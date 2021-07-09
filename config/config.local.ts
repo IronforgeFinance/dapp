@@ -8,6 +8,6 @@ export default defineConfig({
 
     'process.env.RPC_NODE_3': 'https://data-seed-prebsc-1-s2.binance.org:8545/',
 
-    'process.env.APP_CHAIN_ID': '97',
+    'process.env.APP_CHAIN_ID': '56', //'97',
   },
 });
