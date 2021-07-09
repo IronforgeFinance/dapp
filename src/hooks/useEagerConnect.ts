@@ -16,6 +16,7 @@ const _binanceChainListener = async () =>
     }),
   );
 
+// connect wallet eagerly
 const useEagerConnect = () => {
   const { login } = useAuth();
 

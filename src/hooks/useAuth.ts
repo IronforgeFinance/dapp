@@ -15,6 +15,7 @@ import { setupNetwork } from '@/utils/wallet';
 
 export const connectorLocalStorageKey = 'connectorId';
 
+// api for login and logout
 const useAuth = () => {
   const { activate, deactivate } = useWeb3React();
   const login = useCallback(
