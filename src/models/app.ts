@@ -9,6 +9,7 @@ const useAppModel = () => {
     setIsMobile(isMobile);
   }, 100);
   useEffect(() => {
+    getWindowScreen();
     window.addEventListener('resize', getWindowScreen, false);
     return () => {
       window.removeEventListener('resize', getWindowScreen, false);

@@ -16,6 +16,9 @@ export default function IndexPage() {
   }));
   const { fastRefresh } = useRefresh();
 
+  const tokenAddress = '0xdab9b5be023365825609495a6ae0e1c353ce587c'; // some token address
+  const ERC20Contract = useERC20(tokenAddress);
+
   useEagerConnect();
   const intl = useIntl();
   const { account } = useWeb3React();
@@ -34,8 +37,6 @@ export default function IndexPage() {
     // }
   }, [fastRefresh, account]);
   const fetchBnbBalance = async () => {
-    const tokenAddress = '0xdab9b5be023365825609495a6ae0e1c353ce587c'; // some token address
-    const ERC20Contract = useERC20(tokenAddress);
     try {
       const res = (await ERC20Contract.totalSupply()).toString();
       console.log(res);
@@ -67,9 +68,9 @@ export default function IndexPage() {
           English
         </button>
       </h1>
-      <h1 className={styles.title}>
+      <p className={styles.title}>
         {intl.formatMessage({ id: 'WELCOME' }, { account: account })}
-      </h1>
+      </p>
       <p>
         <button onClick={fetchBnbBalance}>获取TotalSupply</button>
         Balance: {balance}
