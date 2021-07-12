@@ -8,7 +8,7 @@ import useEagerConnect from '@/hooks/useEagerConnect';
 import { useModel } from 'umi';
 import { useERC20 } from '@/hooks/useContract';
 import useRefresh from '@/hooks/useRefresh';
-import { getBep20Contract } from '@/utils/contractHelper';
+
 export default function IndexPage() {
   const [balance, setBalance] = useState(0);
   const { isMobile } = useModel('app', (model) => ({
@@ -29,22 +29,25 @@ export default function IndexPage() {
   };
 
   useEffect(() => {
-    const fetchBnbBalance = async () => {
-      const tokenAddress = '0x2170ed0880ac9a755fd29b2688956bd959f933f8'; // some token address
-      const ERC20Contract = getBep20Contract(tokenAddress);
-      try {
-        const res = await ERC20Contract.totalSupply();
-        console.log(res);
-        setBalance(res);
-      } catch (err) {
-        console.log(err);
-      }
-    };
-    if (account) {
-      fetchBnbBalance();
-    }
+    // if (account) {
+    //   fetchBnbBalance();
+    // }
   }, [fastRefresh, account]);
-
+  const fetchBnbBalance = async () => {
+    const tokenAddress = '0xdab9b5be023365825609495a6ae0e1c353ce587c'; // some token address
+    const ERC20Contract = useERC20(tokenAddress);
+    try {
+      const res = (await ERC20Contract.totalSupply()).toString();
+      console.log(res);
+      setBalance(res);
+    } catch (err) {
+      console.log(err);
+      /**
+       * 遇到错误是Error: call revert exception，原因基本都是因为合约对应的链不对。
+       * 比如测试网的合约，钱包连接的是主网。
+       */
+    }
+  };
   return (
     <div>
       <h1 className={styles.title}>
@@ -67,7 +70,10 @@ export default function IndexPage() {
       <h1 className={styles.title}>
         {intl.formatMessage({ id: 'WELCOME' }, { account: account })}
       </h1>
-      <p>Balance: {balance}</p>
+      <p>
+        <button onClick={fetchBnbBalance}>获取TotalSupply</button>
+        Balance: {balance}
+      </p>
 
       <button onClick={handleConnect}>Connect Metamask</button>
       <button onClick={handleDisconnect}>Disonnect</button>
