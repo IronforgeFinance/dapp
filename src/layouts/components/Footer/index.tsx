@@ -5,6 +5,7 @@ import IconUS from '@/assets/images/us.svg';
 import IconTwitter from '@/assets/images/twitter.svg';
 import IconGithub from '@/assets/images/github.svg';
 import IconMedium from '@/assets/images/medium.svg';
+import { setLocale } from 'umi';
 
 import './index.less';
 export default () => {
@@ -17,7 +18,7 @@ export default () => {
         <span className="rate">{rate}</span>
       </div>
       <div className="footer-info">
-        <span className="language">
+        <span className="language" onClick={() => setLocale('en-US', false)}>
           <img src={IconUS} alt="" />
           EN
         </span>

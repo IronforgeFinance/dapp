@@ -6,5 +6,7 @@ export default defineConfig({
   },
   routes,
   fastRefresh: {},
-  locale: {},
+  locale: {
+    default: 'en-US',
+  },
 });
