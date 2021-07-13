@@ -9,5 +9,7 @@ export default defineConfig({
     'process.env.RPC_NODE_3': 'https://bsc-dataseed1.ninicoin.io/',
 
     'process.env.APP_CHAIN_ID': '56',
+
+    'process.env.BSC_SCAN_URL': 'https://bscscan.com/address/',
   },
 });
