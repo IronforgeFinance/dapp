@@ -1,0 +1,109 @@
+.progress-bar-container {
+    display: flex;
+    .left-bg {
+        width: 75px;
+        height: 70px;
+        background-size: contain;
+        margin-right: -10px;
+        z-index: 100;
+    }
+    .bg-icon-axe {
+        background: url(../../assets/images/icon-axe.png) center right no-repeat;
+    }
+    .bg-icon-lock {
+        background: url(../../assets/images/icon-lock.png) center right
+            no-repeat;
+    }
+    .bg-icon-coin {
+        background: url(../../assets/images/icon-coin.png) center right
+            no-repeat;
+    }
+    .bg-icon-magic-bottle {
+        background: url(../../assets/images/icon-magic-bottle.png) center right
+            no-repeat;
+    }
+    .progress-content {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        .progress-name {
+            font-family: Poppins;
+            font-style: normal;
+            font-weight: normal;
+            font-size: 15px;
+            line-height: 22px;
+            color: #ffffff;
+            padding-left: 15px;
+        }
+    }
+    .progress-bar {
+        position: relative;
+        width: 204px;
+        height: 24px;
+        background: url(../../assets/images/progress-bg.png) center left
+            no-repeat;
+        background-size: cover;
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        .progress-bar-bg {
+            width: 186px;
+            height: 12px;
+            // background: linear-gradient(
+            //     269.02deg,
+            //     #ffe07c 4.38%,
+            //     #ffb352 34.91%,
+            //     #fa6c41 74.63%
+            // );
+
+            .current-progress {
+                height: 12px;
+                background: linear-gradient(
+                    269.06deg,
+                    #ffe283 -1.15%,
+                    #ffb13d 31.77%,
+                    #e76731 74.6%
+                );
+                box-shadow: 0px 1px 0.1px rgba(97, 25, 31, 0.3);
+                border-radius: 0px 6px 6px 0px;
+                transition: width 0.5s linear;
+            }
+            .current-progress-revert {
+                transform: rotate(180deg);
+                float: right;
+                border-radius: 6px;
+            }
+        }
+    }
+    .info {
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        padding: 0 10px;
+        align-items: center;
+        font-family: Poppins;
+        font-style: normal;
+        font-weight: bold;
+        font-size: 15px;
+        line-height: 22px;
+        .start-value {
+            text-align: left;
+            color: rgba(199, 130, 115, 0.7);
+        }
+        .end-value {
+            font-weight: bold;
+            text-align: right;
+            color: #fcd144;
+        }
+        .icon-arrow {
+            background: url(../../assets/images/arrow-right.png) center center
+                no-repeat;
+            background-size: contain;
+            width: 14px;
+            height: 14px;
+        }
+        .icon-arrow-left {
+            transform: rotate(180deg);
+        }
+    }
+}

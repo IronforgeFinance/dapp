@@ -9,8 +9,13 @@ export const BIG_NINE = new BigNumber(9);
 export const BIG_TEN = new BigNumber(10);
 
 export const ethersToSerializedBigNumber = (
-  ethersBn: ethers.BigNumber,
+    ethersBn: ethers.BigNumber,
 ): SerializedBigNumber => ethersToBigNumber(ethersBn).toJSON();
 
 export const ethersToBigNumber = (ethersBn: ethers.BigNumber): BigNumber =>
-  new BigNumber(ethersBn.toString());
+    new BigNumber(ethersBn.toString());
+
+export const toFixedWithoutRound = (num: number | BigNumber, fixed: number) => {
+    var re = new RegExp('^-?\\d+(?:.\\d{0,' + (fixed || -1) + '})?');
+    return num.toString().match(re)[0];
+};
