@@ -1,0 +1,81 @@
+[
+  {
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "name",
+        "type": "bytes32"
+      }
+    ],
+    "name": "getAddress",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "name",
+        "type": "bytes32"
+      },
+      {
+        "internalType": "string",
+        "name": "reason",
+        "type": "string"
+      }
+    ],
+    "name": "getAddressWithRequire",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "name",
+        "type": "bytes32"
+      },
+      {
+        "internalType": "address",
+        "name": "dest",
+        "type": "address"
+      }
+    ],
+    "name": "update",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes32[]",
+        "name": "names",
+        "type": "bytes32[]"
+      },
+      {
+        "internalType": "address[]",
+        "name": "destinations",
+        "type": "address[]"
+      }
+    ],
+    "name": "updateAll",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  }
+]

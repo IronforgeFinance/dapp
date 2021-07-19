@@ -1,33 +1,52 @@
 import { ethers } from 'ethers';
 import { simpleRpcProvider } from '@/utils/providers';
-
+import Addresses from '@/config/constants/contracts';
 import {
-  getAddress,
-  getCakeAddress,
-  getMasterChefAddress,
+    getAddress,
+    getCakeAddress,
+    getMasterChefAddress,
 } from './addressHelper';
 
-import bep20Abi from '@/config/abi/erc20.json';
-import cakeAbi from '@/config/abi/cake.json';
-
+import bep20Abi from '@/config/abi/ERC20.json';
+import buildBurnSystemAbi from '@/config/abi/BuildBurnSystem.json';
+import collateralSystemAbi from '@/config/abi/CollateralSystem.json';
+import exchangeSystemAbi from '@/config/abi/ExchangeSystem.json';
 const getContract = (
-  abi: any,
-  address: string,
-  signer?: ethers.Signer | ethers.providers.Provider,
+    abi: any,
+    address: string,
+    signer?: ethers.Signer | ethers.providers.Provider,
 ) => {
-  const signerOrProvider = signer ?? simpleRpcProvider;
-  return new ethers.Contract(address, abi, signerOrProvider);
-};
-
-export const getCakeContract = (
-  signer?: ethers.Signer | ethers.providers.Provider,
-) => {
-  return getContract(cakeAbi, getCakeAddress(), signer);
+    const signerOrProvider = signer ?? simpleRpcProvider;
+    return new ethers.Contract(address, abi, signerOrProvider);
 };
 
 export const getBep20Contract = (
-  address: string,
-  signer?: ethers.Signer | ethers.providers.Provider,
+    address: string,
+    signer?: ethers.Signer | ethers.providers.Provider,
 ) => {
-  return getContract(bep20Abi, address, signer);
+    return getContract(bep20Abi, address, signer);
+};
+
+export const getBuildBurnSystemContract = (
+    signer?: ethers.Signer | ethers.providers.Provider,
+) => {
+    const chainId = process.env.APP_CHAIN_ID as string;
+    const address = Addresses.BuildBurnSystem[chainId];
+    return getContract(buildBurnSystemAbi, address, signer);
+};
+
+export const getCollateralSystemContract = (
+    signer?: ethers.Signer | ethers.providers.Provider,
+) => {
+    const chainId = process.env.APP_CHAIN_ID as string;
+    const address = Addresses.CollateralSystem[chainId];
+    return getContract(collateralSystemAbi, address, signer);
+};
+
+export const getExchangeSystemContract = (
+    signer?: ethers.Signer | ethers.providers.Provider,
+) => {
+    const chainId = process.env.APP_CHAIN_ID as string;
+    const address = Addresses.ExchangeSystem[chainId];
+    return getContract(exchangeSystemAbi, address, signer);
 };

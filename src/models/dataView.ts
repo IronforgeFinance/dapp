@@ -27,8 +27,8 @@ const testData = [
     {
         type: ProgressBarType.f_ratio,
         name: 'F-Ratio',
-        startValue: 300,
-        endValue: 300,
+        startValue: 0,
+        endValue: 0,
         unit: '%',
     },
 ] as IProgressBarProps[];

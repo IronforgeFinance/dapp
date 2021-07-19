@@ -1,19 +1,22 @@
 [
   {
+    "anonymous": false,
     "inputs": [
       {
-        "internalType": "string",
-        "name": "name_",
-        "type": "string"
+        "indexed": false,
+        "internalType": "address",
+        "name": "oldAdmin",
+        "type": "address"
       },
       {
-        "internalType": "string",
-        "name": "symbol_",
-        "type": "string"
+        "indexed": false,
+        "internalType": "address",
+        "name": "newAdmin",
+        "type": "address"
       }
     ],
-    "stateMutability": "nonpayable",
-    "type": "constructor"
+    "name": "AdminChanged",
+    "type": "event"
   },
   {
     "anonymous": false,
@@ -44,6 +47,25 @@
     "anonymous": false,
     "inputs": [
       {
+        "indexed": false,
+        "internalType": "address",
+        "name": "oldCandidate",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "newCandidate",
+        "type": "address"
+      }
+    ],
+    "name": "CandidateChanged",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
         "indexed": true,
         "internalType": "address",
         "name": "from",
@@ -64,6 +86,45 @@
     ],
     "name": "Transfer",
     "type": "event"
+  },
+  {
+    "inputs": [],
+    "name": "MAX_SUPPLY",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_admin",
+        "type": "address"
+      }
+    ],
+    "name": "__AdminUpgradeable_init",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "admin",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
   },
   {
     "inputs": [
@@ -134,6 +195,44 @@
   },
   {
     "inputs": [],
+    "name": "becomeAdmin",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "account",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "amount",
+        "type": "uint256"
+      }
+    ],
+    "name": "burn",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "candidate",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
     "name": "decimals",
     "outputs": [
       {
@@ -194,6 +293,37 @@
     "type": "function"
   },
   {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_admin",
+        "type": "address"
+      }
+    ],
+    "name": "initialize",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "account",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "amount",
+        "type": "uint256"
+      }
+    ],
+    "name": "mint",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
     "inputs": [],
     "name": "name",
     "outputs": [
@@ -204,6 +334,19 @@
       }
     ],
     "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_candidate",
+        "type": "address"
+      }
+    ],
+    "name": "setCandidate",
+    "outputs": [],
+    "stateMutability": "nonpayable",
     "type": "function"
   },
   {

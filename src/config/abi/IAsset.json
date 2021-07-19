@@ -1,21 +1,5 @@
 [
   {
-    "inputs": [
-      {
-        "internalType": "string",
-        "name": "name_",
-        "type": "string"
-      },
-      {
-        "internalType": "string",
-        "name": "symbol_",
-        "type": "string"
-      }
-    ],
-    "stateMutability": "nonpayable",
-    "type": "constructor"
-  },
-  {
     "anonymous": false,
     "inputs": [
       {
@@ -133,13 +117,31 @@
     "type": "function"
   },
   {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "account",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "amount",
+        "type": "uint256"
+      }
+    ],
+    "name": "burn",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
     "inputs": [],
-    "name": "decimals",
+    "name": "keyName",
     "outputs": [
       {
-        "internalType": "uint8",
+        "internalType": "bytes32",
         "name": "",
-        "type": "uint8"
+        "type": "bytes32"
       }
     ],
     "stateMutability": "view",
@@ -149,23 +151,17 @@
     "inputs": [
       {
         "internalType": "address",
-        "name": "spender",
+        "name": "account",
         "type": "address"
       },
       {
         "internalType": "uint256",
-        "name": "subtractedValue",
+        "name": "amount",
         "type": "uint256"
       }
     ],
-    "name": "decreaseAllowance",
-    "outputs": [
-      {
-        "internalType": "bool",
-        "name": "",
-        "type": "bool"
-      }
-    ],
+    "name": "mint",
+    "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
   },
@@ -173,50 +169,23 @@
     "inputs": [
       {
         "internalType": "address",
-        "name": "spender",
+        "name": "from",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "to",
         "type": "address"
       },
       {
         "internalType": "uint256",
-        "name": "addedValue",
+        "name": "amount",
         "type": "uint256"
       }
     ],
-    "name": "increaseAllowance",
-    "outputs": [
-      {
-        "internalType": "bool",
-        "name": "",
-        "type": "bool"
-      }
-    ],
+    "name": "move",
+    "outputs": [],
     "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "name",
-    "outputs": [
-      {
-        "internalType": "string",
-        "name": "",
-        "type": "string"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "symbol",
-    "outputs": [
-      {
-        "internalType": "string",
-        "name": "",
-        "type": "string"
-      }
-    ],
-    "stateMutability": "view",
     "type": "function"
   },
   {
