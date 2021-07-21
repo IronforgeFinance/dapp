@@ -1,0 +1,60 @@
+.info-simple {
+    .token-names {
+        display: flex;
+        .token {
+            margin-right: 20px;
+            font-family: Poppins;
+            font-style: normal;
+            font-weight: bold;
+            font-size: 15px;
+            line-height: 22px;
+            color: #ffffff;
+            .symbol {
+                width: 10px;
+                height: 10px;
+                border-radius: 50%;
+                margin-right: 4px;
+                display: inline-block;
+            }
+            > span:nth-child(2) {
+                font-weight: bold;
+                font-size: 15px;
+                margin-right: 6px;
+            }
+            > span:last-child {
+                font-weight: 300;
+                font-size: 12px;
+            }
+        }
+    }
+    .token-ratios {
+        width: 100%;
+        height: 8px;
+        background: #4e3a36;
+        box-shadow: 0px 0px 1px 3px rgba(72, 36, 2, 0.5),
+            inset 0px -2px 1px rgba(0, 0, 0, 0.25),
+            inset -1px 1px 1px rgba(255, 247, 236, 0.38);
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        .ratio {
+            height: 3px;
+        }
+        > div:first-child {
+            border-radius: 6px 0 0 6px;
+        }
+        > div:last-child {
+            border-radius: 0 6px 6px 0;
+        }
+    }
+}
+
+.token-BTC {
+    background: linear-gradient(90deg, #fcd144 85.54%, #ffad33 98.08%);
+}
+.token-USDT {
+    background: linear-gradient(90deg, #26a17b 85.54%, #0c8f67 98.08%);
+}
+.token-ETH {
+    background: linear-gradient(90deg, #627eea 85.54%, #3a5ad8 98.08%);
+}

@@ -16,3 +16,14 @@ export const COLLATERAL_TOKENS = [
 ];
 
 export const MINT_TOKENS = ['fUSDT', 'fBTC', 'fETH'];
+
+//TODO 从Prices合约接口获取质押token的价格。现在假定1fToken=1U，1BTC=5000U，1ETH=2000U
+export const TokenPrices = {
+    BTC: 10000,
+    ETH: 1000,
+    fToken: 1,
+    USDT: 1,
+    fBTC: 5000,
+    fUSDT: 1,
+    fETH: 2000,
+};

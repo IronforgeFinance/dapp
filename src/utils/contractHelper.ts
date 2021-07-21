@@ -7,10 +7,11 @@ import {
     getMasterChefAddress,
 } from './addressHelper';
 
-import bep20Abi from '@/config/abi/ERC20.json';
+import bep20Abi from '@/config/abi/erc20.json';
 import buildBurnSystemAbi from '@/config/abi/BuildBurnSystem.json';
 import collateralSystemAbi from '@/config/abi/CollateralSystem.json';
 import exchangeSystemAbi from '@/config/abi/ExchangeSystem.json';
+import DebtSystemAbi from '@/config/abi/DebtSystem.json';
 const getContract = (
     abi: any,
     address: string,
@@ -49,4 +50,12 @@ export const getExchangeSystemContract = (
     const chainId = process.env.APP_CHAIN_ID as string;
     const address = Addresses.ExchangeSystem[chainId];
     return getContract(exchangeSystemAbi, address, signer);
+};
+
+export const getDebtSystemContract = (
+    signer?: ethers.Signer | ethers.providers.Provider,
+) => {
+    const chainId = process.env.APP_CHAIN_ID as string;
+    const address = Addresses.DebtSystem[chainId];
+    return getContract(DebtSystemAbi, address, signer);
 };

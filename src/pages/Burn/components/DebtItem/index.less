@@ -1,0 +1,76 @@
+.token-fUSDT {
+    background: linear-gradient(90deg, #627eea 85.54%, #3a5ad8 98.08%);
+}
+
+.token-fBTC {
+    background: linear-gradient(116.98deg, #f6911b 31.39%, #ffcb44 83.13%);
+}
+.token-fETH {
+    background: linear-gradient(116.98deg, #c4c3c7 31.39%, #72727a 83.13%);
+}
+
+.debt-item-container {
+    width: 100%;
+    background: rgba(51, 39, 30, 0.8);
+    border: 1px solid rgba(178, 178, 181, 0.5);
+    box-sizing: border-box;
+    backdrop-filter: blur(20px);
+    border-radius: 6px;
+    margin-bottom: 10px;
+    padding: 10px;
+    .debt-item-head {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 15px;
+        .debt-token {
+            display: flex;
+            align-items: center;
+            .token-name {
+                width: 36px;
+                height: 36px;
+                border-radius: 50%;
+                line-height: 36px;
+                text-align: center;
+                font-family: Poppins;
+                font-style: normal;
+                font-weight: 300;
+                font-size: 15px;
+                color: #ffffff;
+                margin-right: 8px;
+            }
+            .token-minted {
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                font-family: Poppins;
+                font-style: normal;
+                font-weight: bold;
+                font-size: 15px;
+                line-height: 22px;
+                color: #ffffff;
+
+                > span:first-child {
+                    font-weight: bold;
+                    font-size: 15px;
+                }
+                > span:last-child {
+                    font-weight: normal;
+                }
+            }
+        }
+        .debt-in-usd {
+            font-family: Poppins;
+            font-style: normal;
+            font-weight: bold;
+            font-size: 16px;
+            line-height: 24px;
+            text-align: right;
+            color: #ffffff;
+            display: flex;
+            > p {
+                margin-right: 4px;
+            }
+        }
+    }
+}

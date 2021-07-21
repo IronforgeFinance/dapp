@@ -3,7 +3,7 @@ import { InputNumber, Select, Progress, message, Button } from 'antd';
 import { useIntl, useModel } from 'umi';
 import IconDown from '@/assets/images/down.svg';
 import IconAdd from '@/assets/images/add.svg';
-import { COLLATERAL_TOKENS, MINT_TOKENS } from '@/config';
+import { COLLATERAL_TOKENS, MINT_TOKENS, TokenPrices } from '@/config';
 import { useERC20 } from '@/hooks/useContract';
 import useTokenBalance from '@/hooks/useTokenBalance';
 import { useWeb3React } from '@web3-react/core';
@@ -21,17 +21,6 @@ import {
 } from '@/hooks/useApprove';
 import { toFixedWithoutRound, expandToNDecimals } from '@/utils/bigNumber';
 import './index.less';
-
-//TODO 从Prices合约接口获取质押token的价格。现在假定1fToken=1U，1BTC=5000U，1ETH=2000U
-const TokenPrices = {
-    BTC: 10000,
-    ETH: 1000,
-    fToken: 1,
-    USDT: 1,
-    fBTC: 5000,
-    fUSDT: 1,
-    fETH: 2000,
-};
 
 export default () => {
     const intl = useIntl();

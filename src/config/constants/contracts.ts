@@ -15,6 +15,11 @@ export default {
         97: '0xfc2531d45609e335BBF99Be32a2908972218513E',
         56: '',
     },
+    DebtSystem: {
+        97: '0x19683bB92d1AFfe9d97BC688D01A8FD62736E106',
+        56: '',
+    },
+
     // 97: {
     //     PlatformToken: '0x6702C65c26894a6213aFe6A05D6cc869F5f3A640',
     //     AssetSystem: '0xbd7C00d5341E3d5B3B633B342aBBC1B6DD973258',

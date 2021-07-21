@@ -1,6 +1,14 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { IProgressBarProps } from '@/components/ProgressBar';
 import { ProgressBarType } from '@/config/constants/types';
+import { IDebtItemInfo } from '../pages/Burn/components/DebtItem/index';
+
+import { useWeb3React } from '@web3-react/core';
+import { useDebtSystem, useCollateralSystem } from '@/hooks/useContract';
+import { ethers } from 'ethers';
+import { TokenPrices } from '@/config';
+import { toFixedWithoutRound } from '@/utils/bigNumber';
+import useWeb3Provider from '@/hooks/useWeb3Provider';
 
 const testData = [
     {
@@ -44,9 +52,10 @@ const useDataViewModel = () => {
         testData[3],
     );
 
-    useEffect(() => {
-        return () => {};
-    }, []);
+    const [selectedDebtInfos, setSelectedDebtInfos] = useState<IDebtItemInfo[]>(
+        [],
+    );
+    const [selectedDebtInUSD, setSelectedDebtInUSD] = useState(0.0);
 
     return {
         stakedData,
@@ -57,6 +66,10 @@ const useDataViewModel = () => {
         setDebtData,
         fRatioData,
         setfRadioData,
+        selectedDebtInfos,
+        setSelectedDebtInfos,
+        selectedDebtInUSD,
+        setSelectedDebtInUSD,
     };
 };
 
