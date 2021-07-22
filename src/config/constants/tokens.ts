@@ -43,11 +43,19 @@ export default {
         },
         decimals: 18,
     },
-    fUSD: {
-        symbol: 'fUSD',
+    FUSD: {
+        symbol: 'FUSD',
         address: {
             56: '',
-            97: '',
+            97: '0x2A696b216a6262a15fA742750c49c463c9412307',
+        },
+        decimals: 18,
+    },
+    lBTC: {
+        symbol: 'lBTC',
+        address: {
+            56: '',
+            97: '0xD850Ce117c4620930FF8C2D80838c5688dfc9E11',
         },
         decimals: 18,
     },

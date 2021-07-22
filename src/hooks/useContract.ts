@@ -7,6 +7,7 @@ import {
     getCollateralSystemContract,
     getExchangeSystemContract,
     getDebtSystemContract,
+    getConfigContract,
 } from '@/utils/contractHelper';
 
 export const useERC20 = (address: string) => {
@@ -47,4 +48,9 @@ export const useDebtSystem = () => {
         () => getDebtSystemContract(provider.getSigner()),
         [provider],
     );
+};
+
+export const useConfig = () => {
+    const provider = useWeb3Provider();
+    return useMemo(() => getConfigContract(provider.getSigner()), [provider]);
 };

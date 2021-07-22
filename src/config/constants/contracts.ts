@@ -19,6 +19,10 @@ export default {
         97: '0x19683bB92d1AFfe9d97BC688D01A8FD62736E106',
         56: '',
     },
+    Config: {
+        97: '0x52B0FdCE2c92f8361308649c7F1752ed38EAd0C4',
+        56: '',
+    },
 
     // 97: {
     //     PlatformToken: '0x6702C65c26894a6213aFe6A05D6cc869F5f3A640',

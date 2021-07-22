@@ -6,9 +6,10 @@ import { BIG_ZERO } from '@/utils/bigNumber';
 import { simpleRpcProvider } from '@/utils/providers';
 import useRefresh from './useRefresh';
 import useLastUpdated from './useLastUpdated';
-
+import Tokens from '@/config/constants/tokens';
+import { ethers } from 'ethers';
 type UseTokenBalanceState = {
-    balance: BigNumber;
+    balance: BigNumber | string | number;
     fetchStatus: FetchStatus;
 };
 
@@ -49,6 +50,46 @@ const useTokenBalance = (tokenAddress: string) => {
             fetchBalance();
         }
     }, [account, tokenAddress, fastRefresh, SUCCESS, FAILED]);
+
+    return balanceState;
+};
+
+export const useBep20Balance = (token: string) => {
+    const { NOT_FETCHED, SUCCESS, FAILED } = FetchStatus;
+    const [balanceState, setBalanceState] = useState<UseTokenBalanceState>({
+        balance: 0,
+        fetchStatus: NOT_FETCHED,
+    });
+    const { account } = useWeb3React();
+    const { fastRefresh } = useRefresh();
+
+    useEffect(() => {
+        const fetchBalance = async () => {
+            const tokenObj = Tokens[token];
+            if (!token) return;
+            const contract = getBep20Contract(
+                tokenObj.address[process.env.APP_CHAIN_ID],
+            );
+            try {
+                const res = await contract.balanceOf(account);
+                const amount = ethers.utils.formatUnits(res, tokenObj.decimals);
+                setBalanceState({
+                    balance: amount,
+                    fetchStatus: SUCCESS,
+                });
+            } catch (e) {
+                console.error(e);
+                setBalanceState((prev) => ({
+                    ...prev,
+                    fetchStatus: FAILED,
+                }));
+            }
+        };
+
+        if (account) {
+            fetchBalance();
+        }
+    }, [account, token, fastRefresh, SUCCESS, FAILED]);
 
     return balanceState;
 };

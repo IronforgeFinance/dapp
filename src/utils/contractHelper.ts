@@ -12,6 +12,7 @@ import buildBurnSystemAbi from '@/config/abi/BuildBurnSystem.json';
 import collateralSystemAbi from '@/config/abi/CollateralSystem.json';
 import exchangeSystemAbi from '@/config/abi/ExchangeSystem.json';
 import DebtSystemAbi from '@/config/abi/DebtSystem.json';
+import ConfigAbi from '@/config/abi/Config.json';
 const getContract = (
     abi: any,
     address: string,
@@ -58,4 +59,12 @@ export const getDebtSystemContract = (
     const chainId = process.env.APP_CHAIN_ID as string;
     const address = Addresses.DebtSystem[chainId];
     return getContract(DebtSystemAbi, address, signer);
+};
+
+export const getConfigContract = (
+    signer?: ethers.Signer | ethers.providers.Provider,
+) => {
+    const chainId = process.env.APP_CHAIN_ID as string;
+    const address = Addresses.Config[chainId];
+    return getContract(ConfigAbi, address, signer);
 };

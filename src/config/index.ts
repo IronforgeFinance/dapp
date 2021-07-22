@@ -23,7 +23,10 @@ export const TokenPrices = {
     ETH: 1000,
     fToken: 1,
     USDT: 1,
-    fBTC: 5000,
+    fBTC: 10000,
     fUSDT: 1,
-    fETH: 2000,
+    fUSD: 1,
+    FUSD: 1,
+    fETH: 1000,
+    lBTC: 10000,
 };
