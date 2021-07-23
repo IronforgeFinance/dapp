@@ -41,6 +41,7 @@ const testData = [
     },
 ] as IProgressBarProps[];
 const useDataViewModel = () => {
+    const { account } = useWeb3React();
     const [stakedData, setStakedData] = useState<IProgressBarProps>(
         testData[0],
     );
@@ -56,6 +57,10 @@ const useDataViewModel = () => {
         [],
     );
     const [selectedDebtInUSD, setSelectedDebtInUSD] = useState(0.0);
+
+    // plugin-model 是umi提升到全局的状态，与根组件同级，不能响应异步的account的获取，
+    // 因此这里用useEffect 异步获取数据不生效。
+    // 仅做全局静态数据维护
 
     return {
         stakedData,

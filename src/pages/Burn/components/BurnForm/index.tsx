@@ -27,17 +27,25 @@ export default (props: IProps) => {
     const [submitting, setSubmitting] = useState(false);
 
     const { selectedDebtItemInfos, selectedDebtInUSD } = useModel(
-        'dataView',
+        'burnData',
         (model) => ({
             selectedDebtItemInfos: model.selectedDebtInfos,
             selectedDebtInUSD: model.selectedDebtInUSD,
         }),
     );
+    const { debtData, setDebtData } = useModel('dataView', (model) => ({
+        debtData: model.debtData,
+        setDebtData: model.setDebtData,
+    }));
 
     const collateralSystem = useCollateralSystem();
 
     const burnAmountHandler = (v) => {
         setBurnAmount(v);
+        setDebtData({
+            ...debtData,
+            endValue: debtData.startValue - v,
+        });
     };
 
     const unstakeAmountHandler = (v) => {
@@ -152,6 +160,8 @@ export default (props: IProps) => {
                             onChange={burnAmountHandler}
                             placeholder="0.00"
                             className="custom-input"
+                            min={0}
+                            max={selectedDebtInUSD || 9999999}
                         />
                     </div>
                 </div>
@@ -169,6 +179,8 @@ export default (props: IProps) => {
                             placeholder="0.00"
                             className="custom-input"
                             disabled={!toToken}
+                            min={0}
+                            max={toTokenDebt}
                         />
                         <div className="token">
                             <Select

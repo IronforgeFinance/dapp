@@ -21,7 +21,7 @@ import {
 } from '@/hooks/useApprove';
 import { toFixedWithoutRound, expandToNDecimals } from '@/utils/bigNumber';
 import './index.less';
-
+import { useStakedData } from '@/hooks/useDataView';
 export default () => {
     const intl = useIntl();
     const { account } = useWeb3React();
@@ -53,6 +53,8 @@ export default () => {
         collateralSytemContract,
         setLastUpdated,
     );
+
+    // const { stakedData, setStakedData } = useStakedData();
 
     const {
         stakedData,
@@ -164,20 +166,27 @@ export default () => {
     // 计算新的债务
     useEffect(() => {
         if (toToken && toAmount) {
-            const val = parseFloat(
-                new BigNumber(toAmount)
-                    .multipliedBy(TokenPrices[toToken!])
-                    .toFixed(2),
-            );
+            const val =
+                parseFloat(
+                    new BigNumber(toAmount)
+                        .multipliedBy(TokenPrices[toToken!])
+                        .toFixed(2),
+                ) + debtData.startValue;
             setDebtData({
                 ...debtData,
                 endValue: val,
+            });
+        } else {
+            setDebtData({
+                ...debtData,
+                endValue: debtData.startValue,
             });
         }
     }, [toToken, toAmount]);
     const collateralAmountHandler = debounce((v) => {
         setCollateralAmount(v);
-        const currentStakeValue = Number(v) * TokenPrices[collateralToken];
+        const currentStakeValue =
+            Number(v) * TokenPrices[collateralToken] + stakedData.startValue;
         setStakedData({
             ...stakedData,
             endValue: currentStakeValue || 0,

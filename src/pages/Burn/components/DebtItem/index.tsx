@@ -38,7 +38,7 @@ export default (IDebtItemProps) => {
         selectedDebtInUSD,
         setSelectedDebtItemInfos,
         setSelectedDebtInUSD,
-    } = useModel('dataView', (model) => ({
+    } = useModel('burnData', (model) => ({
         selectedDebtInUSD: model.selectedDebtInUSD,
         selectedDebtInfos: model.selectedDebtInfos,
         setSelectedDebtItemInfos: model.setSelectedDebtInfos,

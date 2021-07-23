@@ -16,7 +16,10 @@ export default (props: IProgressBarProps) => {
         if (type === ProgressBarType.f_ratio) {
             return (endValue / startValue) * 100;
         } else {
-            if (startValue !== 0 && endValue !== 0) {
+            if (startValue !== 0 && endValue !== 0 && startValue !== endValue) {
+                if (startValue + endValue < 0) {
+                    return 100;
+                }
                 return (endValue / (startValue + endValue)) * 100;
             } else if (startValue === 0 && endValue !== 0) {
                 return 100;
