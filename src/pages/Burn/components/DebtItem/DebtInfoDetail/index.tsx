@@ -16,7 +16,7 @@ export default (props: IProps) => {
                 <span>Locked</span>
             </div>
             {infos.map((item) => (
-                <div className="info-row ">
+                <div className="info-row " key={item.collateralToken}>
                     <div className="info-data flex-between">
                         <div className="token">
                             <span

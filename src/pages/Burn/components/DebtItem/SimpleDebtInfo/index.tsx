@@ -11,7 +11,7 @@ export default (props: IProps) => {
         <div className="info-simple">
             <div className="token-names">
                 {infos.map((item) => (
-                    <div className="token">
+                    <div className="token" key={item.collateralToken}>
                         <span
                             className={`symbol token-${item.collateralToken}`}
                         ></span>
@@ -23,6 +23,7 @@ export default (props: IProps) => {
             <div className="token-ratios">
                 {infos.map((item) => (
                     <div
+                        key={item.collateralToken}
                         className={`ratio token-${item.collateralToken}`}
                         style={{ width: item.ratio }}
                     ></div>

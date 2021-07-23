@@ -9,6 +9,7 @@ import IconDown from '@/assets/images/down.svg';
 import DebtInfoDetail from './DebtInfoDetail';
 import DebtInfoSimple from './SimpleDebtInfo';
 import useWeb3Provider from '@/hooks/useWeb3Provider';
+import { useBep20Balance } from '@/hooks/useTokenBalance';
 import { useModel } from 'umi';
 interface IDebtItemProps {
     mintedToken: string;
@@ -53,17 +54,33 @@ export default (IDebtItemProps) => {
         return 0.0;
     }, [selectedDebtInUSD]);
 
+    const { balance: fusdBalance } = useBep20Balance('FUSD');
+
     const getDebtInUSD = async (account: string) => {
         console.log('account: ', account);
         let res = await debtSystem.GetUserDebtBalanceInUsd(account);
         res = res.map((item) => ethers.utils.formatUnits(item, 18));
         console.log('getDebtInUSD: ', res);
         if (res && res[0]) {
-            // setDebtInUSD(res[0])
-            // 目前就一个
-            setSelectedDebtInUSD(res[0]);
+            // setDebtInUSD(res[0]) // [user'sdebt,total debt]
+            // 取 余额和debt的最小值
+            let debt = parseFloat(res[0]);
+            if (fusdBalance) {
+                debt = Math.min(debt, parseFloat(fusdBalance as string));
+            }
+            setSelectedDebtInUSD(debt);
         }
     };
+
+    useEffect(() => {
+        if (fusdBalance) {
+            const debt = Math.min(
+                selectedDebtInUSD,
+                parseFloat(fusdBalance as string),
+            );
+            setSelectedDebtInUSD(debt);
+        }
+    }, [fusdBalance]);
 
     const getCollateralDataByToken = async (account, token) => {
         const res = await collateralSystem.getUserCollateral(
