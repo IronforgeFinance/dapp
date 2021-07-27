@@ -3,8 +3,9 @@
     // height: 100%;
     height: 100vh;
     min-height: 900px;
-    background: url('../assets/images/home_bg.png') center center no-repeat;
-    //   background: url('http://localhost:5000/files/mint.webm') center center no-repeat;
+    // background: url('../assets/images/home_bg.png') center center no-repeat;
+    // background: url('http://localhost:5000/files/burn.webm') center center
+    //     no-repeat;
     background-size: cover;
     position: relative;
     > video {
@@ -19,6 +20,17 @@
         width: auto;
         height: auto;
         background-size: cover;
+        // background: url('../assets/images/mint_bg.png') center center no-repeat;
         z-index: -100;
     }
+}
+
+.container-video,
+.container-mint {
+    background: url('../assets/images/mint_bg.jpg') center center no-repeat;
+    // background: url('../assets/images/mint_bg.png') center center no-repeat;
+}
+.container-burn {
+    // background: url('../assets/images/burn_bg.png') center center no-repeat;
+    background: url('../assets/images/burn_bg.jpg') center center no-repeat;
 }

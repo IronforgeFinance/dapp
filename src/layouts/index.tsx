@@ -1,7 +1,9 @@
+import { useEffect, useRef } from 'react';
 import { IRouteComponentProps } from 'umi';
 import './index.less';
 import CommonHeader from './components/Header';
 import CommonFooter from './components/Footer';
+import classNames from 'classnames';
 export default function Layout({
     children,
     location,
@@ -9,9 +11,36 @@ export default function Layout({
     history,
     match,
 }: IRouteComponentProps) {
+    const player = useRef<HTMLVideoElement>(null);
+    console.log('location ', location.pathname);
+
+    useEffect(() => {
+        if (location.pathname === '/mint') {
+            player.current.src = 'http://localhost:5000/files/mint.webm';
+            player.current.play();
+        } else if (location.pathname === '/burn') {
+            player.current.src = 'http://localhost:5000/files/burn.webm';
+            player.current.play();
+        } else {
+            player.current.src = '';
+            player.current.pause();
+        }
+    }, [location]);
     return (
         <div className="container">
-            <video loop autoPlay muted>
+            <video
+                loop
+                autoPlay
+                muted
+                ref={player}
+                className={classNames({
+                    'container-video': true,
+                    'container-mint': location.pathname === '/mint',
+                    'container-burn': location.pathname === '/burn',
+                    'container-trade': location.pathname === '/trade',
+                    'container-farm': location.pathname === '/farm',
+                })}
+            >
                 <source
                     // src="https://blz.nosdn.127.net/1/tm/hearthstone/activities/barrens/landing-kv-dfesffs42.webm"
                     src="http://localhost:5000/files/mint.webm" // 必须是服务器提供的视频资源，本地开发使用简单的静态服务器
