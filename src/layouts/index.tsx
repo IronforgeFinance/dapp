@@ -12,14 +12,22 @@ export default function Layout({
     match,
 }: IRouteComponentProps) {
     const player = useRef<HTMLVideoElement>(null);
-    console.log('location ', location.pathname);
+    console.log('location ', process.env.NODE_ENV);
+
+    const isDev = () => {
+        return process.env.NODE_ENV === 'development';
+    };
 
     useEffect(() => {
         if (location.pathname === '/mint') {
-            player.current.src = 'http://localhost:5000/files/mint.webm';
+            player.current.src = isDev()
+                ? 'http://localhost:5000/files/mint.webm'
+                : './static/mint.webm';
             player.current.play();
         } else if (location.pathname === '/burn') {
-            player.current.src = 'http://localhost:5000/files/burn.webm';
+            player.current.src = isDev()
+                ? 'http://localhost:5000/files/burn.webm'
+                : './static/burn.webm';
             player.current.play();
         } else {
             player.current.src = '';
