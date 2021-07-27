@@ -21,7 +21,6 @@ import {
 } from '@/hooks/useApprove';
 import { toFixedWithoutRound, expandToNDecimals } from '@/utils/bigNumber';
 import './index.less';
-import { useStakedData } from '@/hooks/useDataView';
 export default () => {
     const intl = useIntl();
     const { account } = useWeb3React();

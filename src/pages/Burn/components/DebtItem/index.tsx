@@ -56,6 +56,10 @@ export default (IDebtItemProps) => {
 
     const { balance: fusdBalance } = useBep20Balance('FUSD');
 
+    /* TODO:合约接口没有查询total debt in usd，
+    只能查询某个抵押物currency 对应的debt in usd。
+    前端先写死支持的币，然后分别查询debt in usd，并求和; 
+    */
     const getDebtInUSD = async (account: string) => {
         console.log('account: ', account);
         let res = await debtSystem.GetUserDebtBalanceInUsd(account);
@@ -65,22 +69,22 @@ export default (IDebtItemProps) => {
             // setDebtInUSD(res[0]) // [user'sdebt,total debt]
             // 取 余额和debt的最小值
             let debt = parseFloat(res[0]);
-            if (fusdBalance) {
-                debt = Math.min(debt, parseFloat(fusdBalance as string));
-            }
+            // if (fusdBalance) {
+            //     debt = Math.min(debt, parseFloat(fusdBalance as string));
+            // }
             setSelectedDebtInUSD(debt);
         }
     };
 
-    useEffect(() => {
-        if (fusdBalance) {
-            const debt = Math.min(
-                selectedDebtInUSD,
-                parseFloat(fusdBalance as string),
-            );
-            setSelectedDebtInUSD(debt);
-        }
-    }, [fusdBalance]);
+    // useEffect(() => {
+    //     if (fusdBalance) {
+    //         const debt = Math.min(
+    //             selectedDebtInUSD,
+    //             parseFloat(fusdBalance as string),
+    //         );
+    //         setSelectedDebtInUSD(debt);
+    //     }
+    // }, [fusdBalance]);
 
     const getCollateralDataByToken = async (account, token) => {
         const res = await collateralSystem.getUserCollateral(
@@ -146,7 +150,7 @@ export default (IDebtItemProps) => {
                     className="debt-in-usd"
                     onClick={() => setShowInfos(!showInfos)}
                 >
-                    <p>${selectedDebtInUSD}</p>
+                    <p>Balance: ${fusdBalance}</p>
                     <img src={IconDown} alt="" />
                 </div>
             </div>

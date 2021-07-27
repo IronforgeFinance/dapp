@@ -11,6 +11,7 @@ import {
 } from '@/utils/bigNumber';
 import { ethers } from 'ethers';
 import { COLLATERAL_TOKENS, MINT_TOKENS, TokenPrices } from '@/config';
+import { useBep20Balance } from '@/hooks/useTokenBalance';
 
 const TO_TOKENS = ['BTC'];
 interface IProps {
@@ -25,6 +26,8 @@ export default (props: IProps) => {
     const [toTokenDebt, setToTokenDebt] = useState(0.0);
     const [burnType, setBurnType] = useState('');
     const [submitting, setSubmitting] = useState(false);
+    const [burnInitialAvailable, setBurnInitialAvailable] = useState(true);
+    const [burnMaxAvailable, setBurnMaxAvailable] = useState(true);
 
     const { selectedDebtItemInfos, selectedDebtInUSD } = useModel(
         'burnData',
@@ -37,6 +40,8 @@ export default (props: IProps) => {
         debtData: model.debtData,
         setDebtData: model.setDebtData,
     }));
+
+    const { balance: fusdBalance } = useBep20Balance('FUSD');
 
     const collateralSystem = useCollateralSystem();
 
@@ -85,17 +90,22 @@ export default (props: IProps) => {
         }
     }, [burnAmount, toToken]);
 
-    // 无限循环
-    // useEffect(() => {
-    //     if (toToken && unstakeAmount) {
-    //         const val = parseFloat(toFixedWithoutRound(TokenPrices[toToken] * unstakeAmount / 5, 2))
-    //         if (val > selectedDebtInUSD) {
-    //             message.error('Debt in USD is not enouth')
-    //             setBurnAmount(0.0)
-    //         }
-    //         setBurnAmount(val)
-    //     }
-    // }, [unstakeAmount, toToken])
+    useEffect(() => {
+        //
+        if (!toToken) {
+            setBurnInitialAvailable(true);
+            setBurnMaxAvailable(true);
+        } else {
+            /*TODO 计算toToken的 ratio.只有质押率小于初始质押率才可点击burn to initial
+            钱包余额大于等于债务数，则可burn to max
+            钱包余额小于债务数，则需要进行两个合约步骤：
+                1.直接用bnb进行债务购买来补充钱包不足的债务，
+                2.购买后，钱包余额大于等于债务数，正常燃烧
+            */
+            setBurnInitialAvailable(false);
+            setBurnMaxAvailable(false);
+        }
+    }, [toToken]);
 
     const onSubmit = async () => {
         if (!burnAmount || !unstakeAmount) {
@@ -149,9 +159,7 @@ export default (props: IProps) => {
                         <p className="left">Burned</p>
                         <p className="right">
                             Balance:{' '}
-                            <span className="balance">
-                                {selectedDebtInUSD} fUSD
-                            </span>
+                            <span className="balance">{fusdBalance} fUSD</span>
                         </p>
                     </div>
                     <div className="input">
@@ -163,6 +171,7 @@ export default (props: IProps) => {
                             min={0}
                             max={selectedDebtInUSD || 9999999}
                         />
+                        <div className="token">(Debt:${selectedDebtInUSD})</div>
                     </div>
                 </div>
             </div>
@@ -206,10 +215,15 @@ export default (props: IProps) => {
                         onChange={(v) => setBurnType}
                         buttonStyle="solid"
                     >
-                        <Radio.Button value="initial">
+                        <Radio.Button
+                            value="initial"
+                            disabled={burnInitialAvailable}
+                        >
                             Burn to initial
                         </Radio.Button>
-                        <Radio.Button value="max">Burn Max</Radio.Button>
+                        <Radio.Button value="max" disabled={burnMaxAvailable}>
+                            Burn Max
+                        </Radio.Button>
                     </Radio.Group>
                 </div>
             </div>
