@@ -5,6 +5,11 @@
         "internalType": "address",
         "name": "_user",
         "type": "address"
+      },
+      {
+        "internalType": "bytes32",
+        "name": "_currency",
+        "type": "bytes32"
       }
     ],
     "name": "GetUserDebtBalanceInUsd",
@@ -39,6 +44,11 @@
         "internalType": "uint256",
         "name": "_factor",
         "type": "uint256"
+      },
+      {
+        "internalType": "bytes32",
+        "name": "_currency",
+        "type": "bytes32"
       }
     ],
     "name": "UpdateDebt",

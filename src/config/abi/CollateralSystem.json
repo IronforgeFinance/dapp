@@ -220,19 +220,6 @@
     "type": "function"
   },
   {
-    "inputs": [],
-    "name": "Currency_Platform",
-    "outputs": [
-      {
-        "internalType": "bytes32",
-        "name": "",
-        "type": "bytes32"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
     "inputs": [
       {
         "internalType": "address",
@@ -287,12 +274,12 @@
       },
       {
         "internalType": "bytes32",
-        "name": "unstakeCurrency",
+        "name": "unStakeCurrency",
         "type": "bytes32"
       },
       {
         "internalType": "uint256",
-        "name": "unstakeAmount",
+        "name": "unStakeAmount",
         "type": "uint256"
       }
     ],
@@ -310,7 +297,7 @@
       },
       {
         "internalType": "bytes32",
-        "name": "unstakeCurrency",
+        "name": "unStakeCurrency",
         "type": "bytes32"
       }
     ],
@@ -375,6 +362,11 @@
         "internalType": "address",
         "name": "user",
         "type": "address"
+      },
+      {
+        "internalType": "bytes32",
+        "name": "_currency",
+        "type": "bytes32"
       }
     ],
     "name": "getFreeCollateralInUsd",
@@ -383,6 +375,30 @@
         "internalType": "uint256",
         "name": "",
         "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_user",
+        "type": "address"
+      },
+      {
+        "internalType": "bytes32",
+        "name": "_currency",
+        "type": "bytes32"
+      }
+    ],
+    "name": "getRatio",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
       }
     ],
     "stateMutability": "view",
@@ -457,25 +473,6 @@
         "type": "address"
       }
     ],
-    "name": "getUserPlatformTokenCollateral",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "staked",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "_user",
-        "type": "address"
-      }
-    ],
     "name": "getUserTotalCollateralInUsd",
     "outputs": [
       {
@@ -511,6 +508,11 @@
         "internalType": "address",
         "name": "_user",
         "type": "address"
+      },
+      {
+        "internalType": "bytes32",
+        "name": "_currency",
+        "type": "bytes32"
       }
     ],
     "name": "isSatisfyTargetRatio",
@@ -545,25 +547,6 @@
         "internalType": "contract IConfig",
         "name": "",
         "type": "address"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "user",
-        "type": "address"
-      }
-    ],
-    "name": "maxRedeemablePlatformToken",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
       }
     ],
     "stateMutability": "view",

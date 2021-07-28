@@ -306,6 +306,108 @@
         "internalType": "address",
         "name": "user",
         "type": "address"
+      },
+      {
+        "internalType": "bytes32",
+        "name": "_currency",
+        "type": "bytes32"
+      }
+    ],
+    "name": "evalUserPosition",
+    "outputs": [
+      {
+        "components": [
+          {
+            "internalType": "uint256",
+            "name": "debtBalance",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "stakedCollateral",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "collateralPrice",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "collateralValue",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "collateralizedRatio",
+            "type": "uint256"
+          }
+        ],
+        "internalType": "struct Liquidation.EvalUserPositionResult",
+        "name": "",
+        "type": "tuple"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "user",
+        "type": "address"
+      },
+      {
+        "internalType": "bytes32",
+        "name": "_currency",
+        "type": "bytes32"
+      }
+    ],
+    "name": "evalUserPositionAll",
+    "outputs": [
+      {
+        "components": [
+          {
+            "internalType": "uint256",
+            "name": "debtBalance",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "stakedCollateral",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "collateralPrice",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "collateralValue",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "collateralizedRatio",
+            "type": "uint256"
+          }
+        ],
+        "internalType": "struct Liquidation.EvalUserPositionResult",
+        "name": "",
+        "type": "tuple"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "user",
+        "type": "address"
       }
     ],
     "name": "getMarkTimestamp",

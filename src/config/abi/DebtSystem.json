@@ -62,12 +62,6 @@
       {
         "indexed": false,
         "internalType": "uint256",
-        "name": "index",
-        "type": "uint256"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
         "name": "newFactor",
         "type": "uint256"
       },
@@ -137,6 +131,11 @@
         "internalType": "address",
         "name": "_user",
         "type": "address"
+      },
+      {
+        "internalType": "bytes32",
+        "name": "_currency",
+        "type": "bytes32"
       }
     ],
     "name": "GetUserCurrentDebtProportion",
@@ -156,6 +155,11 @@
         "internalType": "address",
         "name": "_user",
         "type": "address"
+      },
+      {
+        "internalType": "bytes32",
+        "name": "_currency",
+        "type": "bytes32"
       }
     ],
     "name": "GetUserDebtBalanceInUsd",
@@ -180,6 +184,11 @@
         "internalType": "address",
         "name": "_user",
         "type": "address"
+      },
+      {
+        "internalType": "bytes32",
+        "name": "_currency",
+        "type": "bytes32"
       }
     ],
     "name": "GetUserDebtData",
@@ -212,19 +221,6 @@
     "type": "function"
   },
   {
-    "inputs": [],
-    "name": "MAX_DEL_PER_TIME",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
     "inputs": [
       {
         "internalType": "uint256",
@@ -233,19 +229,6 @@
       }
     ],
     "name": "PushDebtFactor",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "index",
-        "type": "uint256"
-      }
-    ],
-    "name": "SetLastCloseFeePeriodAt",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -266,6 +249,11 @@
         "internalType": "uint256",
         "name": "_factor",
         "type": "uint256"
+      },
+      {
+        "internalType": "bytes32",
+        "name": "_currency",
+        "type": "bytes32"
       }
     ],
     "name": "UpdateDebt",
@@ -284,6 +272,11 @@
         "internalType": "uint256",
         "name": "_debtProportion",
         "type": "uint256"
+      },
+      {
+        "internalType": "bytes32",
+        "name": "_currency",
+        "type": "bytes32"
       }
     ],
     "name": "UpdateUserDebt",
@@ -338,19 +331,6 @@
     "type": "function"
   },
   {
-    "inputs": [],
-    "name": "debtCurrentIndex",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
     "inputs": [
       {
         "internalType": "address",
@@ -365,39 +345,7 @@
   },
   {
     "inputs": [],
-    "name": "lastCloseAt",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "name": "lastDebtFactors",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "lastDeletTo",
+    "name": "lastDebtFactor",
     "outputs": [
       {
         "internalType": "uint256",
@@ -432,30 +380,6 @@
     "name": "updateAddressCache",
     "outputs": [],
     "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
-      }
-    ],
-    "name": "userDebtState",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "debtProportion",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "debtFactor",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
     "type": "function"
   }
 ]

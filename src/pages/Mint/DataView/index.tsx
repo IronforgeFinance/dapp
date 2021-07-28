@@ -11,7 +11,7 @@ export default () => {
         }),
     );
 
-    useDataView();
+    useDataView('BTC');
 
     return (
         <div className="data-view-container">

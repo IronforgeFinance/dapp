@@ -3,7 +3,12 @@ import React, { useState, useEffect } from 'react';
 import { IProgressBarProps } from '@/components/ProgressBar';
 import { ProgressBarType } from '@/config/constants/types';
 import { IDebtItemInfo } from '../pages/Burn/components/DebtItem/index';
-import { useDebtSystem, useCollateralSystem } from '@/hooks/useContract';
+import {
+    useDebtSystem,
+    useCollateralSystem,
+    useLiquidation,
+    usePrices,
+} from '@/hooks/useContract';
 import { ethers } from 'ethers';
 import { TokenPrices } from '@/config';
 import { toFixedWithoutRound } from '@/utils/bigNumber';
@@ -42,7 +47,7 @@ const testData = [
 ] as IProgressBarProps[];
 
 // 用于异步获取数据
-const useDataView = () => {
+const useDataView = (currency: string) => {
     const {
         stakedData,
         lockedData,
@@ -56,6 +61,7 @@ const useDataView = () => {
     const { account } = useWeb3React();
     const { fastRefresh } = useRefresh();
     const collateralSystem = useCollateralSystem();
+    const liquidation = useLiquidation();
     const debtSystem = useDebtSystem();
     const provider = useWeb3Provider();
 
@@ -76,7 +82,11 @@ const useDataView = () => {
     };
     const fetchLockedData = async () => {};
     const fetchDebtData = async () => {
-        const res = await debtSystem.GetUserDebtBalanceInUsd(account);
+        //TODO debtSystem.GetUserDebtBalanceInUsd(account, currency)
+        const res = await debtSystem.GetUserDebtBalanceInUsd(
+            account,
+            ethers.utils.formatBytes32String(currency),
+        );
         const amount = res.map((item) =>
             parseFloat(ethers.utils.formatUnits(item, 18)).toFixed(2),
         );
@@ -90,12 +100,30 @@ const useDataView = () => {
             setDebtDataInModel(newVal);
         }
     };
+
+    const fetchCurrencyRatio = async () => {
+        if (currency) {
+            const res = await liquidation.evalUserPosition(
+                account,
+                ethers.utils.formatBytes32String(currency),
+            );
+            console.log('fetchCurrencyRatio: ', res);
+            return res.collateralizedRatio;
+        }
+        return 0;
+    };
     useEffect(() => {
         if (account) {
             fetchStakedData();
             fetchDebtData();
         }
     }, [account, fastRefresh, provider]);
+
+    useEffect(() => {
+        if (currency) {
+            fetchCurrencyRatio();
+        }
+    }, [currency, account, fastRefresh, provider]);
     return { stakedData, fetchStakedData };
 };
 

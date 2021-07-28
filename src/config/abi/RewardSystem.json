@@ -55,12 +55,6 @@
       {
         "indexed": false,
         "internalType": "uint256",
-        "name": "stakingReward",
-        "type": "uint256"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
         "name": "feeReward",
         "type": "uint256"
       }
@@ -86,19 +80,6 @@
     ],
     "name": "RewardSignerChanged",
     "type": "event"
-  },
-  {
-    "inputs": [],
-    "name": "CLAIM_WINDOW_PERIOD_COUNT",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
   },
   {
     "inputs": [],
@@ -134,19 +115,6 @@
         "internalType": "bytes32",
         "name": "",
         "type": "bytes32"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "STAKING_REWARD_LOCK_PERIOD",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
       }
     ],
     "stateMutability": "view",
@@ -207,11 +175,6 @@
       },
       {
         "internalType": "uint256",
-        "name": "stakingReward",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
         "name": "feeReward",
         "type": "uint256"
       },
@@ -237,11 +200,6 @@
         "internalType": "address",
         "name": "recipient",
         "type": "address"
-      },
-      {
-        "internalType": "uint256",
-        "name": "stakingReward",
-        "type": "uint256"
       },
       {
         "internalType": "uint256",

@@ -8,6 +8,8 @@ import {
     getExchangeSystemContract,
     getDebtSystemContract,
     getConfigContract,
+    getLiquidationContract,
+    getPricesContract,
 } from '@/utils/contractHelper';
 
 export const useERC20 = (address: string) => {
@@ -53,4 +55,17 @@ export const useDebtSystem = () => {
 export const useConfig = () => {
     const provider = useWeb3Provider();
     return useMemo(() => getConfigContract(provider.getSigner()), [provider]);
+};
+
+export const useLiquidation = () => {
+    const provider = useWeb3Provider();
+    return useMemo(
+        () => getLiquidationContract(provider.getSigner()),
+        [provider],
+    );
+};
+
+export const usePrices = () => {
+    const provider = useWeb3Provider();
+    return useMemo(() => getPricesContract(provider.getSigner()), [provider]);
 };

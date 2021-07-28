@@ -60,9 +60,9 @@ export default (IDebtItemProps) => {
     只能查询某个抵押物currency 对应的debt in usd。
     前端先写死支持的币，然后分别查询debt in usd，并求和; 
     */
-    const getDebtInUSD = async (account: string) => {
+    const getDebtInUSD = async (account: string, currency: string) => {
         console.log('account: ', account);
-        let res = await debtSystem.GetUserDebtBalanceInUsd(account);
+        let res = await debtSystem.GetUserDebtBalanceInUsd(account, ethers.utils.formatBytes32String(currency));
         res = res.map((item) => ethers.utils.formatUnits(item, 18));
         console.log('getDebtInUSD: ', res);
         if (res && res[0]) {
@@ -122,7 +122,7 @@ export default (IDebtItemProps) => {
 
     const refreshData = () => {
         if (account) {
-            getDebtInUSD(account);
+            getDebtInUSD(account, 'BTC');
             const tokens = ['BTC'];
             getDebtInfo(account, tokens);
         }

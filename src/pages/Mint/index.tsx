@@ -19,11 +19,13 @@ import {
     useCheckERC20ApprovalStatus,
     useERC20Approve,
 } from '@/hooks/useApprove';
+import useProvider from '@/hooks/useWeb3Provider'
 import { toFixedWithoutRound, expandToNDecimals } from '@/utils/bigNumber';
 import './index.less';
 export default () => {
     const intl = useIntl();
     const { account } = useWeb3React();
+    const provider = useProvider()
     const [collateralAmount, setCollateralAmount] = useState();
     const [lockedAmount, setLockedAmount] = useState<undefined | number>();
     const [toAmount, setToAmount] = useState<undefined | number>();
@@ -91,7 +93,7 @@ export default () => {
 
     useEffect(() => {
         fetchCollateralBalance();
-    }, [collateralToken, account]);
+    }, [collateralToken, account, provider]);
 
     // fToken价值/Collateral价值 最高不超过3/10
     const maxLockedAmount = useMemo(() => {

@@ -62,7 +62,7 @@
       {
         "indexed": false,
         "internalType": "address",
-        "name": "fromAddr",
+        "name": "fromAddress",
         "type": "address"
       },
       {
@@ -80,7 +80,7 @@
       {
         "indexed": false,
         "internalType": "address",
-        "name": "destAddr",
+        "name": "destAddress",
         "type": "address"
       },
       {
@@ -161,13 +161,13 @@
       {
         "indexed": false,
         "internalType": "address",
-        "name": "fromAddr",
+        "name": "fromAddress",
         "type": "address"
       },
       {
         "indexed": false,
         "internalType": "address",
-        "name": "destAddr",
+        "name": "destAddress",
         "type": "address"
       },
       {
@@ -302,7 +302,7 @@
       },
       {
         "internalType": "address",
-        "name": "destAddr",
+        "name": "destAddress",
         "type": "address"
       },
       {
@@ -377,12 +377,12 @@
       },
       {
         "internalType": "address",
-        "name": "fromAddr",
+        "name": "fromAddress",
         "type": "address"
       },
       {
         "internalType": "address",
-        "name": "destAddr",
+        "name": "destAddress",
         "type": "address"
       },
       {
@@ -402,19 +402,6 @@
       }
     ],
     "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "pendingExchangeEntryId",
-        "type": "uint256"
-      }
-    ],
-    "name": "revertPendingExchange",
-    "outputs": [],
-    "stateMutability": "nonpayable",
     "type": "function"
   },
   {

@@ -107,6 +107,11 @@
         "internalType": "uint256",
         "name": "amount",
         "type": "uint256"
+      },
+      {
+        "internalType": "bytes32",
+        "name": "_currency",
+        "type": "bytes32"
       }
     ],
     "name": "BuildAsset",
@@ -121,7 +126,13 @@
     "type": "function"
   },
   {
-    "inputs": [],
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "_currency",
+        "type": "bytes32"
+      }
+    ],
     "name": "BuildMaxAsset",
     "outputs": [],
     "stateMutability": "nonpayable",
@@ -133,6 +144,11 @@
         "internalType": "uint256",
         "name": "amount",
         "type": "uint256"
+      },
+      {
+        "internalType": "bytes32",
+        "name": "_currency",
+        "type": "bytes32"
       }
     ],
     "name": "BurnAsset",
@@ -147,7 +163,13 @@
     "type": "function"
   },
   {
-    "inputs": [],
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "_currency",
+        "type": "bytes32"
+      }
+    ],
     "name": "BurnAssetToTarget",
     "outputs": [
       {
@@ -165,6 +187,11 @@
         "internalType": "address",
         "name": "user",
         "type": "address"
+      },
+      {
+        "internalType": "bytes32",
+        "name": "_currency",
+        "type": "bytes32"
       }
     ],
     "name": "MaxCanBuildAsset",
@@ -235,6 +262,11 @@
         "internalType": "uint256",
         "name": "amount",
         "type": "uint256"
+      },
+      {
+        "internalType": "bytes32",
+        "name": "_currency",
+        "type": "bytes32"
       }
     ],
     "name": "buildFromCollateralSys",
@@ -248,6 +280,11 @@
         "internalType": "address",
         "name": "user",
         "type": "address"
+      },
+      {
+        "internalType": "bytes32",
+        "name": "_currency",
+        "type": "bytes32"
       }
     ],
     "name": "buildMaxFromCollateralSys",
@@ -263,14 +300,14 @@
         "type": "address"
       },
       {
-        "internalType": "address",
-        "name": "liquidator",
-        "type": "address"
-      },
-      {
         "internalType": "uint256",
         "name": "amount",
         "type": "uint256"
+      },
+      {
+        "internalType": "bytes32",
+        "name": "_currency",
+        "type": "bytes32"
       }
     ],
     "name": "burnForLiquidation",
@@ -289,6 +326,11 @@
         "internalType": "uint256",
         "name": "amount",
         "type": "uint256"
+      },
+      {
+        "internalType": "bytes32",
+        "name": "_currency",
+        "type": "bytes32"
       }
     ],
     "name": "burnFromCollateralSys",

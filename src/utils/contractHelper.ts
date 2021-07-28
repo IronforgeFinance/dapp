@@ -7,12 +7,14 @@ import {
     getMasterChefAddress,
 } from './addressHelper';
 
-import bep20Abi from '@/config/abi/erc20.json';
+import bep20Abi from '@/config/abi/ERC20.json';
 import buildBurnSystemAbi from '@/config/abi/BuildBurnSystem.json';
 import collateralSystemAbi from '@/config/abi/CollateralSystem.json';
 import exchangeSystemAbi from '@/config/abi/ExchangeSystem.json';
 import DebtSystemAbi from '@/config/abi/DebtSystem.json';
 import ConfigAbi from '@/config/abi/Config.json';
+import LiquidationAbi from '@/config/abi/Liquidation.json';
+import PricesAbi from '@/config/abi/MockPrices.json';
 const getContract = (
     abi: any,
     address: string,
@@ -67,4 +69,20 @@ export const getConfigContract = (
     const chainId = process.env.APP_CHAIN_ID as string;
     const address = Addresses.Config[chainId];
     return getContract(ConfigAbi, address, signer);
+};
+
+export const getLiquidationContract = (
+    signer?: ethers.Signer | ethers.providers.Provider,
+) => {
+    const chainId = process.env.APP_CHAIN_ID as string;
+    const address = Addresses.Liquidation[chainId];
+    return getContract(LiquidationAbi, address, signer);
+};
+
+export const getPricesContract = (
+    signer?: ethers.Signer | ethers.providers.Provider,
+) => {
+    const chainId = process.env.APP_CHAIN_ID as string;
+    const address = Addresses.Prices[chainId];
+    return getContract(LiquidationAbi, address, signer);
 };

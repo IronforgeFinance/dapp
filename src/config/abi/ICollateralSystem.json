@@ -5,6 +5,11 @@
         "internalType": "address",
         "name": "_user",
         "type": "address"
+      },
+      {
+        "internalType": "bytes32",
+        "name": "_currency",
+        "type": "bytes32"
       }
     ],
     "name": "IsSatisfyTargetRatio",
@@ -52,6 +57,11 @@
         "internalType": "address",
         "name": "user",
         "type": "address"
+      },
+      {
+        "internalType": "bytes32",
+        "name": "_currency",
+        "type": "bytes32"
       }
     ],
     "name": "getFreeCollateralInUsd",
