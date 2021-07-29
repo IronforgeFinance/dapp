@@ -5,7 +5,7 @@ import IconDown from '@/assets/images/down.svg';
 import IconAdd from '@/assets/images/add.svg';
 import { COLLATERAL_TOKENS, MINT_TOKENS, TokenPrices } from '@/config';
 import { useERC20 } from '@/hooks/useContract';
-import useTokenBalance from '@/hooks/useTokenBalance';
+import useTokenBalance, { useBep20Balance } from '@/hooks/useTokenBalance';
 import { useWeb3React } from '@web3-react/core';
 import { getBep20Contract } from '@/utils/contractHelper';
 import { useCollateralSystem } from '@/hooks/useContract';
@@ -19,17 +19,17 @@ import {
     useCheckERC20ApprovalStatus,
     useERC20Approve,
 } from '@/hooks/useApprove';
-import useProvider from '@/hooks/useWeb3Provider'
+import useProvider from '@/hooks/useWeb3Provider';
 import { toFixedWithoutRound, expandToNDecimals } from '@/utils/bigNumber';
 import './index.less';
 export default () => {
     const intl = useIntl();
     const { account } = useWeb3React();
-    const provider = useProvider()
+    const provider = useProvider();
     const [collateralAmount, setCollateralAmount] = useState();
     const [lockedAmount, setLockedAmount] = useState<undefined | number>();
     const [toAmount, setToAmount] = useState<undefined | number>();
-    const [collateralBalance, setCollateralBalance] = useState('0.00');
+    // const [collateralBalance, setCollateralBalance] = useState('0.00');
     const [collateralToken, setCollateralToken] = useState('BTC');
     // const [fTokenBalance, setFTokenBalance] = useState('0.00')
     const [toToken, setToToken] = useState();
@@ -73,27 +73,27 @@ export default () => {
     const { balance } = useTokenBalance(
         Tokens.fToken.address[process.env.APP_CHAIN_ID!],
     );
-
     const fTokenBalance = balance.toFixed(2);
-    const fetchCollateralBalance = async () => {
-        const token = collateralToken;
-        if (!account) return;
-        const tokenObj = Tokens[token];
-        if (!token) return;
-        const contract = getBep20Contract(
-            tokenObj.address[process.env.APP_CHAIN_ID],
-        );
-        const res = await contract.balanceOf(account);
-        const amount = ethers.utils.formatUnits(res, tokenObj.decimals);
-        console.log('fetchBEP20Balance: ', token, amount);
-        const val = new BigNumber(amount).toFixed(2);
-        setCollateralBalance(val);
-        return val;
-    };
 
-    useEffect(() => {
-        fetchCollateralBalance();
-    }, [collateralToken, account, provider]);
+    const { balance: collateralBalance } = useBep20Balance(collateralToken);
+
+    // const fetchCollateralBalance = async () => {
+    //     const token = collateralToken;
+    //     if (!account) return;
+    //     const tokenObj = Tokens[token];
+    //     if (!token) return;
+    //     const contract = useERC20(tokenObj.address[process.env.APP_CHAIN_ID]);
+    //     const res = await contract.balanceOf(account);
+    //     const amount = ethers.utils.formatUnits(res, tokenObj.decimals);
+    //     console.log('fetchBEP20Balance: ', token, amount);
+    //     const val = new BigNumber(amount).toFixed(2);
+    //     setCollateralBalance(val);
+    //     return val;
+    // };
+
+    // useEffect(() => {
+    //     fetchCollateralBalance();
+    // }, [collateralToken, account, provider]);
 
     // fToken价值/Collateral价值 最高不超过3/10
     const maxLockedAmount = useMemo(() => {
@@ -237,7 +237,7 @@ export default () => {
                 const receipt = await tx.wait();
                 console.log(receipt);
                 setSubmitting(false);
-                fetchCollateralBalance();
+                // fetchCollateralBalance();
                 message.success('Mint successfully. Pls check your balance.');
             } catch (err) {
                 setSubmitting(false);

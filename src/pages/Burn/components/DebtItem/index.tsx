@@ -11,6 +11,7 @@ import DebtInfoSimple from './SimpleDebtInfo';
 import useWeb3Provider from '@/hooks/useWeb3Provider';
 import { useBep20Balance } from '@/hooks/useTokenBalance';
 import { useModel } from 'umi';
+import { COLLATERAL_TOKENS } from '@/config';
 interface IDebtItemProps {
     mintedToken: string;
     mintedTokenName: string;
@@ -19,6 +20,7 @@ interface IDebtItemProps {
 export interface IDebtItemInfo {
     collateralToken: string;
     ratio: string;
+    ratioValue: number | string;
     debt: number;
     locked: number;
 }
@@ -60,31 +62,24 @@ export default (IDebtItemProps) => {
     只能查询某个抵押物currency 对应的debt in usd。
     前端先写死支持的币，然后分别查询debt in usd，并求和; 
     */
-    const getDebtInUSD = async (account: string, currency: string) => {
-        console.log('account: ', account);
-        let res = await debtSystem.GetUserDebtBalanceInUsd(account, ethers.utils.formatBytes32String(currency));
-        res = res.map((item) => ethers.utils.formatUnits(item, 18));
-        console.log('getDebtInUSD: ', res);
-        if (res && res[0]) {
-            // setDebtInUSD(res[0]) // [user'sdebt,total debt]
-            // 取 余额和debt的最小值
-            let debt = parseFloat(res[0]);
-            // if (fusdBalance) {
-            //     debt = Math.min(debt, parseFloat(fusdBalance as string));
-            // }
-            setSelectedDebtInUSD(debt);
-        }
-    };
+    const getDebtInUSD = async () => {
+        const res = await Promise.all(
+            COLLATERAL_TOKENS.map((token) =>
+                debtSystem.GetUserDebtBalanceInUsd(
+                    account,
+                    ethers.utils.formatBytes32String(token.name),
+                ),
+            ),
+        );
 
-    // useEffect(() => {
-    //     if (fusdBalance) {
-    //         const debt = Math.min(
-    //             selectedDebtInUSD,
-    //             parseFloat(fusdBalance as string),
-    //         );
-    //         setSelectedDebtInUSD(debt);
-    //     }
-    // }, [fusdBalance]);
+        const totalDebtInUsd = res.reduce((total, item) => {
+            const val = parseFloat(ethers.utils.formatUnits(item[0], 18));
+            total += val;
+            return total;
+        }, 0);
+        console.log('getDebtInUSD: ', totalDebtInUsd);
+        setSelectedDebtInUSD(totalDebtInUsd);
+    };
 
     const getCollateralDataByToken = async (account, token) => {
         const res = await collateralSystem.getUserCollateral(
@@ -96,7 +91,8 @@ export default (IDebtItemProps) => {
         return data;
     };
 
-    const getDebtInfo = async (account: string, tokens: string[]) => {
+    const getDebtInfo = async () => {
+        const tokens = COLLATERAL_TOKENS.map((token) => token.name);
         const res = await Promise.all(
             tokens.map((token) => getCollateralDataByToken(account, token)),
         );
@@ -107,24 +103,26 @@ export default (IDebtItemProps) => {
         }, 0);
         const infos = res.map((item, index) => {
             const price = TokenPrices[tokens[index]];
-            const ratio =
-                Number((100 * (item * price)) / total).toFixed(2) + '%';
+            const ratioValue = Number((100 * (item * price)) / total).toFixed(
+                2,
+            );
             return {
                 collateralToken: tokens[index],
-                ratio,
+                ratio: ratioValue + '%',
+                ratioValue,
                 debt: item,
                 locked: 0, // 目前locked都是0
             } as IDebtItemInfo;
         });
+        infos.sort((a, b) => Number(b.ratioValue) - Number(a.ratioValue));
         setDebtItemInfos(infos);
         setSelectedDebtItemInfos(infos);
     };
 
     const refreshData = () => {
         if (account) {
-            getDebtInUSD(account, 'BTC');
-            const tokens = ['BTC'];
-            getDebtInfo(account, tokens);
+            getDebtInUSD();
+            getDebtInfo();
         }
     };
 

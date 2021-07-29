@@ -8,12 +8,14 @@ import {
     useCollateralSystem,
     useLiquidation,
     usePrices,
+    useConfig,
 } from '@/hooks/useContract';
 import { ethers } from 'ethers';
 import { TokenPrices } from '@/config';
 import { toFixedWithoutRound } from '@/utils/bigNumber';
 import useWeb3Provider from '@/hooks/useWeb3Provider';
 import useRefresh from './useRefresh';
+import { COLLATERAL_TOKENS } from '@/config';
 import { useModel } from 'umi';
 const testData = [
     {
@@ -52,12 +54,15 @@ const useDataView = (currency: string) => {
         stakedData,
         lockedData,
         debtData,
+        fRatioData,
         setStakedData: setStakedDataInModel,
         setLockedData: setLockedDataInModel,
         setDebtData: setDebtDataInModel,
+        setfRadioData: setfRadioDataInModel,
     } = useModel('dataView', (model) => ({
         ...model,
     }));
+    const [currencyRatio, setCurrencyRatio] = useState(5); //TODO 初始质押率;
     const { account } = useWeb3React();
     const { fastRefresh } = useRefresh();
     const collateralSystem = useCollateralSystem();
@@ -82,23 +87,26 @@ const useDataView = (currency: string) => {
     };
     const fetchLockedData = async () => {};
     const fetchDebtData = async () => {
-        //TODO debtSystem.GetUserDebtBalanceInUsd(account, currency)
-        const res = await debtSystem.GetUserDebtBalanceInUsd(
-            account,
-            ethers.utils.formatBytes32String(currency),
+        const res = await Promise.all(
+            COLLATERAL_TOKENS.map((token) =>
+                debtSystem.GetUserDebtBalanceInUsd(
+                    account,
+                    ethers.utils.formatBytes32String(token.name),
+                ),
+            ),
         );
-        const amount = res.map((item) =>
-            parseFloat(ethers.utils.formatUnits(item, 18)).toFixed(2),
-        );
-        if (amount && amount[0]) {
-            const value = parseFloat(amount[0]);
-            const newVal = {
-                ...debtData,
-                startValue: value,
-                endValue: debtData.endValue || value,
-            };
-            setDebtDataInModel(newVal);
-        }
+
+        const totalDebtInUsd = res.reduce((total, item) => {
+            const val = parseFloat(ethers.utils.formatUnits(item[0], 18));
+            total += val;
+            return total;
+        }, 0);
+        const newVal = {
+            ...debtData,
+            startValue: totalDebtInUsd,
+            endValue: debtData.endValue || totalDebtInUsd,
+        };
+        setDebtDataInModel(newVal);
     };
 
     const fetchCurrencyRatio = async () => {
@@ -107,8 +115,22 @@ const useDataView = (currency: string) => {
                 account,
                 ethers.utils.formatBytes32String(currency),
             );
-            console.log('fetchCurrencyRatio: ', res);
-            return res.collateralizedRatio;
+            const val =
+                1 /
+                Number(ethers.utils.formatUnits(res.collateralizedRatio, 18));
+            console.log(
+                'fetchCurrencyRatio: ',
+                res.collateralizedRatio.toString(),
+                val,
+            );
+            const newVal = {
+                ...fRatioData,
+                startValue: val * 100,
+                endValue: fRatioData.endValue || val * 100,
+            };
+            setfRadioDataInModel(newVal);
+            setCurrencyRatio(val);
+            return val;
         }
         return 0;
     };
@@ -124,7 +146,32 @@ const useDataView = (currency: string) => {
             fetchCurrencyRatio();
         }
     }, [currency, account, fastRefresh, provider]);
-    return { stakedData, fetchStakedData };
+    return { stakedData, fetchStakedData, currencyRatio };
+};
+
+export const useSelectedDebtInUSD = (currency: string) => {
+    const [debt, setDebt] = useState(0);
+    const debtSystem = useDebtSystem();
+    const { account } = useWeb3React();
+
+    useEffect(() => {
+        if (currency && account) {
+            (async () => {
+                const res = await debtSystem.GetUserDebtBalanceInUsd(
+                    account,
+                    ethers.utils.formatBytes32String(currency),
+                );
+                if (res && res[0]) {
+                    const val = parseFloat(
+                        ethers.utils.formatUnits(res[0], 18),
+                    );
+                    setDebt(val);
+                    console.log('useSelectedDebtInUSD: ', val);
+                }
+            })();
+        }
+    }, [currency, account]);
+    return debt;
 };
 
 export default useDataView;

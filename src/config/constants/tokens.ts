@@ -12,7 +12,7 @@ export default {
         symbol: 'USDT',
         address: {
             56: '0x55d398326f99059fF775485246999027B3197955',
-            97: '0x30e4811284a3fd9745BC41DCad13c8E65fDcE16c',
+            97: '0x6708eef5a96348171a0f4246aec0a33adf67fc00',
             1337: '0x848d3E41333C7bE47FE42dd2b16F16406B9ad61d',
         },
         decimals: 18,
@@ -22,7 +22,7 @@ export default {
         symbol: 'BTCB',
         address: {
             56: '0x7130d2A12B9BCbFAe4f2634d864A1Ee1Ce3Ead9c',
-            97: '0x9b250E6EE03A6e0f1Ca4f0A459548042bDf59C96',
+            97: '0xcaf70a84005bea66e291812249321c8675c49c79',
             1337: '0x7311f3F3c4df06A697A30Ec6749e8a9232D3A478',
         },
         decimals: 18,
@@ -32,7 +32,7 @@ export default {
         symbol: 'ETH',
         address: {
             56: '0x2170Ed0880ac9A755fd29B2688956BD959F933F8',
-            97: '0xcA3Ce2f0E09e9ada049BDe07AA136e33322b01b9',
+            97: '0xf02ff1287b82aabd2d441077004b60a4c4fdcbcd',
             1337: '0x9EE5f56058d20A6CD11260B5BD3e3682f99a45db',
         },
         decimals: 18,
@@ -51,7 +51,7 @@ export default {
         symbol: 'FUSD',
         address: {
             56: '',
-            97: '0x2A696b216a6262a15fA742750c49c463c9412307',
+            97: '0xCF1CcF2170b61320CD752Db95EE7e03867FDfA86',
             1337: '0xEE1A1C36A9E33552362e3d265e24301Fe89c08DC',
         },
         decimals: 18,

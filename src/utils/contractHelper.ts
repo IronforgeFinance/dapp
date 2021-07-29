@@ -84,5 +84,5 @@ export const getPricesContract = (
 ) => {
     const chainId = process.env.APP_CHAIN_ID as string;
     const address = Addresses.Prices[chainId];
-    return getContract(LiquidationAbi, address, signer);
+    return getContract(PricesAbi, address, signer);
 };

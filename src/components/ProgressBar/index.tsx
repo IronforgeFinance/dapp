@@ -57,12 +57,12 @@ export default (props: IProgressBarProps) => {
                 <div className="info">
                     {type === ProgressBarType.f_ratio && (
                         <>
-                            <span className="start-value">
+                            <span className="end-value">
                                 {endValue}
                                 {unit}
                             </span>
                             <span className=" icon-arrow icon-arrow-left"></span>
-                            <span className="end-value">
+                            <span className="start-value">
                                 {startValue}
                                 {unit}
                             </span>

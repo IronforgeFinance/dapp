@@ -8,6 +8,7 @@ import useRefresh from './useRefresh';
 import useLastUpdated from './useLastUpdated';
 import Tokens from '@/config/constants/tokens';
 import { ethers } from 'ethers';
+import { useERC20 } from './useContract';
 type UseTokenBalanceState = {
     balance: BigNumber | string | number;
     fetchStatus: FetchStatus;
@@ -28,9 +29,11 @@ const useTokenBalance = (tokenAddress: string) => {
     const { account } = useWeb3React();
     const { fastRefresh } = useRefresh();
 
+    const contract = useERC20(tokenAddress);
+
     useEffect(() => {
         const fetchBalance = async () => {
-            const contract = getBep20Contract(tokenAddress);
+            // const contract = getBep20Contract(tokenAddress);
             try {
                 const res = await contract.balanceOf(account);
                 setBalanceState({
@@ -62,14 +65,11 @@ export const useBep20Balance = (token: string) => {
     });
     const { account } = useWeb3React();
     const { fastRefresh } = useRefresh();
-
+    const tokenObj = Tokens[token];
+    if (!token) return;
+    const contract = useERC20(tokenObj.address[process.env.APP_CHAIN_ID]);
     useEffect(() => {
         const fetchBalance = async () => {
-            const tokenObj = Tokens[token];
-            if (!token) return;
-            const contract = getBep20Contract(
-                tokenObj.address[process.env.APP_CHAIN_ID],
-            );
             try {
                 const res = await contract.balanceOf(account);
                 const amount = ethers.utils.formatUnits(res, tokenObj.decimals);
@@ -89,7 +89,7 @@ export const useBep20Balance = (token: string) => {
         if (account) {
             fetchBalance();
         }
-    }, [account, token, fastRefresh, SUCCESS, FAILED]);
+    }, [account, token, fastRefresh, SUCCESS, FAILED, contract]);
 
     return balanceState;
 };
