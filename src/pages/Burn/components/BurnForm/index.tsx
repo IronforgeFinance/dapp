@@ -31,7 +31,7 @@ export default (props: IProps) => {
     const [burnType, setBurnType] = useState('');
     const [submitting, setSubmitting] = useState(false);
     const [burnInitialAvailable, setBurnInitialAvailable] = useState(false);
-    const [burnMaxDirectly, setBurnMaxDirectly] = useState(true);
+    const [burnMaxAvailable, setBurnMaxAvailable] = useState(false);
 
     const { currencyRatio } = useDataView(toToken);
 
@@ -46,9 +46,15 @@ export default (props: IProps) => {
             selectedDebtInUSD: model.selectedDebtInUSD,
         }),
     );
-    const { debtData, setDebtData } = useModel('dataView', (model) => ({
-        debtData: model.debtData,
-        setDebtData: model.setDebtData,
+    const {
+        debtData,
+        setDebtData,
+        fRatioData,
+        setfRadioData,
+        stakedData,
+        setStakedData,
+    } = useModel('dataView', (model) => ({
+        ...model,
     }));
 
     const { balance: fusdBalance } = useBep20Balance('FUSD');
@@ -106,7 +112,7 @@ export default (props: IProps) => {
         //
         if (!toToken) {
             setBurnInitialAvailable(false);
-            setBurnMaxDirectly(false);
+            setBurnMaxAvailable(false);
         } else {
             /*TODO 计算toToken的 ratio.
             只有质押率小于初始质押率才可点击burn to initial
@@ -120,10 +126,11 @@ export default (props: IProps) => {
             } else {
                 setBurnInitialAvailable(false);
             }
+            setBurnMaxAvailable(true);
             if (fusdBalance > selectedDebtInUSD) {
-                setBurnMaxDirectly(true);
+                // 不能直接burn max。
             } else {
-                setBurnMaxDirectly(false);
+                // 可以直接burn max
             }
         }
     }, [toToken, currencyRatio, initialRatio]);
@@ -146,6 +153,14 @@ export default (props: IProps) => {
             toTokenDebtInUsd -
             userCollateralInUsd.dividedBy(initialRatio).toNumber();
         setBurnAmount(burnAmount);
+        setDebtData({
+            ...debtData,
+            endValue: debtData.startValue - burnAmount,
+        });
+        setfRadioData({
+            ...fRatioData,
+            endValue: initialRatio * 100,
+        });
     };
 
     /* 如果余额小于债务 提示进行两个交易，tx1用账户里bnb去购买fusd，tx2进行unstake
@@ -169,6 +184,19 @@ export default (props: IProps) => {
                 .dividedBy(initialRatio)
                 .toNumber();
             setBurnAmount(burnAmount);
+            setDebtData({
+                ...debtData,
+                endValue: debtData.startValue - burnAmount,
+            });
+            setfRadioData({
+                ...fRatioData,
+                endValue: 0,
+            });
+            setStakedData({
+                ...stakedData,
+                endValue:
+                    stakedData.startValue - userCollateralInUsd.toNumber(),
+            });
         }
     };
 
@@ -313,7 +341,11 @@ export default (props: IProps) => {
                         >
                             Burn to initial
                         </Radio.Button>
-                        <Radio.Button value="max" onClick={burnMaxHandler}>
+                        <Radio.Button
+                            value="max"
+                            onClick={burnMaxHandler}
+                            disabled={!burnMaxAvailable}
+                        >
                             Burn Max
                         </Radio.Button>
                     </Radio.Group>

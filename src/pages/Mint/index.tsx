@@ -22,6 +22,7 @@ import {
 import useProvider from '@/hooks/useWeb3Provider';
 import { toFixedWithoutRound, expandToNDecimals } from '@/utils/bigNumber';
 import './index.less';
+import useDataView from '@/hooks/useDataView';
 export default () => {
     const intl = useIntl();
     const { account } = useWeb3React();
@@ -48,6 +49,8 @@ export default () => {
         collateralTokenAddress,
         collateralSytemContract,
     );
+
+    useDataView(collateralToken);
 
     const { handleApprove, requestedApproval } = useERC20Approve(
         collateralTokenAddress,
@@ -111,6 +114,7 @@ export default () => {
 
     const ratio = useMemo(() => {
         const initRatio =
+            //TODO 从config获取token和初始ratio
             COLLATERAL_TOKENS.find((item) => item.name === collateralToken)!
                 .ratio * 10; //  进度条满是100
         if (!collateralAmount || !collateralToken || !lockedAmount) {
@@ -134,11 +138,11 @@ export default () => {
     useEffect(() => {
         const initRatio =
             COLLATERAL_TOKENS.find((item) => item.name === collateralToken)!
-                .ratio * 100; //  进度条满是100
+                .ratio * 100; //dataView 展示的时候*100
         setfRadioData({
             ...fRatioData,
             startValue: initRatio,
-            endValue: ratio,
+            endValue: ratio * 10, // mint页面已经ratio*10，需要再*10
         });
     }, [collateralToken]);
     useEffect(() => {
@@ -190,7 +194,7 @@ export default () => {
             Number(v) * TokenPrices[collateralToken] + stakedData.startValue;
         setStakedData({
             ...stakedData,
-            endValue: currentStakeValue || 0,
+            endValue: stakedData.startValue + currentStakeValue,
         });
     }, 500);
 

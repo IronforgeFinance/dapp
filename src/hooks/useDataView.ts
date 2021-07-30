@@ -115,9 +115,10 @@ const useDataView = (currency: string) => {
                 account,
                 ethers.utils.formatBytes32String(currency),
             );
-            const val =
-                1 /
-                Number(ethers.utils.formatUnits(res.collateralizedRatio, 18));
+            const val = res.collateralizedRatio.isZero()
+                ? 0
+                : 1 /
+                  Number(ethers.utils.formatUnits(res.collateralizedRatio, 18));
             console.log(
                 'fetchCurrencyRatio: ',
                 res.collateralizedRatio.toString(),
