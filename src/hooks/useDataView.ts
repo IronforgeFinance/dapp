@@ -58,11 +58,11 @@ const useDataView = (currency: string) => {
         setStakedData: setStakedDataInModel,
         setLockedData: setLockedDataInModel,
         setDebtData: setDebtDataInModel,
-        setfRadioData: setfRadioDataInModel,
+        setfRatioData: setfRatioDataInModel,
     } = useModel('dataView', (model) => ({
         ...model,
     }));
-    const [currencyRatio, setCurrencyRatio] = useState(5); //TODO 初始质押率;
+    const [currencyRatio, setCurrencyRatio] = useState(0); //TODO 初始质押率;
     const { account } = useWeb3React();
     const { fastRefresh } = useRefresh();
     const collateralSystem = useCollateralSystem();
@@ -129,7 +129,7 @@ const useDataView = (currency: string) => {
                 startValue: val * 100,
                 endValue: fRatioData.endValue || val * 100,
             };
-            setfRadioDataInModel(newVal);
+            setfRatioDataInModel(newVal);
             setCurrencyRatio(val);
             return val;
         }

@@ -16,6 +16,7 @@ import { useBep20Balance } from '@/hooks/useTokenBalance';
 import useDataView, { useSelectedDebtInUSD } from '@/hooks/useDataView';
 import { useInitialRatio } from '@/hooks/useConfig';
 import BigNumber from 'bignumber.js';
+import { debounce } from 'lodash';
 
 const TO_TOKENS = ['BTC'];
 interface IProps {
@@ -26,7 +27,7 @@ export default (props: IProps) => {
     const [debtBalance, setDebtBalance] = useState(0.0);
     const [burnAmount, setBurnAmount] = useState<number>();
     const [unstakeAmount, setUnstakeAmount] = useState<number>();
-    const [toToken, setToToken] = useState<string>();
+    const [toToken, setToToken] = useState<string>(COLLATERAL_TOKENS[0].name);
     const [toTokenDebt, setToTokenDebt] = useState(0.0);
     const [burnType, setBurnType] = useState('');
     const [submitting, setSubmitting] = useState(false);
@@ -50,7 +51,7 @@ export default (props: IProps) => {
         debtData,
         setDebtData,
         fRatioData,
-        setfRadioData,
+        setfRatioData,
         stakedData,
         setStakedData,
     } = useModel('dataView', (model) => ({
@@ -63,17 +64,76 @@ export default (props: IProps) => {
     const prices = usePrices();
     const { account } = useWeb3React();
 
-    const burnAmountHandler = (v) => {
+    const getTokenPrice = async (token: string) => {
+        const res = await prices.getPrice(
+            ethers.utils.formatBytes32String(toToken),
+        );
+        return parseFloat(ethers.utils.formatEther(res));
+    };
+
+    const burnAmountHandler = debounce(async (v) => {
         setBurnAmount(v);
         setDebtData({
             ...debtData,
             endValue: debtData.startValue - v,
         });
-    };
+        if (toToken) {
+            const toTokenPrice = await getTokenPrice(toToken);
+            const val = parseFloat(
+                toFixedWithoutRound((v * initialRatio) / toTokenPrice, 2),
+            );
+            setUnstakeAmount(val);
+            setStakedData({
+                ...stakedData,
+                endValue: stakedData.startValue - val * toTokenPrice,
+            });
+            const ratio =
+                debtData.startValue - v > 0
+                    ? toFixedWithoutRound(
+                          ((stakedData.startValue - val * toTokenPrice) /
+                              (debtData.startValue - v)) *
+                              100,
+                          2,
+                      )
+                    : 0;
+            setfRatioData({
+                ...fRatioData,
+                endValue: Number(ratio),
+            });
+        }
+    }, 500);
 
-    const unstakeAmountHandler = (v) => {
+    const unstakeAmountHandler = debounce(async (v) => {
         setUnstakeAmount(v);
-    };
+        if (toToken) {
+            const toTokenPrice = await getTokenPrice(toToken);
+            const val = parseFloat(
+                toFixedWithoutRound((v * toTokenPrice) / initialRatio, 2),
+            );
+            setBurnAmount(val);
+            setDebtData({
+                ...debtData,
+                endValue: debtData.startValue - val,
+            });
+            setStakedData({
+                ...stakedData,
+                endValue: stakedData.startValue - v * toTokenPrice,
+            });
+            const ratio =
+                debtData.startValue - val > 0
+                    ? toFixedWithoutRound(
+                          ((stakedData.startValue - v * toTokenPrice) /
+                              (debtData.startValue - val)) *
+                              100,
+                          2,
+                      )
+                    : 0;
+            setfRatioData({
+                ...fRatioData,
+                endValue: Number(ratio),
+            });
+        }
+    }, 500);
 
     const toTokenHandler = (v) => {
         const debt = selectedDebtItemInfos.find(
@@ -83,30 +143,9 @@ export default (props: IProps) => {
             setToTokenDebt(debt.debt);
         }
         setToToken(v);
+        setUnstakeAmount(0);
+        setBurnAmount(0);
     };
-
-    // useEffect(() => {
-    //     // Fixme 固定ratio 500%， 设置unstaking amount
-    //     if (toToken && burnAmount && !burnType) {
-    //         const val = parseFloat(
-    //             toFixedWithoutRound((burnAmount * 5) / TokenPrices[toToken], 2),
-    //         );
-    //         const debtInfo = selectedDebtItemInfos.find(
-    //             (item) => item.collateralToken === toToken,
-    //         );
-    //         if (debtInfo && val > debtInfo.debt) {
-    //             setUnstakeAmount(debtInfo.debt);
-    //             const _burn = parseFloat(
-    //                 toFixedWithoutRound(
-    //                     (debtInfo.debt * TokenPrices[toToken]) / 5,
-    //                     2,
-    //                 ),
-    //             );
-    //             setBurnAmount(_burn);
-    //         }
-    //         setUnstakeAmount(val);
-    //     }
-    // }, [burnAmount, toToken, burnType]);
 
     useEffect(() => {
         //
@@ -157,7 +196,7 @@ export default (props: IProps) => {
             ...debtData,
             endValue: debtData.startValue - burnAmount,
         });
-        setfRadioData({
+        setfRatioData({
             ...fRatioData,
             endValue: initialRatio * 100,
         });
@@ -188,7 +227,7 @@ export default (props: IProps) => {
                 ...debtData,
                 endValue: debtData.startValue - burnAmount,
             });
-            setfRadioData({
+            setfRatioData({
                 ...fRatioData,
                 endValue: 0,
             });

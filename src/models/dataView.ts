@@ -49,7 +49,7 @@ const useDataViewModel = () => {
         testData[1],
     );
     const [debtData, setDebtData] = useState<IProgressBarProps>(testData[2]);
-    const [fRatioData, setfRadioData] = useState<IProgressBarProps>(
+    const [fRatioData, setfRatioData] = useState<IProgressBarProps>(
         testData[3],
     );
 
@@ -70,7 +70,7 @@ const useDataViewModel = () => {
         debtData,
         setDebtData,
         fRatioData,
-        setfRadioData,
+        setfRatioData,
         selectedDebtInfos,
         setSelectedDebtInfos,
         selectedDebtInUSD,

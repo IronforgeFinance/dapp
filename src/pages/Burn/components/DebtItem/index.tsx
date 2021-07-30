@@ -103,9 +103,10 @@ export default (IDebtItemProps) => {
         }, 0);
         const infos = res.map((item, index) => {
             const price = TokenPrices[tokens[index]];
-            const ratioValue = Number((100 * (item * price)) / total).toFixed(
-                2,
-            );
+            const ratioValue =
+                total > 0
+                    ? Number((100 * (item * price)) / total).toFixed(2)
+                    : 0;
             return {
                 collateralToken: tokens[index],
                 ratio: ratioValue + '%',

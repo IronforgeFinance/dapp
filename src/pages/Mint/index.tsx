@@ -8,7 +8,7 @@ import { useERC20 } from '@/hooks/useContract';
 import useTokenBalance, { useBep20Balance } from '@/hooks/useTokenBalance';
 import { useWeb3React } from '@web3-react/core';
 import { getBep20Contract } from '@/utils/contractHelper';
-import { useCollateralSystem } from '@/hooks/useContract';
+import { useCollateralSystem, usePrices } from '@/hooks/useContract';
 import Tokens from '@/config/constants/tokens';
 import Contracts from '@/config/constants/contracts';
 import { ethers } from 'ethers';
@@ -19,6 +19,7 @@ import {
     useCheckERC20ApprovalStatus,
     useERC20Approve,
 } from '@/hooks/useApprove';
+import { useInitialRatio } from '@/hooks/useConfig';
 import useProvider from '@/hooks/useWeb3Provider';
 import { toFixedWithoutRound, expandToNDecimals } from '@/utils/bigNumber';
 import './index.less';
@@ -27,21 +28,30 @@ export default () => {
     const intl = useIntl();
     const { account } = useWeb3React();
     const provider = useProvider();
-    const [collateralAmount, setCollateralAmount] = useState();
+    const [collateralAmount, setCollateralAmount] = useState(0);
     const [lockedAmount, setLockedAmount] = useState<undefined | number>();
     const [toAmount, setToAmount] = useState<undefined | number>();
     // const [collateralBalance, setCollateralBalance] = useState('0.00');
-    const [collateralToken, setCollateralToken] = useState('BTC');
+    const [collateralToken, setCollateralToken] = useState(
+        COLLATERAL_TOKENS[0].name,
+    );
     // const [fTokenBalance, setFTokenBalance] = useState('0.00')
     const [toToken, setToToken] = useState();
     const [submitting, setSubmitting] = useState(false);
+    const [computedRatio, setComputedRatio] = useState(0);
 
     const collateralSystem = useCollateralSystem();
+
+    const initialRatio = useInitialRatio(collateralToken);
+    const { currencyRatio } = useDataView(collateralToken);
 
     const btcAddress = Tokens['BTC'].address[process.env.APP_CHAIN_ID!];
 
     const collateralTokenAddress = useMemo(() => {
-        return Tokens[collateralToken].address[process.env.APP_CHAIN_ID!];
+        if (collateralToken) {
+            return Tokens[collateralToken].address[process.env.APP_CHAIN_ID!];
+        }
+        return '';
     }, [collateralToken]);
     const collateralSytemContract =
         Contracts.CollateralSystem[process.env.APP_CHAIN_ID!];
@@ -49,6 +59,8 @@ export default () => {
         collateralTokenAddress,
         collateralSytemContract,
     );
+
+    const prices = usePrices();
 
     useDataView(collateralToken);
 
@@ -68,7 +80,7 @@ export default () => {
         debtData,
         setDebtData,
         fRatioData,
-        setfRadioData,
+        setfRatioData,
     } = useModel('dataView', (model) => ({
         ...model,
     }));
@@ -112,61 +124,90 @@ export default () => {
         }
     }, [collateralAmount, collateralToken, fTokenBalance]);
 
-    const ratio = useMemo(() => {
-        const initRatio =
-            //TODO 从config获取token和初始ratio
-            COLLATERAL_TOKENS.find((item) => item.name === collateralToken)!
-                .ratio * 10; //  进度条满是100
-        if (!collateralAmount || !collateralToken || !lockedAmount) {
-            return initRatio;
-        } else if (!lockedAmount || Number(lockedAmount) === 0) {
-            // 单币质押
-            return initRatio;
-        } else {
-            const collateralVal =
-                Number(collateralAmount) * TokenPrices[collateralToken];
-            const fTokenVal = lockedAmount
-                ? Number(lockedAmount) * TokenPrices['fToken']
-                : 0;
-            const ratio = initRatio * (1 - fTokenVal / collateralVal);
-            const v = parseFloat(ratio.toFixed(2));
-            console.log(v);
-            return v;
-        }
-    }, [collateralAmount, collateralToken, lockedAmount]);
+    const getTokenPrice = async (token: string) => {
+        const res = await prices.getPrice(
+            ethers.utils.formatBytes32String(token),
+        );
+        return parseFloat(ethers.utils.formatEther(res));
+    };
+
+    // 实时计算的ratio。用来判断能否mint和计算能mint多少toToken
+    useEffect(() => {
+        (async () => {
+            let computedRatio;
+            if (!collateralAmount || !collateralToken || !lockedAmount) {
+                computedRatio = initialRatio;
+            } else if (!lockedAmount || Number(lockedAmount) === 0) {
+                computedRatio = initialRatio;
+            } else {
+                const collateralPrice = await getTokenPrice(collateralToken);
+                const collateralVal =
+                    Number(collateralAmount) * collateralPrice;
+                const fTokenVal = lockedAmount
+                    ? Number(lockedAmount) * TokenPrices['fToken'] //TODO 平台币价格获取
+                    : 0;
+                const ratio = initialRatio * (1 - fTokenVal / collateralVal);
+                const v = parseFloat(ratio.toFixed(2));
+                console.log(v);
+                computedRatio = v;
+            }
+            setComputedRatio(computedRatio);
+        })();
+    }, [collateralAmount, collateralToken, lockedAmount, initialRatio]);
 
     useEffect(() => {
-        const initRatio =
-            COLLATERAL_TOKENS.find((item) => item.name === collateralToken)!
-                .ratio * 100; //dataView 展示的时候*100
-        setfRadioData({
-            ...fRatioData,
-            startValue: initRatio,
-            endValue: ratio * 10, // mint页面已经ratio*10，需要再*10
-        });
-    }, [collateralToken]);
+        console.log('initialRatio ', initialRatio);
+    }, [initialRatio]);
+
     useEffect(() => {
-        setfRadioData({
-            ...fRatioData,
-            endValue: parseFloat(Number(ratio * 10).toFixed(2)),
-        });
-    }, [ratio]);
+        (async () => {
+            if (collateralAmount && toAmount && collateralToken && toToken) {
+                const collateralPrice = await getTokenPrice(collateralToken);
+                const totalCollateral =
+                    stakedData.startValue + collateralAmount * collateralPrice;
+                const totalDebt = debtData.startValue + toAmount * 1; // TODO 目前铸造物只有FUSD
+                const ratio =
+                    totalDebt > 0
+                        ? toFixedWithoutRound(
+                              (totalCollateral * 100) / totalDebt,
+                              2,
+                          )
+                        : 0;
+                setfRatioData({
+                    ...fRatioData,
+                    startValue: currencyRatio * 100,
+                    endValue: Number(ratio),
+                });
+            }
+        })();
+    }, [collateralAmount, toAmount, collateralToken, toToken]);
 
     // 计算toAmount
     useEffect(() => {
-        if (ratio >= 20 && toToken && collateralAmount) {
-            const val =
-                (Number(collateralAmount) * TokenPrices[collateralToken]) /
-                (ratio / 10);
-            const amount = toFixedWithoutRound(
-                val / TokenPrices[toToken.substr(1)],
-                2,
-            );
-            setToAmount(parseFloat(amount));
-        } else {
-            setToAmount(0);
-        }
-    }, [collateralToken, collateralAmount, lockedAmount, ratio, toToken]);
+        (async () => {
+            if (computedRatio >= 2 && toToken && collateralAmount) {
+                const price = await getTokenPrice(collateralToken);
+                const amount = toFixedWithoutRound(
+                    (Number(collateralAmount) * price) / computedRatio,
+                    2,
+                );
+                // TODO 铸造物的价格，FUSD是1，其它的从合约获取
+                // const amount = toFixedWithoutRound(
+                //     val / TokenPrices[toToken.substr(1)],
+                //     2,
+                // );
+                setToAmount(parseFloat(amount));
+            } else {
+                setToAmount(0);
+            }
+        })();
+    }, [
+        collateralToken,
+        collateralAmount,
+        lockedAmount,
+        computedRatio,
+        toToken,
+    ]);
 
     // 计算新的债务
     useEffect(() => {
@@ -174,7 +215,7 @@ export default () => {
             const val =
                 parseFloat(
                     new BigNumber(toAmount)
-                        .multipliedBy(TokenPrices[toToken!])
+                        .multipliedBy(TokenPrices[toToken!]) //TODO 铸造物价格从合约获取
                         .toFixed(2),
                 ) + debtData.startValue;
             setDebtData({
@@ -194,7 +235,7 @@ export default () => {
             Number(v) * TokenPrices[collateralToken] + stakedData.startValue;
         setStakedData({
             ...stakedData,
-            endValue: stakedData.startValue + currentStakeValue,
+            endValue: currentStakeValue,
         });
     }, 500);
 
@@ -364,8 +405,10 @@ export default () => {
                 <div className="ratio">
                     <span>Ratio</span>
                     <Progress
-                        percent={ratio}
-                        format={() => `${Number(ratio * 10).toFixed(2)}%`}
+                        percent={computedRatio * 10}
+                        format={() =>
+                            `${Number(computedRatio * 100).toFixed(2)}%`
+                        }
                     />
                 </div>
 
