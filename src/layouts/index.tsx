@@ -4,6 +4,7 @@ import './index.less';
 import CommonHeader from './components/Header';
 import CommonFooter from './components/Footer';
 import classNames from 'classnames';
+import { useModel } from 'umi';
 export default function Layout({
     children,
     location,
@@ -11,6 +12,9 @@ export default function Layout({
     history,
     match,
 }: IRouteComponentProps) {
+    const { clearDataView } = useModel('dataView', (model) => ({
+        clearDataView: model.clearDataView,
+    }));
     const player = useRef<HTMLVideoElement>(null);
     console.log('location ', process.env.NODE_ENV);
 
@@ -33,6 +37,7 @@ export default function Layout({
             player.current.src = '';
             player.current.pause();
         }
+        clearDataView();
     }, [location]);
     return (
         <div className="container">

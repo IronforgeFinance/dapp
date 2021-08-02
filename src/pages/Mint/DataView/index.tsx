@@ -11,8 +11,6 @@ export default () => {
         }),
     );
 
-    useDataView();
-
     return (
         <div className="data-view-container">
             <ProgressBar {...stakedData} />

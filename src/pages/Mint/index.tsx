@@ -24,6 +24,7 @@ import useProvider from '@/hooks/useWeb3Provider';
 import { toFixedWithoutRound, expandToNDecimals } from '@/utils/bigNumber';
 import './index.less';
 import useDataView from '@/hooks/useDataView';
+import { useTokenPrice } from '@/hooks/useTokenPrice';
 export default () => {
     const intl = useIntl();
     const { account } = useWeb3React();
@@ -32,9 +33,7 @@ export default () => {
     const [lockedAmount, setLockedAmount] = useState<undefined | number>();
     const [toAmount, setToAmount] = useState<undefined | number>();
     // const [collateralBalance, setCollateralBalance] = useState('0.00');
-    const [collateralToken, setCollateralToken] = useState(
-        COLLATERAL_TOKENS[0].name,
-    );
+    const [collateralToken, setCollateralToken] = useState();
     // const [fTokenBalance, setFTokenBalance] = useState('0.00')
     const [toToken, setToToken] = useState();
     const [submitting, setSubmitting] = useState(false);
@@ -43,9 +42,7 @@ export default () => {
     const collateralSystem = useCollateralSystem();
 
     const initialRatio = useInitialRatio(collateralToken);
-    const { currencyRatio } = useDataView(collateralToken);
-
-    const btcAddress = Tokens['BTC'].address[process.env.APP_CHAIN_ID!];
+    const collateralTokenPrice = useTokenPrice(collateralToken);
 
     const collateralTokenAddress = useMemo(() => {
         if (collateralToken) {
@@ -62,7 +59,7 @@ export default () => {
 
     const prices = usePrices();
 
-    useDataView(collateralToken);
+    const { currencyRatio } = useDataView(collateralToken);
 
     const { handleApprove, requestedApproval } = useERC20Approve(
         collateralTokenAddress,
@@ -88,7 +85,7 @@ export default () => {
     const { balance } = useTokenBalance(
         Tokens.fToken.address[process.env.APP_CHAIN_ID!],
     );
-    const fTokenBalance = balance.toFixed(2);
+    const fTokenBalance = balance?.toFixed(2);
 
     const { balance: collateralBalance } = useBep20Balance(collateralToken);
 
@@ -229,10 +226,10 @@ export default () => {
             });
         }
     }, [toToken, toAmount]);
-    const collateralAmountHandler = debounce((v) => {
+    const collateralAmountHandler = debounce(async (v) => {
         setCollateralAmount(v);
-        const currentStakeValue =
-            Number(v) * TokenPrices[collateralToken] + stakedData.startValue;
+        const price = await getTokenPrice(collateralToken);
+        const currentStakeValue = Number(v) * price + stakedData.startValue;
         setStakedData({
             ...stakedData,
             endValue: currentStakeValue,
@@ -255,6 +252,17 @@ export default () => {
 
     const toAmountHandler = (v) => {
         setToAmount(v);
+    };
+
+    const collateralTokenHandler = (v) => {
+        setCollateralToken(v);
+        setCollateralAmount(0);
+        setToAmount(0);
+    };
+
+    const toTokenHandler = (v) => {
+        setToToken(v);
+        setToAmount(0);
     };
 
     const onSubmit = async () => {
@@ -321,7 +329,8 @@ export default () => {
                             <div className="token">
                                 <Select
                                     value={collateralToken}
-                                    onSelect={(v) => setCollateralToken(v)}
+                                    onSelect={collateralTokenHandler}
+                                    placeholder={'Select token'}
                                 >
                                     {COLLATERAL_TOKENS.map((item) => (
                                         <Select.Option
@@ -386,7 +395,7 @@ export default () => {
                             <div className="token">
                                 <Select
                                     value={toToken}
-                                    onSelect={(v) => setToToken(v)}
+                                    onSelect={toTokenHandler}
                                     placeholder={intl.formatMessage({
                                         id: 'mint.selectCasting',
                                     })}

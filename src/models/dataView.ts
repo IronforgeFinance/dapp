@@ -58,6 +58,13 @@ const useDataViewModel = () => {
     );
     const [selectedDebtInUSD, setSelectedDebtInUSD] = useState(0.0);
 
+    const clearDataView = () => {
+        setStakedData(testData[0]);
+        setLockedData(testData[1]);
+        setDebtData(testData[2]);
+        setfRatioData(testData[3]);
+    };
+
     // plugin-model 是umi提升到全局的状态，与根组件同级，不能响应异步的account的获取，
     // 因此这里用useEffect 异步获取数据不生效。
     // 仅做全局静态数据维护
@@ -75,6 +82,7 @@ const useDataViewModel = () => {
         setSelectedDebtInfos,
         selectedDebtInUSD,
         setSelectedDebtInUSD,
+        clearDataView,
     };
 };
 

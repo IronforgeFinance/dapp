@@ -17,6 +17,7 @@ import useWeb3Provider from '@/hooks/useWeb3Provider';
 import useRefresh from './useRefresh';
 import { COLLATERAL_TOKENS } from '@/config';
 import { useModel } from 'umi';
+import { useInitialRatio } from '@/hooks/useConfig';
 const testData = [
     {
         type: ProgressBarType.staked,
@@ -70,41 +71,50 @@ const useDataView = (currency: string) => {
     const debtSystem = useDebtSystem();
     const provider = useWeb3Provider();
 
+    const initialRatio = useInitialRatio(currency);
+
     const fetchStakedData = async () => {
         if (account) {
-            const res = await collateralSystem.getUserTotalCollateralInUsd(
+            const res = await collateralSystem.getUserCollateralInUsd(
                 account,
+                ethers.utils.formatBytes32String(currency),
             );
-            console.log('getUserTotalCollateralInUsd', res);
             const amount = parseFloat(ethers.utils.formatUnits(res, 18));
+            console.log('getUserCollateralInUsd', amount);
             const newVal = {
                 ...stakedData,
+                token: currency,
                 startValue: amount,
-                endValue: stakedData.endValue || amount,
+                endValue: amount,
             };
             setStakedDataInModel(newVal);
         }
     };
     const fetchLockedData = async () => {};
     const fetchDebtData = async () => {
-        const res = await Promise.all(
-            COLLATERAL_TOKENS.map((token) =>
-                debtSystem.GetUserDebtBalanceInUsd(
-                    account,
-                    ethers.utils.formatBytes32String(token.name),
-                ),
-            ),
-        );
+        // const res = await Promise.all(
+        //     COLLATERAL_TOKENS.map((token) =>
+        //         debtSystem.GetUserDebtBalanceInUsd(
+        //             account,
+        //             ethers.utils.formatBytes32String(token.name),
+        //         ),
+        //     ),
+        // );
 
-        const totalDebtInUsd = res.reduce((total, item) => {
-            const val = parseFloat(ethers.utils.formatUnits(item[0], 18));
-            total += val;
-            return total;
-        }, 0);
+        // const totalDebtInUsd = res.reduce((total, item) => {
+        //     const val = parseFloat(ethers.utils.formatUnits(item[0], 18));
+        //     total += val;
+        //     return total;
+        // }, 0);
+        const res = await debtSystem.GetUserDebtBalanceInUsd(
+            account,
+            ethers.utils.formatBytes32String(currency),
+        );
+        const debt = parseFloat(ethers.utils.formatUnits(res[0], 18));
         const newVal = {
             ...debtData,
-            startValue: totalDebtInUsd,
-            endValue: debtData.endValue || totalDebtInUsd,
+            startValue: debt,
+            endValue: debt,
         };
         setDebtDataInModel(newVal);
     };
@@ -127,7 +137,7 @@ const useDataView = (currency: string) => {
             const newVal = {
                 ...fRatioData,
                 startValue: val * 100,
-                endValue: fRatioData.endValue || val * 100,
+                endValue: initialRatio * 100,
             };
             setfRatioDataInModel(newVal);
             setCurrencyRatio(val);
@@ -136,17 +146,17 @@ const useDataView = (currency: string) => {
         return 0;
     };
     useEffect(() => {
-        if (account) {
+        if (account && currency) {
             fetchStakedData();
             fetchDebtData();
         }
-    }, [account, fastRefresh, provider]);
+    }, [account, currency, fastRefresh, provider]);
 
     useEffect(() => {
         if (currency) {
             fetchCurrencyRatio();
         }
-    }, [currency, account, fastRefresh, provider]);
+    }, [currency, account, fastRefresh, provider, initialRatio]);
     return { stakedData, fetchStakedData, currencyRatio };
 };
 

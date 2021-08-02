@@ -1,12 +1,18 @@
 [
   {
-    "inputs": [],
-    "name": "BUILD_RATIO",
-    "outputs": [
+    "inputs": [
       {
         "internalType": "bytes32",
-        "name": "",
+        "name": "key",
         "type": "bytes32"
+      }
+    ],
+    "name": "getBuildRatio",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
       }
     ],
     "stateMutability": "view",

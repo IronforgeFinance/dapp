@@ -8,9 +8,12 @@ export interface IProgressBarProps {
     startValue: number;
     endValue: number;
     unit: '$' | '%';
+    token?: string;
+    tokenAmount?: number;
 }
 export default (props: IProgressBarProps) => {
-    const { type, name, startValue, endValue, unit } = props;
+    const { type, name, startValue, endValue, unit, token, tokenAmount } =
+        props;
 
     const progress = useMemo(() => {
         if (type === ProgressBarType.f_ratio) {
