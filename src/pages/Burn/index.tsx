@@ -50,7 +50,7 @@ export default () => {
         <div className="burn-container">
             <DataView />
             {!showForm && (
-                <div className="burn-box">
+                <div className="burn-box common-box">
                     <div className="head">
                         <p>
                             Buy and burn fAsset to clean your total debt and

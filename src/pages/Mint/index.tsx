@@ -122,6 +122,7 @@ export default () => {
     }, [collateralAmount, collateralToken, fTokenBalance]);
 
     const getTokenPrice = async (token: string) => {
+        if (!token) return 0;
         const res = await prices.getPrice(
             ethers.utils.formatBytes32String(token),
         );
@@ -302,7 +303,7 @@ export default () => {
     return (
         <div className="mint-container">
             <DataView />
-            <div className="mint-box">
+            <div className="mint-box common-box">
                 <div className="input-item">
                     <p className="label">
                         {intl.formatMessage({ id: 'mint.from' })}
