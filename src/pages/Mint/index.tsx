@@ -25,6 +25,8 @@ import { toFixedWithoutRound, expandToNDecimals } from '@/utils/bigNumber';
 import './index.less';
 import useDataView from '@/hooks/useDataView';
 import { useTokenPrice } from '@/hooks/useTokenPrice';
+import ScaleGroup from '@/components/ScaleGroup';
+import classNames from 'classnames';
 export default () => {
     const intl = useIntl();
     const { account } = useWeb3React();
@@ -38,6 +40,7 @@ export default () => {
     const [toToken, setToToken] = useState();
     const [submitting, setSubmitting] = useState(false);
     const [computedRatio, setComputedRatio] = useState(0);
+    const [lockedScale, setLockedScale] = useState('0');
 
     const collateralSystem = useCollateralSystem();
 
@@ -362,16 +365,19 @@ export default () => {
                             </p>
                         </div>
                         <div className="input">
-                            <InputNumber
-                                disabled // 暂不支持
-                                value={lockedAmount}
-                                onChange={lockedAmountHandler}
-                                placeholder="0.00"
-                                className="custom-input"
+                            <span
+                                className={classNames({
+                                    'common-span-disabled': !isApproved,
+                                    'common-span-active': isApproved,
+                                })}
+                            >
+                                0.00
+                            </span>
+                            <ScaleGroup
+                                scaleRange={['0', '1/10', '1/5', '3/10']}
+                                value={lockedScale}
+                                updateScale={(scale) => setLockedScale(scale)}
                             />
-                            <div className="token">
-                                <p>Max locked amount: {maxLockedAmount}</p>
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -385,15 +391,28 @@ export default () => {
                             <p className="left">
                                 {intl.formatMessage({ id: 'mint.mint' })}
                             </p>
+                            <p className="right">
+                                {intl.formatMessage({ id: 'mint.balance' })}
+                            </p>
                         </div>
                         <div className="input">
                             <InputNumber
                                 value={toAmount}
                                 placeholder="0.00"
-                                className="custom-input"
+                                className={classNames({
+                                    'custom-input': true,
+                                    disabled: !isApproved,
+                                })}
                                 onChange={toAmountHandler}
                             />
                             <div className="token">
+                                <i
+                                    className={classNames({
+                                        'icon-token': true,
+                                        [String(toToken).toLowerCase()]: true,
+                                        'size-24': true,
+                                    })}
+                                />
                                 <Select
                                     value={toToken}
                                     onSelect={toTokenHandler}
@@ -412,15 +431,16 @@ export default () => {
                     </div>
                 </div>
 
-                <div className="ratio">
-                    <span>Ratio</span>
-                    <Progress
-                        percent={computedRatio * 10}
-                        format={() =>
-                            `${Number(computedRatio * 100).toFixed(2)}%`
-                        }
-                    />
-                </div>
+                {isApproved && (
+                    <div className="ratio">
+                        <Progress
+                            percent={computedRatio * 10}
+                            format={() =>
+                                `${Number(computedRatio * 100).toFixed(2)}%`
+                            }
+                        />
+                    </div>
+                )}
 
                 {isApproved && (
                     <Button
@@ -433,7 +453,7 @@ export default () => {
                 )}
                 {!isApproved && (
                     <Button
-                        className="btn-mint"
+                        className="btn-mint common-btn-pale"
                         onClick={handleApprove}
                         loading={requestedApproval}
                     >

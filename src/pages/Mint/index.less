@@ -2,8 +2,9 @@
     width: 100%;
     display: flex;
     justify-content: space-between;
-    align-items: center;
+    // align-items: center;
 }
+
 .mint-box {
     // background: #87737e;
     padding: 40px 30px;
@@ -13,37 +14,95 @@
     background-size: 450px 100%, 450px 100%, 450px 100%;
 }
 
+.input-locked-amount {
+    flex: 1;
+    width: 100%;
+    min-width: auto !important;
+}
+
 .btn-mint {
     cursor: pointer;
     display: block;
-    width: 356px;
-    height: 44px;
-    background: linear-gradient(
-        90.04deg,
-        #724814 1.14%,
-        rgba(172, 123, 64, 0) 104.11%
-    );
-    box-shadow: inset 0px 1px 1px rgba(255, 241, 118, 0.4);
-    border-radius: 6px;
-    margin: 30px auto;
-
+    width: 236px;
+    height: 70px;
     font-style: normal;
     font-weight: bold;
     font-size: 18px;
     line-height: 27px;
+    color: rgba(255, 254, 254, 0.7);
+    border: none;
+    margin: 30px auto;
+    // background: linear-gradient(
+    //     90.04deg,
+    //     #724814 1.14%,
+    //     rgba(172, 123, 64, 0) 104.11%
+    // );
+    // box-shadow: inset 0px 1px 1px rgba(255, 241, 118, 0.4);
+    // border-radius: 6px;
 
-    color: #fcb244;
+    // font-style: normal;
+    // font-weight: bold;
+    // font-size: 18px;
+    // line-height: 27px;
 
-    border: 3.2px solid #3a1f04;
-    text-shadow: 0px 0px 1px rgba(134, 96, 31, 0.9);
+    // color: #fcb244;
+
+    // border: 3.2px solid #3a1f04;
+    // text-shadow: 0px 0px 1px rgba(134, 96, 31, 0.9);
 }
+
 .ratio {
-    font-style: normal;
-    font-weight: normal;
-    font-size: 15px;
-    line-height: 22px;
-    color: #ffffff;
-    .ant-progress-text {
+    .ant-progress {
+        font-style: normal;
+        font-weight: normal;
+        font-size: 15px;
+        line-height: 22px;
         color: #ffffff;
+
+        width: 382px;
+        height: 44px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+
+        .ant-progress-outer {
+            width: 364px;
+            height: 12px;
+            background: #585448;
+            box-shadow: 0px 0px 1px 3px #654609,
+                inset 0px -2px 1px rgba(0, 0, 0, 0.25),
+                inset -1px 1px 1px rgba(255, 247, 236, 0.38);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            padding: 4px 3px;
+            box-sizing: border-box;
+
+            .ant-progress-inner {
+                background-color: transparent;
+
+                .ant-progress-bg {
+                    height: 4px !important;
+                    background: linear-gradient(
+                        90deg,
+                        #fcd144 62.3%,
+                        #ffad33 92.56%
+                    );
+                }
+            }
+        }
+
+        .ant-progress-text {
+            width: 364px;
+            text-align: right;
+            display: inline-block;
+            margin-top: 6px;
+            margin-left: 0;
+            font-style: normal;
+            font-weight: 300;
+            font-size: 15px;
+            line-height: 22px;
+            color: #ffffff;
+        }
     }
 }

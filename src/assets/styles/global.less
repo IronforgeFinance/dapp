@@ -1,3 +1,7 @@
+@import './button.less';
+@import './icon.less';
+@import './token.less';
+
 @max-phone-width: 414px; //phone最大宽度
 @min-ipad-width: 768px; //ipad最小宽度
 @max-ipad-width: 1024px; //ipad最大宽度
@@ -43,6 +47,7 @@ dl {
 
 .input-item {
     margin-bottom: 10px;
+
     .label {
         font-style: normal;
         font-weight: bold;
@@ -51,6 +56,7 @@ dl {
         align-items: center;
         color: #ffffff;
     }
+
     .input-item-content {
         background: rgba(51, 39, 30, 0.8);
         border: 1px solid rgba(178, 178, 181, 0.5);
@@ -60,6 +66,7 @@ dl {
         border-radius: 6px;
         border-radius: 6px;
         padding: 9px 12px;
+
         .content-label {
             display: block;
             height: 22px;
@@ -69,26 +76,32 @@ dl {
             font-weight: normal;
             font-size: 15px;
             line-height: 22px;
+
             .left {
                 float: left;
                 color: rgba(255, 255, 255, 0.7);
             }
+
             .right {
                 float: right;
                 color: #ffffff;
+
                 .price {
                     font-weight: 700;
                 }
             }
         }
+
         .input {
             display: flex;
             justify-content: space-between;
             align-items: center;
+
             .ant-input-number-focused {
                 border: none !important;
                 box-shadow: none !important;
             }
+
             .token {
                 display: flex;
                 justify-content: space-between;
@@ -103,34 +116,41 @@ dl {
         }
     }
 }
+
 .token {
     .ant-select,
     .ant-select-arrow,
     .ant-select-selection-placeholder {
         color: #e1ab3b;
     }
+
     .ant-select-selector {
         background: none !important;
         border: none !important;
     }
+
     .ant-select-arrow {
         top: 50%;
     }
+
     .ant-select-selection-placeholder {
     }
 }
+
 .custom-input {
     .ant-input-number-handler-wrap {
         display: none;
     }
+
     .ant-input-number-input-wrap {
         font-style: normal;
         font-weight: bold;
         font-size: 16px;
         line-height: 24px;
-        color: #e1ab3b;
+        color: #fcd144;
     }
 }
+
 .icon-add {
     margin: 10px auto;
     margin-bottom: 0;
@@ -166,14 +186,17 @@ dl {
     cursor: pointer;
     border: none;
 }
+
 .common-btn-red {
     background: url(../images/common-btn-red.png) no-repeat;
     background-size: 100% 100%;
 }
+
 .common-btn-red:hover {
     background: url(../images/common-btn-red-hover.png) no-repeat;
     background-size: 100% 100%;
 }
+
 .common-btn-red:disabled {
     background: url(../images/common-btn-red-disabled.png) no-repeat;
     background-size: 100% 100%;
@@ -183,10 +206,12 @@ dl {
     background: url(../images/common-btn-yellow.png) no-repeat;
     background-size: 100% 100%;
 }
+
 .common-btn-yellow:hover {
     background: url(../images/common-btn-yellow-hover.png) no-repeat;
     background-size: 100% 100%;
 }
+
 .common-btn-yellow:disabled {
     background: url(../images/common-btn-yellow-disabped.png) no-repeat;
     background-size: 100% 100%;
@@ -221,7 +246,25 @@ dl {
     border: none;
     cursor: pointer;
 }
+
 .common-btn-back:hover {
     background: url(../images/icon-back-hover.png) no-repeat;
     background-size: cover;
+}
+
+.common-span {
+    font-style: normal;
+    font-weight: bold;
+    font-size: 16px;
+    line-height: 24px;
+    display: flex;
+    align-items: center;
+
+    &-disabled {
+        color: rgba(255, 255, 255, 0.5);
+    }
+
+    &-active {
+        color: rgba(252, 209, 68, 1);
+    }
 }

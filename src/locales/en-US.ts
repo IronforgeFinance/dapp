@@ -15,4 +15,5 @@ export default {
     'mint.to': 'To',
     'mint.selectCasting': 'Select a casting',
     'mint.mint': 'Mint',
+    'mint.balance': 'Balance: ',
 };

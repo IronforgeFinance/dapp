@@ -1,0 +1,48 @@
+.group-scale {
+    display: flex;
+    align-items: center;
+
+    .btn-scale {
+        width: 44px;
+        height: 20px;
+        border: 1px solid rgba(225, 171, 59, 0.7);
+        padding: 2px 7px;
+        box-sizing: border-box;
+        border-radius: 4px;
+        font-style: normal;
+        font-weight: normal;
+        font-size: 15px;
+        line-height: 20px;
+        color: rgba(225, 171, 59, 0.7);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: transparent;
+
+        &:nth-child(n + 2) {
+            margin-left: 14px;
+        }
+
+        &.active {
+            background: #e1ab3b;
+            border: 0.4px solid #e1ab3b;
+            box-shadow: 3px 4px 4px rgba(252, 209, 68, 0.2);
+            font-weight: bold;
+            color: #1c1c1d;
+            position: relative;
+
+            &:after {
+                content: '';
+                position: absolute;
+                width: 52px;
+                height: 30px;
+                left: 50%;
+                top: 50%;
+                transform: translate(calc(-50% - 0.4px), calc(-50% - 0.4px));
+                background: url('../../assets/images/mint-focus.png') no-repeat
+                    center;
+                background-size: contain;
+            }
+        }
+    }
+}
