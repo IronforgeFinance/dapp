@@ -19,3 +19,6 @@
 /src/.umi-test
 /.env.local
 *.tar.gz
+
+# vscode
+.vscode
