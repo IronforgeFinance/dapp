@@ -121,6 +121,7 @@ const useDataView = (currency: string) => {
 
     const fetchCurrencyRatio = async () => {
         if (currency) {
+            //TODO 替换为collateralSystem.getRatio 方法。还没部署。
             const res = await liquidation.evalUserPosition(
                 account,
                 ethers.utils.formatBytes32String(currency),
