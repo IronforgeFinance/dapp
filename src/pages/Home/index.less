@@ -1,1 +1,59 @@
 @import '../../assets/styles/global.less';
+
+.home-container {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+
+    .sheepskin-book {
+        margin-top: 143px;
+        width: 326px;
+        height: 297px;
+        padding: 46px 13px 33px 23px;
+        box-sizing: border-box;
+        display: flex;
+        flex-direction: column;
+        background: url('../../assets/images/home_sheepskin_book.png') no-repeat
+            center;
+        background-size: contain;
+
+        &:nth-child(n + 2) {
+            margin-left: 85px;
+        }
+
+        > h3 {
+            font-style: normal;
+            font-weight: bold;
+            font-size: 24px;
+            line-height: 36px;
+            text-align: center;
+            color: #1c1c1d;
+        }
+
+        .key {
+            font-style: normal;
+            font-weight: bold;
+            font-size: 18px;
+            line-height: 27px;
+            text-align: justify;
+            color: #1c1c1d;
+            padding-top: 18px;
+            padding-bottom: 4px;
+        }
+
+        .words {
+            font-style: normal;
+            font-weight: normal;
+            font-size: 15px;
+            line-height: 24px;
+            text-align: justify;
+            letter-spacing: 0.02em;
+            color: rgba(28, 28, 29, 0.6);
+            max-height: 128px;
+            overflow-y: auto;
+            > a.danger {
+                color: #a44116;
+            }
+        }
+    }
+}
