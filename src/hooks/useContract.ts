@@ -10,6 +10,7 @@ import {
     getConfigContract,
     getLiquidationContract,
     getPricesContract,
+    getRouterContract
 } from '@/utils/contractHelper';
 
 export const useERC20 = (address: string) => {
@@ -69,3 +70,8 @@ export const usePrices = () => {
     const provider = useWeb3Provider();
     return useMemo(() => getPricesContract(provider.getSigner()), [provider]);
 };
+
+export const useRouter = () => {
+    const provider = useWeb3Provider()
+    return useMemo(() => getRouterContract(provider.getSigner()), [provider]);
+}

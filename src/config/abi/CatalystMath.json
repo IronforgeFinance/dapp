@@ -7,11 +7,22 @@
         "type": "uint256"
       }
     ],
+    "name": "PRBMathUD60x18__LogInputTooSmall",
+    "type": "error"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "x",
+        "type": "uint256"
+      }
+    ],
     "name": "calcCatalyst",
     "outputs": [
       {
         "internalType": "uint256",
-        "name": "result",
+        "name": "",
         "type": "uint256"
       }
     ],

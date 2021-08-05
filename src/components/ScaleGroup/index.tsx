@@ -2,10 +2,14 @@ import React, { useMemo } from 'react';
 import './index.less';
 import classNames from 'classnames';
 
+export interface IScaleOption {
+    label: string;
+    value: any;
+}
 export interface IScaleGroup {
     defaultValue?: string;
     value?: string;
-    scaleRange?: string[];
+    scaleRange?: IScaleOption[];
     updateScale?: Function;
 }
 
@@ -18,12 +22,12 @@ export default (props: IScaleGroup) => {
                 <button
                     className={classNames({
                         'btn-scale': true,
-                        active: value == scale,
+                        active: value == scale.value,
                     })}
-                    key={scale}
-                    onClick={updateScale.bind(this, scale)}
+                    key={scale.value}
+                    onClick={updateScale.bind(this, scale.value)}
                 >
-                    {scale}
+                    {scale.label}
                 </button>
             ))}
         </div>

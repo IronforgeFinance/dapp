@@ -104,86 +104,6 @@
   {
     "inputs": [
       {
-        "internalType": "uint256",
-        "name": "amount",
-        "type": "uint256"
-      },
-      {
-        "internalType": "bytes32",
-        "name": "_currency",
-        "type": "bytes32"
-      }
-    ],
-    "name": "BuildAsset",
-    "outputs": [
-      {
-        "internalType": "bool",
-        "name": "",
-        "type": "bool"
-      }
-    ],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "bytes32",
-        "name": "_currency",
-        "type": "bytes32"
-      }
-    ],
-    "name": "BuildMaxAsset",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "amount",
-        "type": "uint256"
-      },
-      {
-        "internalType": "bytes32",
-        "name": "_currency",
-        "type": "bytes32"
-      }
-    ],
-    "name": "BurnAsset",
-    "outputs": [
-      {
-        "internalType": "bool",
-        "name": "",
-        "type": "bool"
-      }
-    ],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "bytes32",
-        "name": "_currency",
-        "type": "bytes32"
-      }
-    ],
-    "name": "BurnAssetToTarget",
-    "outputs": [
-      {
-        "internalType": "bool",
-        "name": "",
-        "type": "bool"
-      }
-    ],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
         "internalType": "address",
         "name": "user",
         "type": "address"
@@ -192,6 +112,11 @@
         "internalType": "bytes32",
         "name": "_currency",
         "type": "bytes32"
+      },
+      {
+        "internalType": "uint256",
+        "name": "catalystEffect",
+        "type": "uint256"
       }
     ],
     "name": "MaxCanBuildAsset",
@@ -265,8 +190,13 @@
       },
       {
         "internalType": "bytes32",
-        "name": "_currency",
+        "name": "currency",
         "type": "bytes32"
+      },
+      {
+        "internalType": "uint256",
+        "name": "catalystEffect",
+        "type": "uint256"
       }
     ],
     "name": "buildFromCollateralSys",
@@ -283,8 +213,13 @@
       },
       {
         "internalType": "bytes32",
-        "name": "_currency",
+        "name": "currency",
         "type": "bytes32"
+      },
+      {
+        "internalType": "uint256",
+        "name": "catalystEffect",
+        "type": "uint256"
       }
     ],
     "name": "buildMaxFromCollateralSys",
@@ -329,7 +264,7 @@
       },
       {
         "internalType": "bytes32",
-        "name": "_currency",
+        "name": "currency",
         "type": "bytes32"
       }
     ],

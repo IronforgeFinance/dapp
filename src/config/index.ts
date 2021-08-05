@@ -2,7 +2,7 @@ export const BASE_BSC_SCAN_URL = 'https://bscscan.com';
 
 export const COLLATERAL_TOKENS = [
     {
-        name: 'USDT',
+        name: 'USDC',
         ratio: 5, // TODO get ratio from contract
     },
     {
