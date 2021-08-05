@@ -1,0 +1,58 @@
+#image {
+    .background(@bgImage, @bgColor: transparent) {
+        background-position: center;
+        background-repeat: no-repeat;
+        background-image: url(@bgImage);
+        background-color: @bgColor;
+        background-size: contain;
+    }
+
+    .icon(@size, @bgImage, @bgColor: transparent) {
+        // ? i标签来表示比较好吧
+        .background(@bgImage, @bgColor);
+
+        width: @size;
+        height: @size;
+
+        border: none;
+        outline: none;
+        margin: 0;
+        padding: 0;
+    }
+
+    .button(@bgImage, @bgColor: transparent) {
+        .background(@bgImage, @bgColor);
+
+        border: none;
+        outline: none;
+        margin: 0;
+        padding: 0;
+    }
+}
+
+#position {
+    .parent() {
+        position: relative;
+    }
+
+    .absHorizCenter(@moveTop: -20%, @top: 0) {
+        position: absolute;
+        left: 50%;
+        top: @top;
+        transform: translate(-50%, @moveTop);
+    }
+
+    .absRtCorner(@move: translate(0%, 0%)) {
+        position: absolute;
+        right: 0;
+        top: 0;
+        transform: @move;
+    }
+
+    .absRbCorner(@move: translate(0%, 0%)) {
+        position: absolute;
+        right: 0;
+        bottom: 0;
+        transform: @move;
+    }
+}

@@ -138,6 +138,12 @@ dl {
 }
 
 .custom-input {
+    &.disabled {
+        .ant-input-number-input-wrap {
+            color: rgba(255, 255, 255, 0.5);
+        }
+    }
+
     .ant-input-number-handler-wrap {
         display: none;
     }
@@ -148,6 +154,10 @@ dl {
         font-size: 16px;
         line-height: 24px;
         color: #fcd144;
+    }
+
+    .ant-input-number-input {
+        padding: 0;
     }
 }
 
@@ -185,36 +195,6 @@ dl {
     display: block;
     cursor: pointer;
     border: none;
-}
-
-.common-btn-red {
-    background: url(../images/common-btn-red.png) no-repeat;
-    background-size: 100% 100%;
-}
-
-.common-btn-red:hover {
-    background: url(../images/common-btn-red-hover.png) no-repeat;
-    background-size: 100% 100%;
-}
-
-.common-btn-red:disabled {
-    background: url(../images/common-btn-red-disabled.png) no-repeat;
-    background-size: 100% 100%;
-}
-
-.common-btn-yellow {
-    background: url(../images/common-btn-yellow.png) no-repeat;
-    background-size: 100% 100%;
-}
-
-.common-btn-yellow:hover {
-    background: url(../images/common-btn-yellow-hover.png) no-repeat;
-    background-size: 100% 100%;
-}
-
-.common-btn-yellow:disabled {
-    background: url(../images/common-btn-yellow-disabped.png) no-repeat;
-    background-size: 100% 100%;
 }
 
 .common-btn-s {

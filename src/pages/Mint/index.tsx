@@ -26,6 +26,7 @@ import './index.less';
 import useDataView from '@/hooks/useDataView';
 import { useTokenPrice } from '@/hooks/useTokenPrice';
 import ScaleGroup from '@/components/ScaleGroup';
+import SettingView from './SettingView';
 import classNames from 'classnames';
 export default () => {
     const intl = useIntl();
@@ -303,163 +304,198 @@ export default () => {
         }
     };
 
+    const CommentaryCard = () => {
+        return (
+            <div className="commentary-card">
+                <h3 className="title">Begin To Mint</h3>
+                <p className="words">
+                    Mint fUSD by staking your Token. Token stakers earn weekly
+                    staking rewards .
+                </p>
+            </div>
+        );
+    };
+
     return (
         <div className="mint-container">
             <DataView />
-            <div className="mint-box common-box">
-                <div className="input-item">
-                    <p className="label">
-                        {intl.formatMessage({ id: 'mint.from' })}
-                    </p>
-                    <div className="input-item-content">
-                        <div className="content-label">
-                            <p className="left">
-                                {intl.formatMessage({ id: 'collateral' })}
-                            </p>
-                            <p className="right">
-                                Balance:{' '}
-                                <span className="balance">
-                                    {collateralBalance}
-                                </span>
-                            </p>
-                        </div>
-                        <div className="input">
-                            <InputNumber
-                                value={collateralAmount}
-                                onChange={collateralAmountHandler}
-                                placeholder="0.00"
-                                className="custom-input"
-                            />
-                            <div className="token">
-                                <Select
-                                    value={collateralToken}
-                                    onSelect={collateralTokenHandler}
-                                    placeholder={'Select token'}
-                                >
-                                    {COLLATERAL_TOKENS.map((item) => (
-                                        <Select.Option
-                                            value={item.name}
-                                            key={item.name}
-                                        >
-                                            {item.name}
-                                        </Select.Option>
-                                    ))}
-                                </Select>
+            <div className="right-box">
+                <CommentaryCard />
+                <div className="mint-box common-box">
+                    <SettingView />
+                    <div className="input-item">
+                        <p className="label">
+                            {intl.formatMessage({ id: 'mint.from' })}
+                        </p>
+                        <div className="input-item-content">
+                            <div className="content-label">
+                                <p className="left">
+                                    {intl.formatMessage({ id: 'collateral' })}
+                                </p>
+                                <p className="right">
+                                    Balance:{' '}
+                                    <span className="balance">
+                                        {collateralBalance}
+                                    </span>
+                                </p>
                             </div>
-                        </div>
-                    </div>
-                </div>
-
-                <img src={IconAdd} alt="" className="icon-add" />
-
-                <div className="input-item">
-                    <p className="label">
-                        {intl.formatMessage({ id: 'mint.locked' })}
-                    </p>
-                    <div className="input-item-content">
-                        <div className="content-label">
-                            <p className="left">FToken</p>
-                            <p className="right">
-                                Balance:{' '}
-                                <span className="balance">{fTokenBalance}</span>
-                            </p>
-                        </div>
-                        <div className="input">
-                            <span
-                                className={classNames({
-                                    'common-span-disabled': !isApproved,
-                                    'common-span-active': isApproved,
-                                })}
-                            >
-                                0.00
-                            </span>
-                            <ScaleGroup
-                                scaleRange={['0', '1/10', '1/5', '3/10']}
-                                value={lockedScale}
-                                updateScale={(scale) => setLockedScale(scale)}
-                            />
-                        </div>
-                    </div>
-                </div>
-
-                <div className="input-item">
-                    <p className="label">
-                        {intl.formatMessage({ id: 'mint.to' })}
-                    </p>
-                    <div className="input-item-content">
-                        <div className="content-label">
-                            <p className="left">
-                                {intl.formatMessage({ id: 'mint.mint' })}
-                            </p>
-                            <p className="right">
-                                {intl.formatMessage({ id: 'mint.balance' })}
-                            </p>
-                        </div>
-                        <div className="input">
-                            <InputNumber
-                                value={toAmount}
-                                placeholder="0.00"
-                                className={classNames({
-                                    'custom-input': true,
-                                    disabled: !isApproved,
-                                })}
-                                onChange={toAmountHandler}
-                            />
-                            <div className="token">
-                                <i
+                            <div className="input">
+                                <InputNumber
+                                    value={collateralAmount}
+                                    onChange={collateralAmountHandler}
+                                    placeholder="0.00"
                                     className={classNames({
-                                        'icon-token': true,
-                                        [String(toToken).toLowerCase()]: true,
-                                        'size-24': true,
+                                        'custom-input': true,
+                                        disabled: !isApproved,
                                     })}
                                 />
-                                <Select
-                                    value={toToken}
-                                    onSelect={toTokenHandler}
-                                    placeholder={intl.formatMessage({
-                                        id: 'mint.selectCasting',
-                                    })}
-                                >
-                                    {MINT_TOKENS.map((item) => (
-                                        <Select.Option value={item} key={item}>
-                                            {item}
-                                        </Select.Option>
-                                    ))}
-                                </Select>
+                                <div className="token">
+                                    <i
+                                        className={classNames({
+                                            'icon-token': true,
+                                            [String(
+                                                collateralToken,
+                                            ).toLowerCase()]: true,
+                                            'size-24': true,
+                                        })}
+                                    />
+                                    <Select
+                                        value={collateralToken}
+                                        onSelect={collateralTokenHandler}
+                                        placeholder={'Select token'}
+                                    >
+                                        {COLLATERAL_TOKENS.map((item) => (
+                                            <Select.Option
+                                                value={item.name}
+                                                key={item.name}
+                                            >
+                                                {item.name}
+                                            </Select.Option>
+                                        ))}
+                                    </Select>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
 
-                {isApproved && (
-                    <div className="ratio">
-                        <Progress
-                            percent={computedRatio * 10}
-                            format={() =>
-                                `${Number(computedRatio * 100).toFixed(2)}%`
-                            }
-                        />
+                    <img src={IconAdd} alt="" className="icon-add" />
+
+                    <div className="input-item">
+                        <p className="label">
+                            {intl.formatMessage({ id: 'mint.locked' })}
+                        </p>
+                        <div className="input-item-content">
+                            <div className="content-label">
+                                <p className="left">FToken</p>
+                                <p className="right">
+                                    Balance:{' '}
+                                    <span className="balance">
+                                        {fTokenBalance}
+                                    </span>
+                                </p>
+                            </div>
+                            <div className="input">
+                                <span
+                                    className={classNames({
+                                        'common-span-disabled': !isApproved,
+                                        'common-span-active': isApproved,
+                                    })}
+                                >
+                                    0.00
+                                </span>
+                                <ScaleGroup
+                                    scaleRange={['0', '1/10', '1/5', '3/10']}
+                                    value={lockedScale}
+                                    updateScale={(scale) =>
+                                        setLockedScale(scale)
+                                    }
+                                />
+                            </div>
+                        </div>
                     </div>
-                )}
 
-                {isApproved && (
-                    <Button
-                        className="btn-mint"
-                        onClick={onSubmit}
-                        loading={submitting}
-                    >
-                        {intl.formatMessage({ id: 'mint.mint' })}
-                    </Button>
-                )}
-                {!isApproved && (
-                    <Button
-                        className="btn-mint common-btn-pale"
-                        onClick={handleApprove}
-                        loading={requestedApproval}
-                    >
-                        Approve To Mint
-                    </Button>
-                )}
+                    <div className="input-item">
+                        <p className="label">
+                            {intl.formatMessage({ id: 'mint.to' })}
+                        </p>
+                        <div className="input-item-content">
+                            <div className="content-label">
+                                <p className="left">
+                                    {intl.formatMessage({ id: 'mint.mint' })}
+                                </p>
+                                <p className="right">
+                                    {intl.formatMessage({ id: 'mint.balance' })}
+                                </p>
+                            </div>
+                            <div className="input">
+                                <InputNumber
+                                    value={toAmount}
+                                    placeholder="0.00"
+                                    className={classNames({
+                                        'custom-input': true,
+                                        disabled: !isApproved,
+                                    })}
+                                    onChange={toAmountHandler}
+                                />
+                                <div className="token">
+                                    <i
+                                        className={classNames({
+                                            'icon-token': true,
+                                            [String(
+                                                toToken,
+                                            ).toLowerCase()]: true,
+                                            'size-24': true,
+                                        })}
+                                    />
+                                    <Select
+                                        value={toToken}
+                                        onSelect={toTokenHandler}
+                                        placeholder={intl.formatMessage({
+                                            id: 'mint.selectCasting',
+                                        })}
+                                    >
+                                        {MINT_TOKENS.map((item) => (
+                                            <Select.Option
+                                                value={item}
+                                                key={item}
+                                            >
+                                                {item}
+                                            </Select.Option>
+                                        ))}
+                                    </Select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {isApproved && (
+                        <div className="ratio">
+                            <Progress
+                                percent={computedRatio * 10}
+                                format={() =>
+                                    `${Number(computedRatio * 100).toFixed(2)}%`
+                                }
+                            />
+                        </div>
+                    )}
+
+                    {isApproved && (
+                        <button
+                            className="btn-mint common-btn-yellow"
+                            onClick={onSubmit}
+                        >
+                            {intl.formatMessage({ id: 'mint.mint' })}
+                        </button>
+                    )}
+                    {!isApproved && (
+                        <button
+                            className="btn-mint common-btn-pale"
+                            onClick={handleApprove}
+                        >
+                            Approve To Mint
+                        </button>
+                    )}
+                </div>
             </div>
         </div>
     );

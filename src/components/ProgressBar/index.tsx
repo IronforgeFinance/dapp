@@ -12,8 +12,15 @@ export interface IProgressBarProps {
     tokenAmount?: number;
 }
 export default (props: IProgressBarProps) => {
-    const { type, name, startValue, endValue, unit, token, tokenAmount } =
-        props;
+    const {
+        type,
+        name,
+        startValue,
+        endValue,
+        unit,
+        token,
+        tokenAmount,
+    } = props;
 
     const progress = useMemo(() => {
         if (type === ProgressBarType.f_ratio) {
@@ -30,6 +37,7 @@ export default (props: IProgressBarProps) => {
                 return 0;
             }
         }
+        // return 50; // 调试效果
     }, [type, startValue, endValue]);
 
     return (
