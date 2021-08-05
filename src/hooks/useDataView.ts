@@ -126,10 +126,12 @@ const useDataView = (currency: string) => {
                 account,
                 ethers.utils.formatBytes32String(currency),
             );
-            const val = res.collateralizedRatio.isZero()
+            const _val = res.collateralizedRatio.isZero()
                 ? 0
                 : 1 /
                   Number(ethers.utils.formatUnits(res.collateralizedRatio, 18));
+
+            const val = parseFloat(toFixedWithoutRound(_val, 4));
             console.log(
                 'fetchCurrencyRatio: ',
                 res.collateralizedRatio.toString(),
@@ -137,7 +139,7 @@ const useDataView = (currency: string) => {
             );
             const newVal = {
                 ...fRatioData,
-                startValue: val * 100,
+                startValue: parseFloat((val * 100).toFixed(2)),
                 endValue: initialRatio * 100,
             };
             setfRatioDataInModel(newVal);

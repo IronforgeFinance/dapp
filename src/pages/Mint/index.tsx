@@ -199,7 +199,7 @@ export default () => {
                         : 0;
                 setfRatioData({
                     ...fRatioData,
-                    startValue: currencyRatio * 100,
+                    startValue: parseFloat((currencyRatio * 100).toFixed(2)),
                     endValue: Number(ratio),
                 });
             }
@@ -486,7 +486,7 @@ export default () => {
 
                 {isApproved && isIFTApproved && (
                     <Button
-                        className="btn-mint"
+                        className="btn-mint common-btn common-btn-red"
                         onClick={onSubmit}
                         loading={submitting}
                     >
