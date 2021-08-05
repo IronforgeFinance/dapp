@@ -74,10 +74,15 @@ export const useBep20Balance = (token: string) => {
         const fetchBalance = async () => {
             try {
                 const tokenObj = Tokens[token];
-                const address = tokenObj.address[process.env.APP_CHAIN_ID]
-                const contract = getBep20Contract(address, provider.getSigner())
+                const address = tokenObj.address[process.env.APP_CHAIN_ID];
+                const contract = getBep20Contract(
+                    address,
+                    provider.getSigner(),
+                );
                 const res = await contract.balanceOf(account);
-                const amount = ethers.utils.formatUnits(res, tokenObj.decimals);
+                const amount = parseFloat(
+                    ethers.utils.formatUnits(res, tokenObj.decimals),
+                );
                 setBalanceState({
                     balance: amount,
                     fetchStatus: SUCCESS,

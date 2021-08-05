@@ -21,13 +21,18 @@ import {
 } from '@/hooks/useApprove';
 import { useInitialRatio } from '@/hooks/useConfig';
 import useProvider from '@/hooks/useWeb3Provider';
-import { toFixedWithoutRound, expandToNDecimals } from '@/utils/bigNumber';
+import {
+    toFixedWithoutRound,
+    expandToNDecimals,
+    expandTo18Decimals,
+} from '@/utils/bigNumber';
 import './index.less';
 import useDataView from '@/hooks/useDataView';
 import { useTokenPrice } from '@/hooks/useTokenPrice';
 import ScaleGroup from '@/components/ScaleGroup';
 import SettingView from './SettingView';
 import classNames from 'classnames';
+import useDexPrice from '@/hooks/useDexPrice';
 export default () => {
     const intl = useIntl();
     const { account } = useWeb3React();
@@ -48,6 +53,8 @@ export default () => {
     const initialRatio = useInitialRatio(collateralToken);
     const collateralTokenPrice = useTokenPrice(collateralToken);
 
+    const IFTPrice = useDexPrice('IFT', 'USDC');
+
     const collateralTokenAddress = useMemo(() => {
         if (collateralToken) {
             return Tokens[collateralToken].address[process.env.APP_CHAIN_ID!];
@@ -61,6 +68,11 @@ export default () => {
         collateralSytemContract,
     );
 
+    const { isApproved: isIFTApproved } = useCheckERC20ApprovalStatus(
+        Tokens.IFT.address[process.env.APP_CHAIN_ID],
+        collateralSytemContract,
+    );
+
     const prices = usePrices();
 
     const { currencyRatio } = useDataView(collateralToken);
@@ -70,6 +82,26 @@ export default () => {
         collateralSytemContract,
         setLastUpdated,
     );
+
+    const {
+        handleApprove: handleIFTApprove,
+        requestedApproval: requestIFTApproval,
+    } = useERC20Approve(
+        Tokens.IFT.address[process.env.APP_CHAIN_ID],
+        collateralSytemContract,
+        setLastUpdated,
+    );
+
+    const handleAllApprove = () => {
+        if (!isApproved && collateralToken) {
+            handleApprove();
+            return; // 一次按钮点击处理一次approve
+        }
+        if (!isIFTApproved) {
+            handleIFTApprove();
+            return;
+        }
+    };
 
     // const { stakedData, setStakedData } = useStakedData();
 
@@ -86,30 +118,10 @@ export default () => {
         ...model,
     }));
 
-    const { balance } = useTokenBalance(
-        Tokens.fToken.address[process.env.APP_CHAIN_ID!],
-    );
-    const fTokenBalance = balance?.toFixed(2);
+    const { balance } = useBep20Balance('IFT');
+    const fTokenBalance = balance as number;
 
     const { balance: collateralBalance } = useBep20Balance(collateralToken);
-
-    // const fetchCollateralBalance = async () => {
-    //     const token = collateralToken;
-    //     if (!account) return;
-    //     const tokenObj = Tokens[token];
-    //     if (!token) return;
-    //     const contract = useERC20(tokenObj.address[process.env.APP_CHAIN_ID]);
-    //     const res = await contract.balanceOf(account);
-    //     const amount = ethers.utils.formatUnits(res, tokenObj.decimals);
-    //     console.log('fetchBEP20Balance: ', token, amount);
-    //     const val = new BigNumber(amount).toFixed(2);
-    //     setCollateralBalance(val);
-    //     return val;
-    // };
-
-    // useEffect(() => {
-    //     fetchCollateralBalance();
-    // }, [collateralToken, account, provider]);
 
     // fToken价值/Collateral价值 最高不超过3/10
     const maxLockedAmount = useMemo(() => {
@@ -142,16 +154,27 @@ export default () => {
             } else if (!lockedAmount || Number(lockedAmount) === 0) {
                 computedRatio = initialRatio;
             } else {
-                const collateralPrice = await getTokenPrice(collateralToken);
-                const collateralVal =
-                    Number(collateralAmount) * collateralPrice;
-                const fTokenVal = lockedAmount
-                    ? Number(lockedAmount) * TokenPrices['fToken'] //TODO 平台币价格获取
-                    : 0;
-                const ratio = initialRatio * (1 - fTokenVal / collateralVal);
-                const v = parseFloat(ratio.toFixed(2));
-                console.log(v);
-                computedRatio = v;
+                const [
+                    catalystEffectContract,
+                    proportionContract,
+                    priceContract,
+                ] = await collateralSystem.getCatalystResult(
+                    ethers.utils.formatBytes32String(collateralToken), // stake currency
+                    expandTo18Decimals(collateralAmount), //stake amount
+                    expandTo18Decimals(lockedAmount), // locked amount
+                );
+                console.log(
+                    'getCatalystResult: ',
+                    ethers.utils.formatEther(catalystEffectContract),
+                    ethers.utils.formatEther(proportionContract),
+                    ethers.utils.formatEther(priceContract),
+                );
+                // 合约计算的是利用率增加了catalystEffectContract
+                const catalystEffect = parseFloat(
+                    ethers.utils.formatEther(catalystEffectContract),
+                );
+                const newURatio = (1 / initialRatio) * (1 + catalystEffect);
+                computedRatio = 1 / newURatio;
             }
             setComputedRatio(computedRatio);
         })();
@@ -177,7 +200,7 @@ export default () => {
                         : 0;
                 setfRatioData({
                     ...fRatioData,
-                    startValue: currencyRatio * 100,
+                    startValue: parseFloat((currencyRatio * 100).toFixed(2)),
                     endValue: Number(ratio),
                 });
             }
@@ -249,11 +272,23 @@ export default () => {
         //     return;
         // }
         setLockedAmount(v);
+        const val = parseFloat(toFixedWithoutRound(IFTPrice * v, 2));
         setLockedData({
             ...lockedData,
-            endValue: v || 0,
+            endValue: val || 0,
         });
     }, 500);
+
+    const scaleHandler = (v) => {
+        setLockedScale(v);
+        const amount = fTokenBalance * Number(v);
+        setLockedAmount(amount);
+        const val = parseFloat(toFixedWithoutRound(IFTPrice * amount, 2));
+        setLockedData({
+            ...lockedData,
+            endValue: val || 0,
+        });
+    };
 
     const toAmountHandler = (v) => {
         setToAmount(v);
@@ -279,7 +314,7 @@ export default () => {
             message.warning('Collateral amount and to amount are required');
             return;
         }
-        if (isApproved) {
+        if (isApproved && isIFTApproved) {
             try {
                 setSubmitting(true);
                 const token = Tokens[collateralToken];
@@ -288,6 +323,7 @@ export default () => {
                     ethers.utils.formatBytes32String(collateralToken), // stakeCurrency
                     expandToNDecimals(collateralAmount!, decimal), // stakeAmount
                     expandToNDecimals(toAmount!, 18), // buildAmount
+                    expandTo18Decimals(lockedAmount),
                 );
                 message.info(
                     'Mint tx sent out successfully. Pls wait for a while......',
@@ -395,20 +431,21 @@ export default () => {
                                 </p>
                             </div>
                             <div className="input">
-                                <span
-                                    className={classNames({
-                                        'common-span-disabled': !isApproved,
-                                        'common-span-active': isApproved,
-                                    })}
-                                >
-                                    0.00
-                                </span>
+                                <InputNumber
+                                    value={lockedAmount}
+                                    onChange={lockedAmountHandler}
+                                    placeholder="0.00"
+                                    className="custom-input"
+                                />
                                 <ScaleGroup
-                                    scaleRange={['0', '1/10', '1/5', '3/10']}
+                                    scaleRange={[
+                                        { label: '0', value: 0 },
+                                        { label: '1/10', value: 0.1 },
+                                        { label: '1/5', value: 0.2 },
+                                        { label: '3/10', value: 0.3 },
+                                    ]}
                                     value={lockedScale}
-                                    updateScale={(scale) =>
-                                        setLockedScale(scale)
-                                    }
+                                    updateScale={scaleHandler}
                                 />
                             </div>
                         </div>
@@ -468,32 +505,37 @@ export default () => {
                         </div>
                     </div>
 
-                    {isApproved && (
+                    {isApproved && isIFTApproved && (
                         <div className="ratio">
                             <Progress
                                 percent={computedRatio * 10}
                                 format={() =>
-                                    `${Number(computedRatio * 100).toFixed(2)}%`
+                                    `${toFixedWithoutRound(
+                                        computedRatio * 100,
+                                        2,
+                                    )}%`
                                 }
                             />
                         </div>
                     )}
 
-                    {isApproved && (
-                        <button
-                            className="btn-mint common-btn-yellow"
+                    {isApproved && isIFTApproved && (
+                        <Button
+                            className="btn-mint common-btn common-btn-red"
                             onClick={onSubmit}
+                            loading={submitting}
                         >
                             {intl.formatMessage({ id: 'mint.mint' })}
-                        </button>
+                        </Button>
                     )}
-                    {!isApproved && (
-                        <button
+                    {((!isApproved && collateralToken) || !isIFTApproved) && (
+                        <Button
                             className="btn-mint common-btn-pale"
-                            onClick={handleApprove}
+                            onClick={handleAllApprove}
+                            loading={requestedApproval || requestIFTApproval}
                         >
                             Approve To Mint
-                        </button>
+                        </Button>
                     )}
                 </div>
             </div>

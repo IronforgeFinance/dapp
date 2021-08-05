@@ -1,21 +1,24 @@
 export const localOutput = {
-    "PlatformToken": "0xD2e5F0fAed6aD36b39bfa647be035435c1d73E37",
-    "AssetSystem": "0x2e58536d243E6ba5194FA8fAC978553a0dCf4d2D",
-    "BuildBurnSystem": "0x1Fd8e4d766161Ae9a611113ae0bE777525CA8D1c",
-    "Config": "0x12B1F681434cACb3a2Be9C30d36e32193f66467e",
-    "AccessControl": "0x084704C71a68D53F40aD0C7E16993F71A8F16e9D",
-    "Prices": "0xdbF23ee6946F1DB4C0f5b43CF87F684fb9F8FCF8",
-    "DebtSystem": "0x7B7544F40e62Ab0b9d12Fe0a8Ec64fF977Bb57e7",
-    "CollateralSystem": "0x505DDe012eCbcC5962FA84634B9CBa2CEa5f4BcC",
-    "ExchangeSystem": "0xe36CdCF880F19D41A01c91C9Eb80b7Cdf474128d",
-    "Liquidation": "0x50a6eDa8572AA1A783f2823a5a3824f3b5fE239e",
-    "fusdToken": "0x8f735aFeBA0f2E72adbf028748587CFB8c88b02e",
-    "lbtcToken": "0x3Db1019c03d32c38a994C38c1309ad948AC39103",
-    "btcToken": "0x5d35Df8e7BB72c50A143fBff12D38297c065319f",
-    "ethToken": "0x4DeeF9D26AE42B833f837e4e95bA4386B846Da7f",
-    "usdtToken": "0xE46d418ED7D9ce4ac809960d4652649aB3D20dba",
-    "RewardSystem": "0x7311f3F3c4df06A697A30Ec6749e8a9232D3A478"
-}
+    PlatformToken: '0xaF741336Ffd812967753b097Fd74520eA2e9671B',
+    pancakeFactory: '0xEbf00276eD48Cb2d18de6acA739eB73A29a5dAa5',
+    pancakeRouter: '0xd3B62B5F4437Ef8B8637e61BB05C205b208F4e1d',
+    usdcToken: '0x555d4491adbCFE2D4E4c8B87401cb2305F75F565',
+    AssetSystem: '0xD4cE243Ca9C086b6404a86c9D07Fec4f49fE81C1',
+    BuildBurnSystem: '0xe8BFDC4E6720ae0f2eC3467D1Eb355c82fF12F5d',
+    Config: '0x2dA35eF28Bae8ED458B5498E3B395588999D18E4',
+    AccessControl: '0xCa162D88C73871c22A0455a161d30C678fee5580',
+    Prices: '0xe2E3BD5cbc8eB470777BE0468a35785B4e430417',
+    DebtSystem: '0x80DAcA9e19D64C6398884965F04F8F65FF47f83E',
+    CollateralSystem: '0x43e5CC62CA53B54158e82a6075ea931fA2067F9C',
+    ExchangeSystem: '0xBdaf20f132D3Cb0d018fE2FE3498a39DEE4AAD7C',
+    Liquidation: '0x498f8604182EBa2eEc1126B4f36Ac9cB6772434F',
+    fusdToken: '0xa301371BC2B879616a0aF12f0657B3099C55d629',
+    lbtcToken: '0xb97d28cbb938a6B743e4E547B21666DF4538EE11',
+    btcToken: '0xD72b7eB77179FA12d9830292E778E487548168db',
+    ethToken: '0x1Bba5d8Af1860e1dBf1d0f61C7a10E695aEd2A4D',
+    usdtToken: '0xE0CA62a09C19Bc83164972B8D7aeB4b3a0EF0905',
+    RewardSystem: '0x17673fB69ACE4cDA5a78802b817B2058537EBD81',
+};
 const testnetOutput = {
     PlatformToken: '0x5d2489C5250662d79fCc549D939B7e7f8aA151FC',
     AssetSystem: '0x513e548c0A290bCe0475b35Bf7bE2f1625f7C6Fc',
@@ -71,6 +74,11 @@ export default {
         97: testnetOutput.Prices,
         56: '',
         1337: localOutput.Prices,
+    },
+    PancakeRouter: {
+        97: '',
+        56: '',
+        1337: localOutput.pancakeRouter,
     },
 
     //1337

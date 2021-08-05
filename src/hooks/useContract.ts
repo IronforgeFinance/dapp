@@ -10,46 +10,43 @@ import {
     getConfigContract,
     getLiquidationContract,
     getPricesContract,
+    getRouterContract,
 } from '@/utils/contractHelper';
 
 export const useERC20 = (address: string) => {
     const provider = useWeb3Provider();
-    return useMemo(
-        () => getBep20Contract(address, provider.getSigner()),
-        [address, provider],
-    );
+    return useMemo(() => getBep20Contract(address, provider.getSigner()), [
+        address,
+        provider,
+    ]);
 };
 
 export const useBuildBurnSystem = () => {
     const provider = useWeb3Provider();
-    return useMemo(
-        () => getBuildBurnSystemContract(provider.getSigner()),
-        [provider],
-    );
+    return useMemo(() => getBuildBurnSystemContract(provider.getSigner()), [
+        provider,
+    ]);
 };
 
 export const useCollateralSystem = () => {
     const provider = useWeb3Provider();
-    return useMemo(
-        () => getCollateralSystemContract(provider.getSigner()),
-        [provider],
-    );
+    return useMemo(() => getCollateralSystemContract(provider.getSigner()), [
+        provider,
+    ]);
 };
 
 export const useExchangeSystem = () => {
     const provider = useWeb3Provider();
-    return useMemo(
-        () => getExchangeSystemContract(provider.getSigner()),
-        [provider],
-    );
+    return useMemo(() => getExchangeSystemContract(provider.getSigner()), [
+        provider,
+    ]);
 };
 
 export const useDebtSystem = () => {
     const provider = useWeb3Provider();
-    return useMemo(
-        () => getDebtSystemContract(provider.getSigner()),
-        [provider],
-    );
+    return useMemo(() => getDebtSystemContract(provider.getSigner()), [
+        provider,
+    ]);
 };
 
 export const useConfig = () => {
@@ -59,13 +56,17 @@ export const useConfig = () => {
 
 export const useLiquidation = () => {
     const provider = useWeb3Provider();
-    return useMemo(
-        () => getLiquidationContract(provider.getSigner()),
-        [provider],
-    );
+    return useMemo(() => getLiquidationContract(provider.getSigner()), [
+        provider,
+    ]);
 };
 
 export const usePrices = () => {
     const provider = useWeb3Provider();
     return useMemo(() => getPricesContract(provider.getSigner()), [provider]);
+};
+
+export const useRouter = () => {
+    const provider = useWeb3Provider();
+    return useMemo(() => getRouterContract(provider.getSigner()), [provider]);
 };

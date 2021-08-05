@@ -1,4 +1,4 @@
-import { localOutput, testnetOutput } from "./contracts";
+import { localOutput, testnetOutput } from './contracts';
 
 export default {
     cake: {
@@ -16,6 +16,16 @@ export default {
             56: '0x55d398326f99059fF775485246999027B3197955',
             97: '0x6708eef5a96348171a0f4246aec0a33adf67fc00',
             1337: localOutput.usdtToken,
+        },
+        decimals: 18,
+        projectLink: 'https://tether.to/',
+    },
+    USDC: {
+        symbol: 'USDC',
+        address: {
+            56: '',
+            97: '',
+            1337: localOutput.usdcToken,
         },
         decimals: 18,
         projectLink: 'https://tether.to/',
@@ -40,7 +50,7 @@ export default {
         decimals: 18,
         projectLink: 'https://ethereum.org/en/',
     },
-    fToken: {
+    IFT: {
         symbol: 'IFT',
         address: {
             56: '0x55d398326f99059fF775485246999027B3197955', //TODO usdt for test
