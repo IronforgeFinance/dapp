@@ -1,6 +1,10 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { useWeb3React } from '@web3-react/core';
-import { useDebtSystem, useCollateralSystem } from '@/hooks/useContract';
+import {
+    useDebtSystem,
+    useCollateralSystem,
+    usePrices,
+} from '@/hooks/useContract';
 import { ethers } from 'ethers';
 import { TokenPrices } from '@/config';
 import { toFixedWithoutRound } from '@/utils/bigNumber';
@@ -47,6 +51,11 @@ export default (IDebtItemProps) => {
         setSelectedDebtInUSD: model.setSelectedDebtInUSD,
     }));
 
+    const { lockedData, setLockedData } = useModel('dataView', (model) => ({
+        lockedData: model.lockedData,
+        setLockedData: model.setLockedData,
+    }));
+
     const mintedTokenNum = useMemo(() => {
         if (Number(selectedDebtInUSD) > 0) {
             const price = TokenPrices[mintedToken];
@@ -57,6 +66,14 @@ export default (IDebtItemProps) => {
     }, [selectedDebtInUSD]);
 
     const { balance: fusdBalance } = useBep20Balance('FUSD');
+    const prices = usePrices();
+
+    const getTokenPrice = async (token: string) => {
+        const res = await prices.getPrice(
+            ethers.utils.formatBytes32String(token),
+        );
+        return parseFloat(ethers.utils.formatEther(res));
+    };
 
     /* TODO:合约接口没有查询total debt in usd，
     只能查询某个抵押物currency 对应的debt in usd。
@@ -87,8 +104,19 @@ export default (IDebtItemProps) => {
             ethers.utils.formatBytes32String(token),
         );
         const data = parseFloat(ethers.utils.formatUnits(res, 18));
+        const price = await getTokenPrice(token);
+        const collateralInUSD = data * price;
         console.log('getCollateralData: ', token, data);
-        return data;
+        const lockRes = await collateralSystem.userLockedData(
+            account,
+            ethers.utils.formatBytes32String(token),
+        );
+        const lockData = parseFloat(ethers.utils.formatEther(lockRes));
+        return {
+            collateral: data,
+            inUSD: collateralInUSD,
+            locked: lockData,
+        };
     };
 
     const getDebtInfo = async () => {
@@ -98,21 +126,26 @@ export default (IDebtItemProps) => {
         );
 
         const total = res.reduce((total, item, i) => {
-            const price = TokenPrices[tokens[i]];
-            return total + item * price;
+            return total + item.inUSD;
         }, 0);
+
+        const totalLocked = res.reduce((total, item) => {
+            return total + item.locked;
+        }, 0);
+        setLockedData({
+            ...lockedData,
+            startValue: totalLocked,
+            endValue: totalLocked,
+        });
         const infos = res.map((item, index) => {
-            const price = TokenPrices[tokens[index]];
             const ratioValue =
-                total > 0
-                    ? Number((100 * (item * price)) / total).toFixed(2)
-                    : 0;
+                total > 0 ? Number((100 * item.inUSD) / total).toFixed(2) : 0;
             return {
                 collateralToken: tokens[index],
                 ratio: ratioValue + '%',
                 ratioValue,
-                debt: item,
-                locked: 0, // 目前locked都是0
+                debt: item.collateral,
+                locked: item.locked,
             } as IDebtItemInfo;
         });
         infos.sort((a, b) => Number(b.ratioValue) - Number(a.ratioValue));

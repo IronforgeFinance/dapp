@@ -11,7 +11,7 @@ export default defineConfig({
         'process.env.RPC_NODE_3':
             'https://data-seed-prebsc-1-s2.binance.org:8545/',
 
-        'process.env.APP_CHAIN_ID': '97', //'1337'
+        'process.env.APP_CHAIN_ID': '1337', // '97',
 
         'process.env.BSC_SCAN_URL': 'https://testnet.bscscan.com/address/',
     },
