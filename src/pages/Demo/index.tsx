@@ -17,7 +17,7 @@ export default () => {
                     className="btn-select-tokens"
                     onClick={() => setShowSetting(true)}
                 >
-                    Select Tokens
+                    Click Select Tokens
                 </button>
             </SelectTokens>
         );
@@ -80,7 +80,7 @@ export default () => {
                 dataSource={mockData}
             >
                 <button className="confirm-transaction" onClick={onShowMemo}>
-                    Confirm Transaction
+                    Click Confirm Transaction
                 </button>
             </ConfirmTransaction>
         );

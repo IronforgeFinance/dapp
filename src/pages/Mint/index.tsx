@@ -555,6 +555,7 @@ export default () => {
                     {isApproved && isIFTApproved && (
                         <div className="ratio">
                             <Progress
+                                className="iron-progress"
                                 percent={computedRatio * 10}
                                 format={() =>
                                     `${toFixedWithoutRound(
