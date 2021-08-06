@@ -30,6 +30,7 @@ const useDexPrice = (token1, token2) => {
                     token2Contract,
                 );
 
+                console.log('lp pair: ', lpPairAddress);
                 const lp = getContract(
                     PancakePair,
                     lpPairAddress,
@@ -37,6 +38,12 @@ const useDexPrice = (token1, token2) => {
                 );
 
                 const [r0, r1] = await lp.getReserves();
+                console.log('r0: ', ethers.utils.formatEther(r0));
+                console.log('r1: ', ethers.utils.formatEther(r1));
+
+                const total = await lp.totalSupply();
+                console.log('total: ', ethers.utils.formatEther(total));
+
                 let value;
                 if (token1Contract === (await lp.token0())) {
                     value = r0.mul(expandTo18Decimals(1)).div(r1);

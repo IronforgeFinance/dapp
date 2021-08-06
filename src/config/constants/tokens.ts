@@ -77,4 +77,22 @@ export default {
         },
         decimals: 18,
     },
+    'USDC-IFT': {
+        symbol: 'USDC-IFT',
+        address: {
+            56: '',
+            97: '',
+            1337: localOutput['USDC-IFT'],
+        },
+        decimals: 18,
+    },
+    'USDC-ETH': {
+        symbol: 'USDC-ETH',
+        address: {
+            56: '',
+            97: '',
+            1337: localOutput['USDC-ETH'],
+        },
+        decimals: 18,
+    },
 };

@@ -7,7 +7,7 @@
     filter: drop-shadow(17px 12px 70px #b5471e);
     position: relative;
     margin: 25px;
-    margin-top:0;
+    margin-top: 0;
 }
 .btn-footer {
     margin-top: 60px;
@@ -28,4 +28,51 @@
     width: 45px;
     height: 33px;
     cursor: pointer;
+}
+
+.provide-prices {
+    margin: 26px auto;
+    margin-bottom: 0;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    .title {
+        font-family: Poppins;
+        font-style: normal;
+        font-weight: bold;
+        font-size: 15px;
+        line-height: 22px;
+        display: flex;
+        color: #ffffff;
+    }
+    .prices-bg {
+        width: 380px;
+        min-height: 100px;
+        padding: 26px 42px;
+        background: url(../../../../../assets/images/lp-prices-bg.png) center
+            center no-repeat;
+        background-size: cover;
+    }
+}
+
+.price-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    .token {
+        font-family: Poppins;
+        font-style: normal;
+        font-weight: normal;
+        font-size: 15px;
+        line-height: 22px;
+        color: #292725;
+    }
+    .price {
+        font-family: Poppins;
+        font-style: normal;
+        font-weight: bold;
+        font-size: 15px;
+        line-height: 22px;
+        color: #292725;
+    }
 }

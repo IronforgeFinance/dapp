@@ -104,6 +104,7 @@ export const useBep20Balance = (token: string) => {
     return balanceState;
 };
 
+
 export const useBurnedBalance = (tokenAddress: string) => {
     const [balance, setBalance] = useState(BIG_ZERO);
     const { slowRefresh } = useRefresh();

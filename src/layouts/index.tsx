@@ -62,7 +62,7 @@ export default function Layout({
             </video>
             <CommonHeader />
             {children}
-            <CommonFooter />
+            {/* <CommonFooter /> */}
         </div>
     );
 }
