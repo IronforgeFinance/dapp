@@ -25,7 +25,7 @@ export default (props: IConfirmTransactionProps) => {
     } = props;
     const onCloseMemo = useCallback(() => _closeHandler(), []);
     const WhiteSpace = () => (
-        <div
+        <span
             dangerouslySetInnerHTML={{
                 __html: '&nbsp;',
             }}
