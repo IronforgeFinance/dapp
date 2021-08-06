@@ -126,7 +126,7 @@ const useDataView = (currency: string) => {
             console.log('getRatio: ', resVal);
             const _val = Number(resVal[0]) === 0 ? 0 : 1 / Number(res[0]);
 
-            const val = parseFloat(toFixedWithoutRound(_val, 4));
+            const val = parseFloat(toFixedWithoutRound(_val, 6)); // 保留多位精度
             console.log('fetchCurrencyRatio: ', val, resVal);
             const newVal = {
                 ...fRatioData,

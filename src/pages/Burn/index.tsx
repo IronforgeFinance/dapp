@@ -8,6 +8,7 @@ import DebtItem from './components/DebtItem';
 import { Button } from 'antd';
 import IconBack from '@/assets/images/icon-back.png';
 import BurnForm from './components/BurnForm';
+import { useModel } from 'umi';
 
 export default () => {
     const { account } = useWeb3React();
@@ -58,7 +59,7 @@ export default () => {
                         </p>
                     </div>
                     <div className="content-box">
-                        <DebtItem mintedToken="fUSDT" mintedTokenName="USD" />
+                        <DebtItem mintedToken="fUSDC" mintedTokenName="USD" />
                     </div>
                     <div className="btn-burn">
                         <Button
