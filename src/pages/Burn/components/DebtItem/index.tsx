@@ -59,7 +59,9 @@ export default (IDebtItemProps) => {
     const mintedTokenNum = useMemo(() => {
         if (Number(selectedDebtInUSD) > 0) {
             const price = TokenPrices[mintedToken];
-            const num = toFixedWithoutRound(selectedDebtInUSD / price, 2);
+            const num = price
+                ? toFixedWithoutRound(selectedDebtInUSD / price, 2)
+                : 0;
             return num;
         }
         return 0.0;
@@ -94,8 +96,9 @@ export default (IDebtItemProps) => {
             total += val;
             return total;
         }, 0);
+        const val = parseFloat(toFixedWithoutRound(totalDebtInUsd, 2));
         console.log('getDebtInUSD: ', totalDebtInUsd);
-        setSelectedDebtInUSD(totalDebtInUsd);
+        setSelectedDebtInUSD(val);
     };
 
     const getCollateralDataByToken = async (account, token) => {

@@ -38,12 +38,14 @@ export default () => {
     const { account } = useWeb3React();
     const provider = useProvider();
     const [collateralAmount, setCollateralAmount] = useState(0);
-    const [lockedAmount, setLockedAmount] = useState<undefined | number>();
+    const [lockedAmount, setLockedAmount] = useState<undefined | number>(0);
     const [toAmount, setToAmount] = useState<undefined | number>();
     // const [collateralBalance, setCollateralBalance] = useState('0.00');
-    const [collateralToken, setCollateralToken] = useState();
+    const [collateralToken, setCollateralToken] = useState(
+        COLLATERAL_TOKENS[0].name,
+    );
     // const [fTokenBalance, setFTokenBalance] = useState('0.00')
-    const [toToken, setToToken] = useState();
+    const [toToken, setToToken] = useState(MINT_TOKENS[0]);
     const [submitting, setSubmitting] = useState(false);
     const [computedRatio, setComputedRatio] = useState(0);
     const [lockedScale, setLockedScale] = useState('0');
@@ -323,7 +325,7 @@ export default () => {
                     ethers.utils.formatBytes32String(collateralToken), // stakeCurrency
                     expandToNDecimals(collateralAmount!, decimal), // stakeAmount
                     expandToNDecimals(toAmount!, 18), // buildAmount
-                    expandTo18Decimals(lockedAmount),
+                    expandTo18Decimals(lockedAmount || 0),
                 );
                 message.info(
                     'Mint tx sent out successfully. Pls wait for a while......',
@@ -478,9 +480,8 @@ export default () => {
                                     <i
                                         className={classNames({
                                             'icon-token': true,
-                                            [String(
-                                                toToken,
-                                            ).toLowerCase()]: true,
+                                            [String(toToken).toLowerCase()]:
+                                                true,
                                             'size-24': true,
                                         })}
                                     />
@@ -530,7 +531,7 @@ export default () => {
                     )}
                     {((!isApproved && collateralToken) || !isIFTApproved) && (
                         <Button
-                            className="btn-mint common-btn-pale"
+                            className="btn-mint common-btn common-btn-pale"
                             onClick={handleAllApprove}
                             loading={requestedApproval || requestIFTApproval}
                         >

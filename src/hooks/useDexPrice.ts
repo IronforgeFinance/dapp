@@ -1,13 +1,18 @@
 import { useWeb3React } from '@web3-react/core';
 import React, { useState, useEffect } from 'react';
 import useRefresh from './useRefresh';
-import { useRouter } from '@/hooks/useContract';
+import { usePancakeFactory } from '@/hooks/useContract';
 import { ethers } from 'ethers';
 import Tokens from '@/config/constants/tokens';
+import useWeb3Provider from './useWeb3Provider';
+import { getContract } from '@/utils/contractHelper';
+import { expandTo18Decimals } from '@/utils/bigNumber';
+import PancakePair from '@/config/abi/PancakePair.json';
 const useDexPrice = (token1, token2) => {
     const [price, setPrice] = useState(0); //TODO 不同currency有不同的ratio
-    const router = useRouter();
+    const factory = usePancakeFactory();
     const { fastRefresh } = useRefresh();
+    const provider = useWeb3Provider();
 
     useEffect(() => {
         if (token1 && token2) {
@@ -20,19 +25,30 @@ const useDexPrice = (token1, token2) => {
                 }
                 const token1Contract = token1Obj.address[chainId];
                 const token2Contract = token2Obj.address[chainId];
-                const [
-                    ,
-                    price,
-                ] = await router.getAmountsOut(ethers.utils.parseEther('1'), [
+                const lpPairAddress = await factory.getPair(
                     token1Contract,
                     token2Contract,
-                ]);
-                const value = Number(ethers.utils.formatUnits(price, 18));
+                );
+
+                const lp = getContract(
+                    PancakePair,
+                    lpPairAddress,
+                    provider.getSigner(),
+                );
+
+                const [r0, r1] = await lp.getReserves();
+                let value;
+                if (token1Contract === (await lp.token0())) {
+                    value = r0.mul(expandTo18Decimals(1)).div(r1);
+                } else {
+                    value = r1.mul(expandTo18Decimals(1)).div(r0);
+                }
+                value = Number(ethers.utils.formatUnits(value, 18));
                 console.log('dex price: ', value);
                 setPrice(value);
             })();
         }
-    }, [token1, token1, fastRefresh]);
+    }, [token1, token1, fastRefresh, provider]);
     return price;
 };
 

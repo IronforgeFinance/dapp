@@ -16,7 +16,8 @@ import ConfigAbi from '@/config/abi/Config.json';
 import LiquidationAbi from '@/config/abi/Liquidation.json';
 import PricesAbi from '@/config/abi/MockPrices.json';
 import PancakeRouter from '@/config/abi/PancakeRouterV2.json';
-const getContract = (
+import PancakeFactory from '@/config/abi/PancakeFactory.json';
+export const getContract = (
     abi: any,
     address: string,
     signer?: ethers.Signer | ethers.providers.Provider,
@@ -94,4 +95,12 @@ export const getRouterContract = (
     const chainId = process.env.APP_CHAIN_ID as string;
     const address = Addresses.PancakeRouter[chainId];
     return getContract(PancakeRouter, address, signer);
+};
+
+export const getPancakeFactoryContract = (
+    signer?: ethers.Signer | ethers.providers.Provider,
+) => {
+    const chainId = process.env.APP_CHAIN_ID as string;
+    const address = Addresses.PancakeFactory[chainId];
+    return getContract(PancakeFactory, address, signer);
 };

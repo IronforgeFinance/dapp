@@ -56,6 +56,7 @@ export default (props: IProps) => {
         setStakedData,
         lockedData,
         setLockedData,
+        clearDataView,
     } = useModel('dataView', (model) => ({
         ...model,
     }));
@@ -138,16 +139,20 @@ export default (props: IProps) => {
     }, 500);
 
     const toTokenHandler = (v) => {
+        setToToken(v);
+        setUnstakeAmount(0);
+        setBurnAmount(0);
+        setBurnType('');
+    };
+
+    useEffect(() => {
         const debt = selectedDebtItemInfos.find(
-            (item) => item.collateralToken === v,
+            (item) => item.collateralToken === toToken,
         );
         if (debt) {
             setToTokenDebt(debt.debt);
         }
-        setToToken(v);
-        setUnstakeAmount(0);
-        setBurnAmount(0);
-    };
+    }, [toToken]);
 
     useEffect(() => {
         //
@@ -178,7 +183,8 @@ export default (props: IProps) => {
 
     // 计算burned 和unstaking amount
     //TODO 替换 collateralSystem.getUserCollateralInUsd 方法。还没部署。
-    const burnInitialHandler = async () => {
+    const burnInitialHandler = async (v) => {
+        setBurnType(v);
         setUnstakeAmount(0);
         const res = await collateralSystem.getUserCollateralInUsd(
             account,
@@ -199,29 +205,35 @@ export default (props: IProps) => {
             ...fRatioData,
             endValue: initialRatio * 100,
         });
+        setLockedData({
+            ...lockedData,
+            endValue: lockedData.startValue,
+        });
     };
 
     /* 如果余额小于债务 提示进行两个交易，tx1用账户里bnb去购买fusd，tx2进行unstake
     合约暂时不支持这样的两步操作。所以页面上就提示用户需要购买fusd，保证账户余额大于债务。
     */
-    const burnMaxHandler = async () => {
+    const burnMaxHandler = async (v) => {
+        setBurnType(v);
         if (fusdBalance < toTokenDebtInUsd) {
             message.warning(
                 '钱包余额不足。请到dex购买fUSD，保证余额大于您的债务',
                 5,
             );
+            return;
         } else {
             setUnstakeAmount(toTokenDebt);
-            // const price = await prices.getPrice(
-            //     ethers.utils.formatBytes32String(toToken),
-            // );
-            // const userCollateralInUsd = new BigNumber(toTokenDebt).multipliedBy(
-            //     ethers.utils.formatEther(price),
-            // );
-            // const burnAmount = userCollateralInUsd
-            //     .dividedBy(initialRatio)
-            //     .toNumber();
-            setBurnAmount(selectedDebtInUSD);
+            const price = await prices.getPrice(
+                ethers.utils.formatBytes32String(toToken),
+            );
+            const userCollateralInUsd = new BigNumber(toTokenDebt).multipliedBy(
+                ethers.utils.formatEther(price),
+            );
+            const burnAmount = parseFloat(
+                userCollateralInUsd.dividedBy(currencyRatio).toFixed(2),
+            );
+            setBurnAmount(burnAmount);
             setDebtData({
                 ...debtData,
                 endValue: 0,
@@ -232,7 +244,8 @@ export default (props: IProps) => {
             });
             setStakedData({
                 ...stakedData,
-                endValue: 0,
+                endValue:
+                    stakedData.startValue - userCollateralInUsd.toNumber(),
             });
             setLockedData({
                 ...lockedData,
@@ -268,7 +281,7 @@ export default (props: IProps) => {
         try {
             setSubmitting(true);
             if (burnType === 'max') {
-                const tx = await collateralSystem.burnAndUnstake(
+                const tx = await collateralSystem.burnAndUnstakeMax(
                     expandTo18Decimals(burnAmount), // burnAmount
                     ethers.utils.formatBytes32String(toToken!), // unstakeCurrency
                 );
@@ -300,7 +313,8 @@ export default (props: IProps) => {
             setSubmitting(false);
             message.success('Burn successfully. Pls check your balance.');
             onSubmitSuccess();
-            //TODO 触发ratio更新
+            //更新dataView
+            clearDataView();
         } catch (err) {
             setSubmitting(false);
             console.log(err);
@@ -372,7 +386,8 @@ export default (props: IProps) => {
                 <p className="tips">You can also choose</p>
                 <div className="btns">
                     <Radio.Group
-                        onChange={(v) => setBurnType}
+                        value={burnType}
+                        onChange={(e) => setBurnType(e.target.value)}
                         buttonStyle="solid"
                     >
                         <Radio.Button
