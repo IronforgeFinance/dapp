@@ -3,9 +3,14 @@
  */
 button {
     transition: 0.2s all;
+    border: none;
+    outline: none;
+    background-color: transparent;
+    cursor: pointer;
 }
 
-.common-btn-red {
+.common-btn-red,
+.common-btn-red:focus {
     background: url(../images/common-btn-red.png) no-repeat;
     background-size: 100% 100%;
     color: rgba(255, 254, 254, 1);
@@ -23,7 +28,8 @@ button {
     color: rgba(255, 254, 254, 0.7);
 }
 
-.common-btn-yellow {
+.common-btn-yellow,
+.common-btn-yellow:focus {
     background: url(../images/common-btn-yellow.png) no-repeat;
     background-size: 100% 100%;
     color: rgba(255, 254, 254, 1);
@@ -44,12 +50,17 @@ button {
 .common-btn-pale {
     background: url(../images/common-btn-yellow-disabped.png) no-repeat;
     background-size: 100% 100%;
+    color: rgba(255, 254, 254, 0.7);
+}
 
-    &:hover,
-    &:active,
-    &:focus {
-        background: url(../images/common-btn-yellow-disabped.png) no-repeat;
-        background-size: 100% 100%;
-        color: #ffffff;
-    }
+.common-btn-pale:hover {
+    background: url(../images/common-btn-yellow-disabped.png) no-repeat;
+    background-size: 100% 100%;
+    color: rgba(255, 254, 254, 1);
+}
+
+.common-btn-pale:disabled {
+    background: url(../images/common-btn-yellow-disabped.png) no-repeat;
+    background-size: 100% 100%;
+    color: rgba(255, 254, 254, 0.7);
 }

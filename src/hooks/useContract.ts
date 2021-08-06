@@ -11,7 +11,7 @@ import {
     getLiquidationContract,
     getPricesContract,
     getRouterContract,
-    getPancakeFactoryContract
+    getPancakeFactoryContract,
 } from '@/utils/contractHelper';
 
 export const useERC20 = (address: string) => {
@@ -74,5 +74,7 @@ export const useRouter = () => {
 
 export const usePancakeFactory = () => {
     const provider = useWeb3Provider();
-    return useMemo(() => getPancakeFactoryContract(provider.getSigner()), [provider]);
+    return useMemo(() => getPancakeFactoryContract(provider.getSigner()), [
+        provider,
+    ]);
 };

@@ -31,125 +31,15 @@
     font-size: 18px;
     border: none;
     margin: 30px auto;
+    width: 236px;
+    height: 70px;
     span {
         color: white;
     }
 }
 
-.ratio {
-    .ant-progress {
-        font-style: normal;
-        font-weight: normal;
-        font-size: 15px;
-        line-height: 22px;
-        color: #ffffff;
-
-        width: 382px;
-        height: 44px;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-
-        .ant-progress-outer {
-            width: 364px;
-            height: 12px;
-            background: #585448;
-            box-shadow: 0px 0px 1px 3px #654609,
-                inset 0px -2px 1px rgba(0, 0, 0, 0.25),
-                inset -1px 1px 1px rgba(255, 247, 236, 0.38);
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            padding: 4px 3px;
-            box-sizing: border-box;
-
-            .ant-progress-inner {
-                background-color: transparent;
-
-                .ant-progress-bg {
-                    height: 4px !important;
-                    background: linear-gradient(
-                        90deg,
-                        #fcd144 62.3%,
-                        #ffad33 92.56%
-                    );
-                }
-            }
-        }
-
-        .ant-progress-text {
-            width: 364px;
-            text-align: right;
-            display: inline-block;
-            margin-top: 6px;
-            margin-left: 0;
-            font-style: normal;
-            font-weight: 300;
-            font-size: 15px;
-            line-height: 22px;
-            color: #ffffff;
-        }
-    }
-}
-
 .commentary-card {
-    width: 448px;
-    height: 121.77px;
-    position: relative;
     margin-bottom: 14.89px;
-    background-image: url('../../assets/images/mint-comment-bg-wrapper.png'),
-        url('../../assets/images/mint-comment-bg.png');
-    background-repeat: no-repeat;
-    background-position: center;
-    background-size: 100% 100%;
-    padding: 44.12px 31.86px 18.72px 37.66px;
-    position: relative;
-
-    &:after {
-        content: '';
-        position: absolute;
-        left: 0;
-        top: 0;
-        width: 100%;
-        height: 100%;
-        background-color: rgba(85, 61, 30, 0.7);
-        border-radius: 37.66px;
-        overflow: hidden;
-        z-index: -1;
-    }
-
-    > h3.title {
-        width: 208px;
-        height: 44px;
-        position: absolute;
-        top: 0;
-        left: 50%;
-        transform: translate(-50%, calc(-50% + 10px));
-
-        font-style: normal;
-        font-weight: bold;
-        font-size: 16px;
-        line-height: 24px;
-        color: #292725;
-
-        display: flex;
-        align-items: center;
-        justify-content: center;
-
-        background: url('../../assets/images/mint-comment-title.png') no-repeat
-            center;
-        background-size: contain;
-    }
-
-    .words {
-        font-style: normal;
-        font-weight: 300;
-        font-size: 16px;
-        line-height: 123.01%;
-        text-align: justify;
-        letter-spacing: 0.01em;
-        color: #ffffff;
-    }
 }
 
 .right-box {
@@ -168,4 +58,32 @@
     top: 0;
 
     transform: translate(33.3%, -20%);
+}
+
+.btn-mint-form {
+    font-style: normal;
+    font-weight: normal;
+    font-size: 15px;
+    line-height: 22px;
+    display: flex;
+    align-items: center;
+    text-align: right;
+    color: #e1ab3b;
+    > span {
+        padding-right: 4px;
+        padding-left: 6px;
+    }
+}
+
+.label {
+    display: flex;
+    align-items: center;
+
+    .icon-question {
+        margin-left: 6px;
+    }
+}
+
+.iron-progress {
+    width: 382px;
 }
