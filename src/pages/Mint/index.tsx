@@ -30,9 +30,12 @@ import './index.less';
 import useDataView from '@/hooks/useDataView';
 import { useTokenPrice } from '@/hooks/useTokenPrice';
 import ScaleGroup from '@/components/ScaleGroup';
-import SettingView from './SettingView';
+// import SettingView from './SettingView';
 import classNames from 'classnames';
 import useDexPrice from '@/hooks/useDexPrice';
+import SelectTokens from '@/components/SelectTokens';
+import CommentaryCard from '@/components/CommentaryCard';
+import { useCallback } from 'react';
 export default () => {
     const intl = useIntl();
     const { account } = useWeb3React();
@@ -342,15 +345,59 @@ export default () => {
         }
     };
 
-    const CommentaryCard = () => {
+    const SelectFromTokensView = () => {
+        const [show, setShow] = useState(false);
+        const onCloseMemo = useCallback(() => setShow(false), []);
+        const onShowMemo = useCallback(() => setShow(true), []);
+
+        const DefaultView = () => {
+            return <span>Select token</span>;
+        };
+
         return (
-            <div className="commentary-card">
-                <h3 className="title">Begin To Mint</h3>
-                <p className="words">
-                    Mint fUSD by staking your Token. Token stakers earn weekly
-                    staking rewards .
-                </p>
-            </div>
+            <SelectTokens
+                visable={show}
+                value={collateralToken}
+                tokenList={COLLATERAL_TOKENS}
+                onSelect={collateralTokenHandler}
+                onClose={onCloseMemo}
+            >
+                <button className="btn-mint-form" onClick={onShowMemo}>
+                    <span>{collateralToken || <DefaultView />}</span>
+                    <i className="icon-down size-20"></i>
+                </button>
+            </SelectTokens>
+        );
+    };
+
+    const SelectToTokensView = () => {
+        const [show, setShow] = useState(false);
+        const onCloseMemo = useCallback(() => setShow(false), []);
+        const onShowMemo = useCallback(() => setShow(true), []);
+
+        const DefaultView = () => {
+            return (
+                <span>
+                    {intl.formatMessage({
+                        id: 'mint.selectCasting',
+                    })}
+                </span>
+            );
+        };
+
+        return (
+            <SelectTokens
+                visable={show}
+                value={toToken}
+                tokenList={MINT_TOKENS.map((name) => ({ name }))}
+                onSelect={toTokenHandler}
+                onClose={onCloseMemo}
+            >
+                <button className="btn-mint-form" onClick={onShowMemo}>
+                    <span>{toToken || <DefaultView />}</span>
+                    <i className="icon-down size-20"></i>
+                </button>
+            </SelectTokens>
         );
     };
 
@@ -358,9 +405,13 @@ export default () => {
         <div className="mint-container">
             <DataView />
             <div className="right-box">
-                <CommentaryCard />
+                <CommentaryCard
+                    title="Begin To Mint"
+                    description={
+                        'Mint fUSD by staking your Token. Token stakers earn weekly staking rewards .'
+                    }
+                />
                 <div className="mint-box common-box">
-                    <SettingView />
                     <div className="input-item">
                         <p className="label">
                             {intl.formatMessage({ id: 'mint.from' })}
@@ -397,20 +448,7 @@ export default () => {
                                             'size-24': true,
                                         })}
                                     />
-                                    <Select
-                                        value={collateralToken}
-                                        onSelect={collateralTokenHandler}
-                                        placeholder={'Select token'}
-                                    >
-                                        {COLLATERAL_TOKENS.map((item) => (
-                                            <Select.Option
-                                                value={item.name}
-                                                key={item.name}
-                                            >
-                                                {item.name}
-                                            </Select.Option>
-                                        ))}
-                                    </Select>
+                                    <SelectFromTokensView />
                                 </div>
                             </div>
                         </div>
@@ -421,6 +459,7 @@ export default () => {
                     <div className="input-item">
                         <p className="label">
                             {intl.formatMessage({ id: 'mint.locked' })}
+                            <i className="icon-question size-16"></i>
                         </p>
                         <div className="input-item-content">
                             <div className="content-label">
@@ -480,27 +519,13 @@ export default () => {
                                     <i
                                         className={classNames({
                                             'icon-token': true,
-                                            [String(toToken).toLowerCase()]:
-                                                true,
+                                            [String(
+                                                toToken,
+                                            ).toLowerCase()]: true,
                                             'size-24': true,
                                         })}
                                     />
-                                    <Select
-                                        value={toToken}
-                                        onSelect={toTokenHandler}
-                                        placeholder={intl.formatMessage({
-                                            id: 'mint.selectCasting',
-                                        })}
-                                    >
-                                        {MINT_TOKENS.map((item) => (
-                                            <Select.Option
-                                                value={item}
-                                                key={item}
-                                            >
-                                                {item}
-                                            </Select.Option>
-                                        ))}
-                                    </Select>
+                                    <SelectToTokensView />
                                 </div>
                             </div>
                         </div>
@@ -509,6 +534,7 @@ export default () => {
                     {isApproved && isIFTApproved && (
                         <div className="ratio">
                             <Progress
+                                className="iron-progress"
                                 percent={computedRatio * 10}
                                 format={() =>
                                     `${toFixedWithoutRound(
@@ -531,7 +557,7 @@ export default () => {
                     )}
                     {((!isApproved && collateralToken) || !isIFTApproved) && (
                         <Button
-                            className="btn-mint common-btn common-btn-pale"
+                            className="btn-mint common-btn common-btn-red"
                             onClick={handleAllApprove}
                             loading={requestedApproval || requestIFTApproval}
                         >

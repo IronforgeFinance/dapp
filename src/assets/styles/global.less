@@ -19,6 +19,18 @@
     padding: 0;
 }
 
+// * 消除滚动条
+*::-webkit-scrollbar {
+    display: none;
+}
+
+* {
+    -ms-overflow-style: none;
+    /* IE 10+ */
+    scrollbar-width: none;
+    /* Firefox */
+}
+
 body {
     font-family: PingFangSC-Regular, sans-serif;
 }
@@ -61,7 +73,7 @@ dl {
         background: rgba(51, 39, 30, 0.8);
         border: 1px solid rgba(178, 178, 181, 0.5);
         box-sizing: border-box;
-        backdrop-filter: blur(20px);
+        // backdrop-filter: blur(20px);
         /* Note: backdrop-filter has minimal browser support */
         border-radius: 6px;
         border-radius: 6px;
@@ -196,6 +208,7 @@ dl {
     cursor: pointer;
     border: none;
 }
+
 .common-btn:hover {
     color: #fffefe !important;
 }
@@ -217,7 +230,7 @@ dl {
         url('../images/common-box-frame.png'), url(../images/common-box-bg.png);
     background-repeat: no-repeat, no-repeat, no-repeat;
     background-position: center, center, center;
-    background-size: cover, cover, cover;
+    background-size: contain, contain, contain;
 }
 
 .common-btn-back {
@@ -249,5 +262,57 @@ dl {
 
     &-active {
         color: rgba(252, 209, 68, 1);
+    }
+}
+
+.iron-progress {
+    font-style: normal;
+    font-weight: normal;
+    font-size: 15px;
+    line-height: 22px;
+    color: #ffffff;
+    height: 44px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    .ant-progress-outer {
+        width: 364px;
+        height: 12px;
+        background: #585448;
+        box-shadow: 0px 0px 1px 3px #654609,
+            inset 0px -2px 1px rgba(0, 0, 0, 0.25),
+            inset -1px 1px 1px rgba(255, 247, 236, 0.38);
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        padding: 4px 3px;
+        box-sizing: border-box;
+
+        .ant-progress-inner {
+            background-color: transparent;
+
+            .ant-progress-bg {
+                height: 4px !important;
+                background: linear-gradient(
+                    90deg,
+                    #fcd144 62.3%,
+                    #ffad33 92.56%
+                );
+            }
+        }
+    }
+
+    .ant-progress-text {
+        width: 364px;
+        text-align: right;
+        display: inline-block;
+        margin-top: 6px;
+        margin-left: 0;
+        font-style: normal;
+        font-weight: 300;
+        font-size: 15px;
+        line-height: 22px;
+        color: #ffffff;
     }
 }

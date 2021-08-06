@@ -6,14 +6,14 @@ export interface IScaleOption {
     label: string;
     value: any;
 }
-export interface IScaleGroup {
+export interface IScaleGroupProps {
     defaultValue?: string;
     value?: string;
     scaleRange?: IScaleOption[];
     updateScale?: Function;
 }
 
-export default (props: IScaleGroup) => {
+export default (props: IScaleGroupProps) => {
     const { scaleRange = [], value = '', updateScale = () => {} } = props;
 
     return (

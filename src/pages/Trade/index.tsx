@@ -166,96 +166,153 @@ export default () => {
             }
         }
     };
+    const WhiteSpace = () => (
+        <span
+            dangerouslySetInnerHTML={{
+                __html: '&nbsp;',
+            }}
+        />
+    );
 
     return (
-        <div className="trade_container">
-            <div className="trade-from">
-                <div className="input-item">
-                    <p className="label">From</p>
-                    <div className="input-item-content">
-                        <div className="content-label">
-                            <p className="left"></p>
-                            <p className="right">
-                                Balance:{' '}
-                                <span className="balance">
-                                    {fromTokenBalance}
-                                </span>
-                            </p>
-                        </div>
-                        <div className="input">
-                            <InputNumber
-                                value={fromAmount}
-                                onChange={fromAmountHandler}
-                                placeholder="0.00"
-                                className="custom-input"
-                                min={0}
-                            />
-                            <div className="token">
-                                <Select
-                                    value={fromToken}
-                                    onSelect={(v) => setFromToken(fromToken)}
-                                    placeholder="Select a Token"
-                                >
-                                    {FROM_TOKENS.map((item) => (
-                                        <Select.Option value={item} key={item}>
-                                            {item}
-                                        </Select.Option>
-                                    ))}
-                                </Select>
+        <div className="trade-container">
+            <div className="shop common-box">
+                <div className="roof" />
+                <div className="form">
+                    <div className="input-item">
+                        <p className="label">From</p>
+                        <div className="input-item-content">
+                            <div className="content-label">
+                                <p className="left"></p>
+                                <p className="right">
+                                    Balance:
+                                    <WhiteSpace />
+                                    <span className="balance">
+                                        {fromTokenBalance}
+                                    </span>
+                                </p>
+                            </div>
+                            <div className="input">
+                                <InputNumber
+                                    value={fromAmount}
+                                    onChange={fromAmountHandler}
+                                    placeholder="0.00"
+                                    className="custom-input"
+                                    min={0}
+                                />
+                                <div className="token">
+                                    <Select
+                                        value={fromToken}
+                                        onSelect={(v) =>
+                                            setFromToken(fromToken)
+                                        }
+                                        placeholder="Select a Token"
+                                    >
+                                        {FROM_TOKENS.map((item) => (
+                                            <Select.Option
+                                                value={item}
+                                                key={item}
+                                            >
+                                                {item}
+                                            </Select.Option>
+                                        ))}
+                                    </Select>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                <div className="input-item">
-                    <p className="label">To</p>
-                    <div className="input-item-content">
-                        <div className="content-label">
-                            <p className="left"></p>
-                            <p className="right">
-                                Balance:{' '}
-                                <span className="balance">
-                                    {toTokenBalance}
-                                </span>
-                            </p>
-                        </div>
-                        <div className="input">
-                            <InputNumber
-                                value={toAmount}
-                                onChange={toAmountHandler}
-                                placeholder="0.00"
-                                className="custom-input"
-                                disabled={!toToken}
-                                min={0}
-                            />
-                            <div className="token">
-                                <Select
-                                    value={toToken}
-                                    onSelect={(v) => setToToken(v)}
-                                    placeholder="Select a Token"
-                                >
-                                    {TO_TOKENS.map((item) => (
-                                        <Select.Option value={item} key={item}>
-                                            {item}
-                                        </Select.Option>
-                                    ))}
-                                </Select>
+                    <div className="input-item">
+                        <p className="label">To</p>
+                        <div className="input-item-content">
+                            <div className="content-label">
+                                <p className="left"></p>
+                                <p className="right">
+                                    Balance:{' '}
+                                    <span className="balance">
+                                        {toTokenBalance}
+                                    </span>
+                                </p>
+                            </div>
+                            <div className="input">
+                                <InputNumber
+                                    value={toAmount}
+                                    onChange={toAmountHandler}
+                                    placeholder="0.00"
+                                    className="custom-input"
+                                    disabled={!toToken}
+                                    min={0}
+                                />
+                                <div className="token">
+                                    <Select
+                                        value={toToken}
+                                        onSelect={(v) => setToToken(v)}
+                                        placeholder="Select a Token"
+                                    >
+                                        {TO_TOKENS.map((item) => (
+                                            <Select.Option
+                                                value={item}
+                                                key={item}
+                                            >
+                                                {item}
+                                            </Select.Option>
+                                        ))}
+                                    </Select>
+                                </div>
                             </div>
                         </div>
                     </div>
                     <Button
-                        className="btn-mint"
+                        className="btn-trade common-btn common-btn-red"
                         onClick={onSubmit}
                         loading={submitting}
                     >
                         Trade
                     </Button>
+                    <span className="fee-cost">Fee cost：0</span>
                 </div>
             </div>
-            <EstimateData
+            <div className="market-details">
+                <button className="btn-skip" />
+                <p className="details">
+                    Market Details:
+                    <WhiteSpace />
+                    <span className="token-pair">fBTC/fETH</span>
+                </p>
+                <span className="token">fBTC</span>
+                <ul>
+                    {/* {new Array(6).fill('').map(() => ( */}
+                    <li>
+                        <span className="label">24H volume </span>
+                        <span className="value">2222</span>
+                    </li>
+                    <li>
+                        <span className="label">Market Cap </span>
+                        <span className="value">2222</span>
+                    </li>
+                    <li>
+                        <span className="label">24H High </span>
+                        <span className="value">2222</span>
+                    </li>
+                    <li>
+                        <span className="label">24H Low </span>
+                        <span className="value">2222</span>
+                    </li>
+                    <li>
+                        <span className="label">Price Feed </span>
+                        <span className="value">2222</span>
+                    </li>
+                    <li>
+                        <span className="label">fBTC Contract </span>
+                        <span className="value">2222</span>
+                    </li>
+                    {/* ))} */}
+                </ul>
+            </div>
+            {/* <EstimateData
                 feeRate={feeRate}
                 receivedAmount={parseFloat(estimateAmount)}
                 receivedToken={toToken}
-            />
+            /> */}
         </div>
     );
 };

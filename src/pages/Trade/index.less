@@ -1,9 +1,131 @@
-.trade_container {
-    margin-top: 30px;
-    margin-right: 220px;
-    position: relative;
-    float: right;
-    background: rgba(51, 39, 30, 0.8);
-    border-radius: 15px;
-    padding: 30px;
+@import '~@/assets/styles/util.less';
+
+.trade-container {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: space-between;
+    position: absolute;
+
+    // TODO 这里图片有点大，下周分拆出多个部件图出来合成，充分利用图片并发
+    .shop {
+        width: 606.36px;
+        height: 610.74px;
+        padding: 100.88px 81.89px 32.78px 92.65px;
+        box-sizing: border-box;
+        margin-left: 50%;
+        margin-top: 63.26px;
+        transform: translateX(-50%);
+        #image.background('~@/assets/images/trade-swap-bg.png');
+
+        .form {
+            width: 431.82px;
+            height: 477.09px;
+            padding-top: 88.99px;
+            padding-left: 27.3px;
+            padding-right: 30.54px;
+
+            .btn-trade {
+                margin: 39.72px auto 0 auto;
+            }
+
+            .fee-cost {
+                font-style: normal;
+                font-weight: normal;
+                font-size: 15px;
+                line-height: 22px;
+                display: flex;
+                align-items: center;
+                color: #e1ab3b;
+                margin-top: 9px;
+            }
+        }
+    }
+
+    .market-details {
+        height: 502px;
+        width: 450px;
+        // margin-left: 195px;
+        top: 86px;
+        position: absolute;
+        right: 0;
+        z-index: 1;
+        #image.background('~@/assets/images/trade-market-detail-bg.png');
+        #position.parent();
+        padding-top: 39px;
+        padding-left: 30px;
+        box-sizing: border-box;
+
+        .btn-skip {
+            height: 36px;
+            width: 48px;
+            #image.button('~@/assets/images/trade-btn-skip.png');
+            #position.absLtCorner(translate(-50%, -30%));
+        }
+
+        .details {
+            font-style: normal;
+            font-weight: normal;
+            font-size: 16px;
+            line-height: 24px;
+            color: rgba(255, 255, 255, 0.6);
+            padding-left: 6px;
+
+            .token-pair {
+                color: #e1ab3b;
+            }
+        }
+
+        .token {
+            display: inline-block;
+            margin-top: 8px;
+            font-style: normal;
+            font-weight: normal;
+            font-size: 16px;
+            line-height: 24px;
+            color: #e1ab3b;
+            padding-left: 6px;
+        }
+
+        > ul {
+            display: flex;
+            flex-direction: column;
+            width: 390px;
+
+            > li {
+                flex-shrink: 0;
+                height: 40px;
+                width: 100%;
+                padding-left: 21.47px;
+                padding-bottom: 20px;
+                padding-right: 11px;
+                display: flex;
+                justify-content: space-between;
+                margin-top: 16px;
+                border-bottom: 1px dashed rgba(122, 105, 106, 0.7);
+                filter: blur(0.2px);
+
+                &:first-child {
+                    margin-top: 9px;
+                }
+
+                .label {
+                    font-style: normal;
+                    font-weight: 500;
+                    font-size: 16px;
+                    line-height: 24px;
+                    color: rgba(255, 255, 255, 0.88);
+                }
+
+                .value {
+                    font-style: normal;
+                    font-weight: 500;
+                    font-size: 16px;
+                    line-height: 24px;
+                    text-align: right;
+                    color: rgba(255, 255, 255, 0.88);
+                }
+            }
+        }
+    }
 }

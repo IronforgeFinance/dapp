@@ -5,6 +5,8 @@
         background-image: url(@bgImage);
         background-color: @bgColor;
         background-size: contain;
+        display: inline-block;
+        flex-shrink: 0;
     }
 
     .icon(@size, @bgImage, @bgColor: transparent) {
@@ -40,6 +42,13 @@
         left: 50%;
         top: @top;
         transform: translate(-50%, @moveTop);
+    }
+
+    .absLtCorner(@move: translate(0%, 0%)) {
+        position: absolute;
+        left: 0;
+        top: 0;
+        transform: @move;
     }
 
     .absRtCorner(@move: translate(0%, 0%)) {
