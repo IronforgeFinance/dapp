@@ -577,7 +577,7 @@ export default () => {
                     )}
                     {((!isApproved && collateralToken) || !isIFTApproved) && (
                         <Button
-                            className="btn-mint common-btn-pale"
+                            className="btn-mint common-btn common-btn-red"
                             onClick={handleAllApprove}
                             loading={requestedApproval || requestIFTApproval}
                         >

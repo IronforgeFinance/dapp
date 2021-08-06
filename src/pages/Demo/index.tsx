@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import './index.less';
-import SelectTokens from '../../components/SelectTokens';
+import SelectTokens from '@/components/SelectTokens';
+import ConfirmTransaction from '@/components/ConfirmTransaction';
 
 export default () => {
     // * 选择token演示
@@ -22,12 +23,79 @@ export default () => {
         );
     };
 
+    // * 交易确认演示
+    const ConfirmTransactionDemo = () => {
+        const [show, setShow] = useState(false);
+        const onCloseMemo = useCallback(() => setShow(false), []);
+        const onShowMemo = useCallback(() => setShow(true), []);
+
+        const mockData = [
+            {
+                prop: 'Burned',
+                value: 100,
+                token: 'fUSD',
+                extra: '$6,162.8',
+            },
+            {
+                prop: 'Burned',
+                value: 100,
+                token: 'fUSD',
+            },
+            {
+                prop: 'Burned',
+                value: 100,
+                token: 'fUSD',
+            },
+            {
+                prop: 'Burned',
+                value: 100,
+                token: 'fUSD',
+            },
+            {
+                prop: 'Burned',
+                value: 100,
+                token: 'fUSD',
+            },
+            {
+                prop: 'Burned',
+                value: 100,
+                token: 'fUSD',
+            },
+            {
+                prop: 'Burned',
+                value: 100,
+                token: 'fUSD',
+            },
+            {
+                prop: 'Burned',
+                value: 100,
+                token: 'fUSD',
+            },
+        ];
+
+        return (
+            <ConfirmTransaction
+                visable={show}
+                onClose={onCloseMemo}
+                dataSource={mockData}
+            >
+                <button className="confirm-transaction" onClick={onShowMemo}>
+                    Confirm Transaction
+                </button>
+            </ConfirmTransaction>
+        );
+    };
+
     return (
         <div className="demo-container">
             <ul>
                 <li>
                     <h3>1. select token list</h3>
                     <SelectTokensDemo />
+                </li>
+                <li>
+                    <h3>2. confirm transaction</h3>
+                    <ConfirmTransactionDemo />
                 </li>
             </ul>
         </div>

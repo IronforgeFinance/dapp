@@ -22,7 +22,7 @@ export default (props: ISelectTokensProps) => {
         children,
         visable,
         value,
-        tokenList,
+        tokenList = [],
         onClose: _closeHandler,
         onSelect: _selectHandler,
     } = props;
@@ -32,7 +32,7 @@ export default (props: ISelectTokensProps) => {
     // const tokenList = new Array(100).fill('').map((item, index) => index + 1);
 
     return (
-        <div className="setting">
+        <div className="select-tokens">
             <Board visable={visable} onClose={onCloseMemo}>
                 <ul className="tokenlist">
                     <input

@@ -19,6 +19,18 @@
     padding: 0;
 }
 
+// * 消除滚动条
+*::-webkit-scrollbar {
+    display: none;
+}
+
+* {
+    -ms-overflow-style: none;
+    /* IE 10+ */
+    scrollbar-width: none;
+    /* Firefox */
+}
+
 body {
     font-family: PingFangSC-Regular, sans-serif;
 }
@@ -196,6 +208,7 @@ dl {
     cursor: pointer;
     border: none;
 }
+
 .common-btn:hover {
     color: #fffefe !important;
 }
