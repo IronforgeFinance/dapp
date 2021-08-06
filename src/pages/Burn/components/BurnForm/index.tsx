@@ -54,6 +54,8 @@ export default (props: IProps) => {
         setfRatioData,
         stakedData,
         setStakedData,
+        lockedData,
+        setLockedData,
     } = useModel('dataView', (model) => ({
         ...model,
     }));
@@ -66,7 +68,7 @@ export default (props: IProps) => {
 
     const getTokenPrice = async (token: string) => {
         const res = await prices.getPrice(
-            ethers.utils.formatBytes32String(toToken),
+            ethers.utils.formatBytes32String(token),
         );
         return parseFloat(ethers.utils.formatEther(res));
     };
@@ -178,16 +180,13 @@ export default (props: IProps) => {
     //TODO 替换 collateralSystem.getUserCollateralInUsd 方法。还没部署。
     const burnInitialHandler = async () => {
         setUnstakeAmount(0);
-        const userCollateral = await collateralSystem.getUserCollateral(
+        const res = await collateralSystem.getUserCollateralInUsd(
             account,
             ethers.utils.formatBytes32String(toToken),
         );
-        const price = await prices.getPrice(
-            ethers.utils.formatBytes32String(toToken),
-        );
         const userCollateralInUsd = new BigNumber(
-            ethers.utils.formatEther(userCollateral),
-        ).multipliedBy(ethers.utils.formatEther(price));
+            ethers.utils.formatEther(res),
+        );
         const burnAmount =
             toTokenDebtInUsd -
             userCollateralInUsd.dividedBy(initialRatio).toNumber();
@@ -213,19 +212,19 @@ export default (props: IProps) => {
             );
         } else {
             setUnstakeAmount(toTokenDebt);
-            const price = await prices.getPrice(
-                ethers.utils.formatBytes32String(toToken),
-            );
-            const userCollateralInUsd = new BigNumber(toTokenDebt).multipliedBy(
-                ethers.utils.formatEther(price),
-            );
-            const burnAmount = userCollateralInUsd
-                .dividedBy(initialRatio)
-                .toNumber();
-            setBurnAmount(burnAmount);
+            // const price = await prices.getPrice(
+            //     ethers.utils.formatBytes32String(toToken),
+            // );
+            // const userCollateralInUsd = new BigNumber(toTokenDebt).multipliedBy(
+            //     ethers.utils.formatEther(price),
+            // );
+            // const burnAmount = userCollateralInUsd
+            //     .dividedBy(initialRatio)
+            //     .toNumber();
+            setBurnAmount(selectedDebtInUSD);
             setDebtData({
                 ...debtData,
-                endValue: debtData.startValue - burnAmount,
+                endValue: 0,
             });
             setfRatioData({
                 ...fRatioData,
@@ -233,8 +232,11 @@ export default (props: IProps) => {
             });
             setStakedData({
                 ...stakedData,
-                endValue:
-                    stakedData.startValue - userCollateralInUsd.toNumber(),
+                endValue: 0,
+            });
+            setLockedData({
+                ...lockedData,
+                endValue: 0,
             });
         }
     };
@@ -393,7 +395,7 @@ export default (props: IProps) => {
             <div className="btn-burn">
                 <Button
                     loading={submitting}
-                    className="btn-mint"
+                    className="btn-mint common-btn common-btn-red"
                     onClick={onSubmit}
                 >
                     Burn

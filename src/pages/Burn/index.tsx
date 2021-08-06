@@ -62,7 +62,7 @@ export default () => {
                     </div>
                     <div className="btn-burn">
                         <Button
-                            className="btn-mint"
+                            className="btn-mint common-btn common-btn-red"
                             onClick={() => setShowForm(!showForm)}
                         >
                             Burn

@@ -6,7 +6,6 @@ import { IDebtItemInfo } from '../pages/Burn/components/DebtItem/index';
 import {
     useDebtSystem,
     useCollateralSystem,
-    useLiquidation,
     usePrices,
     useConfig,
 } from '@/hooks/useContract';
@@ -67,7 +66,6 @@ const useDataView = (currency: string) => {
     const { account } = useWeb3React();
     const { fastRefresh } = useRefresh();
     const collateralSystem = useCollateralSystem();
-    const liquidation = useLiquidation();
     const debtSystem = useDebtSystem();
     const provider = useWeb3Provider();
 
@@ -90,22 +88,21 @@ const useDataView = (currency: string) => {
             setStakedDataInModel(newVal);
         }
     };
-    const fetchLockedData = async () => {};
+    const fetchLockedData = async () => {
+        const res = await collateralSystem.userLockedData(
+            account,
+            ethers.utils.formatBytes32String(currency),
+        );
+        const data = parseFloat(ethers.utils.formatEther(res));
+        console.log('fetchLockedData: ', data);
+        const newVal = {
+            ...lockedData,
+            startValue: data,
+            endValue: data,
+        };
+        setLockedDataInModel(newVal);
+    };
     const fetchDebtData = async () => {
-        // const res = await Promise.all(
-        //     COLLATERAL_TOKENS.map((token) =>
-        //         debtSystem.GetUserDebtBalanceInUsd(
-        //             account,
-        //             ethers.utils.formatBytes32String(token.name),
-        //         ),
-        //     ),
-        // );
-
-        // const totalDebtInUsd = res.reduce((total, item) => {
-        //     const val = parseFloat(ethers.utils.formatUnits(item[0], 18));
-        //     total += val;
-        //     return total;
-        // }, 0);
         const res = await debtSystem.GetUserDebtBalanceInUsd(
             account,
             ethers.utils.formatBytes32String(currency),
@@ -121,22 +118,16 @@ const useDataView = (currency: string) => {
 
     const fetchCurrencyRatio = async () => {
         if (currency) {
-            //TODO 替换为collateralSystem.getRatio 方法。还没部署。
-            const res = await liquidation.evalUserPosition(
+            const res = await collateralSystem.getRatio(
                 account,
                 ethers.utils.formatBytes32String(currency),
             );
-            const _val = res.collateralizedRatio.isZero()
-                ? 0
-                : 1 /
-                  Number(ethers.utils.formatUnits(res.collateralizedRatio, 18));
+            const resVal = res.map((item) => ethers.utils.formatEther(item));
+            console.log('getRatio: ', resVal);
+            const _val = Number(resVal[0]) === 0 ? 0 : 1 / Number(res[0]);
 
             const val = parseFloat(toFixedWithoutRound(_val, 4));
-            console.log(
-                'fetchCurrencyRatio: ',
-                res.collateralizedRatio.toString(),
-                val,
-            );
+            console.log('fetchCurrencyRatio: ', val, resVal);
             const newVal = {
                 ...fRatioData,
                 startValue: parseFloat((val * 100).toFixed(2)),
@@ -152,6 +143,7 @@ const useDataView = (currency: string) => {
         if (account && currency) {
             fetchStakedData();
             fetchDebtData();
+            fetchLockedData();
         }
     }, [account, currency, fastRefresh, provider]);
 
