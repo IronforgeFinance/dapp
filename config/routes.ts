@@ -5,6 +5,7 @@ export default [
         component: '@/layouts/index',
         routes: [
             { exact: true, path: '/', component: '@/pages/Home' },
+            { exact: true, path: '/demo', component: '@/pages/Demo' },
             { exact: true, path: '/mint', component: '@/pages/Mint' },
             { exact: true, path: '/burn', component: '@/pages/Burn' },
             { exact: true, path: '/trade', component: '@/pages/Trade' },

@@ -1,0 +1,32 @@
+@import '../../assets/styles/util.less';
+
+.board-box {
+    width: 482px;
+    height: 668px;
+    filter: drop-shadow(12px 17px 70px rgba(237, 170, 39, 0.5));
+    #image.background('../../assets/images/mint-select-token-dialog.png');
+    padding: 65px 70px 52px 71px;
+    box-sizing: border-box;
+    #position.parent();
+
+    .titile {
+        width: 268px;
+        height: 58px;
+        #image.background('../../assets/images/mint-select-token-dialog-title.png');
+        #position.absHorizCenter();
+    }
+
+    .btn-close {
+        #image.icon(54px, '../../assets/images/mint-select-token-dialog-close.png');
+        #position.absRtCorner(translate(5%, 0%));
+    }
+
+    .content {
+        width: 340px;
+        max-height: 540px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        overflow-y: auto;
+    }
+}
