@@ -34,6 +34,7 @@ import ScaleGroup from '@/components/ScaleGroup';
 import classNames from 'classnames';
 import useDexPrice from '@/hooks/useDexPrice';
 import SelectTokens from '@/components/SelectTokens';
+import CommentaryCard from '@/components/CommentaryCard';
 import { useCallback } from 'react';
 export default () => {
     const intl = useIntl();
@@ -342,34 +343,6 @@ export default () => {
         }
     };
 
-    const CommentaryCard = () => {
-        return (
-            <div className="commentary-card">
-                <h3 className="title">Begin To Mint</h3>
-                <p className="words">
-                    Mint fUSD by staking your Token. Token stakers earn weekly
-                    staking rewards .
-                </p>
-            </div>
-        );
-    };
-
-    // const SettingView = () => {
-    //     const [showSetting, setShowSetting] = useState(false);
-
-    //     return (
-    //         <SelectTokens
-    //             visable={showSetting}
-    //             onClose={() => setShowSetting(false)}
-    //         >
-    //             <button
-    //                 className="btn-setting"
-    //                 onClick={() => setShowSetting(true)}
-    //             />
-    //         </SelectTokens>
-    //     );
-    // };
-
     const SelectFromTokensView = () => {
         const [show, setShow] = useState(false);
         const onCloseMemo = useCallback(() => setShow(false), []);
@@ -430,9 +403,13 @@ export default () => {
         <div className="mint-container">
             <DataView />
             <div className="right-box">
-                <CommentaryCard />
+                <CommentaryCard
+                    title="Begin To Mint"
+                    description={
+                        'Mint fUSD by staking your Token. Token stakers earn weekly staking rewards .'
+                    }
+                />
                 <div className="mint-box common-box">
-                    {/* <SettingView /> */}
                     <div className="input-item">
                         <p className="label">
                             {intl.formatMessage({ id: 'mint.from' })}

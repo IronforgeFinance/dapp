@@ -2,6 +2,7 @@ import React, { useState, useCallback } from 'react';
 import './index.less';
 import SelectTokens from '@/components/SelectTokens';
 import ConfirmTransaction from '@/components/ConfirmTransaction';
+import CommentaryCard from '@/components/CommentaryCard';
 
 export default () => {
     // * 选择token演示
@@ -96,6 +97,15 @@ export default () => {
                 <li>
                     <h3>2. confirm transaction</h3>
                     <ConfirmTransactionDemo />
+                </li>
+                <li>
+                    <h3>3. 解说牌</h3>
+                    <CommentaryCard
+                        title="Begin To Mint"
+                        description={
+                            'Mint fUSD by staking your Token. Token stakers earn weekly staking rewards .'
+                        }
+                    />
                 </li>
             </ul>
         </div>
