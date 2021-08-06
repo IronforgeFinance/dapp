@@ -3,17 +3,33 @@ import Board from '@/components/Board';
 import classNames from 'classnames';
 import './index.less';
 
+interface TokenOption {
+    name: string;
+    ratio?: Number;
+}
+
 interface ISelectTokensProps {
     children?: Object;
     visable: Boolean;
+    value?: String;
     onClose?: Function;
+    onSelect?: Function;
+    tokenList?: TokenOption[];
 }
 
 export default (props: ISelectTokensProps) => {
-    const { children, visable, onClose: _closeHandler } = props;
+    const {
+        children,
+        visable,
+        value,
+        tokenList,
+        onClose: _closeHandler,
+        onSelect: _selectHandler,
+    } = props;
 
     const onCloseMemo = useCallback(() => _closeHandler(), []);
-    const tokenList = new Array(100).fill('').map((item, index) => index + 1);
+    const onSelectMemo = useCallback((token) => _selectHandler(token), []);
+    // const tokenList = new Array(100).fill('').map((item, index) => index + 1);
 
     return (
         <div className="setting">
@@ -24,23 +40,26 @@ export default (props: ISelectTokensProps) => {
                         type="text"
                         placeholder="Search name or paste address"
                     />
-                    {tokenList.map((item) => (
+                    {tokenList.map((token) => (
                         <li
-                            key={item}
+                            key={token.name}
                             className={classNames({
                                 token: true,
-                                active: item == 1,
+                                active: value === token.name,
                             })}
+                            onClick={onSelectMemo.bind(this, token.name)}
                         >
                             <i
                                 className={classNames({
                                     'icon-token': true,
-                                    'icon-size-24': true,
-                                    [String('usdt').toLowerCase()]: true,
+                                    'size-24': true,
+                                    [token.name.toLowerCase()]: true,
                                 })}
                             />
-                            <span className="name">BTC</span>
-                            <span className="price">0.222</span>
+                            <span className="name">
+                                {token.name.toUpperCase()}
+                            </span>
+                            <span className="price">{token.ratio || ''}</span>
                         </li>
                     ))}
                 </ul>

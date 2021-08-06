@@ -30,9 +30,11 @@ import './index.less';
 import useDataView from '@/hooks/useDataView';
 import { useTokenPrice } from '@/hooks/useTokenPrice';
 import ScaleGroup from '@/components/ScaleGroup';
-import SettingView from './SettingView';
+// import SettingView from './SettingView';
 import classNames from 'classnames';
 import useDexPrice from '@/hooks/useDexPrice';
+import SelectTokens from '@/components/SelectTokens';
+import { useCallback } from 'react';
 export default () => {
     const intl = useIntl();
     const { account } = useWeb3React();
@@ -352,13 +354,85 @@ export default () => {
         );
     };
 
+    // const SettingView = () => {
+    //     const [showSetting, setShowSetting] = useState(false);
+
+    //     return (
+    //         <SelectTokens
+    //             visable={showSetting}
+    //             onClose={() => setShowSetting(false)}
+    //         >
+    //             <button
+    //                 className="btn-setting"
+    //                 onClick={() => setShowSetting(true)}
+    //             />
+    //         </SelectTokens>
+    //     );
+    // };
+
+    const SelectFromTokensView = () => {
+        const [show, setShow] = useState(false);
+        const onCloseMemo = useCallback(() => setShow(false), []);
+        const onShowMemo = useCallback(() => setShow(true), []);
+
+        const DefaultView = () => {
+            return <span>Select token</span>;
+        };
+
+        return (
+            <SelectTokens
+                visable={show}
+                value={collateralToken}
+                tokenList={COLLATERAL_TOKENS}
+                onSelect={collateralTokenHandler}
+                onClose={onCloseMemo}
+            >
+                <button className="btn-mint-form" onClick={onShowMemo}>
+                    <span>{collateralToken || <DefaultView />}</span>
+                    <i className="icon-down size-20"></i>
+                </button>
+            </SelectTokens>
+        );
+    };
+
+    const SelectToTokensView = () => {
+        const [show, setShow] = useState(false);
+        const onCloseMemo = useCallback(() => setShow(false), []);
+        const onShowMemo = useCallback(() => setShow(true), []);
+
+        const DefaultView = () => {
+            return (
+                <span>
+                    {intl.formatMessage({
+                        id: 'mint.selectCasting',
+                    })}
+                </span>
+            );
+        };
+
+        return (
+            <SelectTokens
+                visable={show}
+                value={toToken}
+                tokenList={MINT_TOKENS.map((name) => ({ name }))}
+                onSelect={toTokenHandler}
+                onClose={onCloseMemo}
+            >
+                <button className="btn-mint-form" onClick={onShowMemo}>
+                    <span>{toToken || <DefaultView />}</span>
+                    <i className="icon-down size-20"></i>
+                </button>
+            </SelectTokens>
+        );
+    };
+
     return (
         <div className="mint-container">
             <DataView />
             <div className="right-box">
                 <CommentaryCard />
                 <div className="mint-box common-box">
-                    <SettingView />
+                    {/* <SettingView /> */}
                     <div className="input-item">
                         <p className="label">
                             {intl.formatMessage({ id: 'mint.from' })}
@@ -395,20 +469,7 @@ export default () => {
                                             'size-24': true,
                                         })}
                                     />
-                                    <Select
-                                        value={collateralToken}
-                                        onSelect={collateralTokenHandler}
-                                        placeholder={'Select token'}
-                                    >
-                                        {COLLATERAL_TOKENS.map((item) => (
-                                            <Select.Option
-                                                value={item.name}
-                                                key={item.name}
-                                            >
-                                                {item.name}
-                                            </Select.Option>
-                                        ))}
-                                    </Select>
+                                    <SelectFromTokensView />
                                 </div>
                             </div>
                         </div>
@@ -419,6 +480,7 @@ export default () => {
                     <div className="input-item">
                         <p className="label">
                             {intl.formatMessage({ id: 'mint.locked' })}
+                            <i className="icon-question size-16"></i>
                         </p>
                         <div className="input-item-content">
                             <div className="content-label">
@@ -484,22 +546,7 @@ export default () => {
                                             'size-24': true,
                                         })}
                                     />
-                                    <Select
-                                        value={toToken}
-                                        onSelect={toTokenHandler}
-                                        placeholder={intl.formatMessage({
-                                            id: 'mint.selectCasting',
-                                        })}
-                                    >
-                                        {MINT_TOKENS.map((item) => (
-                                            <Select.Option
-                                                value={item}
-                                                key={item}
-                                            >
-                                                {item}
-                                            </Select.Option>
-                                        ))}
-                                    </Select>
+                                    <SelectToTokensView />
                                 </div>
                             </div>
                         </div>
