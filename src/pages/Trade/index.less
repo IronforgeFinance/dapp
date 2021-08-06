@@ -4,16 +4,17 @@
     width: 100%;
     height: 100%;
     display: flex;
-    position: relative;
+    justify-content: space-between;
+    position: absolute;
 
+    // TODO 这里图片有点大，下周分拆出多个部件图出来合成，充分利用图片并发
     .shop {
         width: 606.36px;
         height: 610.74px;
         padding: 100.88px 81.89px 32.78px 92.65px;
         box-sizing: border-box;
-        position: absolute;
-        left: 50%;
-        top: 63.26px;
+        margin-left: 50%;
+        margin-top: 63.26px;
         transform: translateX(-50%);
         #image.background('~@/assets/images/trade-swap-bg.png');
 
@@ -44,10 +45,11 @@
     .market-details {
         height: 502px;
         width: 450px;
-        margin-left: 195px;
+        // margin-left: 195px;
         top: 86px;
         position: absolute;
-        left: calc(50% + 300px);
+        right: 0;
+        z-index: 1;
         #image.background('~@/assets/images/trade-market-detail-bg.png');
         #position.parent();
         padding-top: 39px;

@@ -176,7 +176,8 @@ export default () => {
 
     return (
         <div className="trade-container">
-            <div className="shop">
+            <div className="shop common-box">
+                <div className="roof" />
                 <div className="form">
                     <div className="input-item">
                         <p className="label">From</p>
@@ -184,7 +185,8 @@ export default () => {
                             <div className="content-label">
                                 <p className="left"></p>
                                 <p className="right">
-                                    Balance:{' '}
+                                    Balance:
+                                    <WhiteSpace />
                                     <span className="balance">
                                         {fromTokenBalance}
                                     </span>
