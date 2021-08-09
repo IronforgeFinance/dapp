@@ -17,6 +17,7 @@ import useDataView, { useSelectedDebtInUSD } from '@/hooks/useDataView';
 import { useInitialRatio } from '@/hooks/useConfig';
 import BigNumber from 'bignumber.js';
 import { debounce } from 'lodash';
+import ScaleGroup from '@/components/ScaleGroup';
 
 const TO_TOKENS = ['BTC'];
 interface IProps {
@@ -322,10 +323,16 @@ export default (props: IProps) => {
     };
 
     return (
-        <div className="burn-form">
+        <div className="common-box form-view">
+            <ScaleGroup
+                scaleRange={[
+                    { label: 'Burn to initial', value: 0 },
+                    { label: 'Burn Max', value: 0.1 },
+                ]}
+            />
             <div className="input-item">
                 <p className="label">From</p>
-                <div className="input-item-content">
+                <div className="from-content input-item-content">
                     <div className="content-label">
                         <p className="left">Burned</p>
                         <p className="right">
@@ -345,10 +352,11 @@ export default (props: IProps) => {
                         <div className="token">(Debt:${selectedDebtInUSD})</div>
                     </div>
                 </div>
+                <span className="debt">Debt : {'0.00'}</span>
             </div>
             <div className="input-item">
                 <p className="label">To</p>
-                <div className="input-item-content">
+                <div className="to-content input-item-content">
                     <div className="content-label">
                         <p className="left">Unstaking</p>
                     </div>
@@ -382,7 +390,7 @@ export default (props: IProps) => {
                     </div>
                 </div>
             </div>
-            <div className="burn-type">
+            {/* <div className="burn-type">
                 <p className="tips">You can also choose</p>
                 <div className="btns">
                     <Radio.Group
@@ -406,7 +414,7 @@ export default (props: IProps) => {
                         </Radio.Button>
                     </Radio.Group>
                 </div>
-            </div>
+            </div> */}
             <div className="btn-burn">
                 <Button
                     loading={submitting}

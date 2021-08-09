@@ -1,5 +1,6 @@
 .burn-type {
     margin: 20px 0;
+
     p {
         font-style: normal;
         font-weight: normal;
@@ -8,6 +9,7 @@
         color: rgba(255, 255, 255, 0.4);
         margin-bottom: 10px;
     }
+
     .btns {
         > button {
             border: 1px solid rgba(255, 255, 255, 0.4);
@@ -20,6 +22,55 @@
             color: rgba(255, 255, 255, 0.4);
             margin-right: 15px;
             background: none;
+        }
+    }
+}
+
+.from-content {
+    width: 374px;
+    height: 78px;
+    background: rgba(51, 39, 30, 0.8);
+    border: 1px solid rgba(178, 178, 181, 0.5);
+    box-sizing: border-box;
+    backdrop-filter: blur(20px);
+    border-radius: 6px;
+    padding: 9px 12px;
+    box-sizing: border-box;
+}
+
+.debt {
+    font-style: normal;
+    font-weight: bold;
+    font-size: 15px;
+    line-height: 22px;
+    display: flex;
+    align-items: center;
+
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.to-content {
+    width: 374px;
+    height: 78px;
+    background: rgba(51, 39, 30, 0.8);
+    border: 1px solid rgba(178, 178, 181, 0.5);
+    box-sizing: border-box;
+    backdrop-filter: blur(20px);
+    border-radius: 6px;
+    padding: 9px 12px;
+    box-sizing: border-box;
+}
+
+.input-item {
+    &:nth-child(n + 2) {
+        margin-top: 24px;
+    }
+}
+
+.group-scale {
+    .btn-scale {
+        &:nth-child(n + 2) {
+            margin-left: 27px;
         }
     }
 }

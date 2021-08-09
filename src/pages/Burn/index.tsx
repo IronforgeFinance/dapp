@@ -53,6 +53,18 @@ export default () => {
 
     const haveAssets = useMemo(() => true, []); // TODO 获取资产总计
 
+    const BackBtn = () => {
+        return (
+            <img
+                className="btn-back"
+                src={IconBack}
+                onClick={() => {
+                    setShowForm(!showForm);
+                }}
+            />
+        );
+    };
+
     const NoAssetsView = () => {
         const toMintPageHandler = useCallback(
             () => (window.location.href = '/mint'),
@@ -148,15 +160,13 @@ export default () => {
                     )}
                 </div>
             ) : (
-                <div className="burn-form-container">
-                    <img
-                        src={IconBack}
-                        alt=""
-                        onClick={() => {
-                            setShowForm(!showForm);
-                        }}
+                <div className="burn-box">
+                    <CommentaryCard
+                        title="Your Debt"
+                        description="Buy and burn fAsset to clean your total debt and unstake all collateral"
                     />
                     <BurnForm onSubmitSuccess={onSubmitSuccess} />
+                    <BackBtn />
                 </div>
             )}
         </div>
