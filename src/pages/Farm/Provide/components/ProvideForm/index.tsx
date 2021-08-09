@@ -1,9 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './index.less';
 import { InputNumber, Select, Progress, message, Button } from 'antd';
 import IconAdd from '@/assets/images/icon-add.svg';
 import { useBep20Balance } from '@/hooks/useTokenBalance';
 import { useModel } from 'umi';
+import { useWeb3React } from '@web3-react/core';
+import LpItem from '../LpItem';
 const LP_TOKENS = ['USDC-ETH', 'USDC-IFT']; //TODO 配置中读取官方预先添加的流动性lp
 const TOKENS = Array.from(
     new Set(
@@ -16,16 +18,20 @@ const TOKENS = Array.from(
 export default () => {
     // const [token1Balance, setToken1Balance] = useState();
     // const [token2Balance, setToken2Balance] = useState();
+    const { account } = useWeb3React();
     const [token1, setToken1] = useState<string>();
     const [token2, setToken2] = useState<string>();
     const [token1Amount, setToken1Amount] = useState();
     const [token2Amount, setToken2Amount] = useState();
-    const { lpDataList, setLpDataList, fetchLpDataInfo } = useModel(
-        'lpData',
-        (model) => ({ ...model }),
-    );
+    const { lpDataList, setLpDataList, fetchLpDataInfo, fetchLpDataList } =
+        useModel('lpData', (model) => ({ ...model }));
 
-    fetchLpDataInfo('USDC-IFT');
+    useEffect(() => {
+        if (account) {
+            fetchLpDataList(LP_TOKENS, account);
+        }
+    }, [account]);
+
     const { balance: token1Balance } = useBep20Balance(token1);
     const { balance: token2Balance } = useBep20Balance(token2);
 
@@ -57,6 +63,18 @@ export default () => {
 
     return (
         <div>
+            <div className="lp-list">
+                <div className="header">
+                    <p>Your Liquidity</p>
+                    <p>
+                        You can click Add Liquidity to add Lp quickly or remove
+                        liquidity to receive tokens back.
+                    </p>
+                </div>
+                {lpDataList.map((item) => (
+                    <LpItem data={item} />
+                ))}
+            </div>
             <div className="provide-form common-box">
                 <div className="input-item">
                     <p className="label">Asset</p>
@@ -137,21 +155,23 @@ export default () => {
                     <div>
                         <p className="title">Prices and pool share</p>
                         <div className="prices-bg">
-                            <div className="price-item">
-                                <p className="token">
-                                    {token1} per {token2}
-                                </p>
-                                <p className="price">0.005</p>
-                            </div>
-                            <div className="price-item">
-                                <p className="token">
-                                    {token2} per {token1}
-                                </p>
-                                <p className="price">0.005</p>
-                            </div>
-                            <div className="price-item">
-                                <p className="token">Share of Pool</p>
-                                <p className="price">4.58%</p>
+                            <div className="prices-and-share">
+                                <div className="price-item">
+                                    <p className="price">0.005</p>
+                                    <p className="token">
+                                        {token1} per {token2}
+                                    </p>
+                                </div>
+                                <div className="price-item">
+                                    <p className="price">0.005</p>
+                                    <p className="token">
+                                        {token2} per {token1}
+                                    </p>
+                                </div>
+                                <div className="price-item">
+                                    <p className="price">4.58%</p>
+                                    <p className="token">Share of Pool</p>
+                                </div>
                             </div>
                         </div>
                     </div>

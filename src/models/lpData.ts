@@ -9,6 +9,7 @@ import Tokens from '@/config/constants/tokens';
 export interface ILpDataProps {
     symbol: string;
     balance: number;
+    total: number;
     token1: string;
     token2: string;
     token1Balance: number;
@@ -18,13 +19,13 @@ export interface ILpDataProps {
     share: string;
 }
 const useLpDataModel = () => {
-    const [lpDataList, setLpDataList] = useState<ILpDataProps>();
+    const [lpDataList, setLpDataList] = useState<ILpDataProps[]>([]);
     const provider = useWeb3Provider();
     const fetchLpDataInfo = async (lpToken: string, account: string) => {
         const chainId = process.env.APP_CHAIN_ID;
         const lpObj = Tokens[lpToken];
         if (!lpObj) {
-            throw new Error('Wrong lp token');
+            throw new Error('Wrong lp token ' + lpToken);
         }
         const lpContract = lpObj.address[chainId];
         const lp = getContract(PancakePair, lpContract, provider.getSigner());
@@ -33,7 +34,7 @@ const useLpDataModel = () => {
         console.log('r0: ', ethers.utils.formatEther(r0));
         console.log('r1: ', ethers.utils.formatEther(r1));
         const token1 = lpToken.split('-')[0];
-        const token2 = lpToken.split('0')[1];
+        const token2 = lpToken.split('-')[1];
         const token1Balance = ethers.utils.formatEther(r0);
         const token2Balance = ethers.utils.formatEther(r1);
 
@@ -44,26 +45,38 @@ const useLpDataModel = () => {
 
         const shareVal = (parseFloat(balance) * 100) / parseFloat(total);
         const share = shareVal < 0.01 ? '<0.01%' : shareVal + '%';
-        const value1 = r0.mul(expandTo18Decimals(1)).div(r1);
-        const value2 = r1.mul(expandTo18Decimals(1)).div(r0);
+        const value1 = r1.mul(expandTo18Decimals(1)).div(r0);
+        const value2 = r0.mul(expandTo18Decimals(1)).div(r1);
         const token1Price = Number(ethers.utils.formatUnits(value1, 18));
         const token2Price = Number(ethers.utils.formatUnits(value2, 18));
-        return {
-            symbole: lpToken,
+        const res: ILpDataProps = {
+            symbol: lpToken,
+            balance: parseFloat(balance),
+            total: parseFloat(total),
             token1,
             token2,
-            token1Balance,
-            token2Balance,
+            token1Balance: parseFloat(token1Balance),
+            token2Balance: parseFloat(token2Balance),
             token1Price,
             token2Price,
             share,
         };
+        console.log(res);
+        return res;
+    };
+
+    const fetchLpDataList = async (lpTokens: string[], account: string) => {
+        const list: ILpDataProps[] = await Promise.all(
+            lpTokens.map((token) => fetchLpDataInfo(token, account)),
+        );
+        setLpDataList(list);
     };
 
     return {
         lpDataList,
         setLpDataList,
         fetchLpDataInfo,
+        fetchLpDataList,
     };
 };
 
