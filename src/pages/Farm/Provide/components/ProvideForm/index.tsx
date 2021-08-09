@@ -6,6 +6,15 @@ import { useBep20Balance } from '@/hooks/useTokenBalance';
 import { useModel } from 'umi';
 import { useWeb3React } from '@web3-react/core';
 import LpItem from '../LpItem';
+import Contracts from '@/config/constants/contracts';
+import { useRouter } from '@/hooks/useContract';
+import Tokens from '@/config/constants/tokens';
+import { ILpDataProps } from '@/models/lpData';
+import { ethers } from 'ethers';
+import {
+    useCheckERC20ApprovalStatus,
+    useERC20Approve,
+} from '@/hooks/useApprove';
 const LP_TOKENS = ['USDC-ETH', 'USDC-IFT']; //TODO 配置中读取官方预先添加的流动性lp
 const TOKENS = Array.from(
     new Set(
@@ -15,16 +24,83 @@ const TOKENS = Array.from(
         ),
     ),
 );
+
+const NO_LIQUIDITY_LP = {
+    symbol: '',
+    balance: 0,
+    total: 0,
+    token1: '',
+    token2: '',
+    token1Balance: 0,
+    token2Balance: 0,
+    token1Price: 1,
+    token2Price: 1,
+    share: 1,
+};
 export default () => {
     // const [token1Balance, setToken1Balance] = useState();
     // const [token2Balance, setToken2Balance] = useState();
     const { account } = useWeb3React();
     const [token1, setToken1] = useState<string>();
     const [token2, setToken2] = useState<string>();
-    const [token1Amount, setToken1Amount] = useState();
-    const [token2Amount, setToken2Amount] = useState();
-    const { lpDataList, setLpDataList, fetchLpDataInfo, fetchLpDataList } =
-        useModel('lpData', (model) => ({ ...model }));
+    const [token1Amount, setToken1Amount] = useState<number>();
+    const [token2Amount, setToken2Amount] = useState<number>();
+    const [token1Price, setToken1Price] = useState(1);
+    const [token2Price, setToken2Price] = useState(1);
+    const [share, setShare] = useState(1);
+    const [submitting, setSubmitting] = useState(false);
+    const {
+        lpDataList,
+        currentLpData,
+        setCurrentLpData,
+        setLpDataList,
+        fetchLpDataInfo,
+        fetchLpDataList,
+    } = useModel('lpData', (model) => ({ ...model }));
+
+    const routerContract = useRouter();
+
+    const pancakeRouter = Contracts.PancakeRouter[process.env.APP_CHAIN_ID];
+    const { isApproved: token1Approved, setLastUpdated: setToken1LastUpdated } =
+        useCheckERC20ApprovalStatus(
+            token1 ? Tokens[token1].address[process.env.APP_CHAIN_ID] : '',
+            pancakeRouter,
+        );
+
+    const { isApproved: token2Approved, setLastUpdated: setToken2LastUpdated } =
+        useCheckERC20ApprovalStatus(
+            token2 ? Tokens[token2].address[process.env.APP_CHAIN_ID] : '',
+            pancakeRouter,
+        );
+
+    const {
+        handleApprove: handleToken1Approve,
+        requestedApproval: requestedToken1Approval,
+    } = useERC20Approve(
+        token1 ? Tokens[token1].address[process.env.APP_CHAIN_ID] : '',
+        pancakeRouter,
+        setToken1LastUpdated,
+    );
+
+    const {
+        handleApprove: handleToken2Approve,
+        requestedApproval: requestedToken2Approval,
+    } = useERC20Approve(
+        token2 ? Tokens[token2].address[process.env.APP_CHAIN_ID] : '',
+        pancakeRouter,
+        setToken2LastUpdated,
+    );
+
+    const handleAllApprove = () => {
+        if (!token1Approved && token1) {
+            handleToken1Approve();
+            return; // 一次按钮点击处理一次approve
+        }
+        if (!token2Approved && token2) {
+            handleToken2Approve();
+            return;
+        }
+    };
 
     useEffect(() => {
         if (account) {
@@ -32,32 +108,159 @@ export default () => {
         }
     }, [account]);
 
+    useEffect(() => {
+        if (currentLpData) {
+            if (token1 !== currentLpData.token1) {
+                setToken1(currentLpData.token1);
+            }
+            if (token2 !== currentLpData.token2) {
+                setToken2(currentLpData.token2);
+            }
+            updateToken2Amount(token1Amount);
+            setToken1Price(currentLpData.token1Price);
+            setToken2Price(currentLpData.token2Price);
+            setShare(currentLpData.share);
+        }
+    }, [currentLpData]);
+
     const { balance: token1Balance } = useBep20Balance(token1);
     const { balance: token2Balance } = useBep20Balance(token2);
 
+    const isValidLp = (token1, token2) => {
+        if (
+            LP_TOKENS.includes(`${token1}-${token2}`) ||
+            LP_TOKENS.includes(`${token2}-${token1}`)
+        ) {
+            return true;
+        } else {
+            return false;
+        }
+    };
+
+    const getCurrentLpData = (token1, token2) => {
+        if (isValidLp(token1, token2)) {
+            return lpDataList.find(
+                (item) =>
+                    item.symbol === `${token1}-${token2}` ||
+                    item.symbol === `${token2}-${token1}`,
+            );
+        } else {
+            return Object.assign({}, NO_LIQUIDITY_LP, {
+                symbol: `${token1}-${token2}`,
+                token1,
+                token2,
+            });
+        }
+    };
+
+    const updateToken2Amount = (token1Amount) => {
+        if (token1Amount && token1 && token2) {
+            const token1Price =
+                currentLpData.token1 === token1
+                    ? currentLpData.token1Price
+                    : currentLpData.token2Price;
+            const token2Amount = token1Price * token1Amount;
+            setToken2Amount(token2Amount);
+        } else {
+            setToken2Amount(undefined);
+        }
+    };
+
+    const updateToken1Amount = (token2Amount) => {
+        if (token2Amount && token2 && token1) {
+            const token2Price =
+                currentLpData.token2 === token2
+                    ? currentLpData.token2Price
+                    : currentLpData.token1Price;
+            const token1Amount = token2Price * token2Amount;
+            setToken1Amount(token1Amount);
+        } else {
+            setToken1Amount(undefined);
+        }
+    };
+
     const token1AmountHandler = (v) => {
         setToken1Amount(v);
+        if (isValidLp(token1, token2)) {
+            updateToken2Amount(v);
+        } else {
+            setToken1Price(v);
+        }
     };
 
     const token2AmountHandler = (v) => {
         setToken2Amount(v);
+        if (isValidLp(token1, token2)) {
+            updateToken1Amount(v);
+        } else {
+            setToken2Price(v);
+        }
     };
 
     const token1SelectHandler = (v) => {
         if (token2 === v) {
             setToken2(token1);
             setToken1(v);
+            setToken1Amount(token2Amount);
+            setToken2Amount(token1Amount);
         } else {
             setToken1(v);
+            updateToken2Amount(token1Amount);
         }
     };
+
+    useEffect(() => {
+        if (token1 && token2) {
+            if (!isValidLp(token1, token2)) {
+                const data = getCurrentLpData(token1, token2);
+                setCurrentLpData(data);
+            }
+        }
+    }, [token1, token2]);
 
     const token2SelectHandler = (v) => {
         if (token1 === v) {
             setToken1(token2);
             setToken2(v);
+            setToken1Amount(token2Amount);
+            setToken2Amount(token1Amount);
         } else {
             setToken2(v);
+            updateToken1Amount(token2Amount);
+        }
+    };
+
+    const handleProvide = async () => {
+        if (!token1 || !token2 || !token1Amount || !token2Amount) {
+            message.warning('Pls fill in the blanks');
+            return;
+        }
+        try {
+            setSubmitting(true);
+            const deadline = 2000000000;
+            const chainId = process.env.APP_CHAIN_ID;
+            const token1Address = Tokens[token1].address[chainId];
+            const token2Address = Tokens[token2].address[chainId];
+            const tx = await routerContract.addLiquidity(
+                token1Address,
+                token2Address,
+                ethers.utils.parseEther(String(token1Amount)),
+                ethers.utils.parseEther(String(token2Amount)),
+                0,
+                0,
+                account,
+                deadline,
+            );
+            message.info(
+                'Provide tx sent out successfully. Pls wait for a while......',
+            );
+            const receipt = await tx.wait();
+            console.log(receipt);
+            setSubmitting(false);
+            message.success('Provide successfully. Pls check your balance.');
+        } catch (err) {
+            setSubmitting(false);
+            console.log(err);
         }
     };
 
@@ -71,9 +274,11 @@ export default () => {
                         liquidity to receive tokens back.
                     </p>
                 </div>
-                {lpDataList.map((item) => (
-                    <LpItem data={item} />
-                ))}
+                <div className="lp-list-content">
+                    {lpDataList.map((item) => (
+                        <LpItem data={item} />
+                    ))}
+                </div>
             </div>
             <div className="provide-form common-box">
                 <div className="input-item">
@@ -145,9 +350,28 @@ export default () => {
                     </div>
                 </div>
                 <div className="btn-footer">
-                    <button className="common-btn common-btn-red">
-                        Provide
-                    </button>
+                    {token1Approved && token2Approved && (
+                        <Button
+                            className="common-btn common-btn-red"
+                            onClick={handleProvide}
+                            loading={submitting}
+                        >
+                            Provide
+                        </Button>
+                    )}
+                    {((token1 && !token1Approved) ||
+                        (token2 && !token2Approved)) && (
+                        <Button
+                            className="btn-mint common-btn common-btn-red"
+                            onClick={handleAllApprove}
+                            loading={
+                                requestedToken1Approval ||
+                                requestedToken2Approval
+                            }
+                        >
+                            Approve To Provide
+                        </Button>
+                    )}
                 </div>
             </div>
             {token1 && token2 && (
@@ -157,19 +381,23 @@ export default () => {
                         <div className="prices-bg">
                             <div className="prices-and-share">
                                 <div className="price-item">
-                                    <p className="price">0.005</p>
+                                    <p className="price">{token1Price}</p>
                                     <p className="token">
                                         {token1} per {token2}
                                     </p>
                                 </div>
                                 <div className="price-item">
-                                    <p className="price">0.005</p>
+                                    <p className="price">{token2Price}</p>
                                     <p className="token">
                                         {token2} per {token1}
                                     </p>
                                 </div>
                                 <div className="price-item">
-                                    <p className="price">4.58%</p>
+                                    <p className="price">
+                                        {share < 0.0001
+                                            ? '<0.01%'
+                                            : (share * 100).toFixed(2) + '%'}
+                                    </p>
                                     <p className="token">Share of Pool</p>
                                 </div>
                             </div>
