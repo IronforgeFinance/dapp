@@ -48,31 +48,73 @@
     .prices-bg {
         width: 380px;
         min-height: 100px;
-        padding: 26px 42px;
         background: url(../../../../../assets/images/lp-prices-bg.png) center
             center no-repeat;
         background-size: cover;
     }
 }
 
-.price-item {
+.prices-and-share {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    .token {
-        font-family: Poppins;
-        font-style: normal;
-        font-weight: normal;
-        font-size: 15px;
-        line-height: 22px;
-        color: #292725;
+    height: 100px;
+    padding: 0 20px;
+
+    .price-item {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        align-items: center;
+        .token {
+            font-family: Poppins;
+            font-style: normal;
+            font-weight: normal;
+            font-size: 15px;
+            line-height: 22px;
+            color: #292725;
+        }
+        .price {
+            font-family: Poppins;
+            font-style: normal;
+            font-weight: bold;
+            font-size: 15px;
+            line-height: 22px;
+            color: #292725;
+        }
     }
-    .price {
-        font-family: Poppins;
-        font-style: normal;
-        font-weight: bold;
-        font-size: 15px;
-        line-height: 22px;
-        color: #292725;
+}
+
+.lp-list {
+    width: 382px;
+    height: 382px;
+    background: url(../../../../../assets/images/lp-list-bg.png) center center
+        no-repeat;
+    background-size: cover;
+    padding: 18px 28px;
+    position: absolute;
+    left: -350px;
+    top: 80px;
+    .header {
+        > p:first-child {
+            font-family: Poppins;
+            font-style: normal;
+            font-weight: bold;
+            font-size: 16px;
+            line-height: 24px;
+            color: #e1ab3b;
+            margin-bottom: 4px;
+        }
+        > p:last-child {
+            font-family: Poppins;
+            font-style: normal;
+            font-weight: 300;
+            font-size: 15px;
+            line-height: 24px;
+            text-align: justify;
+            letter-spacing: -0.01em;
+            color: #e1ab3b;
+            margin-bottom: 4px;
+        }
     }
 }

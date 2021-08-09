@@ -88,21 +88,23 @@ export default () => {
                     <div>
                         <p className="title">Prices</p>
                         <div className="prices-bg">
-                            <div className="price-item">
-                                <p className="token">
-                                    {receiveTokens[0].token}
-                                </p>
-                                <p className="price">
-                                    1.00{receiveTokens[1].token}
-                                </p>
-                            </div>
-                            <div className="price-item">
-                                <p className="token">
-                                    {receiveTokens[1].token}
-                                </p>
-                                <p className="price">
-                                    1.00{receiveTokens[0].token}
-                                </p>
+                            <div className="price-items">
+                                <div className="price-item">
+                                    <p className="token">
+                                        {receiveTokens[0].token}
+                                    </p>
+                                    <p className="price">
+                                        1.00{receiveTokens[1].token}
+                                    </p>
+                                </div>
+                                <div className="price-item">
+                                    <p className="token">
+                                        {receiveTokens[1].token}
+                                    </p>
+                                    <p className="price">
+                                        1.00{receiveTokens[0].token}
+                                    </p>
+                                </div>
                             </div>
                         </div>
                     </div>
