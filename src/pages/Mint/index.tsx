@@ -73,10 +73,11 @@ export default () => {
         collateralSytemContract,
     );
 
-    const { isApproved: isIFTApproved } = useCheckERC20ApprovalStatus(
-        Tokens.IFT.address[process.env.APP_CHAIN_ID],
-        collateralSytemContract,
-    );
+    const { isApproved: isIFTApproved, setLastUpdated: setLastIFTApproved } =
+        useCheckERC20ApprovalStatus(
+            Tokens.IFT.address[process.env.APP_CHAIN_ID],
+            collateralSytemContract,
+        );
 
     const prices = usePrices();
 
@@ -94,7 +95,7 @@ export default () => {
     } = useERC20Approve(
         Tokens.IFT.address[process.env.APP_CHAIN_ID],
         collateralSytemContract,
-        setLastUpdated,
+        setLastIFTApproved,
     );
 
     const handleAllApprove = () => {
@@ -519,9 +520,8 @@ export default () => {
                                     <i
                                         className={classNames({
                                             'icon-token': true,
-                                            [String(
-                                                toToken,
-                                            ).toLowerCase()]: true,
+                                            [String(toToken).toLowerCase()]:
+                                                true,
                                             'size-24': true,
                                         })}
                                     />
