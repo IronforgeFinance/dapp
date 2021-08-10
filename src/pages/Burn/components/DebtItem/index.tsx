@@ -173,7 +173,7 @@ export default (IDebtItemProps) => {
         <div className="debt-item-container">
             <div className="debt-item-head">
                 <div className="debt-token">
-                    <div className={`token-name token-${mintedToken}`}>
+                    <div className={`bubble ${mintedTokenName.toLowerCase()}`}>
                         {mintedTokenName}
                     </div>
                     <div className="token-minted">
@@ -185,7 +185,7 @@ export default (IDebtItemProps) => {
                     className="debt-in-usd"
                     onClick={() => setShowInfos(!showInfos)}
                 >
-                    <p>Balance: ${fusdBalance}</p>
+                    <p>${fusdBalance}</p>
                     <img src={IconDown} alt="" />
                 </div>
             </div>
