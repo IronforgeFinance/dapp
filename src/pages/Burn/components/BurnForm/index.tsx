@@ -350,65 +350,64 @@ export default (props: IProps) => {
 
     return (
         <div className="common-box form-view">
-            <div className="inner-box">
-                <ScaleGroup
-                    scaleRange={[
-                        { label: 'Burn to initial', value: 0 },
-                        { label: 'Burn Max', value: 0.1 },
-                    ]}
-                />
-                <div className="input-item">
-                    <p className="label">From</p>
-                    <div className="from-content input-item-content">
-                        <div className="content-label">
-                            <p className="left">Burned</p>
-                            <p className="right">
-                                Balance:{' '}
-                                <span className="balance">{fusdBalance}</span>
-                            </p>
-                        </div>
-                        <div className="input">
-                            <InputNumber
-                                value={burnAmount}
-                                onChange={burnAmountHandler}
-                                placeholder="0.00"
-                                className="custom-input"
-                                min={0}
-                                max={selectedDebtInUSD || 9999999}
-                            />
-                            <div className="ftoken">
-                                <button className="max">Max</button>
-                                <i className="icon-token usd">USD</i>
-                                <span>fUSD</span>
-                            </div>
-                        </div>
+            <ScaleGroup
+                scaleRange={[
+                    { label: 'Burn to initial', value: 0 },
+                    { label: 'Burn Max', value: 0.1 },
+                ]}
+            />
+            <div className="input-item">
+                <p className="label">From</p>
+                <div className="from-content input-item-content">
+                    <div className="content-label">
+                        <p className="left">Burned</p>
+                        <p className="right">
+                            Balance:{' '}
+                            <span className="balance">{fusdBalance}</span>
+                        </p>
                     </div>
-                    <span className="debt">Debt : {'0.00'}</span>
-                </div>
-                <div className="input-item">
-                    <p className="label">To</p>
-                    <div className="to-content input-item-content">
-                        <div className="content-label">
-                            <p className="left">Unstaking</p>
-                            <p className="right">-</p>
-                        </div>
-                        <div className="input">
-                            <InputNumber
-                                value={unstakeAmount}
-                                onChange={unstakeAmountHandler}
-                                placeholder="0.00"
-                                className="custom-input"
-                                disabled={!toToken}
-                                min={0}
-                                max={toTokenDebt}
-                            />
-                            <div className="token">
-                                <SelectToTokensView />
-                            </div>
+                    <div className="input">
+                        <InputNumber
+                            value={burnAmount}
+                            onChange={burnAmountHandler}
+                            placeholder="0.00"
+                            className="custom-input"
+                            min={0}
+                            max={selectedDebtInUSD || 9999999}
+                        />
+                        <div className="ftoken">
+                            <button className="max">Max</button>
+                            <i className="icon-token usd">USD</i>
+                            <span>fUSD</span>
                         </div>
                     </div>
                 </div>
-                {/* <div className="burn-type">
+                <span className="debt">Debt : {'0.00'}</span>
+            </div>
+            <div className="input-item">
+                <p className="label">To</p>
+                <div className="to-content input-item-content">
+                    <div className="content-label">
+                        <p className="left">Unstaking</p>
+                        <p className="right">-</p>
+                    </div>
+                    <div className="input">
+                        <InputNumber
+                            value={unstakeAmount}
+                            onChange={unstakeAmountHandler}
+                            placeholder="0.00"
+                            className="custom-input"
+                            disabled={!toToken}
+                            min={0}
+                            max={toTokenDebt}
+                        />
+                        <div className="token">
+                            <SelectToTokensView />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {/* <div className="burn-type">
                 <p className="tips">You can also choose</p>
                 <div className="btns">
                     <Radio.Group
@@ -433,15 +432,14 @@ export default (props: IProps) => {
                     </Radio.Group>
                 </div>
             </div> */}
-                <div className="btn-burn">
-                    <Button
-                        loading={submitting}
-                        className="btn-mint common-btn common-btn-red"
-                        onClick={onSubmit}
-                    >
-                        Burn
-                    </Button>
-                </div>
+            <div className="btn-burn">
+                <Button
+                    loading={submitting}
+                    className="btn-mint common-btn common-btn-red"
+                    onClick={onSubmit}
+                >
+                    Burn
+                </Button>
             </div>
         </div>
     );
