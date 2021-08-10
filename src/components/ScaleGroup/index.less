@@ -3,8 +3,8 @@
     align-items: center;
 
     .btn-scale {
-        width: 44px;
-        height: 20px;
+        min-width: 44px;
+        // height: 20px;
         border: 1px solid rgba(225, 171, 59, 0.7);
         padding: 2px 7px;
         box-sizing: border-box;
@@ -31,17 +31,29 @@
             color: #1c1c1d;
             position: relative;
 
+            &:before {
+                content: '';
+                position: absolute;
+                width: 31.2px;
+                height: 36px;
+                left: -5px;
+                top: 50%;
+                transform: translateY(-50%);
+                background: url('../../assets/images/mint-focus.png') no-repeat;
+                background-size: 62.4px, 36px;
+                background-position: left center;
+            }
             &:after {
                 content: '';
                 position: absolute;
-                width: 52px;
-                height: 30px;
-                left: 50%;
+                width: 31.2px;
+                height: 36px;
+                right: -5px;
                 top: 50%;
-                transform: translate(calc(-50% - 0.4px), calc(-50% - 0.4px));
-                background: url('../../assets/images/mint-focus.png') no-repeat
-                    center;
-                background-size: contain;
+                transform: translateY(-50%);
+                background: url('../../assets/images/mint-focus.png') no-repeat;
+                background-size: 62.4px, 36px;
+                background-position: right center;
             }
         }
     }

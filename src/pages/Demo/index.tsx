@@ -3,6 +3,8 @@ import './index.less';
 import SelectTokens from '@/components/SelectTokens';
 import ConfirmTransaction from '@/components/ConfirmTransaction';
 import CommentaryCard from '@/components/CommentaryCard';
+import DebtItemRatio from '@/components/DebtItemRatio';
+import DebtItem from '@/components/DebtItem';
 
 export default () => {
     // * 选择token演示
@@ -87,6 +89,78 @@ export default () => {
         );
     };
 
+    // * 债务比率显示
+    const DebtItemRatioDemo = () => {
+        // const mockDebtRatios = [
+        //     {
+        //         token: 'BTC',
+        //         percent: '49%',
+        //     },
+        //     {
+        //         token: 'USDT',
+        //         percent: '31%',
+        //     },
+        //     {
+        //         token: 'ETH',
+        //         percent: '12%',
+        //     },
+        //     {
+        //         token: 'TOKEN1',
+        //         percent: '6%',
+        //     },
+        //     {
+        //         token: 'TOKEN2',
+        //         percent: '2%',
+        //     },
+        // ];
+        const mockDebtRatios = [
+            {
+                token: 'BTC',
+                percent: '69%',
+            },
+            {
+                token: 'USDT',
+                percent: '31%',
+            },
+        ];
+
+        return <DebtItemRatio debtRatios={mockDebtRatios} />;
+    };
+
+    // * 每一项债务数据
+    const DebtItemDemo = () => {
+        const mockDebts = {
+            balance: 88888,
+            mintedToken: 'fUSD',
+            mintedTokenName: 'USD',
+            mintedTokenNum: 100,
+            debtRatios: [
+                {
+                    token: 'BTC',
+                    percent: '49%',
+                },
+                {
+                    token: 'USDT',
+                    percent: '31%',
+                },
+                {
+                    token: 'ETH',
+                    percent: '12%',
+                },
+                {
+                    token: 'TOKEN1',
+                    percent: '6%',
+                },
+                {
+                    token: 'TOKEN2',
+                    percent: '2%',
+                },
+            ],
+            fusdBalance: 10000,
+        };
+        return <DebtItem {...mockDebts} />;
+    };
+
     return (
         <div className="demo-container">
             <ul>
@@ -106,6 +180,14 @@ export default () => {
                             'Mint fUSD by staking your Token. Token stakers earn weekly staking rewards .'
                         }
                     />
+                </li>
+                <li>
+                    <h3>4. 债务项进度条</h3>
+                    <DebtItemRatioDemo />
+                </li>
+                <li>
+                    <h3>5. 债务项</h3>
+                    <DebtItemDemo />
                 </li>
             </ul>
         </div>

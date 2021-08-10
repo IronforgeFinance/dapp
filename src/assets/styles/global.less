@@ -226,11 +226,43 @@ dl {
 }
 
 .common-box {
-    background-image: url('../images/common-box-corner.png'),
-        url('../images/common-box-frame.png'), url(../images/common-box-bg.png);
-    background-repeat: no-repeat, no-repeat, no-repeat;
-    background-position: center, center, center;
-    background-size: contain, contain, contain;
+    background-image: url('~@/assets/images/common-box-frame.png'),
+        url('~@/assets/images/common-box-bg.png');
+    background-repeat: no-repeat, no-repeat;
+    background-position: center, center;
+    background-size: 100% 100%, 100% 100%;
+    position: relative;
+
+    &:before {
+        content: '';
+        position: absolute;
+        width: 50%;
+        height: 100%;
+        left: 0;
+        top: 50%;
+        transform: translateY(-50%);
+        background: url('~@/assets/images/common-box-corner.png') no-repeat;
+        background-size: cover, 100%;
+        background-position: left center;
+    }
+
+    &:after {
+        content: '';
+        position: absolute;
+        width: 50%;
+        height: 100%;
+        right: 0;
+        top: 50%;
+        transform: translateY(-50%);
+        background: url('~@/assets/images/common-box-corner.png') no-repeat;
+        background-size: cover, 100%;
+        background-position: right center;
+    }
+
+    .inner-box {
+        position: relative;
+        z-index: 1;
+    }
 }
 
 .common-btn-back {
@@ -315,4 +347,15 @@ dl {
         line-height: 22px;
         color: #ffffff;
     }
+}
+
+.max {
+    font-style: normal;
+    font-weight: bold;
+    font-size: 15px;
+    line-height: 22px;
+    display: flex;
+    align-items: center;
+    color: #e1ab3b;
+    display: inline-block;
 }
