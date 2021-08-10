@@ -24,7 +24,7 @@ export default (props: IProps) => {
                 {infos.map((item) => (
                     <div
                         key={item.collateralToken}
-                        className={`ratio token-${item.collateralToken}`}
+                        className={`ratio token-${item.collateralToken.toLowerCase()}`}
                         style={{ width: item.ratio }}
                     ></div>
                 ))}

@@ -27,13 +27,16 @@ export default (props: ISelectTokensProps) => {
         onSelect: _selectHandler,
     } = props;
 
-    const onCloseMemo = useCallback(() => _closeHandler(), []);
-    const onSelectMemo = useCallback((token) => _selectHandler(token), []);
+    const _close = useCallback(() => _closeHandler(), []);
+    const _select = useCallback((token) => {
+        _selectHandler(token);
+        _close();
+    }, []);
     // const tokenList = new Array(100).fill('').map((item, index) => index + 1);
 
     return (
         <div className="select-tokens">
-            <Board visable={visable} onClose={onCloseMemo}>
+            <Board visable={visable} onClose={_close}>
                 <ul className="tokenlist">
                     <input
                         className="search"
@@ -47,7 +50,7 @@ export default (props: ISelectTokensProps) => {
                                 token: true,
                                 active: value === token.name,
                             })}
-                            onClick={onSelectMemo.bind(this, token.name)}
+                            onClick={_select.bind(this, token.name)}
                         >
                             <i
                                 className={classNames({

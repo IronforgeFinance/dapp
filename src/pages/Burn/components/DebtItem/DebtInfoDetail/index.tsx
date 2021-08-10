@@ -24,7 +24,7 @@ export default (props: IProps) => {
                             <ul className="debt-head">
                                 <li className="collateral">
                                     <i
-                                        className={`dot color-${colors[index]}`}
+                                        className={`dot token-${item.collateralToken.toLowerCase()}`}
                                     />
                                     <span>{item.collateralToken}</span>
                                 </li>
@@ -34,7 +34,7 @@ export default (props: IProps) => {
                             </ul>
                             <div
                                 style={{ width: item.ratio }}
-                                className={`bar color-${colors[index]}`}
+                                className={`bar token-${item.collateralToken.toLowerCase()}`}
                             />
                         </li>
                     );
