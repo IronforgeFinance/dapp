@@ -11,11 +11,13 @@ import { useRouter } from '@/hooks/useContract';
 import Tokens from '@/config/constants/tokens';
 import { ILpDataProps } from '@/models/lpData';
 import { ethers } from 'ethers';
+import { registerToken } from '@/utils/wallet';
+import {DEADLINE} from '@/config/constants/constant';
 import {
     useCheckERC20ApprovalStatus,
     useERC20Approve,
 } from '@/hooks/useApprove';
-const LP_TOKENS = ['USDC-ETH', 'USDC-IFT']; //TODO 配置中读取官方预先添加的流动性lp
+export const LP_TOKENS = ['USDC-ETH', 'USDC-IFT']; //TODO 配置中读取官方预先添加的流动性lp
 const TOKENS = Array.from(
     new Set(
         LP_TOKENS.map((item) => item.split('-')).reduce(
@@ -27,6 +29,7 @@ const TOKENS = Array.from(
 
 const NO_LIQUIDITY_LP = {
     symbol: '',
+    address: '',
     balance: 0,
     total: 0,
     reserve1: 0,
@@ -154,13 +157,13 @@ export default () => {
         } else {
             let reserve1, reserve2;
             if (token1 === currentLpData.token1) {
-                reserve1 = currentLpData.reserve1
-                reserve2 = currentLpData.reserve2
+                reserve1 = currentLpData.reserve1;
+                reserve2 = currentLpData.reserve2;
             } else if (token1 === currentLpData.token2) {
-                reserve1 = currentLpData.reserve2
-                reserve2 = currentLpData.reserve1
+                reserve1 = currentLpData.reserve2;
+                reserve2 = currentLpData.reserve1;
             }
-            
+
             newLiquidity = Math.min(
                 (token1Amount * currentLpData.total) / reserve1,
                 (token2Amount * currentLpData.total) / reserve2,
@@ -265,7 +268,19 @@ export default () => {
         }
     };
 
+    const registerLP = async (token1, token2) => {
+        // 目前都是官方预先添加的流动性，token地址从配置中获取,否则从合约中获取
+        const symbol = `${token1}=${token2}`;
+        const address = Tokens[symbol]?.address[process.env.APP_CHAIN_ID];
+        if (!address) return;
+        registerToken(address, symbol, 18, '');
+    };
+
     const handleProvide = async () => {
+        if (!account) {
+            message.warning('Pls connect wallet');
+            return;
+        }
         if (!token1 || !token2 || !token1Amount || !token2Amount) {
             message.warning('Pls fill in the blanks');
             return;
@@ -276,7 +291,7 @@ export default () => {
         }
         try {
             setSubmitting(true);
-            const deadline = 2000000000;
+            const deadline = DEADLINE;
             const chainId = process.env.APP_CHAIN_ID;
             const token1Address = Tokens[token1].address[chainId];
             const token2Address = Tokens[token2].address[chainId];
@@ -299,6 +314,10 @@ export default () => {
             message.success('Provide successfully. Pls check your balance.');
             //更新数据
             refresh();
+            //添加新的token
+            if (currentLpData.total === 0) {
+                registerLP(token1, token2);
+            }
         } catch (err) {
             setSubmitting(false);
             console.log(err);
@@ -390,7 +409,7 @@ export default () => {
                         </div>
                     </div>
                 </div>
-                <div className="btn-footer">
+                <div className="provide-btn-footer">
                     {token1Approved && token2Approved && (
                         <Button
                             className="common-btn common-btn-red"

@@ -64,6 +64,8 @@ export const useBep20Balance = (token: string) => {
         balance: 0,
         fetchStatus: NOT_FETCHED,
     });
+    const { lastUpdated, setLastUpdated } = useLastUpdated();
+
     const { account } = useWeb3React();
     const { fastRefresh } = useRefresh();
     const provider = useWeb3Provider();
@@ -99,11 +101,10 @@ export const useBep20Balance = (token: string) => {
         if (account && token) {
             fetchBalance();
         }
-    }, [account, token, fastRefresh, SUCCESS, FAILED, provider]);
+    }, [account, token, fastRefresh, SUCCESS, FAILED, provider, lastUpdated]);
 
-    return balanceState;
+    return { balance: balanceState.balance, refresh: setLastUpdated };
 };
-
 
 export const useBurnedBalance = (tokenAddress: string) => {
     const [balance, setBalance] = useState(BIG_ZERO);
