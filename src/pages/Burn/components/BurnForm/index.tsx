@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useWeb3React } from '@web3-react/core';
 import { InputNumber, Button, Select, Radio, message } from 'antd';
 import './index.less';
@@ -18,6 +18,7 @@ import { useInitialRatio } from '@/hooks/useConfig';
 import BigNumber from 'bignumber.js';
 import { debounce } from 'lodash';
 import ScaleGroup from '@/components/ScaleGroup';
+import SelectTokens from '@/components/SelectTokens';
 
 const TO_TOKENS = ['BTC'];
 interface IProps {
@@ -322,75 +323,92 @@ export default (props: IProps) => {
         }
     };
 
+    const SelectToTokensView = () => {
+        const [show, setShow] = useState(false);
+        const _closeHandler = useCallback(() => setShow(false), []);
+        const _showHandler = useCallback(() => setShow(true), []);
+
+        const DefaultView = () => {
+            return <span>Select token</span>;
+        };
+
+        return (
+            <SelectTokens
+                visable={show}
+                value={toToken}
+                tokenList={COLLATERAL_TOKENS}
+                onSelect={toTokenHandler}
+                onClose={_closeHandler}
+            >
+                <button className="btn-mint-form" onClick={_showHandler}>
+                    <span>{toToken || <DefaultView />}</span>
+                    <i className="icon-down size-20"></i>
+                </button>
+            </SelectTokens>
+        );
+    };
+
     return (
         <div className="common-box form-view">
-            <ScaleGroup
-                scaleRange={[
-                    { label: 'Burn to initial', value: 0 },
-                    { label: 'Burn Max', value: 0.1 },
-                ]}
-            />
-            <div className="input-item">
-                <p className="label">From</p>
-                <div className="from-content input-item-content">
-                    <div className="content-label">
-                        <p className="left">Burned</p>
-                        <p className="right">
-                            Balance:{' '}
-                            <span className="balance">{fusdBalance} fUSD</span>
-                        </p>
+            <div className="inner-box">
+                <ScaleGroup
+                    scaleRange={[
+                        { label: 'Burn to initial', value: 0 },
+                        { label: 'Burn Max', value: 0.1 },
+                    ]}
+                />
+                <div className="input-item">
+                    <p className="label">From</p>
+                    <div className="from-content input-item-content">
+                        <div className="content-label">
+                            <p className="left">Burned</p>
+                            <p className="right">
+                                Balance:{' '}
+                                <span className="balance">{fusdBalance}</span>
+                            </p>
+                        </div>
+                        <div className="input">
+                            <InputNumber
+                                value={burnAmount}
+                                onChange={burnAmountHandler}
+                                placeholder="0.00"
+                                className="custom-input"
+                                min={0}
+                                max={selectedDebtInUSD || 9999999}
+                            />
+                            <div className="ftoken">
+                                <button className="max">Max</button>
+                                <i className="icon-token usd">USD</i>
+                                <span>fUSD</span>
+                            </div>
+                        </div>
                     </div>
-                    <div className="input">
-                        <InputNumber
-                            value={burnAmount}
-                            onChange={burnAmountHandler}
-                            placeholder="0.00"
-                            className="custom-input"
-                            min={0}
-                            max={selectedDebtInUSD || 9999999}
-                        />
-                        <div className="token">(Debt:${selectedDebtInUSD})</div>
-                    </div>
+                    <span className="debt">Debt : {'0.00'}</span>
                 </div>
-                <span className="debt">Debt : {'0.00'}</span>
-            </div>
-            <div className="input-item">
-                <p className="label">To</p>
-                <div className="to-content input-item-content">
-                    <div className="content-label">
-                        <p className="left">Unstaking</p>
-                    </div>
-                    <div className="input">
-                        <InputNumber
-                            value={unstakeAmount}
-                            onChange={unstakeAmountHandler}
-                            placeholder="0.00"
-                            className="custom-input"
-                            disabled={!toToken}
-                            min={0}
-                            max={toTokenDebt}
-                        />
-                        <div className="token">
-                            <Select
-                                value={toToken}
-                                onSelect={toTokenHandler}
-                                placeholder="Select a Token"
-                            >
-                                {COLLATERAL_TOKENS.map((item) => (
-                                    <Select.Option
-                                        value={item.name}
-                                        key={item.name}
-                                    >
-                                        {item.name}
-                                    </Select.Option>
-                                ))}
-                            </Select>
-                            ({toTokenDebt})
+                <div className="input-item">
+                    <p className="label">To</p>
+                    <div className="to-content input-item-content">
+                        <div className="content-label">
+                            <p className="left">Unstaking</p>
+                            <p className="right">-</p>
+                        </div>
+                        <div className="input">
+                            <InputNumber
+                                value={unstakeAmount}
+                                onChange={unstakeAmountHandler}
+                                placeholder="0.00"
+                                className="custom-input"
+                                disabled={!toToken}
+                                min={0}
+                                max={toTokenDebt}
+                            />
+                            <div className="token">
+                                <SelectToTokensView />
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            {/* <div className="burn-type">
+                {/* <div className="burn-type">
                 <p className="tips">You can also choose</p>
                 <div className="btns">
                     <Radio.Group
@@ -415,14 +433,15 @@ export default (props: IProps) => {
                     </Radio.Group>
                 </div>
             </div> */}
-            <div className="btn-burn">
-                <Button
-                    loading={submitting}
-                    className="btn-mint common-btn common-btn-red"
-                    onClick={onSubmit}
-                >
-                    Burn
-                </Button>
+                <div className="btn-burn">
+                    <Button
+                        loading={submitting}
+                        className="btn-mint common-btn common-btn-red"
+                        onClick={onSubmit}
+                    >
+                        Burn
+                    </Button>
+                </div>
             </div>
         </div>
     );

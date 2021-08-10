@@ -51,7 +51,7 @@ export default () => {
         setShowForm(false);
     };
 
-    const haveAssets = useMemo(() => false, []); // TODO 获取资产总计
+    const haveAssets = useMemo(() => true, []); // TODO 获取资产总计
 
     const BackBtn = () => {
         return (
