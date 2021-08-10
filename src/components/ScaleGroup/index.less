@@ -31,17 +31,29 @@
             color: #1c1c1d;
             position: relative;
 
+            &:before {
+                content: '';
+                position: absolute;
+                width: 31.2px;
+                height: 36px;
+                left: -5px;
+                top: 50%;
+                transform: translateY(-50%);
+                background: url('../../assets/images/mint-focus.png') no-repeat;
+                background-size: 62.4px, 36px;
+                background-position: left center;
+            }
             &:after {
                 content: '';
                 position: absolute;
-                width: 120%;
-                height: 150%;
-                left: 50%;
+                width: 31.2px;
+                height: 36px;
+                right: -5px;
                 top: 50%;
-                transform: translate(-50%, -50%);
-                background: url('../../assets/images/mint-focus.png') no-repeat
-                    center;
-                background-size: 100% 100%;
+                transform: translateY(-50%);
+                background: url('../../assets/images/mint-focus.png') no-repeat;
+                background-size: 62.4px, 36px;
+                background-position: right center;
             }
         }
     }
