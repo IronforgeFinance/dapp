@@ -226,12 +226,16 @@ dl {
 }
 
 .common-box {
-    background-image: url('~@/assets/images/common-box-frame.png'),
-        url('~@/assets/images/common-box-bg.png');
-    background-repeat: no-repeat, no-repeat;
-    background-position: center, center;
-    background-size: 100% 100%, 100% 100%;
+    background-image: url('~@/assets/images/common-box-bg.png');
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 100% 100%;
     position: relative;
+
+    > * {
+        position: relative;
+        z-index: 1;
+    }
 
     &:before {
         content: '';
@@ -257,11 +261,6 @@ dl {
         background: url('~@/assets/images/common-box-corner.png') no-repeat;
         background-size: cover, 100%;
         background-position: right center;
-    }
-
-    .inner-box {
-        position: relative;
-        z-index: 1;
     }
 }
 
