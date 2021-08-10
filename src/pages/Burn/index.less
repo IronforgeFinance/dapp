@@ -33,6 +33,25 @@
     flex-direction: column;
     align-items: center;
     padding-top: 49.54px;
+
+    .my-debt {
+        display: flex;
+        // align-items: center;
+
+        > .ratio {
+            width: 24px;
+            height: 24px;
+            flex-shrink: 0;
+            #image.icon(24px, '~@/assets/images/common-radio.png', transparent, false);
+
+            &.active {
+                #image.icon(24px, '~@/assets/images/common-radio-active.png', transparent, false);
+            }
+
+            margin-top: 40px;
+            margin-right: 6px;
+        }
+    }
 }
 
 .no-assets-view {
@@ -72,20 +91,6 @@
     > .debt-item-wrapper {
         display: flex;
     }
-}
-
-.ratio {
-    width: 24px;
-    height: 24px;
-    flex-shrink: 0;
-    #image.icon(24px, '~@/assets/images/common-radio.png', transparent, false);
-
-    &.active {
-        #image.icon(24px, '~@/assets/images/common-radio-active.png', transparent, false);
-    }
-
-    margin-top: 40px;
-    margin-right: 6px;
 }
 
 .btn-back {
