@@ -1,26 +1,15 @@
-.token-fUSDC {
-    background: linear-gradient(90deg, #627eea 85.54%, #3a5ad8 98.08%);
-}
-
-.token-fBTC {
-    background: linear-gradient(116.98deg, #f6911b 31.39%, #ffcb44 83.13%);
-}
-
-.token-fETH {
-    background: linear-gradient(116.98deg, #c4c3c7 31.39%, #72727a 83.13%);
-}
-
-.debt-item-container {
+.debt-item {
     background: rgba(51, 39, 30, 0.8);
     border: 1px solid rgba(178, 178, 181, 0.5);
     backdrop-filter: blur(20px);
     border-radius: 6px;
     margin-bottom: 10px;
-    height: 110px;
+    // height: 110px;
     width: 344px;
     border-radius: 6px;
-    padding: 10px;
+    padding: 10px 12px 13px 12px;
     box-sizing: border-box;
+    transition: all 0.7s;
 
     .debt-item-head {
         display: flex;
@@ -57,6 +46,7 @@
                 color: #ffffff;
                 margin-left: 6px;
                 padding-top: 1px;
+
                 > span:first-child {
                     font-weight: bold;
                     color: #ffffff;
@@ -77,8 +67,24 @@
             line-height: 30px;
             color: #ffffff;
             display: flex;
+            cursor: pointer;
+
             > p {
                 margin-right: 4px;
+            }
+
+            &.show-infos {
+                > img {
+                    transition: transform 0.2s;
+                    transform: rotate(180deg);
+                }
+            }
+
+            &.hide-infos {
+                > img {
+                    transition: transform 0.2s;
+                    transform: rotate(0);
+                }
             }
         }
     }
@@ -108,5 +114,136 @@
 
     &.eth {
         background: linear-gradient(116.98deg, #c4c3c7 31.39%, #72727a 83.13%);
+    }
+}
+
+.infos {
+    ul.cols {
+        display: flex;
+        align-items: center;
+        list-style: none;
+
+        > li {
+            margin: 0;
+            flex-basis: 25%;
+            font-style: normal;
+            font-weight: 300;
+            font-size: 12px;
+            line-height: 18px;
+            display: flex;
+            align-items: center;
+            color: #6e646a;
+        }
+    }
+
+    .rows {
+        list-style: none;
+
+        .debt {
+            margin: 0;
+
+            &:first-child {
+                margin-top: 2px;
+            }
+
+            &:nth-child(n + 2) {
+                margin-top: 10px;
+            }
+
+            ul.debt-head {
+                display: flex;
+                align-items: center;
+                width: 100%;
+
+                > li {
+                    margin: 0;
+                    flex-basis: 25%;
+                    list-style: none;
+                }
+
+                .collateral {
+                    display: flex;
+                    align-items: center;
+
+                    > .dot {
+                        width: 10px;
+                        height: 10px;
+                        flex-shrink: 0;
+                        border-radius: 50%;
+                    }
+
+                    > span {
+                        padding-left: 4px;
+                        font-style: normal;
+                        font-weight: normal;
+                        font-size: 12px;
+                        line-height: 18px;
+                        display: flex;
+                        align-items: center;
+                        color: #ffffff;
+                    }
+                }
+
+                .ratio {
+                    font-style: normal;
+                    font-weight: normal;
+                    font-size: 12px;
+                    line-height: 18px;
+                    display: flex;
+                    align-items: center;
+                    color: #ffffff;
+                }
+
+                .debt {
+                    font-style: normal;
+                    font-weight: bold;
+                    font-size: 12px;
+                    line-height: 18px;
+                    display: flex;
+                    align-items: center;
+                    color: #ffffff;
+                }
+
+                .locked {
+                    font-style: normal;
+                    font-weight: normal;
+                    font-size: 12px;
+                    line-height: 18px;
+                    display: flex;
+                    align-items: center;
+                    text-align: right;
+                    color: #ffffff;
+                }
+            }
+
+            .bar {
+                margin-top: 4px;
+                max-width: 318px;
+                height: 2px;
+                border-radius: 6px;
+            }
+        }
+    }
+}
+
+.color {
+    &-yellow {
+        background: #fcd144;
+    }
+
+    &-green {
+        background: #26a17b;
+    }
+
+    &-blue {
+        background: #627eea;
+    }
+
+    &-red {
+        background: #e31837;
+    }
+
+    &-cyan {
+        background: #49d5dc;
     }
 }

@@ -130,25 +130,18 @@ export default () => {
                         <NoAssetsView />
                     ) : (
                         <div className="form-view common-box">
-                            {/* <DebtItem
-                                mintedToken="fUSDC"
-                                mintedTokenName="USD"
-                            /> */}
-                            <div className="debt-list">
-                                {new Array(4).fill('').map((item, index) => (
-                                    <div className="debt-item-wrapper">
-                                        <button
-                                            className={classNames({
-                                                ratio: true,
-                                                active: currentDebt == index,
-                                            })}
-                                            onClick={() =>
-                                                setCurrentDebt(index)
-                                            }
-                                        />
-                                        <DebsView />
-                                    </div>
-                                ))}
+                            <div className="my-debt">
+                                <button
+                                    className={classNames({
+                                        ratio: true,
+                                        active: currentDebt == 0,
+                                    })}
+                                    onClick={() => setCurrentDebt(0)}
+                                />
+                                <DebtItem
+                                    mintedToken="fUSDC"
+                                    mintedTokenName="USD"
+                                />
                             </div>
                             <Button
                                 className="btn-mint common-btn common-btn-red"

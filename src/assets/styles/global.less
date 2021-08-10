@@ -234,33 +234,32 @@ dl {
 
     > * {
         position: relative;
-        z-index: 1;
     }
 
     &:before {
         content: '';
         position: absolute;
-        width: 50%;
-        height: 100%;
-        left: 0;
-        top: 50%;
-        transform: translateY(-50%);
+        width: 100%;
+        height: 10%;
+        left: 50%;
+        top: 2px;
+        transform: translateX(-50%);
         background: url('~@/assets/images/common-box-corner.png') no-repeat;
-        background-size: cover, 100%;
-        background-position: left center;
+        background-size: cover;
+        background-position: center top;
     }
 
     &:after {
         content: '';
         position: absolute;
-        width: 50%;
-        height: 100%;
-        right: 0;
-        top: 50%;
-        transform: translateY(-50%);
+        width: 100%;
+        height: 10%;
+        left: 50%;
+        bottom: 0;
+        transform: translateX(-50%);
         background: url('~@/assets/images/common-box-corner.png') no-repeat;
-        background-size: cover, 100%;
-        background-position: right center;
+        background-size: cover;
+        background-position: center bottom;
     }
 }
 
