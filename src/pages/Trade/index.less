@@ -14,8 +14,28 @@
         // padding: 100.88px 81.89px 32.78px 92.65px;
         // box-sizing: border-box;
         margin-left: 50%;
-        margin-top: 63.26px;
+        margin-top: 163.26px;
         transform: translateX(-50%);
+        position: relative;
+
+        > .roof {
+            height: 141.03187561035156px;
+            width: 606.36181640625px;
+            #image.background('~@/assets/images/trade-swap-roof-ceiling.png');
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            top: -70px;
+        }
+        > .sign {
+            width: 275.38px;
+            height: 71.44px;
+            #image.background('~@/assets/images/trade-swap-roof-sign.png');
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            top: -95px;
+        }
 
         .form {
             width: 431.82px;
@@ -127,9 +147,4 @@
             }
         }
     }
-}
-
-.roof {
-    height: 141.03187561035156px;
-    width: 606.36181640625px;
 }

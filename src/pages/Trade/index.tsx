@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useMemo } from 'react';
+import React, { useEffect, useState, useMemo, useCallback } from 'react';
 import { useConfig, useExchangeSystem } from '@/hooks/useContract';
 import Tokens from '@/config/constants/tokens';
 import { useWeb3React } from '@web3-react/core';
@@ -14,18 +14,19 @@ import { useBep20Balance } from '@/hooks/useTokenBalance';
 import './index.less';
 import EstimateData from './components/EstimateData';
 import Contracts from '@/config/constants/contracts';
+import SelectTokens from '@/components/SelectTokens';
 import { debounce } from 'lodash';
 //Fixme: for test
-const TO_TOKENS = ['lBTC'];
-const FROM_TOKENS = ['FUSD'];
+const TO_TOKENS = [{ name: 'lBTC' }];
+const FROM_TOKENS = [{ name: 'FUSD' }];
 
 export default () => {
     const configContract = useConfig();
     const exchangeSystem = useExchangeSystem();
     const { account } = useWeb3React();
-    const [fromToken, setFromToken] = useState(FROM_TOKENS[0]);
+    const [fromToken, setFromToken] = useState(FROM_TOKENS[0].name);
     const [fromAmount, setFromAmount] = useState(0.0);
-    const [toToken, setToToken] = useState(TO_TOKENS[0]);
+    const [toToken, setToToken] = useState(TO_TOKENS[0].name);
     const [toAmount, setToAmount] = useState(0.0);
     const [fromBalance, setFromBalance] = useState(0.0);
     const [submitting, setSubmitting] = useState(false);
@@ -174,10 +175,61 @@ export default () => {
         />
     );
 
+    const SelectFromTokensView = () => {
+        const [show, setShow] = useState(false);
+        const _closeHandler = useCallback(() => setShow(false), []);
+        const _showHandler = useCallback(() => setShow(true), []);
+
+        const DefaultView = () => {
+            return <span>Select token</span>;
+        };
+
+        return (
+            <SelectTokens
+                visable={show}
+                value={fromToken}
+                tokenList={FROM_TOKENS}
+                onSelect={(v) => setFromToken(v)}
+                onClose={_closeHandler}
+            >
+                <button className="btn-mint-form" onClick={_showHandler}>
+                    <span>{fromToken || <DefaultView />}</span>
+                    <i className="icon-down size-20"></i>
+                </button>
+            </SelectTokens>
+        );
+    };
+
+    const SelectToTokensView = () => {
+        const [show, setShow] = useState(false);
+        const _closeHandler = useCallback(() => setShow(false), []);
+        const _showHandler = useCallback(() => setShow(true), []);
+
+        const DefaultView = () => {
+            return <span>Select token</span>;
+        };
+
+        return (
+            <SelectTokens
+                visable={show}
+                value={toToken}
+                tokenList={TO_TOKENS}
+                onSelect={(v) => setToToken(v)}
+                onClose={_closeHandler}
+            >
+                <button className="btn-mint-form" onClick={_showHandler}>
+                    <span>{toToken || <DefaultView />}</span>
+                    <i className="icon-down size-20"></i>
+                </button>
+            </SelectTokens>
+        );
+    };
+
     return (
         <div className="trade-container">
             <div className="shop common-box">
                 <div className="roof" />
+                <div className="sign" />
                 <div className="form">
                     <div className="input-item">
                         <p className="label">From</p>
@@ -201,22 +253,7 @@ export default () => {
                                     min={0}
                                 />
                                 <div className="token">
-                                    <Select
-                                        value={fromToken}
-                                        onSelect={(v) =>
-                                            setFromToken(fromToken)
-                                        }
-                                        placeholder="Select a Token"
-                                    >
-                                        {FROM_TOKENS.map((item) => (
-                                            <Select.Option
-                                                value={item}
-                                                key={item}
-                                            >
-                                                {item}
-                                            </Select.Option>
-                                        ))}
-                                    </Select>
+                                    <SelectFromTokensView />
                                 </div>
                             </div>
                         </div>
@@ -243,20 +280,7 @@ export default () => {
                                     min={0}
                                 />
                                 <div className="token">
-                                    <Select
-                                        value={toToken}
-                                        onSelect={(v) => setToToken(v)}
-                                        placeholder="Select a Token"
-                                    >
-                                        {TO_TOKENS.map((item) => (
-                                            <Select.Option
-                                                value={item}
-                                                key={item}
-                                            >
-                                                {item}
-                                            </Select.Option>
-                                        ))}
-                                    </Select>
+                                    <SelectToTokensView />
                                 </div>
                             </div>
                         </div>
