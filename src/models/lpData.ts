@@ -14,6 +14,8 @@ export interface ILpDataProps {
     symbol: string;
     balance: number;
     total: number;
+    reserve1: number;
+    reserve2: number;
     token1: string;
     token2: string;
     token1Balance: number;
@@ -40,6 +42,11 @@ const useLpDataModel = () => {
         console.log('total: ', total);
         console.log('balance: ', balance);
 
+        const token1Address = await lp.token0();
+        const token2Address = await lp.token1();
+        console.log('token1Address: ', token1Address);
+        console.log('token2Address: ', token2Address);
+
         const shareVal = parseFloat(balance) / parseFloat(total);
 
         const [r0, r1] = await lp.getReserves();
@@ -47,10 +54,10 @@ const useLpDataModel = () => {
         console.log('r1: ', ethers.utils.formatEther(r1));
         const token1 = lpToken.split('-')[0];
         const token2 = lpToken.split('-')[1];
-        const token1Balance =
-            parseFloat(ethers.utils.formatEther(r0)) * shareVal;
-        const token2Balance =
-            parseFloat(ethers.utils.formatEther(r1)) * shareVal;
+        const reserve1 = parseFloat(ethers.utils.formatEther(r0));
+        const reserve2 = parseFloat(ethers.utils.formatEther(r1));
+        const token1Balance = reserve1 * shareVal;
+        const token2Balance = reserve2 * shareVal;
 
         const value1 = r1.mul(expandTo18Decimals(1)).div(r0);
         const value2 = r0.mul(expandTo18Decimals(1)).div(r1);
@@ -60,10 +67,12 @@ const useLpDataModel = () => {
             symbol: lpToken,
             balance: parseFloat(balance),
             total: parseFloat(total),
+            reserve1,
+            reserve2,
             token1,
             token2,
-            token1Balance: parseFloat(token1Balance),
-            token2Balance: parseFloat(token2Balance),
+            token1Balance: token1Balance,
+            token2Balance: token2Balance,
             token1Price,
             token2Price,
             share: shareVal,
