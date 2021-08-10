@@ -29,6 +29,8 @@ const NO_LIQUIDITY_LP = {
     symbol: '',
     balance: 0,
     total: 0,
+    reserve1: 0,
+    reserve2: 0,
     token1: '',
     token2: '',
     token1Balance: 0,
@@ -102,9 +104,13 @@ export default () => {
         }
     };
 
+    const refresh = () => {
+        fetchLpDataList(LP_TOKENS, account);
+    };
+
     useEffect(() => {
         if (account) {
-            fetchLpDataList(LP_TOKENS, account);
+            refresh();
         }
     }, [account]);
 
@@ -136,6 +142,35 @@ export default () => {
             return false;
         }
     };
+
+    useEffect(() => {
+        //compute new share
+        if (!token1 || !token2 || !token1Amount || !token2Amount) {
+            return;
+        }
+        let newLiquidity;
+        if (currentLpData.total === 0) {
+            //share is 100%. Do noting
+        } else {
+            let reserve1, reserve2;
+            if (token1 === currentLpData.token1) {
+                reserve1 = currentLpData.reserve1
+                reserve2 = currentLpData.reserve2
+            } else if (token1 === currentLpData.token2) {
+                reserve1 = currentLpData.reserve2
+                reserve2 = currentLpData.reserve1
+            }
+            
+            newLiquidity = Math.min(
+                (token1Amount * currentLpData.total) / reserve1,
+                (token2Amount * currentLpData.total) / reserve2,
+            );
+            const newShare =
+                (newLiquidity + currentLpData.balance) /
+                (newLiquidity + currentLpData.total);
+            setShare(newShare);
+        }
+    }, [token1Amount, token2Amount, currentLpData]);
 
     const getCurrentLpData = (token1, token2) => {
         if (isValidLp(token1, token2)) {
@@ -235,6 +270,10 @@ export default () => {
             message.warning('Pls fill in the blanks');
             return;
         }
+        if (token1Amount > token1Balance || token2Amount > token2Balance) {
+            message.warning('Insufficient balance');
+            return;
+        }
         try {
             setSubmitting(true);
             const deadline = 2000000000;
@@ -258,6 +297,8 @@ export default () => {
             console.log(receipt);
             setSubmitting(false);
             message.success('Provide successfully. Pls check your balance.');
+            //更新数据
+            refresh();
         } catch (err) {
             setSubmitting(false);
             console.log(err);
@@ -276,7 +317,7 @@ export default () => {
                 </div>
                 <div className="lp-list-content">
                     {lpDataList.map((item) => (
-                        <LpItem data={item} />
+                        <LpItem data={item} key={item.symbol} />
                     ))}
                 </div>
             </div>
