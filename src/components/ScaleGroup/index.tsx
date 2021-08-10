@@ -8,7 +8,7 @@ export interface IScaleOption {
 }
 export interface IScaleGroupProps {
     defaultValue?: string;
-    value?: string;
+    value?: any;
     scaleRange?: IScaleOption[];
     updateScale?: Function;
 }

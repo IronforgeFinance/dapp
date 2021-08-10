@@ -32,6 +32,7 @@ export default (props: IProps) => {
     const [toToken, setToToken] = useState<string>(COLLATERAL_TOKENS[0].name);
     const [toTokenDebt, setToTokenDebt] = useState(0.0);
     const [burnType, setBurnType] = useState('');
+    const [scale, setScale] = useState('');
     const [submitting, setSubmitting] = useState(false);
     const [burnInitialAvailable, setBurnInitialAvailable] = useState(false);
     const [burnMaxAvailable, setBurnMaxAvailable] = useState(false);
@@ -352,9 +353,11 @@ export default (props: IProps) => {
         <div className="common-box form-view">
             <ScaleGroup
                 scaleRange={[
-                    { label: 'Burn to initial', value: 0 },
-                    { label: 'Burn Max', value: 0.1 },
+                    { label: 'Burn to initial', value: 'initial' },
+                    { label: 'Burn Max', value: 'max' },
                 ]}
+                value={scale}
+                updateScale={(scale) => setScale(scale)}
             />
             <div className="input-item">
                 <p className="label">From</p>
@@ -384,7 +387,7 @@ export default (props: IProps) => {
                 </div>
                 <span className="debt">Debt : {'0.00'}</span>
             </div>
-            <div className="input-item">
+            <div className="input-item" style={{ zIndex: 2 }}>
                 <p className="label">To</p>
                 <div className="to-content input-item-content">
                     <div className="content-label">

@@ -170,7 +170,7 @@ export default (IDebtItemProps) => {
     }, [account, provider]); //fixme: provider 不是metask时合约接口会报错。
 
     return (
-        <div className="debt-item-container">
+        <div className="debt-item">
             <div className="debt-item-head">
                 <div className="debt-token">
                     <div className={`bubble ${mintedTokenName.toLowerCase()}`}>
@@ -182,11 +182,13 @@ export default (IDebtItemProps) => {
                     </div>
                 </div>
                 <div
-                    className="debt-in-usd"
+                    className={`debt-in-usd ${
+                        showInfos ? 'show-infos' : 'hide-infos'
+                    }`}
                     onClick={() => setShowInfos(!showInfos)}
                 >
                     <p>${fusdBalance}</p>
-                    <img src={IconDown} alt="" />
+                    <img src={IconDown} />
                 </div>
             </div>
             <div className="content-box">
