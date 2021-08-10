@@ -27,6 +27,7 @@
             transform: translateX(-50%);
             top: -70px;
         }
+
         > .sign {
             width: 275.38px;
             height: 71.44px;
@@ -35,6 +36,10 @@
             left: 50%;
             transform: translateX(-50%);
             top: -95px;
+
+            &.active {
+                #image.background('~@/assets/images/trade-swap-roof-sign-active.png');
+            }
         }
 
         .form {
@@ -74,12 +79,30 @@
         padding-top: 39px;
         padding-left: 30px;
         box-sizing: border-box;
+        transition: transform 0.2s;
+
+        &.hide {
+            transform: translateX(90%);
+
+            .btn-skip {
+                transform: translate(-50%, -30%) rotate(540deg);
+            }
+        }
+
+        &.show {
+            transform: translateX(0);
+
+            .btn-skip {
+                transform: translate(-50%, -30%) rotate(0);
+            }
+        }
 
         .btn-skip {
             height: 36px;
             width: 48px;
             #image.button('~@/assets/images/trade-btn-skip.png');
             #position.absLtCorner(translate(-50%, -30%));
+            transition: transform 0.7s;
         }
 
         .details {
