@@ -16,6 +16,7 @@ import EstimateData from './components/EstimateData';
 import Contracts from '@/config/constants/contracts';
 import SelectTokens from '@/components/SelectTokens';
 import { debounce } from 'lodash';
+import classNames from 'classnames';
 //Fixme: for test
 const TO_TOKENS = [{ name: 'lBTC' }];
 const FROM_TOKENS = [{ name: 'FUSD' }];
@@ -26,6 +27,7 @@ export default () => {
     const { account } = useWeb3React();
     const [fromToken, setFromToken] = useState(FROM_TOKENS[0].name);
     const [fromAmount, setFromAmount] = useState(0.0);
+    const [toggle, setToggle] = useState(false);
     const [toToken, setToToken] = useState(TO_TOKENS[0].name);
     const [toAmount, setToAmount] = useState(0.0);
     const [fromBalance, setFromBalance] = useState(0.0);
@@ -175,6 +177,10 @@ export default () => {
         />
     );
 
+    const hasInputtedAmount = useMemo(() => {
+        return fromAmount > 0 || toAmount > 0;
+    }, [fromAmount, toAmount]);
+
     const SelectFromTokensView = () => {
         const [show, setShow] = useState(false);
         const _closeHandler = useCallback(() => setShow(false), []);
@@ -229,7 +235,12 @@ export default () => {
         <div className="trade-container">
             <div className="shop common-box">
                 <div className="roof" />
-                <div className="sign" />
+                <div
+                    className={classNames({
+                        sign: true,
+                        active: hasInputtedAmount,
+                    })}
+                />
                 <div className="form">
                     <div className="input-item">
                         <p className="label">From</p>
@@ -295,8 +306,17 @@ export default () => {
                     <span className="fee-cost">Fee cost：0</span>
                 </div>
             </div>
-            <div className="market-details">
-                <button className="btn-skip" />
+            <div
+                className={classNames({
+                    'market-details': true,
+                    hide: toggle,
+                    show: !toggle,
+                })}
+            >
+                <button
+                    className="btn-skip"
+                    onClick={() => setToggle(!toggle)}
+                />
                 <p className="details">
                     Market Details:
                     <WhiteSpace />
@@ -304,7 +324,6 @@ export default () => {
                 </p>
                 <span className="token">fBTC</span>
                 <ul>
-                    {/* {new Array(6).fill('').map(() => ( */}
                     <li>
                         <span className="label">24H volume </span>
                         <span className="value">2222</span>
