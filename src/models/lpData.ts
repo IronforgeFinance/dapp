@@ -12,6 +12,7 @@ export interface ILpDataToken {
 }
 export interface ILpDataProps {
     symbol: string;
+    address: string;
     balance: number;
     total: number;
     reserve1: number;
@@ -65,6 +66,7 @@ const useLpDataModel = () => {
         const token2Price = Number(ethers.utils.formatUnits(value2, 18));
         const res: ILpDataProps = {
             symbol: lpToken,
+            address: lpContract,
             balance: parseFloat(balance),
             total: parseFloat(total),
             reserve1,
