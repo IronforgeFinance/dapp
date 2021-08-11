@@ -1,0 +1,78 @@
+@import '~@/assets/styles/util.less';
+
+.icron-notification.ant-notification-notice {
+    width: 380px;
+    height: 100px;
+    padding: 10px 14px 0 12px;
+
+    &:first-child {
+        margin-top: 80px;
+    }
+
+    &:nth-child(n + 2) {
+        margin-top: 44px;
+    }
+
+    &.success {
+        #image.background('~@/assets/images/notify-success-bg.png');
+    }
+
+    &.fail {
+        #image.background('~@/assets/images/notify-fail-bg.png');
+    }
+
+    h3 {
+        font-style: normal;
+        font-weight: bold;
+        font-size: 15px;
+        line-height: 22px;
+        display: flex;
+        align-items: center;
+        color: #292725;
+    }
+
+    .description {
+        display: flex;
+        flex-direction: column;
+
+        p {
+            font-style: normal;
+            font-weight: 300;
+            font-size: 15px;
+            line-height: 22px;
+            display: flex;
+            align-items: center;
+            color: rgba(41, 39, 37, 0.7);
+        }
+
+        a {
+            font-style: normal;
+            font-weight: bold;
+            font-size: 15px;
+            line-height: 22px;
+            display: flex;
+            align-items: center;
+            text-decoration-line: underline;
+            color: #ac4c06;
+
+            > img {
+                width: 18px;
+                margin-left: 8px;
+                color: #ac4c06;
+            }
+        }
+    }
+
+    span[role='img'] {
+        margin: 0;
+        color: #fff;
+    }
+
+    .icon-status {
+        object-fit: contain;
+    }
+
+    .icon-close {
+        #image.icon(36px, '~@/assets/images/icon-close.png');
+    }
+}
