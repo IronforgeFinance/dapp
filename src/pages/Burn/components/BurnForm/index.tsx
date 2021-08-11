@@ -349,8 +349,20 @@ export default (props: IProps) => {
         );
     };
 
+    const SearchDebts = () => {
+        return (
+            <div className="search-debts">
+                <div className="search-input-wrapper">
+                    <input type="text" placeholder="Search name or your debt" />
+                </div>
+                <button className="search-btn" />
+            </div>
+        );
+    };
+
     return (
         <div className="common-box form-view">
+            <SearchDebts />
             <ScaleGroup
                 scaleRange={[
                     { label: 'Burn to initial', value: 'initial' },
