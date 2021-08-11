@@ -1,10 +1,12 @@
 import React, { useState, useCallback } from 'react';
 import './index.less';
+import { notification } from 'antd';
 import SelectTokens from '@/components/SelectTokens';
 import ConfirmTransaction from '@/components/ConfirmTransaction';
 import CommentaryCard from '@/components/CommentaryCard';
 import DebtItemRatio from '@/components/DebtItemRatio';
 import DebtItem from '@/components/DebtItem';
+import { success, fail } from '@/components/Notification';
 
 export default () => {
     // * 选择token演示
@@ -188,6 +190,30 @@ export default () => {
                 <li>
                     <h3>5. 债务项</h3>
                     <DebtItemDemo />
+                </li>
+                <li>
+                    <h3>5. 成功通知</h3>
+                    <button
+                        onClick={() =>
+                            success({
+                                message: 'Transaction receipt',
+                                description: 'Mint fUSD from USDC',
+                                showView: true,
+                            })
+                        }
+                    >
+                        成功
+                    </button>
+                    <button
+                        onClick={() =>
+                            fail({
+                                message: 'Transaction receipt',
+                                description: 'Mint fUSD from USDC',
+                            })
+                        }
+                    >
+                        失败
+                    </button>
                 </li>
             </ul>
         </div>
