@@ -8,7 +8,12 @@ import { useERC20 } from '@/hooks/useContract';
 import useTokenBalance, { useBep20Balance } from '@/hooks/useTokenBalance';
 import { useWeb3React } from '@web3-react/core';
 import { getBep20Contract } from '@/utils/contractHelper';
-import { useCollateralSystem, usePrices } from '@/hooks/useContract';
+import {
+    useCollateralSystem,
+    usePrices,
+    useExchangeSystem,
+    useConfig,
+} from '@/hooks/useContract';
 import Tokens from '@/config/constants/tokens';
 import Contracts from '@/config/constants/contracts';
 import { ethers } from 'ethers';
@@ -36,6 +41,7 @@ import useDexPrice from '@/hooks/useDexPrice';
 import SelectTokens from '@/components/SelectTokens';
 import CommentaryCard from '@/components/CommentaryCard';
 import { useCallback } from 'react';
+import { isDeliveryAsset } from '@/utils';
 export default () => {
     const intl = useIntl();
     const { account } = useWeb3React();
@@ -54,6 +60,8 @@ export default () => {
     const [lockedScale, setLockedScale] = useState('0');
 
     const collateralSystem = useCollateralSystem();
+    const exchangeSystem = useExchangeSystem();
+    const configContract = useConfig();
 
     const initialRatio = useInitialRatio(collateralToken);
 
@@ -193,9 +201,10 @@ export default () => {
         (async () => {
             if (collateralAmount && toAmount && collateralToken && toToken) {
                 const collateralPrice = await getTokenPrice(collateralToken);
+                const toTokenPrice = await getTokenPrice(toToken);
                 const totalCollateral =
                     stakedData.startValue + collateralAmount * collateralPrice;
-                const totalDebt = debtData.startValue + toAmount * 1; // TODO 目前铸造物只有FUSD
+                const totalDebt = debtData.startValue + toAmount * toTokenPrice;
                 const ratio =
                     totalDebt > 0
                         ? toFixedWithoutRound(
@@ -217,15 +226,16 @@ export default () => {
         (async () => {
             if (computedRatio >= 2 && toToken && collateralAmount) {
                 const price = await getTokenPrice(collateralToken);
-                const amount = toFixedWithoutRound(
+                const fusdAmount = toFixedWithoutRound(
                     (Number(collateralAmount) * price) / computedRatio,
                     2,
                 );
                 // TODO 铸造物的价格，FUSD是1，其它的从合约获取
-                // const amount = toFixedWithoutRound(
-                //     val / TokenPrices[toToken.substr(1)],
-                //     2,
-                // );
+                const toTokenPrice = await getTokenPrice(toToken);
+                const amount = toFixedWithoutRound(
+                    parseFloat(fusdAmount) / toTokenPrice,
+                    2,
+                );
                 setToAmount(parseFloat(amount));
             } else {
                 setToAmount(0);
@@ -241,23 +251,26 @@ export default () => {
 
     // 计算新的债务
     useEffect(() => {
-        if (toToken && toAmount) {
-            const val =
-                parseFloat(
-                    new BigNumber(toAmount)
-                        .multipliedBy(TokenPrices[toToken!]) //TODO 铸造物价格从合约获取
-                        .toFixed(2),
-                ) + debtData.startValue;
-            setDebtData({
-                ...debtData,
-                endValue: val,
-            });
-        } else {
-            setDebtData({
-                ...debtData,
-                endValue: debtData.startValue,
-            });
-        }
+        (async () => {
+            if (toToken && toAmount) {
+                const toTokenPrice = await getTokenPrice(toToken);
+                const val =
+                    parseFloat(
+                        new BigNumber(toAmount)
+                            .multipliedBy(toTokenPrice)
+                            .toFixed(2),
+                    ) + debtData.startValue;
+                setDebtData({
+                    ...debtData,
+                    endValue: val,
+                });
+            } else {
+                setDebtData({
+                    ...debtData,
+                    endValue: debtData.startValue,
+                });
+            }
+        })();
     }, [toToken, toAmount]);
     const collateralAmountHandler = debounce(async (v) => {
         setCollateralAmount(v);
@@ -322,28 +335,111 @@ export default () => {
         if (isApproved && isIFTApproved) {
             try {
                 setSubmitting(true);
-                const token = Tokens[collateralToken];
-                const decimal = token.decimals;
-                const tx = await collateralSystem.stakeAndBuild(
-                    ethers.utils.formatBytes32String(collateralToken), // stakeCurrency
-                    expandToNDecimals(collateralAmount!, decimal), // stakeAmount
-                    expandToNDecimals(toAmount!, 18), // buildAmount
-                    expandTo18Decimals(lockedAmount || 0),
-                );
-                message.info(
-                    'Mint tx sent out successfully. Pls wait for a while......',
-                );
-                const receipt = await tx.wait();
-                console.log(receipt);
-                setSubmitting(false);
-                // fetchCollateralBalance();
-                message.success('Mint successfully. Pls check your balance.');
+                //TODO 目前仅支持mint fusd。其它合成资产需要调用mint和trade两步操作。后续优化成一步操作。
+                if (isDeliveryAsset(toToken)) {
+                    const tokenPrice = await getTokenPrice(toToken);
+                    const fusdAmount = toAmount * tokenPrice; // fusd price is 1
+                    const tx1 = await collateralSystem.stakeAndBuild(
+                        ethers.utils.formatBytes32String(collateralToken), // stakeCurrency
+                        expandTo18Decimals(collateralAmount), // stakeAmount
+                        expandTo18Decimals(fusdAmount), // buildAmount
+                        expandTo18Decimals(lockedAmount || 0),
+                    );
+                    const receipt1 = await tx1.wait();
+                    console.log(receipt1);
+                    const tx2 = await exchangeSystem.exchange(
+                        ethers.utils.formatBytes32String('FUSD'), // sourceKey
+                        expandTo18Decimals(fusdAmount), // sourceAmount
+                        account, // destAddr
+                        ethers.utils.formatBytes32String(toToken), // destKey
+                    );
+                    const receipt2 = await tx2.wait();
+                    console.log(receipt2);
+                    handleTxReceipt(receipt2);
+                    setSubmitting(false);
+                    // fetchCollateralBalance();
+                    message.success(
+                        'Mint successfully. Pls check your balance.',
+                    );
+                } else {
+                    const token = Tokens[collateralToken];
+                    const decimal = token.decimals;
+                    const tx = await collateralSystem.stakeAndBuild(
+                        ethers.utils.formatBytes32String(collateralToken), // stakeCurrency
+                        expandToNDecimals(collateralAmount!, decimal), // stakeAmount
+                        expandToNDecimals(toAmount!, 18), // buildAmount
+                        expandTo18Decimals(lockedAmount || 0),
+                    );
+                    message.info(
+                        'Mint tx sent out successfully. Pls wait for a while......',
+                    );
+                    const receipt = await tx.wait();
+                    console.log(receipt);
+                    setSubmitting(false);
+                    // fetchCollateralBalance();
+                    message.success(
+                        'Mint successfully. Pls check your balance.',
+                    );
+                }
             } catch (err) {
                 setSubmitting(false);
                 console.log(err);
             }
         }
     };
+
+    // *****TODO to be removed starts *********
+    const getTradeSettlementDelay = async () => {
+        const res = await configContract.getUint(
+            ethers.utils.formatBytes32String('TradeSettlementDelay'),
+        );
+        console.log('getTradeSettlementDelay', res.toNumber());
+    };
+    const getRevertDelay = async () => {
+        const res = await configContract.getUint(
+            ethers.utils.formatBytes32String('TradeRevertDelay'),
+        );
+        console.log('getRevertDelay', res.toNumber());
+    };
+    const settleTrade = async (entryId: number) => {
+        const res = await exchangeSystem.settle(entryId);
+        console.log(res);
+    };
+
+    // 超时的只能revert
+    const revertTrade = async (entryId: number) => {
+        const res = await exchangeSystem.revertPendingExchange(entryId);
+        console.log(res);
+    };
+    const handleTxReceipt = (receipt) => {
+        getTradeSettlementDelay();
+        getRevertDelay();
+        const exchangeContract =
+            Contracts.ExchangeSystem[process.env.APP_CHAIN_ID];
+        for (const event of receipt.events) {
+            if (event.address === exchangeContract) {
+                const lastEntryId = event.args[0].toNumber();
+                console.log('>>> lastEntryId <<<', lastEntryId);
+                setTimeout(async () => {
+                    try {
+                        await settleTrade(lastEntryId);
+                        message.success(
+                            'Trade has been settled.Pls check your balance',
+                        );
+                    } catch (err) {
+                        setTimeout(async () => {
+                            await revertTrade(lastEntryId);
+                            message.error(
+                                'Trade has been reverted. Pls try again.',
+                            );
+                        }, 60000);
+                        console.log(err);
+                    }
+                }, 6000); // 合约目前设置的delay是6秒,revert delay 是1min。
+            }
+        }
+    };
+    // *****TODO to be removed ends *********
 
     const SelectFromTokensView = () => {
         const [show, setShow] = useState(false);

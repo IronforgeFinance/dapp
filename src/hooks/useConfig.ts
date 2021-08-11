@@ -10,7 +10,7 @@ export const useInitialRatio = (currency: string) => {
     useEffect(() => {
         if (currency) {
             (async () => {
-                const res = await configContract.getUint(
+                const res = await configContract.getBuildRatio(
                     ethers.utils.formatBytes32String(currency),
                 );
                 const value = Number(ethers.utils.formatUnits(res, 18));

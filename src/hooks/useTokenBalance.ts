@@ -76,6 +76,9 @@ export const useBep20Balance = (token: string) => {
         const fetchBalance = async () => {
             try {
                 const tokenObj = Tokens[token];
+                if (!tokenObj) {
+                    throw new Error('Wrong token ' + token);
+                }
                 const address = tokenObj.address[process.env.APP_CHAIN_ID];
                 const contract = getBep20Contract(
                     address,
