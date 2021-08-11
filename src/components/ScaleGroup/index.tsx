@@ -5,6 +5,7 @@ import classNames from 'classnames';
 export interface IScaleOption {
     label: string;
     value: any;
+    disabled?: boolean;
 }
 export interface IScaleGroupProps {
     defaultValue?: string;
@@ -26,6 +27,7 @@ export default (props: IScaleGroupProps) => {
                     })}
                     key={scale.value}
                     onClick={updateScale.bind(this, scale.value)}
+                    disabled={scale.disabled}
                 >
                     {scale.label}
                 </button>

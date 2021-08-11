@@ -101,3 +101,50 @@
     top: 175.26999999999998px;
     transform: translateX(-50%);
 }
+
+.search-debts {
+    display: flex;
+    align-items: center;
+    width: 418.02px;
+    height: 36px;
+    position: absolute;
+    top: -7px;
+    right: -10px;
+
+    .search-input-wrapper {
+        width: 373px;
+        height: 36px;
+        background: #61191f;
+        box-shadow: 0px 2px 0.5px rgba(51, 6, 6, 0.77);
+        border-radius: 18px 2px 2px 18px;
+        padding: 0 10px 0 30px;
+        box-sizing: border-box;
+        display: flex;
+        align-items: center;
+
+        > input {
+            width: 100%;
+            font-style: normal;
+            font-weight: normal;
+            font-size: 16px;
+            line-height: 24px;
+            display: flex;
+            align-items: center;
+            background-color: transparent;
+            border: none;
+            outline: none;
+            color: #fff;
+
+            &::placeholder {
+                color: rgba(255, 255, 255, 0.8);
+            }
+        }
+    }
+
+    .search-btn {
+        width: 47.02px;
+        height: 36px;
+        // transform: matrix(-1, 0, 0, 1, 0, 0);
+        #image.button('~@/assets/images/icon-search.png');
+    }
+}

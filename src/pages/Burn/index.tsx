@@ -57,6 +57,17 @@ export default () => {
         );
     };
 
+    const SearchDebts = () => {
+        return (
+            <div className="search-debts">
+                <div className="search-input-wrapper">
+                    <input type="text" placeholder="Search name or your debt" />
+                </div>
+                <button className="search-btn" />
+            </div>
+        );
+    };
+
     return (
         <div className="burn-container">
             <DataView />
@@ -70,6 +81,7 @@ export default () => {
                         <NoAssetsView />
                     ) : (
                         <div className="form-view common-box">
+                            <SearchDebts />
                             <div className="my-debt">
                                 <button
                                     className={classNames({

@@ -349,29 +349,51 @@ export default (props: IProps) => {
         );
     };
 
-    const SearchDebts = () => {
-        return (
-            <div className="search-debts">
-                <div className="search-input-wrapper">
-                    <input type="text" placeholder="Search name or your debt" />
-                </div>
-                <button className="search-btn" />
-            </div>
-        );
-    };
+    // const SearchDebts = () => {
+    //     return (
+    //         <div className="search-debts">
+    //             <div className="search-input-wrapper">
+    //                 <input type="text" placeholder="Search name or your debt" />
+    //             </div>
+    //             <button className="search-btn" />
+    //         </div>
+    //     );
+    // };
+
+    useEffect(() => {
+        switch (scale) {
+            case 'initial': {
+                burnInitialHandler(scale);
+                break;
+            }
+            case 'max': {
+                burnMaxHandler(scale);
+                break;
+            }
+            default:
+        }
+    }, [scale]);
 
     return (
         <div className="common-box form-view">
-            <SearchDebts />
+            {/* <SearchDebts /> */}
             <ScaleGroup
                 scaleRange={[
-                    { label: 'Burn to initial', value: 'initial' },
-                    { label: 'Burn Max', value: 'max' },
+                    {
+                        label: 'Burn to initial',
+                        value: 'initial',
+                        disabled: !burnInitialAvailable,
+                    },
+                    {
+                        label: 'Burn Max',
+                        value: 'max',
+                        disabled: burnMaxAvailable,
+                    },
                 ]}
                 value={scale}
                 updateScale={(scale) => setScale(scale)}
             />
-            <div className="input-item">
+            <div className="input-item from-input">
                 <p className="label">From</p>
                 <div className="from-content input-item-content">
                     <div className="content-label">
