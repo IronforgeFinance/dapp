@@ -56,7 +56,6 @@ export default () => {
     const collateralSystem = useCollateralSystem();
 
     const initialRatio = useInitialRatio(collateralToken);
-    const collateralTokenPrice = useTokenPrice(collateralToken);
 
     const IFTPrice = useDexPrice('IFT', 'USDC');
 
