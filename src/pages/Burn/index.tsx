@@ -20,33 +20,6 @@ export default () => {
     const [showForm, setShowForm] = useState(false);
     const [currentDebt, setCurrentDebt] = useState(0);
 
-    const getDebtInUSD = async (account: string) => {
-        let res = await debtSystem.GetUserDebtBalanceInUsd(account);
-        res = res.map((item) => ethers.utils.formatUnits(item, 18));
-        console.log('getDebtInUSD: ', res);
-    };
-
-    const getCollateralData = async (account, token) => {
-        const res = await collateralSystem.getUserCollateral(
-            account,
-            ethers.utils.formatBytes32String(token),
-        );
-        console.log(
-            'getCollateralData: ',
-            token,
-            ethers.utils.formatUnits(res, 18),
-        );
-    };
-
-    useEffect(() => {
-        if (account) {
-            // getDebtInUSD(account)
-            // getCollateralData(account, 'BTC')
-            // getCollateralData(account, 'USDT')
-            // getCollateralData(account, 'ETH')
-        }
-    }, [account]);
-
     const onSubmitSuccess = () => {
         setShowForm(false);
     };
@@ -82,39 +55,6 @@ export default () => {
                 </Button>
             </div>
         );
-    };
-
-    const DebsView = () => {
-        const mockDebts = {
-            balance: 88888,
-            mintedToken: 'fUSD',
-            mintedTokenName: 'USD',
-            mintedTokenNum: 100,
-            debtRatios: [
-                {
-                    token: 'BTC',
-                    percent: '49%',
-                },
-                {
-                    token: 'USDT',
-                    percent: '31%',
-                },
-                {
-                    token: 'ETH',
-                    percent: '12%',
-                },
-                {
-                    token: 'TOKEN1',
-                    percent: '6%',
-                },
-                {
-                    token: 'TOKEN2',
-                    percent: '2%',
-                },
-            ],
-            fusdBalance: 10000,
-        };
-        return <IDebtItem {...mockDebts} />;
     };
 
     return (

@@ -1,99 +1,99 @@
 [
-    {
-        "inputs": [
-            {
-                "internalType": "address",
-                "name": "user",
-                "type": "address"
-            },
-            {
-                "internalType": "uint256",
-                "name": "amount",
-                "type": "uint256"
-            },
-            {
-                "internalType": "bytes32",
-                "name": "_currency",
-                "type": "bytes32"
-            },
-            {
-                "internalType": "uint256",
-                "name": "catalystEffect",
-                "type": "uint256"
-            }
-        ],
-        "name": "buildFromCollateralSys",
-        "outputs": [],
-        "stateMutability": "nonpayable",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "internalType": "address",
-                "name": "user",
-                "type": "address"
-            },
-            {
-                "internalType": "bytes32",
-                "name": "_currency",
-                "type": "bytes32"
-            },
-            {
-                "internalType": "uint256",
-                "name": "catalystEffect",
-                "type": "uint256"
-            }
-        ],
-        "name": "buildMaxFromCollateralSys",
-        "outputs": [],
-        "stateMutability": "nonpayable",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "internalType": "address",
-                "name": "user",
-                "type": "address"
-            },
-            {
-                "internalType": "uint256",
-                "name": "amount",
-                "type": "uint256"
-            },
-            {
-                "internalType": "bytes32",
-                "name": "_currency",
-                "type": "bytes32"
-            }
-        ],
-        "name": "burnForLiquidation",
-        "outputs": [],
-        "stateMutability": "nonpayable",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "internalType": "address",
-                "name": "user",
-                "type": "address"
-            },
-            {
-                "internalType": "uint256",
-                "name": "amount",
-                "type": "uint256"
-            },
-            {
-                "internalType": "bytes32",
-                "name": "_currency",
-                "type": "bytes32"
-            }
-        ],
-        "name": "burnFromCollateralSys",
-        "outputs": [],
-        "stateMutability": "nonpayable",
-        "type": "function"
-    }
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "user",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "amount",
+        "type": "uint256"
+      },
+      {
+        "internalType": "bytes32",
+        "name": "_currency",
+        "type": "bytes32"
+      },
+      {
+        "internalType": "uint256",
+        "name": "catalystEffect",
+        "type": "uint256"
+      }
+    ],
+    "name": "buildFromCollateralSys",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "user",
+        "type": "address"
+      },
+      {
+        "internalType": "bytes32",
+        "name": "_currency",
+        "type": "bytes32"
+      },
+      {
+        "internalType": "uint256",
+        "name": "catalystEffect",
+        "type": "uint256"
+      }
+    ],
+    "name": "buildMaxFromCollateralSys",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "user",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "amount",
+        "type": "uint256"
+      },
+      {
+        "internalType": "bytes32",
+        "name": "_currency",
+        "type": "bytes32"
+      }
+    ],
+    "name": "burnForLiquidation",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "user",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "amount",
+        "type": "uint256"
+      },
+      {
+        "internalType": "bytes32",
+        "name": "_currency",
+        "type": "bytes32"
+      }
+    ],
+    "name": "burnFromCollateralSys",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  }
 ]

@@ -1,5 +1,5 @@
 export const BASE_BSC_SCAN_URL = 'https://bscscan.com';
-
+//TODO 从配置或者合约中获取
 export const COLLATERAL_TOKENS = [
     {
         name: 'USDC',
@@ -9,13 +9,15 @@ export const COLLATERAL_TOKENS = [
         name: 'BTC',
         ratio: 5,
     },
+
     // {
     //     name: 'ETH',
     //     ratio: 5,
     // },
 ];
 
-export const MINT_TOKENS = ['fUSDT'];
+//TODO 从配置或者合约中获取
+export const MINT_TOKENS = ['FUSD', 'lBTC-202112'];
 
 //TODO 从Prices合约接口获取质押token的价格。现在假定1fToken=1U，1BTC=5000U，1ETH=2000U
 export const TokenPrices = {

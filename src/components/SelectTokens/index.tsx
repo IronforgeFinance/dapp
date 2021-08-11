@@ -2,7 +2,7 @@ import React, { useCallback } from 'react';
 import Board from '@/components/Board';
 import classNames from 'classnames';
 import './index.less';
-
+import { getRemainDaysOfQuarterAsset } from '@/utils';
 interface TokenOption {
     name: string;
     ratio?: Number;
@@ -61,6 +61,14 @@ export default (props: ISelectTokensProps) => {
                             />
                             <span className="name">
                                 {token.name.toUpperCase()}
+                                {token.name.includes('-') && (
+                                    <span className="remain-days">
+                                        {getRemainDaysOfQuarterAsset(
+                                            token.name.split('-')[1],
+                                        )}
+                                        days
+                                    </span>
+                                )}
                             </span>
                             <span className="price">{token.ratio || ''}</span>
                         </li>

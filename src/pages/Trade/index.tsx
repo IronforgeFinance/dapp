@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useMemo, useCallback } from 'react';
-import { useConfig, useExchangeSystem } from '@/hooks/useContract';
+import { useConfig, useExchangeSystem, usePrices } from '@/hooks/useContract';
 import Tokens from '@/config/constants/tokens';
 import { useWeb3React } from '@web3-react/core';
 import { ethers } from 'ethers';
@@ -18,7 +18,7 @@ import SelectTokens from '@/components/SelectTokens';
 import { debounce } from 'lodash';
 import classNames from 'classnames';
 //Fixme: for test
-const TO_TOKENS = [{ name: 'lBTC' }];
+const TO_TOKENS = [{ name: 'lBTC' }, { name: 'lBTC-202112' }];
 const FROM_TOKENS = [{ name: 'FUSD' }];
 
 export default () => {
@@ -33,9 +33,24 @@ export default () => {
     const [fromBalance, setFromBalance] = useState(0.0);
     const [submitting, setSubmitting] = useState(false);
     const [feeRate, setFeeRate] = useState(0);
+    const [estimateAmount, setEstimateAmount] = useState(0);
+
+    const prices = usePrices();
 
     const { balance: fromTokenBalance } = useBep20Balance(fromToken);
     const { balance: toTokenBalance } = useBep20Balance(toToken);
+
+    const getTokenPrice = async (token: string) => {
+        if (!token) return 0;
+        const res = await prices.getPrice(
+            ethers.utils.formatBytes32String(token),
+        );
+        const val = parseFloat(ethers.utils.formatEther(res));
+        if (val === 0) {
+            throw new Error('Wrong token price: ' + token);
+        }
+        return val;
+    };
 
     const getFeeRate = async () => {
         if (toToken) {
@@ -66,18 +81,27 @@ export default () => {
         getFeeRate();
     }, [configContract, toToken]);
 
-    useEffect(() => {
-        const val =
-            (TokenPrices[fromToken] * fromAmount) / TokenPrices[toToken];
+    const computeToAmount = debounce(async () => {
+        const fromTokenPrice = await getTokenPrice(fromToken);
+        const toTokenPrice = await getTokenPrice(toToken);
+        const val = (fromTokenPrice * fromAmount) / toTokenPrice;
         const toAmount = toFixedWithoutRound(val, 2);
         setToAmount(parseFloat(toAmount));
+    }, 500);
+    useEffect(() => {
+        computeToAmount();
     }, [fromToken, fromAmount, toToken]);
 
-    const estimateAmount = useMemo(() => {
+    const computeEstimateAmount = debounce(async () => {
+        const fromTokenPrice = await getTokenPrice(fromToken);
+        const toTokenPrice = await getTokenPrice(toToken);
         const val =
-            (TokenPrices[fromToken] * fromAmount * (1 - feeRate)) /
-            TokenPrices[toToken];
-        return toFixedWithoutRound(val, 6);
+            (fromTokenPrice * fromAmount * (1 - feeRate)) / toTokenPrice;
+        const amount = parseFloat(toFixedWithoutRound(val, 6));
+        setEstimateAmount(amount);
+    }, 500);
+    useEffect(() => {
+        computeEstimateAmount();
     }, [feeRate, fromAmount, fromToken, toToken]);
 
     const fromAmountHandler = (v) => {
@@ -141,6 +165,7 @@ export default () => {
         }
     };
 
+    //TODO to be removed
     const handleTxReceipt = (receipt) => {
         getTradeSettlementDelay();
         getRevertDelay();
