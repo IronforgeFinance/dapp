@@ -131,11 +131,16 @@ export default () => {
         ...model,
     }));
 
-    const { balance } = useBep20Balance('IFT');
+    const { balance, refresh: refreshIFTBalance } = useBep20Balance('IFT');
     const fTokenBalance = balance as number;
 
-    const { balance: collateralBalance } = useBep20Balance(collateralToken);
+    const { balance: collateralBalance, refresh: refreshCollateralBalance } =
+        useBep20Balance(collateralToken);
 
+    const refreshBalance = () => {
+        refreshIFTBalance();
+        refreshCollateralBalance();
+    };
     // fToken价值/Collateral价值 最高不超过3/10
     const maxLockedAmount = useMemo(() => {
         if (collateralToken && collateralAmount) {
@@ -355,7 +360,8 @@ export default () => {
                     );
                     const receipt2 = await tx2.wait();
                     console.log(receipt2);
-                    handleTxReceipt(receipt2);
+                    await handleTxReceipt(receipt2);
+                    refreshBalance();
                     setSubmitting(false);
                     // fetchCollateralBalance();
                     message.success(
@@ -380,6 +386,7 @@ export default () => {
                     message.success(
                         'Mint successfully. Pls check your balance.',
                     );
+                    refreshBalance();
                 }
             } catch (err) {
                 setSubmitting(false);

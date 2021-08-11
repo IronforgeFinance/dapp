@@ -17,18 +17,22 @@ import Contracts from '@/config/constants/contracts';
 import SelectTokens from '@/components/SelectTokens';
 import { debounce } from 'lodash';
 import classNames from 'classnames';
-//Fixme: for test
-const TO_TOKENS = [{ name: 'lBTC' }, { name: 'lBTC-202112' }];
-const FROM_TOKENS = [{ name: 'FUSD' }];
+
+//TODO: for test.从配置中读取
+const TOKEN_OPTIONS = [
+    { name: 'lBTC-202112' },
+    { name: 'FUSD' },
+    { name: 'lBTC' },
+];
 
 export default () => {
     const configContract = useConfig();
     const exchangeSystem = useExchangeSystem();
     const { account } = useWeb3React();
-    const [fromToken, setFromToken] = useState(FROM_TOKENS[0].name);
+    const [fromToken, setFromToken] = useState(TOKEN_OPTIONS[0].name);
     const [fromAmount, setFromAmount] = useState(0.0);
     const [toggle, setToggle] = useState(false);
-    const [toToken, setToToken] = useState(TO_TOKENS[0].name);
+    const [toToken, setToToken] = useState(TOKEN_OPTIONS[1].name);
     const [toAmount, setToAmount] = useState(0.0);
     const [fromBalance, setFromBalance] = useState(0.0);
     const [submitting, setSubmitting] = useState(false);
@@ -219,7 +223,7 @@ export default () => {
             <SelectTokens
                 visable={show}
                 value={fromToken}
-                tokenList={FROM_TOKENS}
+                tokenList={TOKEN_OPTIONS}
                 onSelect={(v) => setFromToken(v)}
                 onClose={_closeHandler}
             >
@@ -244,7 +248,7 @@ export default () => {
             <SelectTokens
                 visable={show}
                 value={toToken}
-                tokenList={TO_TOKENS}
+                tokenList={TOKEN_OPTIONS}
                 onSelect={(v) => setToToken(v)}
                 onClose={_closeHandler}
             >

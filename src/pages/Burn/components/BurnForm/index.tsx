@@ -416,9 +416,6 @@ export default (props: IProps) => {
                             min={0}
                             max={toTokenDebt}
                         />
-                        <div className="token">
-                            <SelectToTokensView />
-                        </div>
                     </div>
                 </div>
             </div>
