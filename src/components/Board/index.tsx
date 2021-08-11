@@ -5,6 +5,7 @@ import './index.less';
 interface ISelectTokensProps {
     children?: Object;
     visable: Boolean;
+    title?: String;
     onClose?: Function;
     onCustTitle?: Function;
 }
@@ -15,12 +16,19 @@ export default (props: ISelectTokensProps) => {
         visable,
         onClose: _closeHandler,
         onCustTitle: _custTitle = () => {},
+        title,
     } = props;
     const onCloseMemo = useCallback(() => _closeHandler(), []);
     return (
         <Overlay visable={visable} onClose={onCloseMemo}>
             <div className="board-box">
-                {_custTitle() || <h1 className="titile"></h1>}
+                {_custTitle() || (
+                    <div className="title-wrapper">
+                        <h1 className="titile">
+                            <span>{title}</span>
+                        </h1>
+                    </div>
+                )}
                 <button className="btn-close" onClick={onCloseMemo}></button>
                 <div className="content">{children}</div>
             </div>

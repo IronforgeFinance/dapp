@@ -36,7 +36,7 @@ export default (props: ISelectTokensProps) => {
 
     return (
         <div className="select-tokens">
-            <Board visable={visable} onClose={_close}>
+            <Board visable={visable} onClose={_close} title="Select a Token">
                 <ul className="tokenlist">
                     <input
                         className="search"
