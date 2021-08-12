@@ -22,11 +22,12 @@ interface BigBoardTabOptions {
 interface BigBoardProps {
     tabItems: BigBoardTabOptions[];
     tabKey: string;
+    title: string;
     onChange: Function;
 }
 
 export default (props: BigBoardProps) => {
-    const { tabItems, tabKey, onChange } = props;
+    const { tabItems, tabKey, onChange, title } = props;
 
     return (
         <div className="big-board">
@@ -50,7 +51,9 @@ export default (props: BigBoardProps) => {
                 })}
             </ul>
             <div className="big-board-container">
-                <h3 className="title" />
+                <h3 className="common-title silver big-board-title">
+                    <span>{title}</span>
+                </h3>
             </div>
         </div>
     );

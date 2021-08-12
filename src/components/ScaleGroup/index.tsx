@@ -1,11 +1,13 @@
 import React, { useMemo } from 'react';
 import './index.less';
 import classNames from 'classnames';
+import { useCallback } from 'react';
 
 export interface IScaleOption {
     label: string;
     value: any;
     disabled?: boolean;
+    onClick?: Function;
 }
 export interface IScaleGroupProps {
     defaultValue?: string;
@@ -17,6 +19,18 @@ export interface IScaleGroupProps {
 export default (props: IScaleGroupProps) => {
     const { scaleRange = [], value = '', updateScale = () => {} } = props;
 
+    const _onUpdate = useCallback(
+        (e, scale) => {
+            e.stopPropagation();
+
+            if (scale.value === value) return;
+
+            updateScale(scale.value);
+            scale.onClick(scale.value);
+        },
+        [value],
+    );
+
     return (
         <div className="group-scale">
             {scaleRange.map((scale) => (
@@ -26,7 +40,7 @@ export default (props: IScaleGroupProps) => {
                         active: value == scale.value,
                     })}
                     key={scale.value}
-                    onClick={updateScale.bind(this, scale.value)}
+                    onClick={(e) => _onUpdate(e, scale)}
                     disabled={scale.disabled}
                 >
                     {scale.label}

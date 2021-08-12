@@ -13,54 +13,9 @@
         #position.absHorizCenter();
     }
 
-    .titile {
+    .titile.common-titile {
         width: 268px;
         height: 58px;
-        // #image.background('../../assets/images/mint-select-token-dialog-title.png');
-        // #position.absHorizCenter();
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        position: relative;
-
-        span {
-            position: relative;
-            z-index: 1;
-            font-style: normal;
-            font-weight: bold;
-            font-size: 16px;
-            line-height: 24px;
-            text-align: center;
-            color: #1c1c1d;
-        }
-
-        &:before {
-            flex: 1;
-            content: '';
-            position: absolute;
-            width: 50%;
-            height: 100%;
-            top: 50%;
-            transform: translateY(-50%);
-            left: 0;
-            background: url('~@/assets/images/board-title.png') no-repeat;
-            background-size: cover;
-            background-position: left center;
-        }
-
-        &:after {
-            flex: 1;
-            content: '';
-            position: absolute;
-            width: 50%;
-            height: 100%;
-            top: 50%;
-            transform: translateY(-50%);
-            right: 0;
-            background: url('~@/assets/images/board-title.png') no-repeat;
-            background-size: cover;
-            background-position: right center;
-        }
     }
 
     .btn-close {

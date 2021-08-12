@@ -24,7 +24,7 @@ export default (props: ISelectTokensProps) => {
             <div className="board-box">
                 {_custTitle() || (
                     <div className="title-wrapper">
-                        <h1 className="titile">
+                        <h1 className="common-title silver title">
                             <span>{title}</span>
                         </h1>
                     </div>

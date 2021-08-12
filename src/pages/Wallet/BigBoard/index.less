@@ -102,8 +102,8 @@
                 span {
                     min-width: 68px;
                     font-style: normal;
-                    font-weight: 900;
-                    font-family: Arial, sans-serif;
+                    font-weight: bolder;
+                    // font-family: Arial, sans-serif;
                     height: 15px;
                     font-size: 18px;
                     line-height: 18px;
@@ -127,14 +127,13 @@
         position: relative;
         #image.background('~@/assets/images/big-board-bg.png');
 
-        .title {
+        .big-board-title.common-title {
             height: 70px;
             width: 356px;
             top: -5px;
-            left: 50%;
-            transform: translate(-50%);
-            position: absolute;
-            #image.background('~@/assets/images/big-board-title.png');
+            > span {
+                font-size: 24px;
+            }
         }
     }
 }
