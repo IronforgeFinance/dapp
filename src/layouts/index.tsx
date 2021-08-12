@@ -52,6 +52,7 @@ export default function Layout({
                     'container-burn': location.pathname === '/burn',
                     'container-trade': location.pathname === '/trade',
                     'container-farm': location.pathname === '/farm',
+                    'container-home': location.pathname === '/',
                 })}
             >
                 <source

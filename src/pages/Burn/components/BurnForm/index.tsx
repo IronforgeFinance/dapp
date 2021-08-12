@@ -387,7 +387,7 @@ export default (props: IProps) => {
                     {
                         label: 'Burn Max',
                         value: 'max',
-                        disabled: burnMaxAvailable,
+                        disabled: !burnMaxAvailable,
                     },
                 ]}
                 value={scale}
@@ -426,7 +426,10 @@ export default (props: IProps) => {
                 <div className="to-content input-item-content">
                     <div className="content-label">
                         <p className="left">Unstaking</p>
-                        <p className="right">-</p>
+                        <p className="right">
+                            Balance:{' '}
+                            <span className="balance">{toTokenDebt}</span>
+                        </p>
                     </div>
                     <div className="input">
                         <InputNumber
