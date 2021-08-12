@@ -360,19 +360,19 @@ export default (props: IProps) => {
     //     );
     // };
 
-    useEffect(() => {
-        switch (scale) {
-            case 'initial': {
-                burnInitialHandler(scale);
-                break;
-            }
-            case 'max': {
-                burnMaxHandler(scale);
-                break;
-            }
-            default:
-        }
-    }, [scale]);
+    // useEffect(() => {
+    //     switch (scale) {
+    //         case 'initial': {
+    //             burnInitialHandler(scale);
+    //             break;
+    //         }
+    //         case 'max': {
+    //             burnMaxHandler(scale);
+    //             break;
+    //         }
+    //         default:
+    //     }
+    // }, [scale]);
 
     return (
         <div className="common-box form-view">
@@ -383,11 +383,13 @@ export default (props: IProps) => {
                         label: 'Burn to initial',
                         value: 'initial',
                         disabled: !burnInitialAvailable,
+                        onClick: (scale) => burnInitialHandler(scale),
                     },
                     {
                         label: 'Burn Max',
                         value: 'max',
-                        disabled: burnMaxAvailable,
+                        disabled: !burnMaxAvailable,
+                        onClick: (scale) => burnMaxHandler(scale),
                     },
                 ]}
                 value={scale}
