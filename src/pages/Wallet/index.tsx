@@ -28,6 +28,7 @@ export default () => {
     return (
         <div className="wallet">
             <BigBoard
+                title="My Wallet"
                 tabItems={tabItems}
                 tabKey={tabKey}
                 onChange={(key) => setTabKey(key)}

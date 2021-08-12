@@ -357,3 +357,74 @@ dl {
     color: #e1ab3b;
     display: inline-block;
 }
+
+.common-title {
+    width: 268px;
+    height: 58px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    left: 50%;
+    transform: translate(-50%);
+    position: absolute;
+
+    &.silver {
+        &:after {
+            background-image: url('~@/assets/images/common-title-silver.png');
+        }
+
+        &:before {
+            background-image: url('~@/assets/images/common-title-silver.png');
+        }
+    }
+
+    &.gold {
+        &:after {
+            background-image: url('~@/assets/images/common-title-gold.png');
+        }
+
+        &:before {
+            background-image: url('~@/assets/images/common-title-gold.png');
+        }
+    }
+
+    span {
+        position: relative;
+        z-index: 1;
+        font-style: normal;
+        font-weight: bold;
+        font-size: 16px;
+        line-height: 24px;
+        text-align: center;
+        color: #1c1c1d;
+    }
+
+    &:before {
+        flex: 1;
+        content: '';
+        position: absolute;
+        width: 50%;
+        height: 100%;
+        top: 50%;
+        transform: translateY(-50%);
+        left: 0;
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-position: left center;
+    }
+
+    &:after {
+        flex: 1;
+        content: '';
+        position: absolute;
+        width: 50%;
+        height: 100%;
+        top: 50%;
+        transform: translateY(-50%);
+        right: 0;
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-position: right center;
+    }
+}
