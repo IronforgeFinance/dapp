@@ -45,15 +45,20 @@ export default () => {
     const { balance: toTokenBalance } = useBep20Balance(toToken);
 
     const getTokenPrice = async (token: string) => {
-        if (!token) return 0;
-        const res = await prices.getPrice(
-            ethers.utils.formatBytes32String(token),
-        );
-        const val = parseFloat(ethers.utils.formatEther(res));
-        if (val === 0) {
-            throw new Error('Wrong token price: ' + token);
+        try {
+            if (!token) return 0;
+            const res = await prices.getPrice(
+                ethers.utils.formatBytes32String(token),
+            );
+            const val = parseFloat(ethers.utils.formatEther(res));
+            if (val === 0) {
+                throw new Error('Wrong token price: ' + token);
+            }
+            return val;
+        } catch (error) {
+            console.error(error);
         }
-        return val;
+        return 0;
     };
 
     const getFeeRate = async () => {
