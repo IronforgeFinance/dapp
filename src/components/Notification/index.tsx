@@ -5,9 +5,12 @@ import LinkSvg from '@/assets/images/link.svg';
 import NotifySuccessSvg from '@/assets/images/notify-success.svg';
 import NotifyFailSvg from '@/assets/images/notify-fail.svg';
 
+const DEFAULT_DURATION = 5;
+
 interface Notification {
     message: string;
     description: string;
+    duration?: number;
 }
 
 interface SuccessProps extends Notification {
@@ -19,10 +22,17 @@ interface SuccessProps extends Notification {
 interface FailProps extends Notification {}
 
 export const success = (props: SuccessProps) => {
-    const { message, description, view: ViewNode, showView, viewLink } = props;
+    const {
+        message,
+        description,
+        view: ViewNode,
+        showView,
+        viewLink,
+        duration,
+    } = props;
 
     notification.success({
-        duration: 0,
+        duration: duration || DEFAULT_DURATION,
         className: 'icron-notification success',
         message: <h3>{message}</h3>,
         description: (
@@ -43,10 +53,10 @@ export const success = (props: SuccessProps) => {
 };
 
 export const fail = (props: FailProps) => {
-    const { message, description } = props;
+    const { message, description, duration } = props;
 
     notification.error({
-        duration: 0,
+        duration: duration || DEFAULT_DURATION,
         className: 'icron-notification fail',
         message: <h3>{message}</h3>,
         description: (
