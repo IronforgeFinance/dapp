@@ -34,7 +34,7 @@ import {
 import './index.less';
 import useDataView from '@/hooks/useDataView';
 import { useTokenPrice } from '@/hooks/useTokenPrice';
-import ScaleGroup from '@/components/ScaleGroup';
+import { Group as ScaleGroup, Button as ScaleOption } from '@/components/Scale';
 // import SettingView from './SettingView';
 import classNames from 'classnames';
 import useDexPrice from '@/hooks/useDexPrice';
@@ -80,11 +80,13 @@ export default () => {
         collateralSytemContract,
     );
 
-    const { isApproved: isIFTApproved, setLastUpdated: setLastIFTApproved } =
-        useCheckERC20ApprovalStatus(
-            Tokens.IFT.address[process.env.APP_CHAIN_ID],
-            collateralSytemContract,
-        );
+    const {
+        isApproved: isIFTApproved,
+        setLastUpdated: setLastIFTApproved,
+    } = useCheckERC20ApprovalStatus(
+        Tokens.IFT.address[process.env.APP_CHAIN_ID],
+        collateralSytemContract,
+    );
 
     const prices = usePrices();
 
@@ -134,8 +136,10 @@ export default () => {
     const { balance, refresh: refreshIFTBalance } = useBep20Balance('IFT');
     const fTokenBalance = balance as number;
 
-    const { balance: collateralBalance, refresh: refreshCollateralBalance } =
-        useBep20Balance(collateralToken);
+    const {
+        balance: collateralBalance,
+        refresh: refreshCollateralBalance,
+    } = useBep20Balance(collateralToken);
 
     const refreshBalance = () => {
         refreshIFTBalance();
@@ -582,15 +586,23 @@ export default () => {
                                     className="custom-input"
                                 />
                                 <ScaleGroup
-                                    scaleRange={[
+                                    value={lockedScale}
+                                    updateScale={scaleHandler}
+                                >
+                                    {[
                                         { label: '0', value: 0 },
                                         { label: '1/10', value: 0.1 },
                                         { label: '1/5', value: 0.2 },
                                         { label: '3/10', value: 0.3 },
-                                    ]}
-                                    value={lockedScale}
-                                    updateScale={scaleHandler}
-                                />
+                                    ].map((option) => (
+                                        <ScaleOption
+                                            key={option.label}
+                                            value={option.value}
+                                        >
+                                            <span>{option.label}</span>
+                                        </ScaleOption>
+                                    ))}
+                                </ScaleGroup>
                             </div>
                         </div>
                     </div>
@@ -622,8 +634,9 @@ export default () => {
                                     <i
                                         className={classNames({
                                             'icon-token': true,
-                                            [String(toToken).toLowerCase()]:
-                                                true,
+                                            [String(
+                                                toToken,
+                                            ).toLowerCase()]: true,
                                             'size-24': true,
                                         })}
                                     />

@@ -17,7 +17,7 @@ import useDataView, { useSelectedDebtInUSD } from '@/hooks/useDataView';
 import { useInitialRatio } from '@/hooks/useConfig';
 import BigNumber from 'bignumber.js';
 import { debounce } from 'lodash';
-import ScaleGroup from '@/components/ScaleGroup';
+import { Group as ScaleGroup, Button as ScaleOption } from '@/components/Scale';
 import SelectTokens from '@/components/SelectTokens';
 
 const TO_TOKENS = ['BTC'];
@@ -349,36 +349,10 @@ export default (props: IProps) => {
         );
     };
 
-    // const SearchDebts = () => {
-    //     return (
-    //         <div className="search-debts">
-    //             <div className="search-input-wrapper">
-    //                 <input type="text" placeholder="Search name or your debt" />
-    //             </div>
-    //             <button className="search-btn" />
-    //         </div>
-    //     );
-    // };
-
-    // useEffect(() => {
-    //     switch (scale) {
-    //         case 'initial': {
-    //             burnInitialHandler(scale);
-    //             break;
-    //         }
-    //         case 'max': {
-    //             burnMaxHandler(scale);
-    //             break;
-    //         }
-    //         default:
-    //     }
-    // }, [scale]);
-
     return (
         <div className="common-box form-view">
-            {/* <SearchDebts /> */}
-            <ScaleGroup
-                scaleRange={[
+            <ScaleGroup value={scale} updateScale={(scale) => setScale(scale)}>
+                {[
                     {
                         label: 'Burn to initial',
                         value: 'initial',
@@ -391,10 +365,17 @@ export default (props: IProps) => {
                         disabled: !burnMaxAvailable,
                         onClick: (scale) => burnMaxHandler(scale),
                     },
-                ]}
-                value={scale}
-                updateScale={(scale) => setScale(scale)}
-            />
+                ].map((option) => (
+                    <ScaleOption
+                        key={option.label}
+                        value={option.value}
+                        disabled={option.disabled}
+                        onClick={option.onClick}
+                    >
+                        <span>{option.label}</span>
+                    </ScaleOption>
+                ))}
+            </ScaleGroup>
             <div className="input-item from-input">
                 <p className="label">From</p>
                 <div className="from-content input-item-content">
