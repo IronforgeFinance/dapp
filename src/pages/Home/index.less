@@ -1,5 +1,11 @@
 @import '../../assets/styles/global.less';
 
+@dataTop: 710px;
+
+// .container {
+//     overflow: hidden;
+// }
+
 .home-container {
     width: 100%;
     display: flex;
@@ -17,6 +23,7 @@
         width: 840px;
         height: 875px;
     }
+
     .video-bg-right {
         position: absolute;
         right: 0;
@@ -28,55 +35,188 @@
         background-size: contain;
     }
 
-    .sheepskin-book {
-        margin-top: 143px;
-        width: 326px;
-        height: 297px;
-        padding: 46px 13px 33px 23px;
-        box-sizing: border-box;
+    .sheepskin-box {
+        display: grid;
+        grid-template-columns: auto auto;
+        grid-template-rows: auto auto;
+        margin-top: 130px;
+
+        .sheepskin-book {
+            display: flex;
+            flex-direction: column;
+            box-sizing: border-box;
+            transition: all 0.2s;
+
+            &:hover {
+                filter: brightness(130%);
+                transform: scale(1.05);
+
+                .words {
+                    > a {
+                        color: #ac4c06;
+                    }
+                }
+            }
+
+            &.mint {
+                padding: 0 24px 0 20px;
+                box-sizing: border-box;
+                margin-right: 60px;
+
+                grid-column: 1 e('/') 2;
+                grid-row: 1 e('/') 4;
+
+                > h3 {
+                    margin-top: 72px;
+                    text-align: center;
+                }
+
+                height: 393.0390930175781px;
+                width: 326px;
+                #image.background('~@/assets/images/home-intro-mint.png');
+            }
+
+            &.trade {
+                margin-top: 35px;
+                height: 160px;
+                width: 352px;
+                #image.background('~@/assets/images/home-intro-trade.png');
+                padding: 12px 15px 0 20px;
+
+                grid-column: 3 e('/') 4;
+                grid-row: 1 e('/') 2;
+
+                .words {
+                    margin-top: 6px;
+                }
+            }
+
+            &.buy-ftoken {
+                width: 352px;
+                height: 160px;
+                margin-bottom: 12px;
+                #image.background('~@/assets/images/home-intro-buy-ftoken.png');
+                padding: 12px 15px 0 20px;
+
+                grid-column: 3 e('/') 4;
+                grid-row: 3 e('/') 4;
+
+                .words {
+                    margin-top: 6px;
+                }
+            }
+
+            > h3 {
+                font-style: normal;
+                font-weight: bold;
+                font-size: 24px;
+                line-height: 36px;
+                color: #1c1c1d;
+                margin: 0;
+            }
+
+            .summary {
+                font-style: normal;
+                font-weight: bold;
+                font-size: 16px;
+                line-height: 24px;
+                text-align: justify;
+                color: #1c1c1d;
+                margin-top: 35px;
+            }
+
+            .words {
+                font-style: normal;
+                font-weight: normal;
+                font-size: 15px;
+                line-height: 24px;
+                text-align: justify;
+                letter-spacing: 0.02em;
+                color: rgba(28, 28, 29, 0.6);
+
+                > a {
+                    color: #fcd144;
+                    text-decoration-line: underline;
+                }
+            }
+        }
+    }
+
+    .pledge-ratio-box {
         display: flex;
         flex-direction: column;
-        background: url('../../assets/images/home_sheepskin_book.png') no-repeat
-            center;
-        background-size: contain;
+        align-items: center;
+        #image.background('~@/assets/images/home-middata-bg-corner.png');
+        width: 282px;
+        height: 184px;
 
-        &:nth-child(n + 2) {
-            margin-left: 85px;
+        position: absolute;
+        top: @dataTop;
+        left: 51%;
+
+        padding: 14px 24px;
+        box-sizing: border-box;
+
+        .common-select {
+            align-self: flex-start;
         }
 
-        > h3 {
+        .ratio {
+            margin-top: 20px;
+            display: inline-block;
+            font-style: normal;
+            font-weight: bold;
+            font-size: 36px;
+            line-height: 54px;
+            text-align: center;
+            color: #ff6a00;
+            text-shadow: 0px 2px 4px rgba(167, 98, 255, 0.8);
+        }
+
+        .desc {
+            margin-top: 14px;
+            display: inline-block;
+            font-style: normal;
+            font-weight: normal;
+            font-size: 18px;
+            line-height: 27px;
+            display: flex;
+            align-items: center;
+            text-align: center;
+            color: #6f4123;
+        }
+    }
+
+    .amount-box {
+        width: 282px;
+        height: 184px;
+        position: absolute;
+        top: @dataTop;
+        left: 80%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding-top: 66px;
+        box-sizing: border-box;
+
+        .amount {
             font-style: normal;
             font-weight: bold;
             font-size: 24px;
             line-height: 36px;
             text-align: center;
-            color: #1c1c1d;
+            color: #e1ab3b;
         }
 
-        .key {
-            font-style: normal;
-            font-weight: bold;
-            font-size: 18px;
-            line-height: 27px;
-            text-align: justify;
-            color: #1c1c1d;
-            padding-top: 18px;
-            padding-bottom: 4px;
-        }
-
-        .words {
+        .desc {
             font-style: normal;
             font-weight: normal;
-            font-size: 15px;
-            line-height: 24px;
-            text-align: justify;
-            letter-spacing: 0.02em;
-            color: rgba(28, 28, 29, 0.6);
-            max-height: 128px;
-            overflow-y: auto;
-            > a.danger {
-                color: #a44116;
-            }
+            font-size: 18px;
+            line-height: 27px;
+            display: flex;
+            align-items: center;
+            text-align: center;
+            color: #a762ff;
         }
     }
 }

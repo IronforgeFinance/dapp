@@ -1,5 +1,6 @@
 import React from 'react';
 import './index.less';
+import { Select } from 'antd';
 import useEagerConnect from '@/hooks/useEagerConnect';
 
 export default () => {
@@ -29,23 +30,48 @@ export default () => {
                     type="video/webm"
                 />
             </video>
-            <div className="sheepskin-book">
-                <h3>Mint</h3>
-                <p className="key">Mint fUSD by staking a Token</p>
-                <p className="words">
-                    Mint fUSD by staking your Token. Token stakers earn weekly
-                    staking rewards in exchange for managing their
-                    Collateralization Ratio and debt.{' '}
-                    <a className="danger">Learn more</a>
-                </p>
+            <div className="sheepskin-box">
+                <div className="sheepskin-book mint">
+                    <h3>Mint</h3>
+                    <p className="summary">Mint fUSD by staking a Token</p>
+                    <p className="words">
+                        Mint fUSD by staking your Token. Token stakers earn
+                        weekly staking rewards in exchange for managing their
+                        Collateralization Ratio and debt.{' '}
+                        <a href="/mint">Learn more</a>
+                    </p>
+                </div>
+                <div className="sheepskin-book trade">
+                    <h3>Trade</h3>
+                    <p className="words">
+                        Earn rewards staking fToken. You will need a Binance
+                        Chain wallet for the transaction.{' '}
+                        <a href="/trade">Learn more</a>
+                    </p>
+                </div>
+                <div className="sheepskin-book buy-ftoken">
+                    <h3>Buy ftoken</h3>
+                    <p className="words">
+                        Earn rewards staking fToken. You will need a Binance
+                        Chain wallet for the transaction.{' '}
+                        <a href="/farm">Learn more</a>
+                    </p>
+                </div>
             </div>
-            <div className="sheepskin-book">
-                <h3>Trade</h3>
-                <p className="key">Borrow other fAsset by using your fAsset</p>
-                <p className="words">
-                    Borrow other fAsset using your fAsset{' '}
-                    <a className="danger">Learn more</a>
-                </p>
+            <div className="pledge-ratio-box">
+                <Select className="common-select" placeholder={'Select token'}>
+                    {['USDC'].map((item) => (
+                        <Select.Option value={item} key={item}>
+                            {item}
+                        </Select.Option>
+                    ))}
+                </Select>
+                <span className="ratio">400%</span>
+                <p className="desc">My Current Pledge Ratio</p>
+            </div>
+            <div className="amount-box">
+                <span className="amount">130030 fUSD</span>
+                <span className="desc">Active Debt</span>
             </div>
         </div>
     );
