@@ -2,7 +2,8 @@ import React from 'react';
 import './index.less';
 import { Select } from 'antd';
 import useEagerConnect from '@/hooks/useEagerConnect';
-
+import Blacksmith from '@/assets/images/blacksmith.png';
+import Merchant from '@/assets/images/merchant.png';
 export default () => {
     useEagerConnect();
     const isDev = () => {
@@ -10,17 +11,29 @@ export default () => {
     };
     return (
         <div className="home-container">
-            <video loop autoPlay muted className="video-bg-left">
+            <video
+                loop
+                autoPlay
+                muted
+                className="video-bg-left"
+                poster={Blacksmith}
+            >
                 <source
                     src={
                         isDev()
-                            ? 'http://localhost:5000/files/blacksmith.webm'
+                            ? 'http://localhost:5000/files/blacksmith2.webm'
                             : './static/blacksmith.webm'
                     }
                     type="video/webm"
                 />
             </video>
-            <video loop autoPlay muted className="video-bg-right">
+            <video
+                loop
+                autoPlay
+                muted
+                className="video-bg-right"
+                poster={Merchant}
+            >
                 <source
                     src={
                         isDev()
