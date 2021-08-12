@@ -4,8 +4,31 @@ import useEagerConnect from '@/hooks/useEagerConnect';
 
 export default () => {
     useEagerConnect();
+    const isDev = () => {
+        return process.env.NODE_ENV === 'development';
+    };
     return (
         <div className="home-container">
+            <video loop autoPlay muted className="video-bg-left">
+                <source
+                    src={
+                        isDev()
+                            ? 'http://localhost:5000/files/blacksmith.webm'
+                            : './static/blacksmith.webm'
+                    }
+                    type="video/webm"
+                />
+            </video>
+            <video loop autoPlay muted className="video-bg-right">
+                <source
+                    src={
+                        isDev()
+                            ? 'http://localhost:5000/files/merchant.webm'
+                            : './static/merchant.webm'
+                    }
+                    type="video/webm"
+                />
+            </video>
             <div className="sheepskin-book">
                 <h3>Mint</h3>
                 <p className="key">Mint fUSD by staking a Token</p>
