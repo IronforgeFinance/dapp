@@ -145,13 +145,13 @@ const useDataView = (currency: string) => {
             fetchDebtData();
             fetchLockedData();
         }
-    }, [account, currency, fastRefresh, provider]);
+    }, [account, currency, provider]);
 
     useEffect(() => {
         if (currency) {
             fetchCurrencyRatio();
         }
-    }, [currency, account, fastRefresh, provider, initialRatio]);
+    }, [currency, account, provider, initialRatio]);
     return { stakedData, fetchStakedData, currencyRatio };
 };
 

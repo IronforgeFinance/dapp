@@ -70,7 +70,7 @@ export default (props: ISelectTokensProps) => {
                                     </span>
                                 )}
                             </span>
-                            <span className="price">{token.ratio || ''}</span>
+                            {/* <span className="price">{token.ratio || ''}</span> */}
                         </li>
                     ))}
                 </ul>
