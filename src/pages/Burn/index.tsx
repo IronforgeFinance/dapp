@@ -91,7 +91,7 @@ export default () => {
                                     onClick={() => setCurrentDebt(0)}
                                 />
                                 <DebtItem
-                                    mintedToken="fUSDC"
+                                    mintedToken="FUSD"
                                     mintedTokenName="USD"
                                 />
                             </div>

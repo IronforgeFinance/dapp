@@ -50,8 +50,7 @@ export default function Layout({
                     'container-video': true,
                     'container-mint': location.pathname === '/mint',
                     'container-burn': location.pathname === '/burn',
-                    'container-trade': location.pathname === '/trade',
-                    'container-farm': location.pathname === '/farm',
+                    'container-trade': ['/trade', '/farm','/wallet'].includes(location.pathname),
                     'container-home': location.pathname === '/',
                 })}
             >

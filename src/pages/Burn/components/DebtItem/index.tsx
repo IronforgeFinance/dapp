@@ -29,8 +29,9 @@ export interface IDebtItemInfo {
     locked: number;
 }
 
-export default (IDebtItemProps) => {
-    const { mintedToken, mintedTokenName } = IDebtItemProps;
+export default (props: IDebtItemProps) => {
+    const { mintedToken, mintedTokenName } = props;
+    const [mintedTokenNum, setMintedTokenNum] = useState(0);
     // const [debtInUSD, setDebtInUSD] = useState(0.0)
     const [debtItemInfos, setDebtItemInfos] = useState<IDebtItemInfo[]>([]);
     const [showInfos, setShowInfos] = useState(false);
@@ -56,15 +57,18 @@ export default (IDebtItemProps) => {
         setLockedData: model.setLockedData,
     }));
 
-    const mintedTokenNum = useMemo(() => {
-        if (Number(selectedDebtInUSD) > 0) {
-            const price = TokenPrices[mintedToken];
-            const num = price
-                ? toFixedWithoutRound(selectedDebtInUSD / price, 2)
-                : 0;
-            return num;
-        }
-        return 0.0;
+    useEffect(() => {
+        (async () => {
+            if (Number(selectedDebtInUSD) > 0) {
+                const price = await getTokenPrice(mintedToken);
+                const num = price
+                    ? parseFloat(
+                          toFixedWithoutRound(selectedDebtInUSD / price, 2),
+                      )
+                    : 0;
+                setMintedTokenNum(num);
+            }
+        })();
     }, [selectedDebtInUSD]);
 
     const { balance: fusdBalance } = useBep20Balance('FUSD');

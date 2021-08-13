@@ -4,6 +4,7 @@ import { Select } from 'antd';
 import useEagerConnect from '@/hooks/useEagerConnect';
 import Blacksmith from '@/assets/images/blacksmith.png';
 import Merchant from '@/assets/images/merchant.png';
+import { Link } from 'umi';
 export default () => {
     useEagerConnect();
     const isDev = () => {
@@ -51,7 +52,7 @@ export default () => {
                         Mint fUSD by staking your Token. Token stakers earn
                         weekly staking rewards in exchange for managing their
                         Collateralization Ratio and debt.{' '}
-                        <a href="/mint">Learn more</a>
+                        <Link to="/mint">Learn more</Link>
                     </p>
                 </div>
                 <div className="sheepskin-book trade">
@@ -59,7 +60,7 @@ export default () => {
                     <p className="words">
                         Earn rewards staking fToken. You will need a Binance
                         Chain wallet for the transaction.{' '}
-                        <a href="/trade">Learn more</a>
+                        <Link to="/trade">Learn more</Link>
                     </p>
                 </div>
                 <div className="sheepskin-book buy-ftoken">
@@ -67,7 +68,7 @@ export default () => {
                     <p className="words">
                         Earn rewards staking fToken. You will need a Binance
                         Chain wallet for the transaction.{' '}
-                        <a href="/farm">Learn more</a>
+                        <Link to="/farm">Learn more</Link>
                     </p>
                 </div>
             </div>
