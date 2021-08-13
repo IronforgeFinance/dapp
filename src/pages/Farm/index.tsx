@@ -68,8 +68,8 @@ export default () => {
                 </button>
             </div>
             <div className="farm-pool">
-                {poolItems.map((item) => (
-                    <PoolItem {...item} />
+                {poolItems.map((item, index) => (
+                    <PoolItem key={index} {...item} />
                 ))}
             </div>
         </div>

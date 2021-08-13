@@ -428,3 +428,20 @@ dl {
         background-position: right center;
     }
 }
+
+.common-select.ant-select {
+    *,
+    .ant-select-focused,
+    .ant-select-selector {
+        background-color: transparent;
+        color: #e1ab3b;
+        border: none;
+        border-color: transparent;
+
+        &:active,
+        &:focus {
+            border-color: transparent;
+            border: none;
+        }
+    }
+}

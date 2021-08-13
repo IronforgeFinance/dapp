@@ -4,6 +4,7 @@ import './index.less';
 import WalletStatus from '../WalletStatus';
 import Logo from '@/assets/images/home_logo.png';
 import useEagerConnect from '@/hooks/useEagerConnect';
+import LangSwitcher from '../LangSwitcher';
 export default () => {
     const intl = useIntl();
     useEagerConnect();
@@ -44,6 +45,9 @@ export default () => {
             </ul>
             <div className="wallet-status">
                 <WalletStatus />
+            </div>
+            <div className="lang-box">
+                <LangSwitcher />
             </div>
         </div>
     );
