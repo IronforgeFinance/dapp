@@ -42,6 +42,7 @@ import SelectTokens from '@/components/SelectTokens';
 import CommentaryCard from '@/components/CommentaryCard';
 import { useCallback } from 'react';
 import { isDeliveryAsset } from '@/utils';
+import Popover from '@/components/Popover';
 export default () => {
     const intl = useIntl();
     const { account } = useWeb3React();
@@ -566,7 +567,9 @@ export default () => {
                     <div className="input-item">
                         <p className="label">
                             {intl.formatMessage({ id: 'mint.locked' })}
-                            <i className="icon-question size-16"></i>
+                            <Popover content="这是一段文字这是一段文字这是一段文字">
+                                <i className="icon-question size-16"></i>
+                            </Popover>
                         </p>
                         <div className="input-item-content">
                             <div className="content-label">
