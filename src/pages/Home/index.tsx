@@ -21,7 +21,7 @@ export default () => {
                 <source
                     src={
                         isDev()
-                            ? 'http://localhost:5000/files/blacksmith2.webm'
+                            ? 'http://localhost:5000/files/blacksmith.webm'
                             : './static/blacksmith.webm'
                     }
                     type="video/webm"
