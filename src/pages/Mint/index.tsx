@@ -84,11 +84,13 @@ export default () => {
         collateralSytemContract,
     );
 
-    const { isApproved: isIFTApproved, setLastUpdated: setLastIFTApproved } =
-        useCheckERC20ApprovalStatus(
-            Tokens.IFT.address[process.env.APP_CHAIN_ID],
-            collateralSytemContract,
-        );
+    const {
+        isApproved: isIFTApproved,
+        setLastUpdated: setLastIFTApproved,
+    } = useCheckERC20ApprovalStatus(
+        Tokens.IFT.address[process.env.APP_CHAIN_ID],
+        collateralSytemContract,
+    );
 
     const prices = usePrices();
 
@@ -138,8 +140,10 @@ export default () => {
     const { balance, refresh: refreshIFTBalance } = useBep20Balance('IFT');
     const fTokenBalance = balance as number;
 
-    const { balance: collateralBalance, refresh: refreshCollateralBalance } =
-        useBep20Balance(collateralToken);
+    const {
+        balance: collateralBalance,
+        refresh: refreshCollateralBalance,
+    } = useBep20Balance(collateralToken);
 
     const refreshBalance = () => {
         refreshIFTBalance();
@@ -530,12 +534,12 @@ export default () => {
                     <img src={IconAdd} alt="" className="icon-add" />
 
                     <div className="input-item">
-                        <p className="label">
+                        <div className="label">
                             {intl.formatMessage({ id: 'mint.locked' })}
                             <Popover content="这是一段文字这是一段文字这是一段文字">
                                 <i className="icon-question size-16"></i>
                             </Popover>
-                        </p>
+                        </div>
                         <div className="input-item-content">
                             <div className="content-label">
                                 <p className="left">FToken</p>
@@ -602,8 +606,9 @@ export default () => {
                                     <i
                                         className={classNames({
                                             'icon-token': true,
-                                            [String(toToken).toLowerCase()]:
-                                                true,
+                                            [String(
+                                                toToken,
+                                            ).toLowerCase()]: true,
                                             'size-24': true,
                                         })}
                                     />
@@ -628,7 +633,8 @@ export default () => {
                                                 {toToken || (
                                                     <span>
                                                         {intl.formatMessage({
-                                                            id: 'mint.selectCasting',
+                                                            id:
+                                                                'mint.selectCasting',
                                                         })}
                                                     </span>
                                                 )}
