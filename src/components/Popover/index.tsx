@@ -22,11 +22,15 @@ const Popover = (props: IPopoverProps) => {
     // TODO 封装trigger模式
     const [visable, setVisable] = useState(false);
     let triggerCall: React.MouseEventHandler<HTMLButtonElement>;
-    let blurCall: React.FocusEventHandler<HTMLButtonElement>;
+    let hideCall: React.FocusEventHandler<HTMLButtonElement> &
+        React.MouseEventHandler<HTMLButtonElement>;
+    let showCall: React.MouseEventHandler<HTMLButtonElement> &
+        React.FocusEventHandler<HTMLButtonElement>;
     switch (trigger) {
         case 'click': {
             triggerCall = useCallback(() => setVisable(!visable), [visable]);
-            blurCall = useCallback(() => setVisable(false), []);
+            hideCall = useCallback(() => setVisable(false), []);
+            showCall = useCallback(() => setVisable(true), []);
             break;
         }
         default:
@@ -53,7 +57,9 @@ const Popover = (props: IPopoverProps) => {
             <button
                 className="display"
                 onMouseDown={triggerCall}
-                onBlur={blurCall}
+                onBlur={hideCall}
+                onMouseOver={showCall}
+                onMouseLeave={hideCall}
             >
                 {children}
             </button>
