@@ -36,6 +36,7 @@ export default (props: IProps) => {
     const [submitting, setSubmitting] = useState(false);
     const [burnInitialAvailable, setBurnInitialAvailable] = useState(false);
     const [burnMaxAvailable, setBurnMaxAvailable] = useState(false);
+    const [showSelectToToken, setShowSelectToToken] = useState(false);
 
     const { currencyRatio } = useDataView(toToken);
 
@@ -324,31 +325,6 @@ export default (props: IProps) => {
         }
     };
 
-    const SelectToTokensView = () => {
-        const [show, setShow] = useState(false);
-        const _closeHandler = useCallback(() => setShow(false), []);
-        const _showHandler = useCallback(() => setShow(true), []);
-
-        const DefaultView = () => {
-            return <span>Select token</span>;
-        };
-
-        return (
-            <SelectTokens
-                visable={show}
-                value={toToken}
-                tokenList={COLLATERAL_TOKENS}
-                onSelect={toTokenHandler}
-                onClose={_closeHandler}
-            >
-                <button className="btn-mint-form" onClick={_showHandler}>
-                    <span>{toToken || <DefaultView />}</span>
-                    <i className="icon-down size-20"></i>
-                </button>
-            </SelectTokens>
-        );
-    };
-
     return (
         <div className="common-box form-view">
             <ScaleGroup value={scale} updateScale={(scale) => setScale(scale)}>
@@ -425,36 +401,31 @@ export default (props: IProps) => {
                             max={toTokenDebt}
                         />
                         <div className="token">
-                            <SelectToTokensView />
+                            <SelectTokens
+                                visable={showSelectToToken}
+                                value={toToken}
+                                tokenList={COLLATERAL_TOKENS}
+                                onSelect={toTokenHandler}
+                                onClose={() => {
+                                    setShowSelectToToken(false);
+                                }}
+                            >
+                                <button
+                                    className="btn-mint-form"
+                                    onClick={() => {
+                                        setShowSelectToToken(true);
+                                    }}
+                                >
+                                    <span>
+                                        {toToken || <span>Select token</span>}
+                                    </span>
+                                    <i className="icon-down size-20"></i>
+                                </button>
+                            </SelectTokens>
                         </div>
                     </div>
                 </div>
             </div>
-            {/* <div className="burn-type">
-                <p className="tips">You can also choose</p>
-                <div className="btns">
-                    <Radio.Group
-                        value={burnType}
-                        onChange={(e) => setBurnType(e.target.value)}
-                        buttonStyle="solid"
-                    >
-                        <Radio.Button
-                            onClick={burnInitialHandler}
-                            value="initial"
-                            disabled={!burnInitialAvailable}
-                        >
-                            Burn to initial
-                        </Radio.Button>
-                        <Radio.Button
-                            value="max"
-                            onClick={burnMaxHandler}
-                            disabled={!burnMaxAvailable}
-                        >
-                            Burn Max
-                        </Radio.Button>
-                    </Radio.Group>
-                </div>
-            </div> */}
             <div className="btn-burn">
                 <Button
                     loading={submitting}

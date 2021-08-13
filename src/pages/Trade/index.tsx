@@ -38,6 +38,8 @@ export default () => {
     const [submitting, setSubmitting] = useState(false);
     const [feeRate, setFeeRate] = useState(0);
     const [estimateAmount, setEstimateAmount] = useState(0);
+    const [showSelectFromToken, setShowSelectFromToken] = useState(false);
+    const [showSelectToToken, setShowSelectToToken] = useState(false);
 
     const prices = usePrices();
 
@@ -215,56 +217,6 @@ export default () => {
         return fromAmount > 0 || toAmount > 0;
     }, [fromAmount, toAmount]);
 
-    const SelectFromTokensView = () => {
-        const [show, setShow] = useState(false);
-        const _closeHandler = useCallback(() => setShow(false), []);
-        const _showHandler = useCallback(() => setShow(true), []);
-
-        const DefaultView = () => {
-            return <span>Select token</span>;
-        };
-
-        return (
-            <SelectTokens
-                visable={show}
-                value={fromToken}
-                tokenList={TOKEN_OPTIONS}
-                onSelect={(v) => setFromToken(v)}
-                onClose={_closeHandler}
-            >
-                <button className="btn-mint-form" onClick={_showHandler}>
-                    <span>{fromToken || <DefaultView />}</span>
-                    <i className="icon-down size-20"></i>
-                </button>
-            </SelectTokens>
-        );
-    };
-
-    const SelectToTokensView = () => {
-        const [show, setShow] = useState(false);
-        const _closeHandler = useCallback(() => setShow(false), []);
-        const _showHandler = useCallback(() => setShow(true), []);
-
-        const DefaultView = () => {
-            return <span>Select token</span>;
-        };
-
-        return (
-            <SelectTokens
-                visable={show}
-                value={toToken}
-                tokenList={TOKEN_OPTIONS}
-                onSelect={(v) => setToToken(v)}
-                onClose={_closeHandler}
-            >
-                <button className="btn-mint-form" onClick={_showHandler}>
-                    <span>{toToken || <DefaultView />}</span>
-                    <i className="icon-down size-20"></i>
-                </button>
-            </SelectTokens>
-        );
-    };
-
     return (
         <div className="trade-container">
             <div className="shop common-box">
@@ -298,7 +250,29 @@ export default () => {
                                     min={0}
                                 />
                                 <div className="token">
-                                    <SelectFromTokensView />
+                                    <SelectTokens
+                                        visable={showSelectFromToken}
+                                        value={fromToken}
+                                        tokenList={TOKEN_OPTIONS}
+                                        onSelect={(v) => setFromToken(v)}
+                                        onClose={() => {
+                                            setShowSelectFromToken(false);
+                                        }}
+                                    >
+                                        <button
+                                            className="btn-mint-form"
+                                            onClick={() => {
+                                                setShowSelectFromToken(true);
+                                            }}
+                                        >
+                                            <span>
+                                                {fromToken || (
+                                                    <span>Select token</span>
+                                                )}
+                                            </span>
+                                            <i className="icon-down size-20"></i>
+                                        </button>
+                                    </SelectTokens>
                                 </div>
                             </div>
                         </div>
@@ -325,7 +299,29 @@ export default () => {
                                     min={0}
                                 />
                                 <div className="token">
-                                    <SelectToTokensView />
+                                    <SelectTokens
+                                        visable={showSelectToToken}
+                                        value={toToken}
+                                        tokenList={TOKEN_OPTIONS}
+                                        onSelect={(v) => setToToken(v)}
+                                        onClose={() => {
+                                            setShowSelectToToken(false);
+                                        }}
+                                    >
+                                        <button
+                                            className="btn-mint-form"
+                                            onClick={() => {
+                                                setShowSelectToToken(true);
+                                            }}
+                                        >
+                                            <span>
+                                                {toToken || (
+                                                    <span>Select token</span>
+                                                )}
+                                            </span>
+                                            <i className="icon-down size-20"></i>
+                                        </button>
+                                    </SelectTokens>
                                 </div>
                             </div>
                         </div>

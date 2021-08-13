@@ -1,8 +1,10 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import Board from '@/components/Board';
 import classNames from 'classnames';
 import './index.less';
 import { getRemainDaysOfQuarterAsset, isDeliveryAsset } from '@/utils';
+import { usePrices } from '@/hooks/useContract';
+import { ethers } from 'ethers';
 interface TokenOption {
     name: string;
     ratio?: Number;
@@ -27,6 +29,40 @@ export default (props: ISelectTokensProps) => {
         onSelect: _selectHandler,
     } = props;
 
+    const [tokens, setTokens] = useState([]);
+
+    const prices = usePrices();
+
+    const getTokenPrice = async (token: string) => {
+        if (!token) return 0;
+        const res = await prices.getPrice(
+            ethers.utils.formatBytes32String(token),
+        );
+        return parseFloat(ethers.utils.formatEther(res));
+    };
+
+    useEffect(() => {
+        (async () => {
+            const tokenPrices = await Promise.all(
+                tokenList.map((token) => getTokenPrice(token.name)),
+            );
+            const tokens = tokenList.map((item, index) => {
+                const _token: any = {
+                    name: item.name,
+                    price: tokenPrices[index],
+                };
+                if (isDeliveryAsset(item.name)) {
+                    _token.isDeliveryAsset = true;
+                    _token.remainDays = getRemainDaysOfQuarterAsset(
+                        item.name.split('-')[1],
+                    );
+                }
+                return _token;
+            });
+            setTokens(tokens);
+        })();
+    }, [tokenList]);
+
     const _close = useCallback(() => _closeHandler(), []);
     const _select = useCallback((token) => {
         _selectHandler(token);
@@ -43,7 +79,7 @@ export default (props: ISelectTokensProps) => {
                         type="text"
                         placeholder="Search name or paste address"
                     />
-                    {tokenList.map((token) => (
+                    {tokens.map((token) => (
                         <li
                             key={token.name}
                             className={classNames({
@@ -61,16 +97,14 @@ export default (props: ISelectTokensProps) => {
                             />
                             <span className="name">
                                 {token.name.toUpperCase()}
-                                {isDeliveryAsset(token.name) && (
+                                {token.isDeliveryAsset && (
                                     <span className="remain-days">
-                                        {getRemainDaysOfQuarterAsset(
-                                            token.name.split('-')[1],
-                                        )}
+                                        {token.remainDays}
                                         days
                                     </span>
                                 )}
                             </span>
-                            {/* <span className="price">{token.ratio || ''}</span> */}
+                            <span className="price">{token.price}</span>
                         </li>
                     ))}
                 </ul>
