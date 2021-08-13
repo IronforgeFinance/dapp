@@ -24,10 +24,11 @@ interface BigBoardProps {
     tabKey: string;
     title: string;
     onChange: Function;
+    children: React.ReactNode;
 }
 
 export default (props: BigBoardProps) => {
-    const { tabItems, tabKey, onChange, title } = props;
+    const { tabItems, tabKey, onChange, title, children } = props;
 
     return (
         <div className="big-board">
@@ -54,6 +55,7 @@ export default (props: BigBoardProps) => {
                 <h3 className="common-title silver big-board-title">
                     <span>{title}</span>
                 </h3>
+                {children}
             </div>
         </div>
     );

@@ -7,6 +7,7 @@ import CommentaryCard from '@/components/CommentaryCard';
 import DebtItemRatio from '@/components/DebtItemRatio';
 import DebtItem from '@/components/DebtItem';
 import { success, fail } from '@/components/Notification';
+import Popover from '@/components/Popover';
 
 export default () => {
     // * 选择token演示
@@ -214,6 +215,12 @@ export default () => {
                     >
                         失败
                     </button>
+                </li>
+                <li>
+                    <h3>6. Popover</h3>
+                    <Popover content="Fuck Qsk!!!!">
+                        <button>Open Popover</button>
+                    </Popover>
                 </li>
             </ul>
         </div>
