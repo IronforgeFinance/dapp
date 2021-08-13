@@ -34,7 +34,7 @@ import {
 import './index.less';
 import useDataView from '@/hooks/useDataView';
 import { useTokenPrice } from '@/hooks/useTokenPrice';
-import { Group as ScaleGroup, Button as ScaleOption } from '@/components/Scale';
+import Scale from '@/components/Scale';
 // import SettingView from './SettingView';
 import classNames from 'classnames';
 import useDexPrice from '@/hooks/useDexPrice';
@@ -585,7 +585,7 @@ export default () => {
                                     placeholder="0.00"
                                     className="custom-input"
                                 />
-                                <ScaleGroup
+                                <Scale.Group
                                     value={lockedScale}
                                     updateScale={scaleHandler}
                                 >
@@ -595,14 +595,14 @@ export default () => {
                                         { label: '1/5', value: 0.2 },
                                         { label: '3/10', value: 0.3 },
                                     ].map((option) => (
-                                        <ScaleOption
+                                        <Scale.Option
                                             key={option.label}
                                             value={option.value}
                                         >
                                             <span>{option.label}</span>
-                                        </ScaleOption>
+                                        </Scale.Option>
                                     ))}
-                                </ScaleGroup>
+                                </Scale.Group>
                             </div>
                         </div>
                     </div>
