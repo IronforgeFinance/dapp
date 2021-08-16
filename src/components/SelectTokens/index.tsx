@@ -50,16 +50,18 @@ export default (props: ISelectTokensProps) => {
      */
     React.useEffect(() => {
         const wrapperBox: HTMLElement = document.querySelector('.common-box');
-        if (visable) {
-            wrapperBox.style.filter = 'none';
-        } else {
-            // * fade out效果占用了一些时间，这里延迟处理
-            setTimeout(
-                () =>
-                    (wrapperBox.style.filter =
-                        'drop-shadow(12px 12px 70px #E78231)'),
-                200,
-            );
+        if (wrapperBox?.style) {
+            if (visable) {
+                wrapperBox.style.filter = 'none';
+            } else {
+                // * fade out效果占用了一些时间，这里延迟处理
+                setTimeout(
+                    () =>
+                        (wrapperBox.style.filter =
+                            'drop-shadow(12px 12px 70px #E78231)'),
+                    200,
+                );
+            }
         }
     }, [visable]);
 

@@ -2,12 +2,12 @@ import React, { useState, useCallback } from 'react';
 import './index.less';
 import { notification } from 'antd';
 import SelectTokens from '@/components/SelectTokens';
-import ConfirmTransaction from '@/components/ConfirmTransaction';
 import CommentaryCard from '@/components/CommentaryCard';
 import DebtItemRatio from '@/components/DebtItemRatio';
 import DebtItem from '@/components/DebtItem';
 import { success, fail } from '@/components/Notification';
 import Popover from '@/components/Popover';
+import TransitionConfirm from '@/components/TransitionConfirm';
 
 export default () => {
     // * 选择token演示
@@ -26,69 +26,6 @@ export default () => {
                     Click Select Tokens
                 </button>
             </SelectTokens>
-        );
-    };
-
-    // * 交易确认演示
-    const ConfirmTransactionDemo = () => {
-        const [show, setShow] = useState(false);
-        const onCloseMemo = useCallback(() => setShow(false), []);
-        const onShowMemo = useCallback(() => setShow(true), []);
-
-        const mockData = [
-            {
-                prop: 'Burned',
-                value: 100,
-                token: 'fUSD',
-                extra: '$6,162.8',
-            },
-            {
-                prop: 'Burned',
-                value: 100,
-                token: 'fUSD',
-            },
-            {
-                prop: 'Burned',
-                value: 100,
-                token: 'fUSD',
-            },
-            {
-                prop: 'Burned',
-                value: 100,
-                token: 'fUSD',
-            },
-            {
-                prop: 'Burned',
-                value: 100,
-                token: 'fUSD',
-            },
-            {
-                prop: 'Burned',
-                value: 100,
-                token: 'fUSD',
-            },
-            {
-                prop: 'Burned',
-                value: 100,
-                token: 'fUSD',
-            },
-            {
-                prop: 'Burned',
-                value: 100,
-                token: 'fUSD',
-            },
-        ];
-
-        return (
-            <ConfirmTransaction
-                visable={show}
-                onClose={onCloseMemo}
-                dataSource={mockData}
-            >
-                <button className="confirm-transaction" onClick={onShowMemo}>
-                    Click Confirm Transaction
-                </button>
-            </ConfirmTransaction>
         );
     };
 
@@ -130,6 +67,49 @@ export default () => {
         return <DebtItemRatio debtRatios={mockDebtRatios} />;
     };
 
+    const TransitionConfirmDemo = () => {
+        const [visable, setVisable] = useState(false);
+
+        return (
+            <div className="transition-confirm-demo">
+                <TransitionConfirm
+                    visable={visable}
+                    onClose={() => setVisable(false)}
+                    dataSource={[
+                        {
+                            label: 'Collateral',
+                            value: {
+                                token: 'BNB',
+                                amount: 20,
+                                mappingPrice: 6162.8,
+                            },
+                        },
+                        {
+                            label: 'Minted',
+                            value: {
+                                token: 'fETH',
+                                amount: 5,
+                                mappingPrice: 6162.8,
+                            },
+                        },
+                        {
+                            label: 'Locked',
+                            value: {
+                                token: 'ftoken',
+                                amount: 0,
+                                mappingPrice: 6162.8,
+                            },
+                        },
+                        { label: 'Type', value: 'Delivery' },
+                    ]}
+                />
+                <button onClick={() => setVisable(true)}>
+                    Test TransitionConfirm
+                </button>
+            </div>
+        );
+    };
+
     // * 每一项债务数据
     const DebtItemDemo = () => {
         const mockDebts = {
@@ -167,14 +147,10 @@ export default () => {
     return (
         <div className="demo-container">
             <ul>
-                <li>
+                {/* <li>
                     <h3>1. select token list</h3>
                     <SelectTokensDemo />
-                </li>
-                <li>
-                    <h3>2. confirm transaction</h3>
-                    <ConfirmTransactionDemo />
-                </li>
+                </li> */}
                 <li>
                     <h3>3. 解说牌</h3>
                     <CommentaryCard
@@ -221,6 +197,10 @@ export default () => {
                     <Popover content="Fuck Qsk!!!!">
                         <button>Open Popover</button>
                     </Popover>
+                </li>
+                <li>
+                    <h3>7. Transition Confirm</h3>
+                    <TransitionConfirmDemo />
                 </li>
             </ul>
         </div>
