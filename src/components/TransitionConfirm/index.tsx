@@ -1,14 +1,13 @@
 import React from 'react';
 import './index.less';
 import Board from '@/components/Board';
-
-type CurrencySymbol = '$' | '¥';
+import { CurrencySymbol } from '@/config/constants/types';
 
 interface TokenMap {
     token: string;
     amount: string | number;
     mappingPrice?: string | number;
-    priceSymbol?: CurrencySymbol;
+    symbol?: CurrencySymbol;
 }
 
 interface TransitionData {
@@ -45,7 +44,7 @@ function TransitionConfirm(props: TransitionConfirmProps) {
                                             {prop.value.token}
                                         </span>
                                         <span className="dollar">
-                                            {prop.value.priceSymbol ||
+                                            {prop.value.symbol ||
                                                 DEFAULT_CURRENCY_SYMBOL}
                                             {prop.value.mappingPrice}
                                         </span>

@@ -10,3 +10,5 @@ export enum ProgressBarType {
     active_debt = 'active_debt',
     f_ratio = 'f_ratio',
 }
+
+export type CurrencySymbol = '$' | '¥';

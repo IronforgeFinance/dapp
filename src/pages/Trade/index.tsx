@@ -15,6 +15,7 @@ import './index.less';
 import EstimateData from './components/EstimateData';
 import Contracts from '@/config/constants/contracts';
 import SelectTokens from '@/components/SelectTokens';
+import MarketDetail from './MarketDetail';
 import { debounce } from 'lodash';
 import classNames from 'classnames';
 
@@ -31,7 +32,6 @@ export default () => {
     const { account } = useWeb3React();
     const [fromToken, setFromToken] = useState(TOKEN_OPTIONS[0].name);
     const [fromAmount, setFromAmount] = useState(0.0);
-    const [toggle, setToggle] = useState(false);
     const [toToken, setToToken] = useState(TOKEN_OPTIONS[1].name);
     const [toAmount, setToAmount] = useState(0.0);
     const [fromBalance, setFromBalance] = useState(0.0);
@@ -217,6 +217,29 @@ export default () => {
         return fromAmount > 0 || toAmount > 0;
     }, [fromAmount, toAmount]);
 
+    const mockMarketDetailData = {
+        token0: 'fBTC',
+        token1: 'fETH',
+        dataSource: [
+            { label: '24H volume', value: { amount: 6668.15 } },
+            { label: 'Market Cap', value: { amount: 6668.15 } },
+            { label: '24H High', value: { amount: 558.15 } },
+            { label: '24H Low', value: { amount: 6668.15 } },
+            {
+                label: 'Price Feed',
+                value: {
+                    address: '0xDD21D68304503Efe46be7eCe376afaC77C8067c8',
+                },
+            },
+            {
+                label: 'fBTC Contract',
+                value: {
+                    address: '0xDD21D68304503Efe46be7eCe376afaC77C8067c8',
+                },
+            },
+        ],
+    };
+
     return (
         <div className="trade-container">
             <div className="shop common-box">
@@ -336,56 +359,7 @@ export default () => {
                     <span className="fee-cost">Fee cost：0</span>
                 </div>
             </div>
-            <div
-                className={classNames({
-                    'market-details': true,
-                    hide: toggle,
-                    show: !toggle,
-                })}
-            >
-                <button
-                    className="btn-skip"
-                    onClick={() => setToggle(!toggle)}
-                />
-                <p className="details">
-                    Market Details:
-                    <WhiteSpace />
-                    <span className="token-pair">fBTC/fETH</span>
-                </p>
-                <span className="token">fBTC</span>
-                <ul>
-                    <li>
-                        <span className="label">24H volume </span>
-                        <span className="value">2222</span>
-                    </li>
-                    <li>
-                        <span className="label">Market Cap </span>
-                        <span className="value">2222</span>
-                    </li>
-                    <li>
-                        <span className="label">24H High </span>
-                        <span className="value">2222</span>
-                    </li>
-                    <li>
-                        <span className="label">24H Low </span>
-                        <span className="value">2222</span>
-                    </li>
-                    <li>
-                        <span className="label">Price Feed </span>
-                        <span className="value">2222</span>
-                    </li>
-                    <li>
-                        <span className="label">fBTC Contract </span>
-                        <span className="value">2222</span>
-                    </li>
-                    {/* ))} */}
-                </ul>
-            </div>
-            {/* <EstimateData
-                feeRate={feeRate}
-                receivedAmount={parseFloat(estimateAmount)}
-                receivedToken={toToken}
-            /> */}
+            <MarketDetail {...mockMarketDetailData} />
         </div>
     );
 };
