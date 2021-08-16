@@ -41,6 +41,28 @@ export default (props: ISelectTokensProps) => {
         return parseFloat(ethers.utils.formatEther(res));
     };
 
+    /**
+     * 该代码用于处理包含块的问题
+     * 参考资料：https://juejin.cn/post/6844904046663303181
+     *
+     * 主要是common-box的after和before两个伪元素用完了，
+     * 才想到这个方法来解决该问题
+     */
+    React.useEffect(() => {
+        const wrapperBox: HTMLElement = document.querySelector('.common-box');
+        if (visable) {
+            wrapperBox.style.filter = 'none';
+        } else {
+            // * fade out效果占用了一些时间，这里延迟处理
+            setTimeout(
+                () =>
+                    (wrapperBox.style.filter =
+                        'drop-shadow(12px 12px 70px #E78231)'),
+                200,
+            );
+        }
+    }, [visable]);
+
     useEffect(() => {
         (async () => {
             const tokenPrices = await Promise.all(
