@@ -12,6 +12,8 @@ import { DEADLINE } from '@/config/constants/constant';
 import Tokens from '@/config/constants/tokens';
 import Contracts from '@/config/constants/contracts';
 import { ethers } from 'ethers';
+import SelectTokens from '@iron/SelectTokens';
+import TransitionConfirm from '@iron/TransitionConfirm';
 import {
     useCheckERC20ApprovalStatus,
     useERC20Approve,
@@ -21,6 +23,9 @@ export default () => {
     const [lpAmount, setLpAmount] = useState<number>();
     const [receiveTokens, setReceiveTokens] = useState([]);
     const [submitting, setSubmitting] = useState(false);
+    const [showTxConfirm, setShowTxConfirm] = useState(false);
+    const [tx, setTx] = useState<any | null>(null);
+    const [showSelectFromToken, setShowSelectFromToken] = useState(false);
 
     const routerContract = useRouter();
     const { account } = useWeb3React();
@@ -75,6 +80,12 @@ export default () => {
         handleReceiveTokens();
     }, [lpAmount, lp]);
 
+    const selectOptions = React.useMemo(() => {
+        return lpDataList.map((item) => ({
+            name: item.symbol,
+        }));
+    }, [lpDataList]);
+
     const handleWithdraw = async () => {
         if (!account) {
             message.warning('Pls connect wallet');
@@ -90,6 +101,34 @@ export default () => {
         }
         try {
             setSubmitting(true);
+            setShowTxConfirm(true);
+            setTx([
+                {
+                    label: 'LP',
+                    value: {
+                        token: lp,
+                        amount: lpAmount,
+                        mappingPrice: '--',
+                    },
+                },
+                {
+                    label: 'Token0',
+                    value: {
+                        token: receiveTokens[0].token,
+                        amount: receiveTokens[0].amount,
+                        mappingPrice: '--',
+                    },
+                },
+                {
+                    label: 'Token1',
+                    value: {
+                        token: receiveTokens[1].token,
+                        amount: receiveTokens[1].amount,
+                        mappingPrice: '--',
+                    },
+                },
+            ]);
+
             const deadline = DEADLINE;
             const chainId = process.env.APP_CHAIN_ID;
             const token1 = receiveTokens[0].token;
@@ -140,22 +179,27 @@ export default () => {
                                 className="custom-input"
                             />
                             <div className="token">
-                                <Select
+                                <SelectTokens
+                                    visable={showSelectFromToken}
                                     value={lp}
-                                    onSelect={(v) => {
-                                        setLp(v);
-                                    }}
-                                    placeholder={'Select LP'}
+                                    tokenList={selectOptions}
+                                    onSelect={(v) => setLp(v)}
+                                    onClose={() =>
+                                        setShowSelectFromToken(false)
+                                    }
                                 >
-                                    {lpDataList.map((item) => (
-                                        <Select.Option
-                                            value={item.symbol}
-                                            key={item.symbol}
-                                        >
-                                            {item.symbol}
-                                        </Select.Option>
-                                    ))}
-                                </Select>
+                                    <button
+                                        className="btn-mint-form"
+                                        onClick={() =>
+                                            setShowSelectFromToken(true)
+                                        }
+                                    >
+                                        <span>
+                                            {lp || <span>Select LP</span>}
+                                        </span>
+                                        <i className="icon-down size-20"></i>
+                                    </button>
+                                </SelectTokens>
                             </div>
                         </div>
                     </div>
@@ -224,6 +268,11 @@ export default () => {
                     </div>
                 </div>
             )}
+            <TransitionConfirm
+                visable={showTxConfirm}
+                onClose={() => setShowTxConfirm(false)}
+                dataSource={tx || []}
+            />
         </div>
     );
 };

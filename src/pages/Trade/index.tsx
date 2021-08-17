@@ -19,6 +19,7 @@ import SelectTokens from '@/components/SelectTokens';
 import MarketDetail from './MarketDetail';
 import { debounce } from 'lodash';
 import classNames from 'classnames';
+import TransitionConfirm from '@iron/TransitionConfirm';
 
 //TODO: for test.从配置中读取
 const TOKEN_OPTIONS = [
@@ -145,6 +146,9 @@ export default () => {
         console.log(res);
     };
 
+    const [showTxConfirm, setShowTxConfirm] = useState(false);
+    const [tx, setTx] = useState<any | null>(null);
+
     const onSubmit = async () => {
         // await revertTrade(3);
         // await revertTrade(4);
@@ -155,6 +159,20 @@ export default () => {
         }
         try {
             setSubmitting(true);
+            setShowTxConfirm(true);
+            setTx({
+                from: {
+                    token: fromToken,
+                    amount: fromAmount,
+                    price: '--',
+                },
+                to: {
+                    token: toToken,
+                    amount: toAmount,
+                    price: '--',
+                },
+            });
+
             const tx = await exchangeSystem.exchange(
                 ethers.utils.formatBytes32String(fromToken), // sourceKey
                 expandTo18Decimals(fromAmount), // sourceAmount
@@ -361,6 +379,32 @@ export default () => {
                 </div>
             </div>
             <MarketDetail {...mockMarketDetailData} />
+            <TransitionConfirm
+                visable={showTxConfirm}
+                onClose={() => setShowTxConfirm(false)}
+                dataSource={
+                    tx
+                        ? [
+                              {
+                                  label: 'From',
+                                  value: {
+                                      token: tx.from.token,
+                                      amount: tx.from.amount,
+                                      mappingPrice: tx.from.price,
+                                  },
+                              },
+                              {
+                                  label: 'To',
+                                  value: {
+                                      token: tx.to.token,
+                                      amount: tx.to.amount,
+                                      mappingPrice: tx.to.price,
+                                  },
+                              },
+                          ]
+                        : []
+                }
+            />
         </div>
     );
 };

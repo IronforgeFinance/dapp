@@ -60,7 +60,7 @@ const MarketDetail = (props: MarketDetailProps) => {
                 <ul className="props">
                     {props.dataSource.map((prop) => {
                         return (
-                            <li className="prop">
+                            <li key={prop.label} className="prop">
                                 <span className="label">{prop.label}</span>
                                 {instanceOfAddress(prop.value) && (
                                     <span className="value address">

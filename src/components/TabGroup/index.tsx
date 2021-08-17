@@ -23,6 +23,7 @@ export default (props: TabGroupProps) => {
             {items.map((item) => {
                 return (
                     <button
+                        key={item.key}
                         className={classNames({
                             'tab-btn': true,
                             active: value === item.key,

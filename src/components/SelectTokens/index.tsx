@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState, useRef } from 'react';
 import Board from '@/components/Board';
 import classNames from 'classnames';
 import './index.less';
@@ -25,11 +25,12 @@ export default (props: ISelectTokensProps) => {
         visable,
         value,
         tokenList = [],
-        onClose: _closeHandler,
-        onSelect: _selectHandler,
+        onClose,
+        onSelect,
     } = props;
 
     const [tokens, setTokens] = useState([]);
+    const isMounted = useRef(false);
 
     const prices = usePrices();
 
@@ -70,33 +71,47 @@ export default (props: ISelectTokensProps) => {
             const tokenPrices = await Promise.all(
                 tokenList.map((token) => getTokenPrice(token.name)),
             );
-            const tokens = tokenList.map((item, index) => {
-                const _token: any = {
-                    name: item.name,
-                    price: tokenPrices[index],
-                };
-                if (isDeliveryAsset(item.name)) {
-                    _token.isDeliveryAsset = true;
-                    _token.remainDays = getRemainDaysOfQuarterAsset(
-                        item.name.split('-')[1],
-                    );
-                }
-                return _token;
-            });
-            setTokens(tokens);
+            if (isMounted.current) {
+                const tokens = tokenList.map((item, index) => {
+                    const _token: any = {
+                        name: item.name,
+                        price: tokenPrices[index],
+                    };
+                    if (isDeliveryAsset(item.name)) {
+                        const quarter = item.name.split('-')[1];
+                        _token.isDeliveryAsset = /^\d+$/.test(quarter);
+
+                        if (_token.isDeliveryAsset) {
+                            _token.remainDays = getRemainDaysOfQuarterAsset(
+                                quarter,
+                            );
+                        }
+                    }
+                    return _token;
+                });
+                setTokens(tokens);
+            }
         })();
     }, [tokenList]);
 
-    const _close = useCallback(() => _closeHandler(), []);
-    const _select = useCallback((token) => {
-        _selectHandler(token);
-        _close();
+    useEffect(() => {
+        isMounted.current = true;
+
+        return () => {
+            isMounted.current = false;
+        };
+    }, []);
+
+    const _onClose = useCallback(() => onClose(), []);
+    const _onSelect = useCallback((token) => {
+        onSelect(token);
+        _onClose();
     }, []);
     // const tokenList = new Array(100).fill('').map((item, index) => index + 1);
 
     return (
         <div className="select-tokens">
-            <Board visable={visable} onClose={_close} title="Select a Token">
+            <Board visable={visable} onClose={_onClose} title="Select a Token">
                 <ul className="tokenlist">
                     <input
                         className="search"
@@ -110,7 +125,7 @@ export default (props: ISelectTokensProps) => {
                                 token: true,
                                 active: value === token.name,
                             })}
-                            onClick={_select.bind(this, token.name)}
+                            onClick={_onSelect.bind(this, token.name)}
                         >
                             <i
                                 className={classNames({

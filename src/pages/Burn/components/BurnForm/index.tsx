@@ -20,6 +20,7 @@ import BigNumber from 'bignumber.js';
 import { debounce } from 'lodash';
 import { Group as ScaleGroup, Button as ScaleOption } from '@/components/Scale';
 import SelectTokens from '@/components/SelectTokens';
+import TransitionConfirm from '@iron/TransitionConfirm';
 
 const TO_TOKENS = ['BTC'];
 interface IProps {
@@ -259,6 +260,9 @@ export default (props: IProps) => {
         }
     };
 
+    const [showTxConfirm, setShowTxConfirm] = useState(false);
+    const [tx, setTx] = useState<any | null>(null);
+
     const onSubmit = async () => {
         if (!burnAmount && !unstakeAmount) {
             message.warning('Burned amount and unstaking can not be both 0');
@@ -285,15 +289,28 @@ export default (props: IProps) => {
         }
         try {
             setSubmitting(true);
+            setShowTxConfirm(true);
+            setTx({
+                from: {
+                    token: 'fUSD',
+                    amount: burnAmount,
+                    price: '--',
+                },
+                to: {
+                    token: toToken,
+                    amount: unstakeAmount,
+                    price: '--',
+                },
+            });
             if (burnType === 'max') {
-                const tx = await collateralSystem.burnAndUnstakeMax(
+                const _tx = await collateralSystem.burnAndUnstakeMax(
                     expandTo18Decimals(burnAmount), // burnAmount
                     ethers.utils.formatBytes32String(toToken!), // unstakeCurrency
                 );
                 message.info(
-                    'Burn tx sent out successfully. Pls wait for a while......',
+                    'Burn _tx sent out successfully. Pls wait for a while......',
                 );
-                const receipt = await tx.wait();
+                const receipt = await _tx.wait();
                 console.log(receipt);
             } else {
                 const token: any = Tokens[toToken!];
@@ -303,15 +320,22 @@ export default (props: IProps) => {
                     expandToNDecimals(unstakeAmount, decimals).toString(),
                 );
                 console.log(expandTo18Decimals(burnAmount).toString());
-                const tx = await collateralSystem.burnAndUnstake(
+
+                console.log(
+                    "burnAndUnstake's params: burnAmount is %o, toToken is %s, unstakeAmount is %o",
+                    expandTo18Decimals(burnAmount),
+                    ethers.utils.formatBytes32String(toToken!),
+                    expandToNDecimals(unstakeAmount, decimals),
+                );
+                const _tx = await collateralSystem.burnAndUnstake(
                     expandTo18Decimals(burnAmount), // burnAmount
                     ethers.utils.formatBytes32String(toToken!), // unstakeCurrency
                     expandToNDecimals(unstakeAmount, decimals), // unstakeAmount
                 );
                 message.info(
-                    'Burn tx sent out successfully. Pls wait for a while......',
+                    'Burn _tx sent out successfully. Pls wait for a while......',
                 );
-                const receipt = await tx.wait();
+                const receipt = await _tx.wait();
                 console.log(receipt);
             }
 
@@ -436,6 +460,33 @@ export default (props: IProps) => {
                     Burn
                 </Button>
             </div>
+
+            <TransitionConfirm
+                visable={showTxConfirm}
+                onClose={() => setShowTxConfirm(false)}
+                dataSource={
+                    tx
+                        ? [
+                              {
+                                  label: 'From',
+                                  value: {
+                                      token: tx.from.token,
+                                      amount: tx.from.amount,
+                                      mappingPrice: tx.from.price,
+                                  },
+                              },
+                              {
+                                  label: 'To',
+                                  value: {
+                                      token: tx.to.token,
+                                      amount: tx.to.amount,
+                                      mappingPrice: tx.to.price,
+                                  },
+                              },
+                          ]
+                        : []
+                }
+            />
         </div>
     );
 };
