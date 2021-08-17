@@ -61,7 +61,7 @@ export default () => {
     const [toToken, setToToken] = useState(MINT_TOKENS[0]);
     const [submitting, setSubmitting] = useState(false);
     const [computedRatio, setComputedRatio] = useState(0);
-    const [lockedScale, setLockedScale] = useState('0');
+    const [lockedScale, setLockedScale] = useState<string | number>('0');
 
     const [showSelectFromToken, setShowSelectFromToken] = useState(false);
     const [showSelectToToken, setShowSelectToToken] = useState(false);
@@ -306,6 +306,7 @@ export default () => {
         //     return;
         // }
         setLockedAmount(v);
+        setLockedScale(Number(v) / fTokenBalance);
         const val = parseFloat(toFixedWithoutRound(IFTPrice * v, 2));
         setLockedData({
             ...lockedData,
