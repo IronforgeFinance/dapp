@@ -5,7 +5,7 @@ import SelectTokens from '@/components/SelectTokens';
 import CommentaryCard from '@/components/CommentaryCard';
 import DebtItemRatio from '@/components/DebtItemRatio';
 import DebtItem from '@/components/DebtItem';
-import * as message from '@/components/Notification';
+import * as message from '@iron/Notification';
 import Popover from '@/components/Popover';
 import TransitionConfirm from '@/components/TransitionConfirm';
 
