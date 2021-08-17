@@ -1,34 +1,38 @@
 import React from 'react';
-import { useState } from 'react';
-import { useFtokenPrice } from '@/hooks/useTokenBalance';
-import IconUS from '@/assets/images/us.svg';
 import IconTwitter from '@/assets/images/twitter.svg';
 import IconGithub from '@/assets/images/github.svg';
 import IconMedium from '@/assets/images/medium.svg';
-import { setLocale } from 'umi';
+import { useFtokenPrice, useGetBnbBalance } from '@/hooks/useTokenBalance';
 
 import './index.less';
 export default () => {
-  const { price, rate } = useFtokenPrice();
-  return (
-    <div className="footer-container">
-      <div className="ftoken-price">
-        <span>fToken Price</span>
-        <span className="price">${price}</span>
-        <span className="rate">{rate}</span>
-      </div>
-      <div className="footer-info">
-        <span className="language" onClick={() => setLocale('en-US', false)}>
-          <img src={IconUS} alt="" />
-          EN
-        </span>
-        <span className="divider"></span>
-        <span className="medias">
-          <img src={IconTwitter} alt="" />
-          <img src={IconGithub} alt="" />
-          <img src={IconMedium} alt="" />
-        </span>
-      </div>
-    </div>
-  );
+    const { price, rate } = useFtokenPrice();
+    const { balance } = useGetBnbBalance();
+
+    return (
+        <div className="footer-container">
+            <div className="entries">
+                <button className="btn-history" />
+                <button className="btn-52days" />
+            </div>
+            <div className="ftoken">
+                <p className="price">
+                    <span className="symbol">$</span>
+                    {price}
+                </p>
+                <p className="label">
+                    fToken Price <span className="rate">{rate}</span>
+                </p>
+            </div>
+            <button className="btn-buy-token common-btn common-btn-red">
+                Buy Token
+            </button>
+            {/* <p className="balance">Balance: {balance}</p> */}
+            <div className="medias">
+                <img key={1} src={IconTwitter} />
+                <img key={2} src={IconGithub} />
+                <img key={3} src={IconMedium} />
+            </div>
+        </div>
+    );
 };

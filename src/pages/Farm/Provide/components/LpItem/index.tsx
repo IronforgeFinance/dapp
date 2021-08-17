@@ -62,7 +62,7 @@ export default (props: IProps) => {
                             className="common-btn common-btn-red common-btn-s"
                             onClick={handleRemove}
                         >
-                            Removes
+                            Remove
                         </button>
                     </div>
                 </div>
