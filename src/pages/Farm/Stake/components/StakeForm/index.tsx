@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { InputNumber, Select, Progress, message, Button } from 'antd';
+import { InputNumber, Select, Progress, Button } from 'antd';
+import * as message from '@/components/Notification';
 import './index.less';
 const LP_TOKENS = ['fUSD-FTSLA'];
 import { STAKE_TABS } from '../../index';

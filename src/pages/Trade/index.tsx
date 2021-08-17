@@ -8,7 +8,8 @@ import {
     expandToNDecimals,
     expandTo18Decimals,
 } from '@/utils/bigNumber';
-import { InputNumber, Button, Select, Radio, message } from 'antd';
+import { InputNumber, Button, Select, Radio } from 'antd';
+import * as message from '@/components/Notification';
 import { COLLATERAL_TOKENS, MINT_TOKENS, TokenPrices } from '@/config';
 import { useBep20Balance } from '@/hooks/useTokenBalance';
 import './index.less';

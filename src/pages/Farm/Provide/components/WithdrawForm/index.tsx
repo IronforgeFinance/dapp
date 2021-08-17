@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { InputNumber, Select, Button, message } from 'antd';
+import { InputNumber, Select, Button } from 'antd';
+import * as message from '@/components/Notification';
 import IconDown from '@/assets/images/icon-down.svg';
 import './index.less';
 import { debounce } from 'lodash';

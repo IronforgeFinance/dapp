@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { InputNumber, Select, Progress, message, Button } from 'antd';
+import { InputNumber, Select, Progress, Button } from 'antd';
+import * as message from '@/components/Notification';
 import { useIntl, useModel } from 'umi';
 import IconDown from '@/assets/images/down.svg';
 import IconAdd from '@/assets/images/add.svg';

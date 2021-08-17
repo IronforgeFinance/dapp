@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './index.less';
-import { InputNumber, Select, Progress, message, Button } from 'antd';
+import { InputNumber, Select, Progress, Button } from 'antd';
+import * as message from '@/components/Notification';
 import IconAdd from '@/assets/images/icon-add.svg';
 import { useBep20Balance } from '@/hooks/useTokenBalance';
 import { useModel } from 'umi';
@@ -12,7 +13,7 @@ import Tokens from '@/config/constants/tokens';
 import { ILpDataProps } from '@/models/lpData';
 import { ethers } from 'ethers';
 import { registerToken } from '@/utils/wallet';
-import {DEADLINE} from '@/config/constants/constant';
+import { DEADLINE } from '@/config/constants/constant';
 import {
     useCheckERC20ApprovalStatus,
     useERC20Approve,
@@ -66,17 +67,21 @@ export default () => {
     const routerContract = useRouter();
 
     const pancakeRouter = Contracts.PancakeRouter[process.env.APP_CHAIN_ID];
-    const { isApproved: token1Approved, setLastUpdated: setToken1LastUpdated } =
-        useCheckERC20ApprovalStatus(
-            token1 ? Tokens[token1].address[process.env.APP_CHAIN_ID] : '',
-            pancakeRouter,
-        );
+    const {
+        isApproved: token1Approved,
+        setLastUpdated: setToken1LastUpdated,
+    } = useCheckERC20ApprovalStatus(
+        token1 ? Tokens[token1].address[process.env.APP_CHAIN_ID] : '',
+        pancakeRouter,
+    );
 
-    const { isApproved: token2Approved, setLastUpdated: setToken2LastUpdated } =
-        useCheckERC20ApprovalStatus(
-            token2 ? Tokens[token2].address[process.env.APP_CHAIN_ID] : '',
-            pancakeRouter,
-        );
+    const {
+        isApproved: token2Approved,
+        setLastUpdated: setToken2LastUpdated,
+    } = useCheckERC20ApprovalStatus(
+        token2 ? Tokens[token2].address[process.env.APP_CHAIN_ID] : '',
+        pancakeRouter,
+    );
 
     const {
         handleApprove: handleToken1Approve,

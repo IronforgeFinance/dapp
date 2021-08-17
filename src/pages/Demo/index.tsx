@@ -5,7 +5,7 @@ import SelectTokens from '@/components/SelectTokens';
 import CommentaryCard from '@/components/CommentaryCard';
 import DebtItemRatio from '@/components/DebtItemRatio';
 import DebtItem from '@/components/DebtItem';
-import { success, fail } from '@/components/Notification';
+import * as message from '@/components/Notification';
 import Popover from '@/components/Popover';
 import TransitionConfirm from '@/components/TransitionConfirm';
 
@@ -171,22 +171,25 @@ export default () => {
                 <li>
                     <h3>5. 成功通知</h3>
                     <button
-                        onClick={() =>
-                            success({
-                                message: 'Transaction receipt',
-                                description: 'Mint fUSD from USDC',
-                                showView: true,
-                            })
+                        onClick={
+                            () =>
+                                message.success({
+                                    message: 'Transaction receipt',
+                                    description: 'Mint fUSD from USDC',
+                                    showView: true,
+                                })
+                            // message.success('Transaction success')
                         }
                     >
                         成功
                     </button>
                     <button
                         onClick={() =>
-                            fail({
-                                message: 'Transaction receipt',
-                                description: 'Mint fUSD from USDC',
-                            })
+                            // message.fail({
+                            //     message: 'Transaction receipt',
+                            //     description: 'Mint fUSD from USDC',
+                            // })
+                            message.fail('Transaction fail')
                         }
                     >
                         失败
