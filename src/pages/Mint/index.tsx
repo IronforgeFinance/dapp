@@ -44,6 +44,8 @@ import CommentaryCard from '@/components/CommentaryCard';
 import { useCallback } from 'react';
 import { isDeliveryAsset } from '@/utils';
 import Popover from '@/components/Popover';
+import TransitionConfirm from '@iron/TransitionConfirm';
+
 export default () => {
     const intl = useIntl();
     const { account } = useWeb3React();
@@ -337,6 +339,9 @@ export default () => {
         setToAmount(0);
     };
 
+    const [showTxConfirm, setShowTxConfirm] = useState(false);
+    const [tx, setTx] = useState<any | null>(null);
+
     const onSubmit = async () => {
         if (!account) {
             message.warning('Pls connect wallet first');
@@ -347,6 +352,26 @@ export default () => {
             return;
         }
         if (isApproved && isIFTApproved) {
+            setShowTxConfirm(true);
+            setTx({
+                collateral: {
+                    token: collateralToken,
+                    amount: collateralAmount,
+                    price: '--',
+                },
+                minted: {
+                    token: toToken,
+                    amount: toAmount,
+                    price: '--',
+                },
+                locked: {
+                    token: 'FToken',
+                    amount: lockedAmount,
+                    price: '--',
+                },
+                type: isDeliveryAsset(toToken) ? 'Delivery' : 'Perpetuation',
+            });
+
             try {
                 setSubmitting(true);
                 //TODO 目前仅支持mint fusd。其它合成资产需要调用mint和trade两步操作。后续优化成一步操作。
@@ -379,16 +404,16 @@ export default () => {
                 } else {
                     const token = Tokens[collateralToken];
                     const decimal = token.decimals;
-                    const tx = await collateralSystem.stakeAndBuild(
+                    const tx0 = await collateralSystem.stakeAndBuild(
                         ethers.utils.formatBytes32String(collateralToken), // stakeCurrency
                         expandToNDecimals(collateralAmount!, decimal), // stakeAmount
                         expandToNDecimals(toAmount!, 18), // buildAmount
                         expandTo18Decimals(lockedAmount || 0),
                     );
                     message.info(
-                        'Mint tx sent out successfully. Pls wait for a while......',
+                        'Mint tx0 sent out successfully. Pls wait for a while......',
                     );
-                    const receipt = await tx.wait();
+                    const receipt = await tx0.wait();
                     console.log(receipt);
                     setSubmitting(false);
                     // fetchCollateralBalance();
@@ -681,6 +706,42 @@ export default () => {
                             Approve To Mint
                         </Button>
                     )}
+
+                    <TransitionConfirm
+                        visable={showTxConfirm}
+                        onClose={() => setShowTxConfirm(false)}
+                        dataSource={
+                            tx
+                                ? [
+                                      {
+                                          label: 'Collateral',
+                                          value: {
+                                              token: tx.collateral.token,
+                                              amount: tx.collateral.amount,
+                                              mappingPrice: tx.collateral.price,
+                                          },
+                                      },
+                                      {
+                                          label: 'Minted',
+                                          value: {
+                                              token: tx.minted.token,
+                                              amount: tx.minted.amount,
+                                              mappingPrice: tx.minted.price,
+                                          },
+                                      },
+                                      {
+                                          label: 'Locked',
+                                          value: {
+                                              token: tx.locked.token,
+                                              amount: tx.locked.amount,
+                                              mappingPrice: tx.locked.price,
+                                          },
+                                      },
+                                      { label: 'Type', value: tx.type },
+                                  ]
+                                : []
+                        }
+                    />
                 </div>
             </div>
         </div>
