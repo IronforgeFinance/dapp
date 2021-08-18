@@ -4,33 +4,31 @@
     .token-names {
         display: flex;
         flex-wrap: wrap;
+
         .token {
             margin-right: 20px;
-
             font-style: normal;
             font-weight: bold;
             font-size: 15px;
             line-height: 22px;
             color: #ffffff;
+            display: flex;
 
-            .dot {
-                .dot(10px);
-                .token-color(dot);
-                &:before {
-                    margin-right: 4px;
-                }
-            }
-            > span:nth-child(2) {
+            .dot(10px, 4px);
+
+            span:first-child {
                 font-weight: bold;
                 font-size: 15px;
                 margin-right: 6px;
             }
-            > span:last-child {
+
+            span:last-child {
                 font-weight: 300;
                 font-size: 12px;
             }
         }
     }
+
     .token-ratios {
         margin-top: 4px;
         width: 100%;
@@ -42,12 +40,15 @@
         border-radius: 10px;
         display: flex;
         align-items: center;
+
         .ratio {
             height: 3px;
         }
+
         > div:first-child {
             border-radius: 6px 0 0 6px;
         }
+
         > div:last-child {
             border-radius: 0 6px 6px 0;
         }

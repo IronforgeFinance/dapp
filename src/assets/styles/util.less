@@ -75,7 +75,7 @@
     flex-shrink: 0;
 }
 
-.dot(@size: 16px, @bgColor: #fff) {
+.dot(@size: 16px, @marginRight: 0px, @bgColor: transparent) {
     display: flex;
     align-items: center;
 
@@ -87,6 +87,11 @@
         display: inline-block;
         background-color: @bgColor;
         flex-shrink: 0;
+        margin-right: @marginRight;
+    }
+
+    & when (@bgColor=transparent) {
+        .token-color(dot);
     }
 }
 

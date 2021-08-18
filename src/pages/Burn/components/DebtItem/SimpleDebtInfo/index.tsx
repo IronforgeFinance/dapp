@@ -12,10 +12,10 @@ export default (props: IProps) => {
         <div className="info-simple">
             <div className="token-names">
                 {infos.map((item) => (
-                    <div className="token" key={item.collateralToken}>
-                        <span
-                            className={`dot dot-${item.collateralToken.toLowerCase()}`}
-                        />
+                    <div
+                        className={`token dot dot-${item.collateralToken.toLowerCase()}`}
+                        key={item.collateralToken}
+                    >
                         <span>{item.collateralToken}</span>
                         <span>{item.ratio}</span>
                     </div>
