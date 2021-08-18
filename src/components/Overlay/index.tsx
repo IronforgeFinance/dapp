@@ -9,10 +9,8 @@ interface IOverlayProps {
     children?: Object;
 }
 
-export default (props: IOverlayProps) => {
+const Overlay = (props: IOverlayProps) => {
     const { visable, onClose, children } = props;
-
-    const onCloseMemo = useCallback(() => onClose(), []);
 
     return (
         <CSSTransition
@@ -20,10 +18,17 @@ export default (props: IOverlayProps) => {
             timeout={300}
             unmountOnExit
             classNames="overlay"
-            onExited={onCloseMemo}
+            onExited={() => onClose()}
         >
             {/* TODO postion改成自定义 */}
             <div className="overlay center">{children}</div>
         </CSSTransition>
     );
 };
+
+Overlay.defaultProps = {
+    visable: false,
+    onClose: () => {},
+};
+
+export default Overlay;

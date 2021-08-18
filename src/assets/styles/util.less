@@ -1,3 +1,9 @@
+@usdt: linear-gradient(90deg, #fcd144 85.54%, #ffad33 98.08%);
+@usdc: linear-gradient(90deg, #26a17b 85.54%, #0c8f67 98.08%);
+@usd: linear-gradient(116.98deg, #611bf6 31.39%, #8d33ff 83.13%);
+@btc: linear-gradient(116.98deg, #f6911b 31.39%, #ffcb44 83.13%);
+@eth: linear-gradient(116.98deg, #c4c3c7 31.39%, #72727a 83.13%);
+
 .image {
     background-position: center;
     background-repeat: no-repeat;
@@ -5,6 +11,17 @@
     background-size: contain;
     display: inline-block;
     flex-shrink: 0;
+}
+
+.dot(@size: 16px, @bgColor: #fff) {
+    &:before {
+        content: '';
+        width: @size;
+        height: @size;
+        border-radius: 50%;
+        display: inline-block;
+        background-color: @bgColor;
+    }
 }
 
 #image {
