@@ -426,6 +426,8 @@ export default () => {
             } catch (err) {
                 setSubmitting(false);
                 console.log(err);
+            } finally {
+                setShowTxConfirm(false);
             }
         }
     };
@@ -707,44 +709,43 @@ export default () => {
                             Approve To Mint
                         </Button>
                     )}
-
-                    <TransitionConfirm
-                        visable={showTxConfirm}
-                        onClose={() => setShowTxConfirm(false)}
-                        dataSource={
-                            tx
-                                ? [
-                                      {
-                                          label: 'Collateral',
-                                          value: {
-                                              token: tx.collateral.token,
-                                              amount: tx.collateral.amount,
-                                              mappingPrice: tx.collateral.price,
-                                          },
-                                      },
-                                      {
-                                          label: 'Minted',
-                                          value: {
-                                              token: tx.minted.token,
-                                              amount: tx.minted.amount,
-                                              mappingPrice: tx.minted.price,
-                                          },
-                                      },
-                                      {
-                                          label: 'Locked',
-                                          value: {
-                                              token: tx.locked.token,
-                                              amount: tx.locked.amount,
-                                              mappingPrice: tx.locked.price,
-                                          },
-                                      },
-                                      { label: 'Type', value: tx.type },
-                                  ]
-                                : []
-                        }
-                    />
                 </div>
             </div>
+            <TransitionConfirm
+                visable={showTxConfirm}
+                onClose={() => setShowTxConfirm(false)}
+                dataSource={
+                    tx
+                        ? [
+                              {
+                                  label: 'Collateral',
+                                  value: {
+                                      token: tx.collateral.token,
+                                      amount: tx.collateral.amount,
+                                      mappingPrice: tx.collateral.price,
+                                  },
+                              },
+                              {
+                                  label: 'Minted',
+                                  value: {
+                                      token: tx.minted.token,
+                                      amount: tx.minted.amount,
+                                      mappingPrice: tx.minted.price,
+                                  },
+                              },
+                              {
+                                  label: 'Locked',
+                                  value: {
+                                      token: tx.locked.token,
+                                      amount: tx.locked.amount,
+                                      mappingPrice: tx.locked.price,
+                                  },
+                              },
+                              { label: 'Type', value: tx.type },
+                          ]
+                        : []
+                }
+            />
         </div>
     );
 };

@@ -352,6 +352,8 @@ export default () => {
         } catch (err) {
             setSubmitting(false);
             console.log(err);
+        } finally {
+            setShowTxConfirm(false);
         }
     };
 

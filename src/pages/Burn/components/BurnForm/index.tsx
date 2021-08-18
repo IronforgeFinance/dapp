@@ -347,6 +347,8 @@ export default (props: IProps) => {
         } catch (err) {
             setSubmitting(false);
             console.log(err);
+        } finally {
+            setShowTxConfirm(false);
         }
     };
 
