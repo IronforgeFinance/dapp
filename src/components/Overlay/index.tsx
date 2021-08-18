@@ -17,7 +17,7 @@ const Overlay = (props: IOverlayProps) => {
             in={visable}
             timeout={300}
             unmountOnExit
-            classNames="overlay"
+            classNames="weighing overlay"
             onExited={() => onClose()}
         >
             {/* TODO postion改成自定义 */}
