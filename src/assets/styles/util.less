@@ -4,6 +4,68 @@
 @btc: linear-gradient(116.98deg, #f6911b 31.39%, #ffcb44 83.13%);
 @eth: linear-gradient(116.98deg, #c4c3c7 31.39%, #72727a 83.13%);
 
+.token-color(@geometric) {
+    &.@{geometric}-usdc {
+        & when(@geometric=bar) {
+            background: @usdc;
+        }
+
+        & when(@geometric=dot) {
+            &:before {
+                background: @usdc;
+            }
+        }
+    }
+
+    &.@{geometric}-usdt {
+        & when(@geometric=bar) {
+            background: @usdt;
+        }
+
+        & when(@geometric=dot) {
+            &:before {
+                background: @usdt;
+            }
+        }
+    }
+
+    &.@{geometric}-usd {
+        & when(@geometric=bar) {
+            background: @usd;
+        }
+
+        & when(@geometric=dot) {
+            &:before {
+                background: @usd;
+            }
+        }
+    }
+
+    &.@{geometric}-btc {
+        & when(@geometric=bar) {
+            background: @btc;
+        }
+
+        & when(@geometric=dot) {
+            &:before {
+                background: @btc;
+            }
+        }
+    }
+
+    &.@{geometric}-eth {
+        & when(@geometric=bar) {
+            background: @eth;
+        }
+
+        & when(@geometric=dot) {
+            &:before {
+                background: @eth;
+            }
+        }
+    }
+}
+
 .image {
     background-position: center;
     background-repeat: no-repeat;
@@ -14,6 +76,9 @@
 }
 
 .dot(@size: 16px, @bgColor: #fff) {
+    display: flex;
+    align-items: center;
+
     &:before {
         content: '';
         width: @size;
@@ -21,6 +86,7 @@
         border-radius: 50%;
         display: inline-block;
         background-color: @bgColor;
+        flex-shrink: 0;
     }
 }
 

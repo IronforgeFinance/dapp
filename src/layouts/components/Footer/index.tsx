@@ -1,9 +1,11 @@
 import React from 'react';
+import './index.less';
 import IconTwitter from '@/assets/images/twitter.svg';
 import IconGithub from '@/assets/images/github.svg';
 import IconMedium from '@/assets/images/medium.svg';
 import { useFtokenPrice, useGetBnbBalance } from '@/hooks/useTokenBalance';
 import DataBoard from './components/DataBoard';
+import RainbowBar from '@iron/RainbowBar';
 
 const tabItems = [
     {
@@ -19,8 +21,6 @@ const tabItems = [
         key: 'delivery',
     },
 ];
-
-import './index.less';
 
 const Mint = () => {
     return (
@@ -115,28 +115,7 @@ const Mint = () => {
                                                     </p>
                                                 ))}
                                         </div>
-                                        <div className="progress-bar">
-                                            <div className="progress-bar-wrapper">
-                                                {new Array(2)
-                                                    .fill('')
-                                                    .map((item, index) => (
-                                                        <div
-                                                            key={index}
-                                                            style={{
-                                                                width: `${
-                                                                    (1 / 2) *
-                                                                    100
-                                                                }%`,
-                                                            }}
-                                                            className={`progress-move-bar bar-${
-                                                                index % 2
-                                                                    ? 'usdt'
-                                                                    : 'usdc'
-                                                            }`}
-                                                        />
-                                                    ))}
-                                            </div>
-                                        </div>
+                                        <RainbowBar />
                                     </div>
                                 </div>
                             </div>

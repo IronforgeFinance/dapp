@@ -1,3 +1,5 @@
+@import '~@/assets/styles/util.less';
+
 .info-simple {
     .token-names {
         display: flex;
@@ -10,12 +12,13 @@
             font-size: 15px;
             line-height: 22px;
             color: #ffffff;
-            .symbol {
-                width: 10px;
-                height: 10px;
-                border-radius: 50%;
-                margin-right: 4px;
-                display: inline-block;
+
+            .dot {
+                .dot(10px);
+                .token-color(dot);
+                &:before {
+                    margin-right: 4px;
+                }
             }
             > span:nth-child(2) {
                 font-weight: bold;
@@ -49,14 +52,4 @@
             border-radius: 0 6px 6px 0;
         }
     }
-}
-
-.token-BTC {
-    background: linear-gradient(90deg, #fcd144 85.54%, #ffad33 98.08%);
-}
-.token-USDC {
-    background: linear-gradient(90deg, #26a17b 85.54%, #0c8f67 98.08%);
-}
-.token-ETH {
-    background: linear-gradient(90deg, #627eea 85.54%, #3a5ad8 98.08%);
 }

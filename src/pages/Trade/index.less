@@ -4,8 +4,8 @@
     width: 100%;
     height: 100%;
     display: flex;
-    justify-content: space-between;
-    position: absolute;
+    // align-items: center;
+    justify-content: center;
 
     // TODO 这里图片有点大，下周分拆出多个部件图出来合成，充分利用图片并发
     .shop {
@@ -13,9 +13,7 @@
         height: 518px;
         // padding: 100.88px 81.89px 32.78px 92.65px;
         // box-sizing: border-box;
-        margin-left: 50%;
         margin-top: 163.26px;
-        transform: translateX(-50%);
         position: relative;
 
         > .roof {
@@ -64,5 +62,11 @@
                 margin-top: 9px;
             }
         }
+    }
+
+    .market-details {
+        position: absolute;
+        right: 0;
+        top: 170px;
     }
 }
