@@ -146,6 +146,10 @@ export default () => {
         console.log(res);
     };
 
+    const canTrade = React.useMemo(() => {
+        return !(fromAmount > fromTokenBalance);
+    }, [fromAmount, fromTokenBalance]);
+
     const [showTxConfirm, setShowTxConfirm] = useState(false);
     const [tx, setTx] = useState<any | null>(null);
 
@@ -370,6 +374,7 @@ export default () => {
                     </div>
                     <Button
                         className="btn-trade common-btn common-btn-red"
+                        disabled={!canTrade}
                         onClick={onSubmit}
                         loading={submitting}
                     >

@@ -7,6 +7,7 @@ button {
     outline: none;
     background-color: transparent;
     cursor: pointer;
+
     &:disabled {
         cursor: no-drop;
     }
@@ -42,7 +43,8 @@ button {
     color: rgba(41, 39, 37, 1);
 }
 
-.common-btn-red:disabled {
+.common-btn-red:disabled,
+.common-btn-red:hover:disabled {
     background: url(../images/common-btn-red-disabled.png) no-repeat;
     background-size: 100% 100%;
     color: rgba(255, 254, 254, 0.7);
@@ -61,7 +63,8 @@ button {
     color: rgba(41, 39, 37, 1);
 }
 
-.common-btn-yellow:disabled {
+.common-btn-yellow:disabled,
+.common-btn-yellow:hover:disabled {
     background: url(../images/common-btn-yellow-disabped.png) no-repeat;
     background-size: 100% 100%;
     color: rgba(255, 254, 254, 0.7);
