@@ -1,11 +1,16 @@
 @import './iron.less';
 
+[class|='icon'] {
+    cursor: pointer;
+}
+
 .icon {
     &-down {
-        #image.background('../../assets/images/icon-down.png');
+        #image.background('~@/assets/images/icon-down.png');
     }
+
     &-question {
-        #image.background('../../assets/images/icon-question.png');
+        #image.background('~@/assets/images/icon-question.png');
     }
 }
 
@@ -33,5 +38,23 @@
     &-32 {
         width: 12px;
         height: 12px;
+    }
+}
+
+.ml {
+    &-4 {
+        margin-left: 4px;
+    }
+
+    &-6 {
+        margin-left: 6px;
+    }
+
+    &-8 {
+        margin-left: 8px;
+    }
+
+    &-10 {
+        margin-left: 10px;
     }
 }

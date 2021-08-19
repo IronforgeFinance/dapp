@@ -4,7 +4,7 @@ import { ProgressBarType } from '@/config/constants/types';
 import classnames from 'classnames';
 export interface IProgressBarProps {
     type: ProgressBarType;
-    name: string;
+    name: string | React.ReactNode;
     startValue: number;
     endValue: number;
     unit: '$' | '%';
