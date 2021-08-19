@@ -20,6 +20,7 @@ import {
     useCheckERC20ApprovalStatus,
     useERC20Approve,
 } from '@/hooks/useApprove';
+import { TokenIcon } from '@/components/Icon';
 export const LP_TOKENS = ['USDC-ETH', 'USDC-IFT']; //TODO 配置中读取官方预先添加的流动性lp
 const TOKENS = Array.from(
     new Set(
@@ -391,6 +392,7 @@ export default () => {
                                 className="custom-input"
                             />
                             <div className="token">
+                                <TokenIcon name={token1} size={24} />
                                 <SelectTokens
                                     visable={showSelectFromToken}
                                     value={token1}
@@ -439,6 +441,7 @@ export default () => {
                                 className="custom-input"
                             />
                             <div className="token">
+                                <TokenIcon name={token2} size={24} />
                                 <SelectTokens
                                     visable={showSelectToToken}
                                     value={token2}

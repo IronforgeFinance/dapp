@@ -18,6 +18,7 @@ import {
     useCheckERC20ApprovalStatus,
     useERC20Approve,
 } from '@/hooks/useApprove';
+import { TokenIcon } from '@/components/Icon';
 export default () => {
     const [lp, setLp] = useState<string>();
     const [lpAmount, setLpAmount] = useState<number>();
@@ -181,6 +182,7 @@ export default () => {
                                 className="custom-input"
                             />
                             <div className="token">
+                                <TokenIcon isTokenPair name={lp} size={24} />
                                 <SelectTokens
                                     visable={showSelectFromToken}
                                     value={lp}

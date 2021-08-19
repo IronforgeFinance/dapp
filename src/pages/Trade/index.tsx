@@ -20,6 +20,7 @@ import MarketDetail from './MarketDetail';
 import { debounce } from 'lodash';
 import classNames from 'classnames';
 import TransitionConfirm from '@iron/TransitionConfirm';
+import { TokenIcon } from '@/components/Icon';
 
 //TODO: for test.从配置中读取
 const TOKEN_OPTIONS = [
@@ -298,6 +299,7 @@ export default () => {
                                     min={0}
                                 />
                                 <div className="token">
+                                    <TokenIcon size={24} name={fromToken} />
                                     <SelectTokens
                                         visable={showSelectFromToken}
                                         value={fromToken}
@@ -347,6 +349,7 @@ export default () => {
                                     min={0}
                                 />
                                 <div className="token">
+                                    <TokenIcon size={24} name={toToken} />
                                     <SelectTokens
                                         visable={showSelectToToken}
                                         value={toToken}

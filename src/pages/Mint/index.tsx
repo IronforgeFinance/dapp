@@ -44,6 +44,7 @@ import CommentaryCard from '@/components/CommentaryCard';
 import { useCallback } from 'react';
 import { isDeliveryAsset } from '@/utils';
 import Popover from '@/components/Popover';
+import { TokenIcon } from '@/components/Icon';
 import TransitionConfirm from '@iron/TransitionConfirm';
 
 export default () => {
@@ -523,14 +524,9 @@ export default () => {
                                     })}
                                 />
                                 <div className="token">
-                                    <i
-                                        className={classNames({
-                                            'icon-token': true,
-                                            [String(
-                                                collateralToken,
-                                            ).toLowerCase()]: true,
-                                            'size-24': true,
-                                        })}
+                                    <TokenIcon
+                                        name={collateralToken.toLowerCase()}
+                                        size={24}
                                     />
                                     <SelectTokens
                                         visable={showSelectFromToken}
@@ -632,14 +628,9 @@ export default () => {
                                     onChange={toAmountHandler}
                                 />
                                 <div className="token">
-                                    <i
-                                        className={classNames({
-                                            'icon-token': true,
-                                            [String(
-                                                toToken,
-                                            ).toLowerCase()]: true,
-                                            'size-24': true,
-                                        })}
+                                    <TokenIcon
+                                        name={String(toToken).toLowerCase()}
+                                        size={24}
                                     />
                                     <SelectTokens
                                         visable={showSelectToToken}

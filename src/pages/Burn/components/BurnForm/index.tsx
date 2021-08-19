@@ -21,6 +21,7 @@ import { debounce } from 'lodash';
 import { Group as ScaleGroup, Button as ScaleOption } from '@/components/Scale';
 import SelectTokens from '@/components/SelectTokens';
 import TransitionConfirm from '@iron/TransitionConfirm';
+import { TokenIcon } from '@/components/Icon';
 
 const TO_TOKENS = ['BTC'];
 interface IProps {
@@ -199,9 +200,12 @@ export default (props: IProps) => {
         const userCollateralInUsd = new BigNumber(
             ethers.utils.formatEther(res),
         );
-        const burnAmount =
-            toTokenDebtInUsd -
-            userCollateralInUsd.dividedBy(initialRatio).toNumber();
+        const burnAmount = parseFloat(
+            new BigNumber(
+                toTokenDebtInUsd -
+                    userCollateralInUsd.dividedBy(initialRatio).toNumber(),
+            ).toFixed(2),
+        );
         setBurnAmount(burnAmount);
         setDebtData({
             ...debtData,
@@ -399,8 +403,20 @@ export default (props: IProps) => {
                             max={selectedDebtInUSD || 9999999}
                         />
                         <div className="ftoken">
-                            <button className="max">Max</button>
-                            <i className="icon-token usd">USD</i>
+                            <button
+                                className="max"
+                                onClick={() => setBurnAmount(selectedDebtInUSD)}
+                            >
+                                Max
+                            </button>
+                            <TokenIcon
+                                name="fusd"
+                                size={24}
+                                style={{
+                                    marginLeft: '4px',
+                                    marginRight: '4px',
+                                }}
+                            />
                             <span>fUSD</span>
                         </div>
                     </div>
@@ -428,6 +444,7 @@ export default (props: IProps) => {
                             max={toTokenDebt}
                         />
                         <div className="token">
+                            <TokenIcon name={toToken.toLowerCase()} size={24} />
                             <SelectTokens
                                 visable={showSelectToToken}
                                 value={toToken}

@@ -16,6 +16,7 @@ import useWeb3Provider from '@/hooks/useWeb3Provider';
 import { useBep20Balance } from '@/hooks/useTokenBalance';
 import { useModel } from 'umi';
 import { COLLATERAL_TOKENS } from '@/config';
+import { TokenIcon } from '@/components/Icon';
 interface IDebtItemProps {
     mintedToken: string;
     mintedTokenName: string;
@@ -177,9 +178,7 @@ export default (props: IDebtItemProps) => {
         <div className="debt-item">
             <div className="debt-item-head">
                 <div className="debt-token">
-                    <div className={`bubble ${mintedTokenName.toLowerCase()}`}>
-                        {mintedTokenName}
-                    </div>
+                    <TokenIcon size={36} name={mintedToken} />
                     <div className="token-minted">
                         <span>{mintedToken}</span>
                         <span>{mintedTokenNum}</span>

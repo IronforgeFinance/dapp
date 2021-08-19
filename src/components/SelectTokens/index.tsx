@@ -5,6 +5,7 @@ import './index.less';
 import { getRemainDaysOfQuarterAsset, isDeliveryAsset } from '@/utils';
 import { usePrices } from '@/hooks/useContract';
 import { ethers } from 'ethers';
+import { TokenIcon } from '@/components/Icon';
 interface TokenOption {
     name: string;
     ratio?: Number;
@@ -127,12 +128,10 @@ export default (props: ISelectTokensProps) => {
                             })}
                             onClick={_onSelect.bind(this, token.name)}
                         >
-                            <i
-                                className={classNames({
-                                    'icon-token': true,
-                                    'size-24': true,
-                                    [token.name.toLowerCase()]: true,
-                                })}
+                            <TokenIcon
+                                isTokenPair={token.name.split('-').length > 1}
+                                name={token.name.toLowerCase()}
+                                size={24}
                             />
                             <span className="name">
                                 {token.name.toUpperCase()}

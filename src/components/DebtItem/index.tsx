@@ -2,6 +2,7 @@ import React, { useState, useCallback } from 'react';
 import DebtItemRatio, { DebtRatio } from '@/components/DebtItemRatio';
 import IconDown from '@/assets/images/down.svg';
 import './index.less';
+import { TokenIcon } from '../Icon';
 
 interface DebtItemProps {
     balance: string | number;
@@ -33,9 +34,7 @@ export default (props: DebtItemProps) => {
         <div className="debt-item">
             <div className="debt-item-head">
                 <div className="debt-token">
-                    <div className={`bubble ${mintedTokenName.toLowerCase()}`}>
-                        {mintedTokenName}
-                    </div>
+                    <TokenIcon size={36} name={mintedTokenName} />
                     <div className="token-minted">
                         <span>{mintedToken}</span>
                         <span>{mintedTokenNum}</span>
