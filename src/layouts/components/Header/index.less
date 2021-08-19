@@ -16,7 +16,9 @@
 
         > li {
             flex-basis: percentage(1/6);
-            margin-right: 55px;
+            flex-shrink: 0;
+            flex-grow: 0;
+            box-sizing: border-box;
 
             > a {
                 font-style: normal;
@@ -44,6 +46,26 @@
                 position: absolute;
                 left: 0;
                 right: 0;
+            }
+
+            &:hover {
+                > a {
+                    color: #fcd144;
+                    font-weight: 800;
+                }
+
+                // > a:after {
+                //     content: '';
+                //     width: 40px;
+                //     height: 2px;
+                //     background: #fcd144;
+                //     display: block;
+                //     margin: 10px auto;
+                //     margin-bottom: 0;
+                //     position: absolute;
+                //     left: 0;
+                //     right: 0;
+                // }
             }
         }
 
