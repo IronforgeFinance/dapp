@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { InputNumber, Select, Progress, Button } from 'antd';
+import { InputNumber, Select, Progress, Button, Popover } from 'antd';
 import * as message from '@/components/Notification';
 import { useIntl, useModel } from 'umi';
 import IconDown from '@/assets/images/down.svg';
@@ -43,7 +43,7 @@ import SelectTokens from '@/components/SelectTokens';
 import CommentaryCard from '@/components/CommentaryCard';
 import { useCallback } from 'react';
 import { isDeliveryAsset } from '@/utils';
-import Popover from '@/components/Popover';
+// import Popover from '@/components/Popover';
 import { TokenIcon } from '@/components/Icon';
 import TransitionConfirm from '@iron/TransitionConfirm';
 
@@ -561,7 +561,11 @@ export default () => {
                     <div className="input-item">
                         <div className="label">
                             {intl.formatMessage({ id: 'mint.locked' })}
-                            <Popover content="这是一段文字这是一段文字这是一段文字">
+                            <Popover
+                                content={'这是一段文字这是一段文字这是一段文字'}
+                                trigger="hover"
+                                placement="rightTop"
+                            >
                                 <i className="icon-question size-16"></i>
                             </Popover>
                         </div>
