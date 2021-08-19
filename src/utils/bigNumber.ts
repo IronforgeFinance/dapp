@@ -18,7 +18,13 @@ export const ethersToBigNumber = (ethersBn: ethers.BigNumber): BN =>
 
 export const toFixedWithoutRound = (num: number | BigNumber, fixed: number) => {
     var re = new RegExp('^-?\\d+(?:.\\d{0,' + (fixed || -1) + '})?');
-    return num.toString().match(re)![0];
+    return num
+        .toString()
+        .match(re)![0]
+        .replace(
+            /^(\d+)$/,
+            '$1' + (fixed > 0 ? `.${new Array(fixed).fill('0').join('')}` : ''),
+        );
 };
 
 export function expandTo18Decimals(num: number | string): BigNumber {

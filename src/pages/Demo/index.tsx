@@ -6,7 +6,7 @@ import CommentaryCard from '@/components/CommentaryCard';
 // import DebtItemRatio from '@/components/DebtItemRatio';
 // import DebtItem from '@/components/DebtItem';
 import message from '@iron/Notification';
-import Popover from '@/components/Popover';
+// import Popover from '@/components/Popover';
 import TransitionConfirm from '@/components/TransitionConfirm';
 
 export default () => {
@@ -115,12 +115,12 @@ export default () => {
                         失败
                     </button>
                 </li>
-                <li>
+                {/* <li>
                     <h3>6. Popover</h3>
                     <Popover content="Fuck Qsk!!!!">
                         <button>Open Popover</button>
                     </Popover>
-                </li>
+                </li> */}
                 <li>
                     <h3>7. Transition Confirm</h3>
                     <TransitionConfirmDemo />

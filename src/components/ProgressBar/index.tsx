@@ -2,6 +2,10 @@ import React, { useMemo } from 'react';
 import './index.less';
 import { ProgressBarType } from '@/config/constants/types';
 import classnames from 'classnames';
+import { toFixedWithoutRound } from '@/utils/bigNumber';
+
+export type StatusType = 'unconnect' | 'trading' | 'default';
+
 export interface IProgressBarProps {
     type: ProgressBarType;
     name: string | React.ReactNode;
@@ -10,19 +14,26 @@ export interface IProgressBarProps {
     unit: '$' | '%';
     token?: string;
     tokenAmount?: number;
+    status?: StatusType;
 }
-export default (props: IProgressBarProps) => {
+
+const ProgressBar = (props: IProgressBarProps) => {
     const {
         type,
         name,
         startValue,
         endValue,
         unit,
+        status,
         token,
         tokenAmount,
     } = props;
 
     const progress = useMemo(() => {
+        if (status === 'unconnect') {
+            return 0;
+        }
+
         if (type === ProgressBarType.f_ratio) {
             return (endValue / startValue) * 100;
         } else {
@@ -38,7 +49,13 @@ export default (props: IProgressBarProps) => {
             }
         }
         // return 50; // 调试效果
-    }, [type, startValue, endValue]);
+    }, [type, startValue, endValue, status]);
+
+    const barStyle = useMemo((): React.CSSProperties => {
+        return {
+            opacity: status === 'default' ? 1 : 0.7,
+        };
+    }, [status]);
 
     return (
         <div className="progress-bar-container">
@@ -53,7 +70,7 @@ export default (props: IProgressBarProps) => {
             ></div>
             <div className="progress-content">
                 <p className="progress-name">{name}</p>
-                <div className="progress-bar">
+                <div className="progress-bar" style={barStyle}>
                     <div className="progress-bar-bg">
                         <div
                             className={classnames({
@@ -97,3 +114,9 @@ export default (props: IProgressBarProps) => {
         </div>
     );
 };
+
+ProgressBar.defaultProps = {
+    status: 'unconnect' as StatusType,
+};
+
+export default ProgressBar;
