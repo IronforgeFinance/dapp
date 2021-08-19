@@ -2,7 +2,7 @@ import React from 'react';
 import { NavLink, useIntl } from 'umi';
 import './index.less';
 import WalletStatus from '../WalletStatus';
-import Logo from '@/assets/images/home_logo.png';
+import Logo from '@/assets/images/header-logo.png';
 import useEagerConnect from '@/hooks/useEagerConnect';
 import LangSwitcher from '../LangSwitcher';
 export default () => {

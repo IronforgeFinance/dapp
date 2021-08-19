@@ -11,6 +11,8 @@
     display: flex;
     justify-content: center;
     position: absolute;
+    display: flex;
+    flex-direction: column;
 
     .video-bg-left {
         position: absolute;
@@ -35,7 +37,10 @@
         display: grid;
         grid-template-columns: auto auto;
         grid-template-rows: auto auto;
-        margin-top: 130px;
+        margin: 130px auto 0 auto;
+
+        width: 738px;
+        height: 396px;
 
         .sheepskin-book {
             display: flex;
@@ -146,9 +151,9 @@
         width: 282px;
         height: 184px;
 
-        position: absolute;
-        top: @dataTop;
-        left: 51%;
+        position: fixed;
+        bottom: 0;
+        margin-left: 51%;
 
         padding: 14px 24px;
         box-sizing: border-box;
@@ -186,13 +191,13 @@
     .amount-box {
         width: 282px;
         height: 184px;
-        position: absolute;
-        top: @dataTop;
+        position: fixed;
+        bottom: 0;
         left: 80%;
         display: flex;
         flex-direction: column;
         align-items: center;
-        padding-top: 66px;
+        padding-top: 110px;
         box-sizing: border-box;
 
         .amount {
