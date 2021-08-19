@@ -1,15 +1,32 @@
-import React from 'react';
+import React, { useState, useMemo } from 'react';
 import './index.less';
-import { Select } from 'antd';
 import useEagerConnect from '@/hooks/useEagerConnect';
 import Blacksmith from '@/assets/images/blacksmith.png';
 import Merchant from '@/assets/images/merchant.png';
 import { Link } from 'umi';
+import { useInitialRatio } from '@/hooks/useConfig';
+import { COLLATERAL_TOKENS } from '@/config';
+import SelectTokens from '@/components/SelectTokens';
+import { useBep20Balance } from '@/hooks/useTokenBalance';
+
 export default () => {
     useEagerConnect();
     const isDev = () => {
         return process.env.NODE_ENV === 'development';
     };
+    const [showSelectFromToken, setShowSelectFromToken] = useState(false);
+    const [collateralToken, setCollateralToken] = useState(
+        COLLATERAL_TOKENS[0].name,
+    );
+    const initialRatio = useInitialRatio(collateralToken);
+
+    const computedRatio = useMemo(() => initialRatio * 100, [
+        collateralToken,
+        initialRatio,
+    ]);
+
+    const { balance: fusdBalance } = useBep20Balance('FUSD');
+
     return (
         <div className="home-container">
             <video
@@ -73,18 +90,28 @@ export default () => {
                 </div>
             </div>
             <div className="pledge-ratio-box">
-                <Select className="common-select" placeholder={'Select token'}>
-                    {['USDC'].map((item) => (
-                        <Select.Option value={item} key={item}>
-                            {item}
-                        </Select.Option>
-                    ))}
-                </Select>
-                <span className="ratio">400%</span>
+                <SelectTokens
+                    visable={showSelectFromToken}
+                    value={collateralToken}
+                    tokenList={COLLATERAL_TOKENS}
+                    onSelect={(v) => setCollateralToken(v)}
+                    onClose={() => setShowSelectFromToken(false)}
+                >
+                    <button
+                        className="btn-mint-form"
+                        onClick={() => setShowSelectFromToken(true)}
+                    >
+                        <span>
+                            {collateralToken || <span>Select token</span>}
+                        </span>
+                        <i className="icon-down size-20"></i>
+                    </button>
+                </SelectTokens>
+                <span className="ratio">{computedRatio}%</span>
                 <p className="desc">My Current Pledge Ratio</p>
             </div>
             <div className="amount-box">
-                <span className="amount">130030 fUSD</span>
+                <span className="amount">{fusdBalance} fUSD</span>
                 <span className="desc">Active Debt</span>
             </div>
         </div>

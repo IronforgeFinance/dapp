@@ -4,15 +4,28 @@ import { IconProps } from './index';
 
 interface TokenIconProps extends IconProps {
     name: string;
-    isTokenPair?: boolean;
+    // isTokenPair?: boolean;
 }
 
+const tokenRegex = /^[a-zA-Z]+$/;
+
 const TokenIcon = (props: TokenIconProps) => {
-    const { size, name = '', style, isTokenPair } = props;
+    const { size, name = '', style } = props;
 
     const sizeStyle = React.useMemo(() => {
         return { width: `${size}px`, height: `${size}px` };
     }, [size]);
+
+    const isTokenPair = React.useMemo(() => {
+        const nameArray = name.split('-');
+        if (nameArray.length > 1) {
+            return (
+                tokenRegex.test(nameArray[0]) && tokenRegex.test(nameArray[1])
+            );
+        }
+
+        return false;
+    }, [name]);
 
     const tokenPair = React.useMemo(() => {
         const tokens = name.split('-');
@@ -20,7 +33,7 @@ const TokenIcon = (props: TokenIconProps) => {
             token0: tokens[0] || '',
             token1: tokens[1] || '',
         };
-    }, [isTokenPair, name]);
+    }, [isTokenPair]);
 
     return (
         <React.Fragment>
@@ -48,7 +61,6 @@ const TokenIcon = (props: TokenIconProps) => {
 
 TokenIcon.defaultProps = {
     size: 24,
-    isTokenPair: false,
     style: {},
 };
 

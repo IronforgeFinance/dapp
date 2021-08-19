@@ -129,7 +129,6 @@ export default (props: ISelectTokensProps) => {
                             onClick={_onSelect.bind(this, token.name)}
                         >
                             <TokenIcon
-                                isTokenPair={token.name.split('-').length > 1}
                                 name={token.name.toLowerCase()}
                                 size={24}
                             />

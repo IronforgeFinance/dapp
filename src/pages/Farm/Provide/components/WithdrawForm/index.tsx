@@ -182,7 +182,7 @@ export default () => {
                                 className="custom-input"
                             />
                             <div className="token">
-                                <TokenIcon isTokenPair name={lp} size={24} />
+                                <TokenIcon name={lp} size={24} />
                                 <SelectTokens
                                     visable={showSelectFromToken}
                                     value={lp}

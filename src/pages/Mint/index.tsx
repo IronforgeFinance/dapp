@@ -149,9 +149,15 @@ export default () => {
         refresh: refreshCollateralBalance,
     } = useBep20Balance(collateralToken);
 
+    const {
+        balance: mintBalance,
+        refresh: refreshMintBalance,
+    } = useBep20Balance(toToken);
+
     const refreshBalance = () => {
         refreshIFTBalance();
         refreshCollateralBalance();
+        refreshMintBalance();
     };
     // fToken价值/Collateral价值 最高不超过3/10
     const maxLockedAmount = useMemo(() => {
@@ -619,6 +625,9 @@ export default () => {
                                 </p>
                                 <p className="right">
                                     {intl.formatMessage({ id: 'mint.balance' })}
+                                    <span className="balance">
+                                        {mintBalance}
+                                    </span>
                                 </p>
                             </div>
                             <div className="input">
