@@ -126,3 +126,11 @@ export const info = success;
 export const error = fail;
 
 export const warning = fail;
+
+export default {
+    info,
+    error,
+    warning,
+    fail,
+    success,
+};

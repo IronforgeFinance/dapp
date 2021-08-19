@@ -2,6 +2,8 @@ import React from 'react';
 import './index.less';
 import { CurrencySymbol } from '@/config/constants/types';
 import classNames from 'classnames';
+import { copyTextToClipboard } from '@/utils/clipboard';
+import Notification from '@iron/Notification';
 
 // type DataType = 'address' | 'mouney';
 
@@ -63,7 +65,17 @@ const MarketDetail = (props: MarketDetailProps) => {
                             <li key={prop.label} className="prop">
                                 <span className="label">{prop.label}</span>
                                 {instanceOfAddress(prop.value) && (
-                                    <span className="value address">
+                                    <span
+                                        className="value address"
+                                        onClick={() => {
+                                            copyTextToClipboard(
+                                                (prop.value as Address).address,
+                                            );
+                                            Notification.success(
+                                                'Copy Address Successfully',
+                                            );
+                                        }}
+                                    >
                                         {prop.value.address.replace(
                                             /^(0x[\d\w]{4}).*([\d\w]{4})$/,
                                             '$1...$2',
