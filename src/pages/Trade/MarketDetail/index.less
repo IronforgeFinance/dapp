@@ -3,41 +3,11 @@
 .market-details {
     height: 502px;
     width: 450px;
-    // margin-left: 195px;
-    top: 86px;
-    position: absolute;
-    right: 0;
-    z-index: 1;
     #image.background('~@/assets/images/trade-market-detail-bg.png');
     #position.parent();
     padding-top: 39px;
     padding-left: 30px;
     box-sizing: border-box;
-    transition: transform 0.2s;
-
-    &.hide {
-        transform: translateX(90%);
-
-        .btn-skip {
-            transform: translate(-50%, -30%) rotate(540deg);
-        }
-    }
-
-    &.show {
-        transform: translateX(0);
-
-        .btn-skip {
-            transform: translate(-50%, -30%) rotate(0);
-        }
-    }
-
-    .btn-skip {
-        height: 36px;
-        width: 48px;
-        #image.button('~@/assets/images/trade-btn-skip.png');
-        #position.absLtCorner(translate(-50%, -30%));
-        transition: transform 0.7s;
-    }
 
     .head {
         display: flex;
@@ -116,4 +86,8 @@
             }
         }
     }
+}
+
+div.iron-folder {
+    top: 93px;
 }

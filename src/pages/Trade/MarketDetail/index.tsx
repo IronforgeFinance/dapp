@@ -4,6 +4,7 @@ import { CurrencySymbol } from '@/config/constants/types';
 import classNames from 'classnames';
 import { copyTextToClipboard } from '@/utils/clipboard';
 import Notification from '@iron/Notification';
+import Folder from '@iron/Folder';
 
 // type DataType = 'address' | 'mouney';
 
@@ -38,63 +39,57 @@ interface MarketDetailProps {
 const DEFAULT_CURRENCY_SYMBOL: CurrencySymbol = '$';
 
 const MarketDetail = (props: MarketDetailProps) => {
-    const [toggle, setToggle] = React.useState(false);
-
     return (
-        <div
-            className={classNames({
-                'market-details': true,
-                hide: toggle,
-                show: !toggle,
-            })}
-        >
-            <button className="btn-skip" onClick={() => setToggle(!toggle)} />
-            <div className="head">
-                <p className="details">
-                    Market Details:{' '}
-                    <span className="token-pair">
-                        {props.token0}/{props.token1}
-                    </span>
-                </p>
-                <span className="token0">{props.token0}</span>
+        <Folder>
+            <div className="market-details">
+                <div className="head">
+                    <p className="details">
+                        Market Details:{' '}
+                        <span className="token-pair">
+                            {props.token0}/{props.token1}
+                        </span>
+                    </p>
+                    <span className="token0">{props.token0}</span>
+                </div>
+                <div className="main">
+                    <ul className="props">
+                        {props.dataSource.map((prop) => {
+                            return (
+                                <li key={prop.label} className="prop">
+                                    <span className="label">{prop.label}</span>
+                                    {instanceOfAddress(prop.value) && (
+                                        <span
+                                            className="value address"
+                                            onClick={() => {
+                                                copyTextToClipboard(
+                                                    (prop.value as Address)
+                                                        .address,
+                                                );
+                                                Notification.success(
+                                                    'Copy Address Successfully',
+                                                );
+                                            }}
+                                        >
+                                            {prop.value.address.replace(
+                                                /^(0x[\d\w]{4}).*([\d\w]{4})$/,
+                                                '$1...$2',
+                                            )}
+                                        </span>
+                                    )}
+                                    {instanceOfPrice(prop.value) && (
+                                        <span className="value price">
+                                            {prop.value.symbol ||
+                                                DEFAULT_CURRENCY_SYMBOL}
+                                            {prop.value.amount}
+                                        </span>
+                                    )}
+                                </li>
+                            );
+                        })}
+                    </ul>
+                </div>
             </div>
-            <div className="main">
-                <ul className="props">
-                    {props.dataSource.map((prop) => {
-                        return (
-                            <li key={prop.label} className="prop">
-                                <span className="label">{prop.label}</span>
-                                {instanceOfAddress(prop.value) && (
-                                    <span
-                                        className="value address"
-                                        onClick={() => {
-                                            copyTextToClipboard(
-                                                (prop.value as Address).address,
-                                            );
-                                            Notification.success(
-                                                'Copy Address Successfully',
-                                            );
-                                        }}
-                                    >
-                                        {prop.value.address.replace(
-                                            /^(0x[\d\w]{4}).*([\d\w]{4})$/,
-                                            '$1...$2',
-                                        )}
-                                    </span>
-                                )}
-                                {instanceOfPrice(prop.value) && (
-                                    <span className="value price">
-                                        {prop.value.symbol ||
-                                            DEFAULT_CURRENCY_SYMBOL}
-                                        {prop.value.amount}
-                                    </span>
-                                )}
-                            </li>
-                        );
-                    })}
-                </ul>
-            </div>
-        </div>
+        </Folder>
     );
 };
 

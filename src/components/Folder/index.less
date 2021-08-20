@@ -1,0 +1,19 @@
+@import '~@/assets/styles/iron.less';
+
+.iron-folder {
+    position: absolute;
+    transition: transform 0.2s;
+
+    &-wrapper {
+        position: relative;
+
+        .btn-toggle {
+            height: 36px;
+            width: 48px;
+            #image.button('~@/assets/images/trade-btn-skip.png');
+            #position.absLtCorner(translate(-50%, -30%));
+            transition: transform 0.7s;
+            z-index: 10;
+        }
+    }
+}
