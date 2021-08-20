@@ -51,11 +51,26 @@ const ProgressBar = (props: IProgressBarProps) => {
         // return 50; // 调试效果
     }, [type, startValue, endValue, status]);
 
-    const barStyle = useMemo((): React.CSSProperties => {
-        return {
-            opacity: status === 'default' ? 1 : 0.7,
-        };
-    }, [status]);
+    const initialRatio = useMemo(() => (startValue > 0 ? 50 : 0), [startValue]);
+    const increment: number = useMemo(() => endValue - startValue, [
+        endValue,
+        startValue,
+    ]);
+    const isTrading = useMemo(() => increment !== 0, [increment]);
+    const currentRatio = useMemo(
+        () => (isTrading ? 50 + (increment / (startValue || 1)) * 50 : 0),
+        [increment, startValue],
+    );
+    const isRaised = useMemo(() => initialRatio < currentRatio, [
+        initialRatio,
+        currentRatio,
+    ]);
+    const barStyle = useMemo(
+        (): React.CSSProperties => ({
+            opacity: isTrading ? 0.7 : status === 'default' ? 1 : 0.7,
+        }),
+        [status, isTrading],
+    );
 
     return (
         <div className="progress-bar-container">
@@ -73,13 +88,21 @@ const ProgressBar = (props: IProgressBarProps) => {
                 <div className="progress-bar" style={barStyle}>
                     <div className="progress-bar-bg">
                         <div
-                            className={classnames({
-                                'current-progress': true,
-                                'current-progress-revert':
-                                    type === ProgressBarType.f_ratio,
-                            })}
-                            style={{ width: progress + '%' }}
-                        ></div>
+                            className={`initial-progress ${
+                                !isRaised && 'is-not-raised'
+                            }`}
+                            style={{ width: initialRatio + '%', ...barStyle }}
+                        >
+                            <div className="move-bar" />
+                        </div>
+                        <div
+                            className={`current-progress ${
+                                isRaised && 'is-raised'
+                            }`}
+                            style={{ width: currentRatio + '%' }}
+                        >
+                            <div className="move-bar" />
+                        </div>
                     </div>
                 </div>
                 <div className="info">
@@ -116,7 +139,7 @@ const ProgressBar = (props: IProgressBarProps) => {
 };
 
 ProgressBar.defaultProps = {
-    status: 'unconnect' as StatusType,
+    status: 'default' as StatusType,
 };
 
 export default ProgressBar;

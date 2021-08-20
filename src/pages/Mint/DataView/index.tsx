@@ -3,22 +3,26 @@ import './index.less';
 import { Popover } from 'antd';
 import { useModel } from 'umi';
 import { useWeb3React } from '@web3-react/core';
-import ProgressBar from '@/components/ProgressBar';
+import ProgressBar, { StatusType } from '@/components/ProgressBar';
 
-export default () => {
+interface DataViewProps {
+    status?: StatusType;
+}
+
+export default (props: DataViewProps) => {
     const { stakedData, lockedData, debtData, fRatioData } = useModel(
         'dataView',
         (model) => ({
             ...model,
         }),
     );
+    const { status = 'default' } = props;
 
     const { account } = useWeb3React();
 
-    const loginStatus = React.useMemo(
-        () => (account ? 'default' : 'unconnect'),
-        [account],
-    );
+    const loginStatus = React.useMemo(() => (account ? status : 'unconnect'), [
+        account,
+    ]);
 
     return (
         <div className="data-view-container">

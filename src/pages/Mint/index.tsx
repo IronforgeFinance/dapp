@@ -46,6 +46,7 @@ import { isDeliveryAsset } from '@/utils';
 // import Popover from '@/components/Popover';
 import { TokenIcon } from '@/components/Icon';
 import TransitionConfirm from '@iron/TransitionConfirm';
+import { StatusType } from '@/components/ProgressBar';
 
 export default () => {
     const intl = useIntl();
@@ -490,6 +491,7 @@ export default () => {
             }
         }
     };
+
     // *****TODO to be removed ends *********
 
     return (
