@@ -10,13 +10,23 @@ interface FolderProps {
     value?: boolean;
 }
 
+export interface FolderContextProps {
+    changeToggle: (toggle: boolean) => void;
+    toggle: boolean;
+}
+
+export const FolderContext = React.createContext<FolderContextProps | null>(
+    null,
+);
+
 const Folder = (props: FolderProps) => {
     const { children, placement, foldingOffest, value } = props;
-    const [toggle, setToggle] = React.useState(false);
+    const [toggle, setToggle] = React.useState(true);
 
-    // * 这个屌函数插在RAF里面执行，所以是插入帧之前完成
+    // * layoutEffect插在RAF里面执行，所以是插入帧之前完成
     // * 如果使用effect，就是下一帧完成，开始的时候会看到一个动画
-    React.useLayoutEffect(() => setToggle(value), [value]);
+    // React.useLayoutEffect(() => setToggle(value), [value]);
+    React.useEffect(() => setToggle(value), [value]);
 
     const boxStyle = React.useMemo(() => {
         return toggle
@@ -46,7 +56,14 @@ const Folder = (props: FolderProps) => {
                     className="btn-toggle"
                     onClick={() => setToggle(!toggle)}
                 />
-                {children}
+                <FolderContext.Provider
+                    value={{
+                        changeToggle: (toggle) => setToggle(toggle),
+                        toggle,
+                    }}
+                >
+                    {children}
+                </FolderContext.Provider>
             </div>
         </div>
     );

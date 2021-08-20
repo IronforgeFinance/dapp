@@ -7,6 +7,7 @@ import IconBack from '@/assets/images/icon-back.png';
 import { history } from 'umi';
 
 import { Tabs } from 'antd';
+import IsShow from '@/components/IsShow';
 const { TabPane } = Tabs;
 
 const tabItems = [
@@ -19,6 +20,8 @@ const tabItems = [
         key: '2',
     },
 ];
+
+export const ITabKeyContext = React.createContext<string>('');
 
 export default () => {
     const [tabKey, setTabKey] = useState('1');
@@ -45,8 +48,14 @@ export default () => {
                             history.goBack();
                         }}
                     />
-                    {tabKey === '1' && <ProvideForm />}
-                    {tabKey === '2' && <WithdrawForm />}
+                    <ITabKeyContext.Provider value={tabKey}>
+                        <IsShow condition={tabKey === '1'}>
+                            <ProvideForm />
+                        </IsShow>
+                        <IsShow condition={tabKey === '2'}>
+                            <WithdrawForm />
+                        </IsShow>
+                    </ITabKeyContext.Provider>
                 </div>
             </div>
         </div>

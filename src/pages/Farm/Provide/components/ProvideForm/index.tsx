@@ -16,6 +16,7 @@ import { registerToken } from '@/utils/wallet';
 import { DEADLINE } from '@/config/constants/constant';
 import SelectTokens from '@iron/SelectTokens';
 import TransitionConfirm from '@iron/TransitionConfirm';
+import { ITabKeyContext } from '../../index';
 import {
     useCheckERC20ApprovalStatus,
     useERC20Approve,
@@ -359,11 +360,17 @@ export default () => {
         }
     };
 
+    const tabKey = React.useContext(ITabKeyContext);
     const hasLpList = React.useMemo(() => !!lpDataList.length, [lpDataList]);
+    const isCurrentTab = React.useMemo(() => tabKey === '1', [tabKey]);
 
     return (
         <div className="provide-outer-container">
-            <Folder placement="left" foldingOffest={95} value={!hasLpList}>
+            <Folder
+                placement="left"
+                foldingOffest={95}
+                value={!isCurrentTab || !hasLpList}
+            >
                 <div className="lp-list">
                     <div className="header">
                         <p>Your Liquidity</p>
