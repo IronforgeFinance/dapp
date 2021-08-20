@@ -17,6 +17,8 @@ import LiquidationAbi from '@/config/abi/Liquidation.json';
 import PricesAbi from '@/config/abi/MockPrices.json';
 import PancakeRouter from '@/config/abi/PancakeRouterV2.json';
 import PancakeFactory from '@/config/abi/PancakeFactory.json';
+import MinerReward from '@/config/abi/MinerReward.json';
+
 export const getContract = (
     abi: any,
     address: string,
@@ -103,4 +105,12 @@ export const getPancakeFactoryContract = (
     const chainId = process.env.APP_CHAIN_ID as string;
     const address = Addresses.PancakeFactory[chainId];
     return getContract(PancakeFactory, address, signer);
+};
+
+export const getMinerRewardContract = (
+    signer?: ethers.Signer | ethers.providers.Provider,
+) => {
+    const chainId = process.env.APP_CHAIN_ID as string;
+    const address = Addresses.MinerReward[chainId];
+    return getContract(MinerReward, address, signer);
 };

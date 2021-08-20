@@ -1,8 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './index.less';
-import { history } from 'umi';
+import { history, useModel } from 'umi';
 import PoolItem from './PoolItem';
+import { useWeb3React } from '@web3-react/core';
 export default () => {
+    const { account } = useWeb3React();
+    const { fetchStakePoolList } = useModel('stakeData', (model) => ({
+        ...model,
+    }));
     const [ftokenInfo, setfTokenInfo] = useState({
         price: 4.32,
         vol: 633656,
@@ -42,6 +47,15 @@ export default () => {
             staked: 1234.0,
         },
     ];
+
+    useEffect(() => {
+        (async () => {
+            if (account) {
+                const tokens = [{ poolName: 'USDC-IFT', poolId: 0 }];
+                await fetchStakePoolList(tokens, account);
+            }
+        })();
+    }, [account]);
     const [poolItems, setPoolItems] = useState(test);
     return (
         <div className="farm-container">

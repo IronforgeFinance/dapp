@@ -1,0 +1,15 @@
+[
+  {
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "c__0x880da070",
+        "type": "bytes32"
+      }
+    ],
+    "name": "c_0x880da070",
+    "outputs": [],
+    "stateMutability": "pure",
+    "type": "function"
+  }
+]

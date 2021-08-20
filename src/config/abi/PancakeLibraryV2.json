@@ -1,0 +1,15 @@
+[
+  {
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "c__0x574c5536",
+        "type": "bytes32"
+      }
+    ],
+    "name": "c_0x574c5536",
+    "outputs": [],
+    "stateMutability": "pure",
+    "type": "function"
+  }
+]
