@@ -3,6 +3,7 @@ import routes from './routes';
 import path from 'path';
 
 export default defineConfig({
+    plugins: ['babel-plugin-styled-components'],
     nodeModulesTransform: {
         type: 'none',
     },

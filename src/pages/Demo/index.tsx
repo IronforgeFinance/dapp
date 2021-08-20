@@ -91,14 +91,13 @@ export default () => {
                 <li>
                     <h3>5. 成功通知</h3>
                     <button
-                        onClick={
-                            () =>
-                                message.success({
-                                    message: 'Transaction receipt',
-                                    description: 'Mint fUSD from USDC',
-                                    showView: true,
-                                })
-                            // message.success('Transaction success')
+                        onClick={() =>
+                            // message.success({
+                            //     message: 'Transaction receipt',
+                            //     description: 'Mint fUSD from USDC',
+                            //     showView: true,
+                            // })
+                            message.success('Transaction success')
                         }
                     >
                         成功

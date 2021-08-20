@@ -4,6 +4,7 @@ import { notification } from 'antd';
 import LinkSvg from '@/assets/images/link.svg';
 import NotifySuccessSvg from '@/assets/images/notify-success.svg';
 import NotifyFailSvg from '@/assets/images/notify-fail.svg';
+import styled, { keyframes } from 'styled-components';
 
 const DEFAULT_DURATION = 5;
 
@@ -35,16 +36,40 @@ function instanceOfFailProps(object: any): object is FailProps {
     return 'description' in object;
 }
 
+interface TimerBarProps {
+    duration: number;
+}
+
+const TimerBar = function (props: TimerBarProps) {
+    const ITimerBar = styled.div`
+        position: absolute;
+        left: 0;
+        right: 20px;
+        bottom: 0;
+        background: #a762ff;
+        height: 5px;
+        animation: ${keyframes`
+            0% { width: 100%; }
+            100% { width: 0%; }
+        `} ${props.duration}s linear 1 forwards;
+    `;
+
+    return <ITimerBar />;
+};
+
 export const success = (props: string | SuccessProps) => {
     if (typeof props === 'string') {
         notification.success({
             duration: DEFAULT_DURATION,
-            className: 'icron-notification success',
+            className: 'iron-notification success',
             message: <h3>{DEFAULT_SUCCESS_MESSAGE}</h3>,
             description: (
-                <div className="description">
-                    <p>{props}</p>
-                </div>
+                <React.Fragment>
+                    <div className="description">
+                        <p>{props}</p>
+                    </div>
+                    <TimerBar duration={DEFAULT_DURATION} />
+                </React.Fragment>
             ),
             icon: <img className="icon-status" src={NotifySuccessSvg} />,
             closeIcon: <i className="icon-close" />,
@@ -63,23 +88,26 @@ export const success = (props: string | SuccessProps) => {
 
         notification.success({
             duration: duration || DEFAULT_DURATION,
-            className: 'icron-notification success',
+            className: 'iron-notification success',
             message: <h3>{message || DEFAULT_SUCCESS_MESSAGE}</h3>,
             description: (
-                <div className="description">
-                    <p>{description}</p>
-                    {showView &&
-                        (ViewNode || (
-                            <a
-                                onClick={() =>
-                                    (window.location.href = viewLink)
-                                }
-                            >
-                                View on Bscscan
-                                <img src={LinkSvg} />
-                            </a>
-                        ))}
-                </div>
+                <React.Fragment>
+                    <div className="description">
+                        <p>{description}</p>
+                        {showView &&
+                            (ViewNode || (
+                                <a
+                                    onClick={() =>
+                                        (window.location.href = viewLink)
+                                    }
+                                >
+                                    View on Bscscan
+                                    <img src={LinkSvg} />
+                                </a>
+                            ))}
+                    </div>
+                    <TimerBar duration={duration || DEFAULT_DURATION} />
+                </React.Fragment>
             ),
             icon: <img className="icon-status" src={NotifySuccessSvg} />,
             closeIcon: <i className="icon-close" />,
@@ -91,12 +119,15 @@ export const fail = (props: string | FailProps) => {
     if (typeof props === 'string') {
         notification.error({
             duration: DEFAULT_DURATION,
-            className: 'icron-notification fail',
+            className: 'iron-notification fail',
             message: <h3>{DEFAULT_FAIL_MESSAGE}</h3>,
             description: (
-                <div className="description">
-                    <p>{props}</p>
-                </div>
+                <React.Fragment>
+                    <div className="description">
+                        <p>{props}</p>
+                    </div>
+                    <TimerBar duration={DEFAULT_DURATION} />
+                </React.Fragment>
             ),
             icon: <img className="icon-status" src={NotifyFailSvg} />,
             closeIcon: <i className="icon-close" />,
@@ -108,12 +139,15 @@ export const fail = (props: string | FailProps) => {
 
         notification.error({
             duration: duration || DEFAULT_DURATION,
-            className: 'icron-notification fail',
+            className: 'iron-notification fail',
             message: <h3>{message || DEFAULT_FAIL_MESSAGE}</h3>,
             description: (
-                <div className="description">
-                    <p>{description}</p>
-                </div>
+                <React.Fragment>
+                    <div className="description">
+                        <p>{description}</p>
+                    </div>
+                    <TimerBar duration={duration || DEFAULT_DURATION} />
+                </React.Fragment>
             ),
             icon: <img className="icon-status" src={NotifyFailSvg} />,
             closeIcon: <i className="icon-close" />,
