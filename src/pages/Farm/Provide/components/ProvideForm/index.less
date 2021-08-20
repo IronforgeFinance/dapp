@@ -89,9 +89,7 @@
         no-repeat;
     background-size: cover;
     padding: 18px 28px;
-    position: absolute;
-    left: -350px;
-    top: 80px;
+    position: relative;
     .header {
         > p:first-child {
             font-style: normal;
@@ -115,5 +113,19 @@
     .lp-list-content {
         overflow: auto;
         height: 220px;
+    }
+}
+
+.provide-outer-container {
+    position: relative;
+
+    .iron-folder {
+        top: 0;
+        left: -350px !important;
+        top: 80px;
+
+        .btn-toggle {
+            top: 180px;
+        }
     }
 }

@@ -21,6 +21,7 @@ import {
     useERC20Approve,
 } from '@/hooks/useApprove';
 import { TokenIcon } from '@/components/Icon';
+import Folder from '@/components/Folder';
 export const LP_TOKENS = ['USDC-ETH', 'USDC-IFT']; //TODO 配置中读取官方预先添加的流动性lp
 const TOKENS = Array.from(
     new Set(
@@ -358,22 +359,26 @@ export default () => {
         }
     };
 
+    const hasLpList = React.useMemo(() => !!lpDataList.length, [lpDataList]);
+
     return (
-        <div>
-            <div className="lp-list">
-                <div className="header">
-                    <p>Your Liquidity</p>
-                    <p>
-                        You can click Add Liquidity to add Lp quickly or remove
-                        liquidity to receive tokens back.
-                    </p>
+        <div className="provide-outer-container">
+            <Folder placement="left" foldingOffest={95} value={!hasLpList}>
+                <div className="lp-list">
+                    <div className="header">
+                        <p>Your Liquidity</p>
+                        <p>
+                            You can click Add Liquidity to add Lp quickly or
+                            remove liquidity to receive tokens back.
+                        </p>
+                    </div>
+                    <div className="lp-list-content">
+                        {lpDataList.map((item) => (
+                            <LpItem data={item} key={item.symbol} />
+                        ))}
+                    </div>
                 </div>
-                <div className="lp-list-content">
-                    {lpDataList.map((item) => (
-                        <LpItem data={item} key={item.symbol} />
-                    ))}
-                </div>
-            </div>
+            </Folder>
             <div className="provide-form common-box">
                 <div className="input-item">
                     <p className="label">Asset</p>

@@ -1,22 +1,27 @@
 import React from 'react';
 import './index.less';
-import classNames from 'classnames';
 
 type PlacementType = 'right' | 'left';
 
 interface FolderProps {
     children: React.ReactNode;
     placement?: PlacementType;
+    foldingOffest?: number;
+    value?: boolean;
 }
 
 const Folder = (props: FolderProps) => {
-    const { children, placement } = props;
+    const { children, placement, foldingOffest, value } = props;
     const [toggle, setToggle] = React.useState(false);
+
+    // * 这个屌函数插在RAF里面执行，所以是插入帧之前完成
+    // * 如果使用effect，就是下一帧完成，开始的时候会看到一个动画
+    React.useLayoutEffect(() => setToggle(value), [value]);
 
     const boxStyle = React.useMemo(() => {
         return toggle
             ? {
-                  transform: `translateX(90%)`,
+                  transform: `translateX(${foldingOffest}%)`,
               }
             : {
                   transform: `translateX(0)`,
@@ -26,10 +31,10 @@ const Folder = (props: FolderProps) => {
     const btnStyle = React.useMemo(() => {
         return toggle
             ? {
-                  transform: `translate(-50%, -30%) rotate(0)`,
+                  transform: `translate(-50%, -30%) rotate(540deg)`,
               }
             : {
-                  transform: `translate(-50%, -30%) rotate(540deg)`,
+                  transform: `translate(-50%, -30%) rotate(0)`,
               };
     }, [toggle]);
 
@@ -49,6 +54,8 @@ const Folder = (props: FolderProps) => {
 
 Folder.defaultProps = {
     placement: 'right',
+    foldingOffest: 90,
+    value: false,
 };
 
 export default Folder;
