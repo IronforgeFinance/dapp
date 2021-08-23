@@ -396,6 +396,7 @@ export default () => {
                     tx && [
                         {
                             label: 'From',
+                            direct: 'from',
                             value: {
                                 token: tx.from.token,
                                 amount: tx.from.amount,
@@ -404,6 +405,7 @@ export default () => {
                         },
                         {
                             label: 'To',
+                            direct: 'to',
                             value: {
                                 token: tx.to.token,
                                 amount: tx.to.amount,
