@@ -1,10 +1,13 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 import './index.less';
 import { ProgressBarType } from '@/config/constants/types';
+import { Popover } from 'antd';
 import classnames from 'classnames';
 import { toFixedWithoutRound } from '@/utils/bigNumber';
+import { useEffect } from 'react';
+import classNames from 'classnames';
 
-export type StatusType = 'unconnect' | 'trading' | 'default';
+export type StatusType = 'unconnect' | 'trading' | 'done' | 'default';
 
 export interface IProgressBarProps {
     type: ProgressBarType;
@@ -17,6 +20,22 @@ export interface IProgressBarProps {
     status?: StatusType;
 }
 
+export interface RatioViewProps {
+    currentRatio?: number | string;
+    initialRatio?: number | string;
+}
+
+const RatioView = (props: RatioViewProps) => {
+    const { initialRatio = 0, currentRatio = 0 } = props;
+
+    return (
+        <ul className="popover-ratios">
+            <li className="current">f-Ratio current: {currentRatio}</li>
+            <li className="initial">f-Ratio initial: {initialRatio}</li>
+        </ul>
+    );
+};
+
 const ProgressBar = (props: IProgressBarProps) => {
     const {
         type,
@@ -28,6 +47,7 @@ const ProgressBar = (props: IProgressBarProps) => {
         token,
         tokenAmount,
     } = props;
+    const [stakeRatioInitial, setStakeRatioInitial] = useState(0);
 
     const progress = useMemo(() => {
         if (status === 'unconnect') {
@@ -51,23 +71,53 @@ const ProgressBar = (props: IProgressBarProps) => {
         // return 50; // 调试效果
     }, [type, startValue, endValue, status]);
 
-    const initialRatio = useMemo(() => (startValue > 0 ? 50 : 0), [startValue]);
-    const increment: number = useMemo(() => endValue - startValue, [
-        endValue,
-        startValue,
-    ]);
-    const isTrading = useMemo(() => increment !== 0, [increment]);
-    const currentRatio = useMemo(
-        () => (isTrading ? 50 + (increment / (startValue || 1)) * 50 : 0),
-        [increment, startValue],
+    // * 初始过程的质押率计算
+    const isStakeRatioInitial = useMemo(
+        () => startValue === 0 && type === 'f_ratio',
+        [type, startValue],
     );
+    useEffect(() => {
+        if (!stakeRatioInitial && isStakeRatioInitial) {
+            setStakeRatioInitial(endValue);
+        }
+    }, [isStakeRatioInitial, endValue]);
+    const initialRatio = useMemo(() => {
+        if (isStakeRatioInitial) {
+            return 50;
+        }
+
+        return startValue > 0 ? 50 : 0;
+    }, [startValue, isStakeRatioInitial]);
+    const increment: number = useMemo(() => {
+        if (isStakeRatioInitial) {
+            return endValue - stakeRatioInitial;
+        }
+
+        return endValue - startValue;
+    }, [endValue, startValue, isStakeRatioInitial, stakeRatioInitial]);
+    const isTrading = useMemo(() => increment !== 0, [increment]);
+    const currentRatio = useMemo(() => {
+        if (isStakeRatioInitial) {
+            return isTrading
+                ? 50 + (increment / (stakeRatioInitial || 1)) * 50
+                : 0;
+        }
+
+        return isTrading ? 50 + (increment / (startValue || 1)) * 50 : 0;
+    }, [increment, startValue, stakeRatioInitial]);
     const isRaised = useMemo(() => initialRatio < currentRatio, [
         initialRatio,
         currentRatio,
     ]);
     const barStyle = useMemo(
         (): React.CSSProperties => ({
-            opacity: isTrading ? 0.7 : status === 'default' ? 1 : 0.7,
+            opacity: isTrading
+                ? status === 'done'
+                    ? 1
+                    : 0.7
+                : status === 'default'
+                ? 1
+                : 0.7,
         }),
         [status, isTrading],
     );
@@ -85,52 +135,110 @@ const ProgressBar = (props: IProgressBarProps) => {
             ></div>
             <div className="progress-content">
                 <p className="progress-name">{name}</p>
-                <div className="progress-bar" style={barStyle}>
-                    <div className="progress-bar-bg">
-                        <div
-                            className={`initial-progress ${
-                                !isRaised && 'is-not-raised'
-                            }`}
-                            style={{ width: initialRatio + '%', ...barStyle }}
-                        >
-                            <div className="move-bar" />
+                {type === 'f_ratio' && (
+                    <Popover
+                        placement="rightBottom"
+                        content={<RatioView />}
+                        trigger="hover"
+                    >
+                        <div className="progress-bar" style={barStyle}>
+                            <div className="progress-bar-bg">
+                                <div
+                                    className={`initial-progress ${
+                                        !isRaised && 'is-not-raised'
+                                    }`}
+                                    style={{
+                                        width: initialRatio + '%',
+                                        ...barStyle,
+                                    }}
+                                >
+                                    <div className="move-bar" />
+                                </div>
+                                <div
+                                    className={`current-progress ${
+                                        isRaised && 'is-raised'
+                                    }`}
+                                    style={{ width: currentRatio + '%' }}
+                                >
+                                    <div className="move-bar" />
+                                </div>
+                            </div>
                         </div>
-                        <div
-                            className={`current-progress ${
-                                isRaised && 'is-raised'
-                            }`}
-                            style={{ width: currentRatio + '%' }}
-                        >
-                            <div className="move-bar" />
+                    </Popover>
+                )}
+                {type !== 'f_ratio' && (
+                    <div className="progress-bar" style={barStyle}>
+                        <div className="progress-bar-bg">
+                            <div
+                                className={`initial-progress ${
+                                    !isRaised && 'is-not-raised'
+                                }`}
+                                style={{
+                                    width: initialRatio + '%',
+                                    ...barStyle,
+                                }}
+                            >
+                                <div className="move-bar" />
+                            </div>
+                            <div
+                                className={`current-progress ${
+                                    isRaised && 'is-raised'
+                                }`}
+                                style={{ width: currentRatio + '%' }}
+                            >
+                                <div className="move-bar" />
+                            </div>
                         </div>
                     </div>
-                </div>
+                )}
                 <div className="info">
-                    {type === ProgressBarType.f_ratio && (
-                        <>
-                            <span className="end-value">
-                                {endValue}
-                                {unit}
+                    {isTrading && !isRaised && (
+                        <React.Fragment>
+                            <span
+                                className={`end-value ${
+                                    isRaised && 'is-raised'
+                                }`}
+                            >
+                                {type === 'f_ratio'
+                                    ? `${endValue}%`
+                                    : `${unit}${endValue}`}
                             </span>
-                            <span className=" icon-arrow icon-arrow-left"></span>
-                            <span className="start-value">
-                                {startValue}
-                                {unit}
-                            </span>
-                        </>
+                            <span
+                                className={`icon-arrow ${
+                                    !isRaised && 'reverse'
+                                }`}
+                            />
+                        </React.Fragment>
                     )}
-                    {type !== ProgressBarType.f_ratio && (
-                        <>
-                            <span className="start-value">
-                                {unit}
-                                {startValue}
+                    <span
+                        style={{ width: isTrading ? 'auto' : '100%' }}
+                        className={classNames({
+                            'start-value': true,
+                            'is-raised': isRaised,
+                            'is-ratio': type === 'f_ratio',
+                        })}
+                    >
+                        {type === 'f_ratio'
+                            ? `${
+                                  isStakeRatioInitial
+                                      ? stakeRatioInitial
+                                      : startValue
+                              }%`
+                            : `${unit}${startValue}`}
+                    </span>
+                    {isTrading && isRaised && (
+                        <React.Fragment>
+                            <span className="icon-arrow" />
+                            <span
+                                className={`end-value ${
+                                    isRaised && 'is-raised'
+                                }`}
+                            >
+                                {type === 'f_ratio'
+                                    ? `${endValue}%`
+                                    : `${unit}${endValue}`}
                             </span>
-                            <span className="icon-arrow"></span>
-                            <span className="end-value">
-                                {unit}
-                                {endValue}
-                            </span>
-                        </>
+                        </React.Fragment>
                     )}
                 </div>
             </div>

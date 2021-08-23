@@ -1,4 +1,6 @@
+import classNames from 'classnames';
 import React from 'react';
+import { keyframes } from 'styled-components';
 import './index.less';
 
 type PlacementType = 'right' | 'left';
@@ -30,22 +32,23 @@ const Folder = (props: FolderProps) => {
 
     const boxStyle = React.useMemo(() => {
         return toggle
-            ? {
-                  transform: `translateX(${foldingOffest}%)`,
-              }
-            : {
-                  transform: `translateX(0)`,
-              };
+            ? { transform: `translateX(${foldingOffest}%)` }
+            : { transform: `translateX(0)` };
     }, [toggle]);
 
     const btnStyle = React.useMemo(() => {
         return toggle
-            ? {
-                  transform: `translate(-50%, -30%) rotate(540deg)`,
-              }
-            : {
-                  transform: `translate(-50%, -30%) rotate(0)`,
-              };
+            ? { transform: `translate(-50%, -30%) rotate(540deg)` }
+            : { transform: `translate(-50%, -30%) rotate(0)` };
+    }, [toggle]);
+
+    React.useEffect(() => {
+        const folderDom = document.querySelector('.iron-folder');
+        if (folderDom) {
+            !toggle
+                ? folderDom.classList.add('shake-effect')
+                : folderDom.classList.remove('shake-effect');
+        }
     }, [toggle]);
 
     return (
