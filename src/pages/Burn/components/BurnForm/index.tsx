@@ -484,26 +484,26 @@ export default (props: IProps) => {
                 visable={showTxConfirm}
                 onClose={() => setShowTxConfirm(false)}
                 dataSource={
-                    tx
-                        ? [
-                              {
-                                  label: 'From',
-                                  value: {
-                                      token: tx.from.token,
-                                      amount: tx.from.amount,
-                                      mappingPrice: tx.from.price,
-                                  },
-                              },
-                              {
-                                  label: 'To',
-                                  value: {
-                                      token: tx.to.token,
-                                      amount: tx.to.amount,
-                                      mappingPrice: tx.to.price,
-                                  },
-                              },
-                          ]
-                        : []
+                    tx && [
+                        {
+                            label: 'Burn',
+                            direct: 'from',
+                            value: {
+                                token: tx.from.token,
+                                amount: tx.from.amount,
+                                mappingPrice: tx.from.price,
+                            },
+                        },
+                        {
+                            label: 'Unstaking',
+                            direct: 'to',
+                            value: {
+                                token: tx.to.token,
+                                amount: tx.to.amount,
+                                mappingPrice: tx.to.price,
+                            },
+                        },
+                    ]
                 }
             />
         </div>

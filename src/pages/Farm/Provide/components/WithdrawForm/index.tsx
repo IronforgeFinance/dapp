@@ -275,7 +275,6 @@ export default () => {
             <TransitionConfirm
                 visable={showTxConfirm}
                 onClose={() => setShowTxConfirm(false)}
-                dataSource={tx || []}
             />
         </div>
     );
