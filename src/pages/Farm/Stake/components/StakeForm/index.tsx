@@ -131,18 +131,12 @@ export default (props: { tabKey: string; lp?: string }) => {
                             className="custom-input"
                         />
                         <div className="token">
-                            <TokenIcon
-                                name={String(token).toLowerCase()}
-                                size={24}
-                            />
-                            <SelectTokens
-                                visable={showSelectToToken}
-                                value={token}
-                                tokenList={LP_TOKENS.map((name) => ({ name }))}
-                                onSelect={(v) => setToken(v)}
-                                onClose={() => setShowSelectToToken(false)}
+                            <Select
+                                value={lp}
+                                onChange={(v) => {
+                                    setLp(v);
+                                }}
                             >
-<<<<<<< HEAD
                                 {LP_TOKENS.map((item) => (
                                     <Select.Option
                                         value={item.poolName}
@@ -152,18 +146,6 @@ export default (props: { tabKey: string; lp?: string }) => {
                                     </Select.Option>
                                 ))}
                             </Select>
-=======
-                                <button
-                                    onClick={() => setShowSelectToToken(true)}
-                                    className="select-token-btn"
-                                >
-                                    <span>
-                                        {token || <span>Select token</span>}
-                                    </span>
-                                    <i className="icon-down size-20"></i>
-                                </button>
-                            </SelectTokens>
->>>>>>> 7e53bee1bc42960ddff8b258af78c066e33e629e
                         </div>
                     </div>
                 </div>
