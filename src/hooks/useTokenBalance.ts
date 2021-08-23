@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import BigNumber from 'bignumber.js';
 import { useWeb3React } from '@web3-react/core';
 import { getBep20Contract } from '@/utils/contractHelper';
-import { BIG_ZERO } from '@/utils/bigNumber';
+import { BIG_ZERO, toFixedWithoutRound } from '@/utils/bigNumber';
 import { simpleRpcProvider } from '@/utils/providers';
 import useRefresh from './useRefresh';
 import useLastUpdated from './useLastUpdated';
@@ -11,7 +11,7 @@ import Tokens from '@/config/constants/tokens';
 import { ethers } from 'ethers';
 import { useERC20 } from './useContract';
 type UseTokenBalanceState = {
-    balance: BigNumber | string | number;
+    balance: number;
     fetchStatus: FetchStatus;
 };
 
@@ -24,7 +24,7 @@ export enum FetchStatus {
 const useTokenBalance = (tokenAddress: string) => {
     const { NOT_FETCHED, SUCCESS, FAILED } = FetchStatus;
     const [balanceState, setBalanceState] = useState<UseTokenBalanceState>({
-        balance: BIG_ZERO,
+        balance: 0,
         fetchStatus: NOT_FETCHED,
     });
     const { account } = useWeb3React();
@@ -38,7 +38,7 @@ const useTokenBalance = (tokenAddress: string) => {
             try {
                 const res = await contract.balanceOf(account);
                 setBalanceState({
-                    balance: new BigNumber(res.toString()),
+                    balance: new BigNumber(res.toString()).toNumber(),
                     fetchStatus: SUCCESS,
                 });
             } catch (e) {
@@ -86,7 +86,10 @@ export const useBep20Balance = (token: string) => {
                 );
                 const res = await contract.balanceOf(account);
                 const amount = parseFloat(
-                    ethers.utils.formatUnits(res, tokenObj.decimals),
+                    toFixedWithoutRound(
+                        ethers.utils.formatUnits(res, tokenObj.decimals),
+                        2,
+                    ),
                 );
                 setBalanceState({
                     balance: amount,

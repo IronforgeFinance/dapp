@@ -83,7 +83,7 @@ const useStakeDataModel = () => {
         const minerReward = getMinerRewardContract(provider);
         const lpAddress = await minerReward.stakeTokens(poolId);
         const lpContract = getBep20Contract(lpAddress, provider);
-        const totalStaked = parseFloat(
+        const totalStakedVal = parseFloat(
             ethers.utils.formatEther(
                 await lpContract.balanceOf(minerRewardAddress),
             ),
@@ -112,6 +112,8 @@ const useStakeDataModel = () => {
             ethers.utils.formatEther(await minerReward.rewardPerBlock()),
         );
         const lpPrice = await getLpPrice(poolName);
+        console.log('lpPrice of: ', poolName, lpPrice);
+        const totalStaked = Number((totalStakedVal * lpPrice).toFixed(2));
         const rewardPrice = await getTokenPrice('IFT');
         const BSC_BLOCK_TIME = 5; // 5 seconds per block
         const apy =

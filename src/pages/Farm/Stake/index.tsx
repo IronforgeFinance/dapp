@@ -1,56 +1,42 @@
 import React, { useState } from 'react';
 import StakeForm from './components/StakeForm';
-import TabGroup from '@/components/TabGroup';
-import UnstakeForm from './components/UnstakeForm';
+import PoolItem from './components/PoolItem';
 import './index.less';
-import { history } from 'umi';
+import classnames from 'classnames';
+import { IStakePool } from '@/models/stakeData';
 
-import { Tabs } from 'antd';
-const { TabPane } = Tabs;
-export enum STAKE_TABS {
-    stake = 'stake',
-    unstake = 'unstake',
-}
-
-const tabItems = [
-    {
-        name: 'Stake',
-        key: 'stake',
-    },
-    {
-        name: 'Unstake',
-        key: 'unstake',
-    },
-];
-
-export default (props) => {
-    // const [tabKey, setTabKey] = useState(STAKE_TABS.stake);
-    const [tabKey, setTabKey] = useState(tabItems[0].key);
-    const onTabChange = (key) => {
-        console.log(key);
-        setTabKey(key);
+export default (props: IStakePool) => {
+    const [showStakeForm, setShowStakeForm] = useState(false);
+    const handleFlipper = () => {
+        setShowStakeForm(!showStakeForm);
     };
-    const { query } = props.location;
+    const [token1, token2] = props.name.split('-');
     return (
-        <div className="provide-container">
-            <div className="custom-tabs">
-                {/* <Tabs onChange={onTabChange} type="card">
-                    <TabPane tab="Stake" key={STAKE_TABS.stake}></TabPane>
-                    <TabPane tab="Unstake" key={STAKE_TABS.unstake}></TabPane>
-                </Tabs> */}
-                <TabGroup
-                    items={tabItems}
-                    value={tabKey}
-                    onChange={onTabChange}
-                />
-                <div className="tab-content">
-                    <button
-                        className="common-btn-back icon-back"
-                        onClick={() => {
-                            history.goBack();
-                        }}
-                    />
-                    <StakeForm tabKey={tabKey} lp={query.lp} />
+        <div
+            className={classnames(
+                'flip-container',
+                showStakeForm ? 'flipper-over' : '',
+            )}
+        >
+            <div className="flipper">
+                <div className="front">
+                    <div className={`lp-token lp-token-left`}>
+                        <div className={`lp-token-${token1}`}></div>
+                    </div>
+                    <div className={`lp-token lp-token-right`}>
+                        <div className={`lp-token-${token2}`}></div>
+                    </div>
+
+                    <PoolItem pool={props} handleFlipper={handleFlipper} />
+                </div>
+                <div className="back">
+                    <div className={`lp-token lp-token-left`}>
+                        <div className={`lp-token-${token1}`}></div>
+                    </div>
+                    <div className={`lp-token lp-token-right`}>
+                        <div className={`lp-token-${token2}`}></div>
+                    </div>
+                    <StakeForm lp={props.name} handleFlipper={handleFlipper} />
                 </div>
             </div>
         </div>

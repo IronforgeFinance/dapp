@@ -3,7 +3,7 @@ import { InputNumber, Select, Progress, Button } from 'antd';
 import * as message from '@/components/Notification';
 import './index.less';
 import { LP_TOKENS } from '@/config';
-import { STAKE_TABS } from '../../index';
+
 import { useBep20Balance } from '@/hooks/useTokenBalance';
 import {
     useCheckERC20ApprovalStatus,
@@ -15,13 +15,36 @@ import Contracts from '@/config/constants/contracts';
 import { useWeb3React } from '@web3-react/core';
 import { expandTo18Decimals } from '@/utils/bigNumber';
 import { ethers } from 'ethers';
-export default (props: { tabKey: string; lp?: string }) => {
+import TabGroup from '@/components/TabGroup';
+import { useModel } from 'umi';
+
+enum STAKE_TABS {
+    stake = 'stake',
+    unstake = 'unstake',
+}
+
+const tabItems = [
+    {
+        name: 'Stake',
+        key: 'stake',
+    },
+    {
+        name: 'Unstake',
+        key: 'unstake',
+    },
+];
+
+export default (props: { lp: string; handleFlipper: () => void }) => {
     const [submitting, setSubmitting] = useState(false);
-    const { tabKey, lp: lpParam } = props;
-    const [lpAmount, setLpAmount] = useState();
+    const { lp: lpParam } = props;
+    const [tabKey, setTabKey] = useState(tabItems[0].key);
+    const [lpAmount, setLpAmount] = useState<number>();
     const [staked, setStaked] = useState<number>();
     const [lp, setLp] = useState<string>(lpParam || LP_TOKENS[0].poolName);
 
+    const { updateStakePoolItem } = useModel('stakeData', (model) => ({
+        ...model,
+    }));
     const { account } = useWeb3React();
 
     const MinerReward = useMinerReward();
@@ -45,6 +68,7 @@ export default (props: { tabKey: string; lp?: string }) => {
     };
 
     useEffect(() => {
+        setLpAmount(0);
         if (tabKey === STAKE_TABS.unstake && account) {
             fetchStakedBalance();
         }
@@ -101,15 +125,30 @@ export default (props: { tabKey: string; lp?: string }) => {
                 );
                 fetchStakedBalance();
             }
+            updateStakePoolItem({ poolId, poolName: lp }, account);
         } catch (err) {
             console.log(err);
             setSubmitting(false);
         }
     };
     return (
-        <div className="provide-form common-box">
-            <div className="input-item">
-                <p className="label">Asset</p>
+        <div className="stake-form common-box">
+            <TabGroup
+                items={tabItems}
+                value={tabKey}
+                onChange={(v) => {
+                    setTabKey(v);
+                }}
+                className="custom-tabs-group"
+            />
+            <button
+                className="common-btn-back custom-icon-back"
+                onClick={() => {
+                    props.handleFlipper();
+                }}
+            />
+            <div className="input-item custom-input-container">
+                <p className="label">Amount</p>
                 <div className="input-item-content">
                     <div className="content-label">
                         <p className="right">
@@ -130,22 +169,20 @@ export default (props: { tabKey: string; lp?: string }) => {
                             placeholder="0.00"
                             className="custom-input"
                         />
-                        <div className="token">
-                            <Select
-                                value={lp}
-                                onChange={(v) => {
-                                    setLp(v);
+                        <div className="custom-token">
+                            <span
+                                className="btn-max"
+                                onClick={() => {
+                                    setLpAmount(
+                                        tabKey === STAKE_TABS.stake
+                                            ? lpBalance
+                                            : staked,
+                                    );
                                 }}
                             >
-                                {LP_TOKENS.map((item) => (
-                                    <Select.Option
-                                        value={item.poolName}
-                                        key={item.poolName}
-                                    >
-                                        {item.poolName}
-                                    </Select.Option>
-                                ))}
-                            </Select>
+                                Max
+                            </span>
+                            <span className="token-name">{lp}</span>
                         </div>
                     </div>
                 </div>

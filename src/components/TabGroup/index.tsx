@@ -11,15 +11,16 @@ interface TabGroupProps {
     items: TabOption[];
     value: string | number;
     onChange: Function;
+    [key: string]: any;
 }
 
 export default (props: TabGroupProps) => {
-    const { items = [], value, onChange } = props;
+    const { items = [], value, onChange, ...rest } = props;
 
     const _changeTab = useCallback((key) => onChange(key), []);
 
     return (
-        <div className="tab-group">
+        <div className={'tab-group ' + props.className}>
             {items.map((item) => {
                 return (
                     <button

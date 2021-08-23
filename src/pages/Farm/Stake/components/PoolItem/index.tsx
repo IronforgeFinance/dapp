@@ -3,12 +3,12 @@ import './index.less';
 import { history } from 'umi';
 import { IStakePool } from '@/models/stakeData';
 import { useMinerReward } from '@/hooks/useContract';
-import { Button } from 'antd';
+import { Button, Popover } from 'antd';
 import { useModel } from 'umi';
 import { useWeb3React } from '@web3-react/core';
 import * as message from '@/components/Notification';
 
-export default (props: IStakePool) => {
+export default (props: { pool: IStakePool; handleFlipper: () => void }) => {
     const {
         name,
         apy,
@@ -17,7 +17,7 @@ export default (props: IStakePool) => {
         redeemableReward,
         staked,
         poolId,
-    } = props;
+    } = props.pool;
     const [token1, token2] = name.split('-');
     const [submitting, setSubmitting] = useState(false);
     const MinerReward = useMinerReward();
@@ -42,24 +42,41 @@ export default (props: IStakePool) => {
     };
     return (
         <div className="pool-item">
-            <div className={`lp-token lp-token-left`}>
-                <div className={`lp-token-${token1}`}></div>
-            </div>
-            <div className={`lp-token lp-token-right`}>
-                <div className={`lp-token-${token2}`}></div>
-            </div>
+           
             <div className="pool-item-container">
                 <div className="pool-item-title">
                     <p>{name}</p>
                 </div>
+                <div className="pool-total-staked">
+                    <p>${totalStaked}</p>
+                    <p>Total staked</p>
+                </div>
                 <div className="total-info">
                     <div className="total-info-item">
-                        <p className="label">APY</p>
-                        <p className="value">{(apy * 100).toFixed(2) + '%'}</p>
+                        <p className="label">APY:</p>
+                        <p className="value">
+                            {(apy * 100).toFixed(2) + '%'}{' '}
+                            <Popover
+                                content={'这是APY计算规则说明'}
+                                trigger="hover"
+                                placement="topRight"
+                            >
+                                <i className="icon-question size-16"></i>
+                            </Popover>
+                        </p>
                     </div>
                     <div className="total-info-item">
-                        <p className="label">Total staked</p>
-                        <p className="value">{totalStaked}</p>
+                        <p className="label">EARN:</p>
+                        <p className="value">
+                            BS{' '}
+                            <Popover
+                                content={'这是奖励说明'}
+                                trigger="hover"
+                                placement="topRight"
+                            >
+                                <i className="icon-question size-16"></i>
+                            </Popover>
+                        </p>
                     </div>
                 </div>
 
@@ -70,11 +87,25 @@ export default (props: IStakePool) => {
                             <p className="label">{totalPendingReward}</p>
                         </div>
                         <div className="value">
-                            <p>{redeemableReward}</p>
+                            <p
+                                className={
+                                    redeemableReward === 0 ? 'value-zero' : ''
+                                }
+                            >
+                                {redeemableReward}{' '}
+                                <Popover
+                                    content={'Redeemable'}
+                                    trigger="hover"
+                                    placement="bottom"
+                                >
+                                    <i className="icon-question size-16"></i>
+                                </Popover>
+                            </p>
                             <Button
                                 className="common-btn common-btn-yellow common-btn-s"
                                 onClick={handleHarvest}
                                 loading={submitting}
+                                disabled={redeemableReward === 0}
                             >
                                 Harvest
                             </Button>
@@ -83,11 +114,14 @@ export default (props: IStakePool) => {
                     <div className="user-info-item">
                         <p className="label">{name} STAKED</p>
                         <div className="value">
-                            <p>{staked}</p>
+                            <p className={staked === 0 ? 'value-zero' : ''}>
+                                {staked}
+                            </p>
                             <button
                                 className="common-btn common-btn-red common-btn-s"
                                 onClick={() => {
-                                    history.push('/farm/stake?lp=' + name);
+                                    props.handleFlipper();
+                                    // history.push('/farm/stake?lp=' + name);
                                 }}
                             >
                                 Stake LP

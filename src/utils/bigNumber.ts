@@ -16,7 +16,10 @@ export const ethersToSerializedBigNumber = (
 export const ethersToBigNumber = (ethersBn: ethers.BigNumber): BN =>
     new BN(ethersBn.toString());
 
-export const toFixedWithoutRound = (num: number | BigNumber, fixed: number) => {
+export const toFixedWithoutRound = (
+    num: number | BigNumber | string,
+    fixed: number,
+) => {
     var re = new RegExp('^-?\\d+(?:.\\d{0,' + (fixed || -1) + '})?');
     return num
         .toString()

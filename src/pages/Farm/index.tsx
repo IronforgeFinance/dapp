@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './index.less';
 import { history, useModel } from 'umi';
-import PoolItem from './PoolItem';
+import StakeItem from './Stake';
 import { useWeb3React } from '@web3-react/core';
 import { LP_TOKENS } from '@/config/';
 import useRefresh from '@/hooks/useRefresh';
@@ -54,7 +54,7 @@ export default () => {
             </div>
             <div className="farm-pool">
                 {stakeDataList.map((item, index) => (
-                    <PoolItem key={index} {...item} />
+                    <StakeItem key={index} {...item} />
                 ))}
             </div>
         </div>

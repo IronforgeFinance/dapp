@@ -566,7 +566,7 @@ export default () => {
                             <Popover
                                 content={'这是一段文字这是一段文字这是一段文字'}
                                 trigger="hover"
-                                placement="rightTop"
+                                placement="topLeft"
                             >
                                 <i className="icon-question size-16"></i>
                             </Popover>

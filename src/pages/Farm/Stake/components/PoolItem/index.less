@@ -16,7 +16,8 @@
 .lp-token-left {
     top: 0;
     left: 10px;
-    background: url(../../../assets/images/gem-yellow.png) top center no-repeat;
+    background: url(../../../../../assets/images/gem-yellow.png) top center
+        no-repeat;
     background-size: cover;
     filter: drop-shadow(-3px 2px 5px rgba(22, 6, 0, 0.7))
         drop-shadow(-3px -3px 4px #2d0202)
@@ -26,7 +27,8 @@
 .lp-token-right {
     top: 0;
     right: 10px;
-    background: url(../../../assets/images/gem-red.png) top center no-repeat;
+    background: url(../../../../../assets/images/gem-red.png) top center
+        no-repeat;
     background-size: cover;
     filter: drop-shadow(3px 2px 5px rgba(22, 6, 0, 0.7))
         drop-shadow(3px -3px 4px #2d0202)
@@ -37,7 +39,7 @@
     width: 342px;
     height: 466px;
     overflow: auto;
-    background-image: url(../../../assets/images/pool-item-bg.png);
+    background-image: url(../../../../../assets/images/pool-item-bg.png);
     background-repeat: no-repeat;
     background-position: center;
     background-size: cover;
@@ -49,7 +51,7 @@
     .pool-item-title {
         width: 280px;
         height: 100px;
-        background: url(../../../assets/images/pool-item-title.png) center
+        background: url(../../../../../assets/images/pool-item-title.png) center
             center no-repeat;
         background-size: cover;
         margin: 0 auto;
@@ -66,9 +68,34 @@
             text-align: center;
         }
     }
+    .pool-total-staked {
+        position: relative;
+        top: -30px;
+        margin: 0 auto;
+        text-align: center;
+        > p:first-child {
+            font-family: Poppins;
+            font-style: normal;
+            font-weight: normal;
+            font-size: 16px;
+            line-height: 21px;
+            text-align: center;
+            color: #ac4c06;
+        }
+        > p:last-child {
+            font-family: Poppins;
+            font-style: normal;
+            font-weight: normal;
+            font-size: 14px;
+            line-height: 21px;
+            text-align: center;
+            color: rgba(255, 255, 255, 0.5);
+        }
+    }
     .total-info {
         width: 260px;
         margin: 0 auto;
+        margin-top: -20px;
         .total-info-item {
             display: flex;
             justify-content: space-between;
@@ -129,13 +156,17 @@
     }
 }
 
+.value-zero {
+    color: rgba(255, 255, 255, 0.5) !important;
+}
+
 .lp-token-fUSD {
-    background: url(../../../assets/images/icon-busd.png) center center
+    background: url(../../../../../assets/images/icon-busd.png) center center
         no-repeat;
     background-size: cover;
 }
 .lp-token-FTSLA {
-    background: url(../../../assets/images/icon-tsla.png) center center
+    background: url(../../../../../assets/images/icon-tsla.png) center center
         no-repeat;
     background-size: cover;
 }
