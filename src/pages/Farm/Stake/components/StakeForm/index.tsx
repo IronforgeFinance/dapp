@@ -4,11 +4,15 @@ import * as message from '@/components/Notification';
 import './index.less';
 const LP_TOKENS = ['fUSD-FTSLA'];
 import { STAKE_TABS } from '../../index';
+import { TokenIcon } from '@/components/Icon';
+import SelectTokens from '@/components/SelectTokens';
 export default (props: { tabKey: string }) => {
     const { tabKey } = props;
     const [lpBalance, setLpBalance] = useState();
     const [lpAmount, setLpAmount] = useState();
     const [lp, setLp] = useState();
+    const [showSelectToToken, setShowSelectToToken] = useState(false);
+    const [token, setToken] = useState('');
     return (
         <div className="provide-form common-box">
             <div className="input-item">
@@ -30,19 +34,27 @@ export default (props: { tabKey: string }) => {
                             className="custom-input"
                         />
                         <div className="token">
-                            <Select
-                                value={lp}
-                                onSelect={(v) => {
-                                    setLp(v);
-                                }}
-                                placeholder={'Select token'}
+                            <TokenIcon
+                                name={String(token).toLowerCase()}
+                                size={24}
+                            />
+                            <SelectTokens
+                                visable={showSelectToToken}
+                                value={token}
+                                tokenList={LP_TOKENS.map((name) => ({ name }))}
+                                onSelect={(v) => setToken(v)}
+                                onClose={() => setShowSelectToToken(false)}
                             >
-                                {LP_TOKENS.map((item) => (
-                                    <Select.Option value={item} key={item}>
-                                        {item}
-                                    </Select.Option>
-                                ))}
-                            </Select>
+                                <button
+                                    onClick={() => setShowSelectToToken(true)}
+                                    className="select-token-btn"
+                                >
+                                    <span>
+                                        {token || <span>Select token</span>}
+                                    </span>
+                                    <i className="icon-down size-20"></i>
+                                </button>
+                            </SelectTokens>
                         </div>
                     </div>
                 </div>
