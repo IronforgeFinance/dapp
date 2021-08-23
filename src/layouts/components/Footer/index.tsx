@@ -5,6 +5,7 @@ import IconGithub from '@/assets/images/github.svg';
 import IconMedium from '@/assets/images/medium.svg';
 import { useFtokenPrice, useGetBnbBalance } from '@/hooks/useTokenBalance';
 import DataBoard from './components/DataBoard';
+import { history } from 'umi';
 import RainbowBar from '@iron/RainbowBar';
 
 const tabItems = [
@@ -21,6 +22,8 @@ const tabItems = [
         key: 'delivery',
     },
 ];
+
+const filterList = ['/', '/farm'];
 
 const Mint = () => {
     return (
@@ -132,6 +135,7 @@ export default () => {
     const { balance } = useGetBnbBalance();
     const [tabKey, setTabKey] = React.useState(tabItems[0].key);
     const [visable, setVisable] = React.useState(false);
+    const [showWholeView, setShowWholeView] = React.useState(false);
 
     const CurrentView = React.useMemo(() => {
         switch (tabKey) {
@@ -149,6 +153,18 @@ export default () => {
         }
     }, [tabKey]);
 
+    React.useEffect(() => {
+        setShowWholeView(
+            !filterList.some((item) => item === window.location!.pathname),
+        );
+
+        return history.listen((location, action) => {
+            setShowWholeView(
+                !filterList.some((item) => item === location.pathname),
+            );
+        });
+    }, []);
+
     const openHistory = React.useCallback(() => {
         setVisable(true);
         setTabKey(tabItems[2].key);
@@ -160,40 +176,46 @@ export default () => {
     }, []);
 
     return (
-        <div className="footer-container">
-            <div className="entries">
-                <button className="btn-history" onClick={openMint} />
-                <button className="btn-52days" onClick={openHistory} />
-            </div>
-            <div className="ftoken">
-                <p className="price">
-                    <span className="symbol">$</span>
-                    {price}
-                </p>
-                <p className="label">
-                    fToken Price <span className="rate">{rate}</span>
-                </p>
-            </div>
-            <button className="btn-buy-token common-btn common-btn-red">
-                Buy Token
-            </button>
-            {/* <p className="balance">Balance: {balance}</p> */}
-            <div className="medias">
-                <img key={1} src={IconTwitter} />
-                <img key={2} src={IconGithub} />
-                <img key={3} src={IconMedium} />
-            </div>
+        <React.Fragment>
+            {showWholeView && (
+                <div className="footer-container">
+                    <div className="entries">
+                        <button className="btn-history" onClick={openMint} />
+                        <button className="btn-52days" onClick={openHistory} />
+                    </div>
+                    <div className="ftoken">
+                        <p className="price">
+                            <span className="symbol">$</span>
+                            {price}
+                        </p>
+                        <p className="label">
+                            fToken Price <span className="rate">{rate}</span>
+                        </p>
+                    </div>
+                    <button className="btn-buy-token common-btn common-btn-red">
+                        Buy Token
+                    </button>
+                    {/* <p className="balance">Balance: {balance}</p> */}
+                    <div className="medias">
+                        <img key={1} src={IconTwitter} />
+                        <img key={2} src={IconGithub} />
+                        <img key={3} src={IconMedium} />
+                    </div>
 
-            <DataBoard
-                title={tabKey.replace(/^([\w]{1})/, (v) => v.toUpperCase())}
-                tabItems={tabItems}
-                tabKey={tabKey}
-                onChange={(key) => setTabKey(key)}
-                onClose={() => setVisable(false)}
-                visable={visable}
-            >
-                {CurrentView}
-            </DataBoard>
-        </div>
+                    <DataBoard
+                        title={tabKey.replace(/^([\w]{1})/, (v) =>
+                            v.toUpperCase(),
+                        )}
+                        tabItems={tabItems}
+                        tabKey={tabKey}
+                        onChange={(key) => setTabKey(key)}
+                        onClose={() => setVisable(false)}
+                        visable={visable}
+                    >
+                        {CurrentView}
+                    </DataBoard>
+                </div>
+            )}
+        </React.Fragment>
     );
 };
