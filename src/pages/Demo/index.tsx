@@ -40,6 +40,7 @@ export default () => {
                     dataSource={[
                         {
                             label: 'Collateral',
+                            direct: 'from',
                             value: {
                                 token: 'BNB',
                                 amount: 20,
@@ -47,7 +48,8 @@ export default () => {
                             },
                         },
                         {
-                            label: 'Minted',
+                            label: 'Mint',
+                            direct: 'to',
                             value: {
                                 token: 'fETH',
                                 amount: 5,

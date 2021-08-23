@@ -1,8 +1,20 @@
+@import '~@/assets/styles/iron.less';
+
 .confirm-infos {
     display: flex;
     flex-direction: column;
     list-style: none;
     width: 100%;
+
+    .tx-tokens {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .arrow {
+        #image.icon(14px, '~@/assets/images/confirm-tx-arrow.svg');
+        margin-left: 25px + 5px;
+    }
 
     .info {
         padding: 20px 25px 4px 25px;
@@ -11,6 +23,16 @@
         position: relative;
         min-height: 72px;
         box-sizing: border-box;
+
+        &.is-form {
+            &:before {
+                display: none;
+            }
+        }
+
+        &.is-to {
+            padding-top: 10px;
+        }
 
         &:before {
             content: '';
@@ -22,27 +44,45 @@
             border-bottom: 1px dashed rgba(157, 113, 71, 0.33);
         }
 
-        .label {
-            font-style: normal;
-            font-weight: normal;
-            font-size: 16px;
-            line-height: 24px;
-            color: rgba(28, 28, 29, 0.7);
-            display: inline-block;
+        .left {
+            .token {
+                display: flex;
+                align-items: center;
+
+                > span {
+                    font-style: normal;
+                    font-weight: bold;
+                    font-size: 16px;
+                    line-height: 24px;
+                    display: flex;
+                    align-items: center;
+                    color: #292725;
+                }
+            }
+
+            .label {
+                font-style: normal;
+                font-weight: 300;
+                font-size: 15px;
+                line-height: 22px;
+                display: flex;
+                align-items: center;
+                color: rgba(41, 39, 37, 0.5);
+            }
         }
 
-        .value {
+        .right {
             display: flex;
             flex-direction: column;
             align-items: flex-end;
 
-            .token {
+            .amount {
                 font-style: normal;
                 font-weight: bold;
-                font-size: 16px;
-                line-height: 24px;
+                font-size: 18px;
+                line-height: 27px;
                 text-align: right;
-                color: #292725;
+                color: #ac4c06;
             }
 
             .dollar {
@@ -51,7 +91,7 @@
                 font-size: 15px;
                 line-height: 22px;
                 text-align: right;
-                color: rgba(28, 28, 29, 0.5);
+                color: #292725;
             }
         }
     }

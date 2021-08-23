@@ -89,11 +89,13 @@ export default () => {
         collateralSytemContract,
     );
 
-    const { isApproved: isIFTApproved, setLastUpdated: setLastIFTApproved } =
-        useCheckERC20ApprovalStatus(
-            Tokens.IFT.address[process.env.APP_CHAIN_ID],
-            collateralSytemContract,
-        );
+    const {
+        isApproved: isIFTApproved,
+        setLastUpdated: setLastIFTApproved,
+    } = useCheckERC20ApprovalStatus(
+        Tokens.IFT.address[process.env.APP_CHAIN_ID],
+        collateralSytemContract,
+    );
 
     const prices = usePrices();
 
@@ -143,11 +145,15 @@ export default () => {
     const { balance, refresh: refreshIFTBalance } = useBep20Balance('IFT');
     const fTokenBalance = balance as number;
 
-    const { balance: collateralBalance, refresh: refreshCollateralBalance } =
-        useBep20Balance(collateralToken);
+    const {
+        balance: collateralBalance,
+        refresh: refreshCollateralBalance,
+    } = useBep20Balance(collateralToken);
 
-    const { balance: mintBalance, refresh: refreshMintBalance } =
-        useBep20Balance(toToken);
+    const {
+        balance: mintBalance,
+        refresh: refreshMintBalance,
+    } = useBep20Balance(toToken);
 
     const refreshBalance = () => {
         refreshIFTBalance();
@@ -662,7 +668,8 @@ export default () => {
                                                 {toToken || (
                                                     <span>
                                                         {intl.formatMessage({
-                                                            id: 'mint.selectCasting',
+                                                            id:
+                                                                'mint.selectCasting',
                                                         })}
                                                     </span>
                                                 )}
@@ -714,35 +721,35 @@ export default () => {
                 visable={showTxConfirm}
                 onClose={() => setShowTxConfirm(false)}
                 dataSource={
-                    tx
-                        ? [
-                              {
-                                  label: 'Collateral',
-                                  value: {
-                                      token: tx.collateral.token,
-                                      amount: tx.collateral.amount,
-                                      mappingPrice: tx.collateral.price,
-                                  },
-                              },
-                              {
-                                  label: 'Minted',
-                                  value: {
-                                      token: tx.minted.token,
-                                      amount: tx.minted.amount,
-                                      mappingPrice: tx.minted.price,
-                                  },
-                              },
-                              {
-                                  label: 'Locked',
-                                  value: {
-                                      token: tx.locked.token,
-                                      amount: tx.locked.amount,
-                                      mappingPrice: tx.locked.price,
-                                  },
-                              },
-                              { label: 'Type', value: tx.type },
-                          ]
-                        : []
+                    tx && [
+                        {
+                            label: 'Collateral',
+                            direct: 'from',
+                            value: {
+                                token: tx.collateral.token,
+                                amount: tx.collateral.amount,
+                                mappingPrice: tx.collateral.price,
+                            },
+                        },
+                        {
+                            label: 'Minted',
+                            direct: 'to',
+                            value: {
+                                token: tx.minted.token,
+                                amount: tx.minted.amount,
+                                mappingPrice: tx.minted.price,
+                            },
+                        },
+                        {
+                            label: 'Locked',
+                            value: {
+                                token: tx.locked.token,
+                                amount: tx.locked.amount,
+                                mappingPrice: tx.locked.price,
+                            },
+                        },
+                        { label: 'Type', value: tx.type },
+                    ]
                 }
             />
         </div>

@@ -2,6 +2,10 @@ import React from 'react';
 import './index.less';
 import Board from '@/components/Board';
 import { CurrencySymbol } from '@/config/constants/types';
+import { TokenIcon } from '../Icon';
+import classNames from 'classnames';
+
+type DirectType = 'from' | 'to';
 
 interface TokenMap {
     token: string;
@@ -12,13 +16,14 @@ interface TokenMap {
 
 interface TransitionData {
     label: string;
+    direct?: DirectType;
     value: number | string | TokenMap;
 }
 
 interface TransitionConfirmProps {
     visable: Boolean;
     onClose?: Function;
-    dataSource: TransitionData[];
+    dataSource?: TransitionData[];
 }
 
 const DEFAULT_CURRENCY_SYMBOL: CurrencySymbol = '$';
@@ -53,34 +58,59 @@ function TransitionConfirm(props: TransitionConfirmProps) {
     return (
         <Board visable={visable} onClose={_onClose} title="Confirm Transaction">
             <ul className="confirm-infos">
-                {dataSource.map((prop) => {
+                {(dataSource ?? []).map((prop) => {
                     return (
-                        <li key={prop.label} className="info">
-                            <span className="label">{prop.label}</span>
-                            <div className="value">
-                                {typeof prop.value === 'string' && (
-                                    <span className="token">{prop.value}</span>
-                                )}
-                                {typeof prop.value === 'object' && (
-                                    <React.Fragment>
+                        <React.Fragment key={prop.label}>
+                            <li
+                                className={classNames({
+                                    info: true,
+                                    'is-form': prop.direct === 'from',
+                                    'is-to': prop.direct === 'to',
+                                })}
+                            >
+                                <div className="left">
+                                    {typeof prop.value === 'object' && (
+                                        <div className="token">
+                                            <TokenIcon
+                                                style={{ marginRight: 5 }}
+                                                name={prop.value.token}
+                                            />
+                                            <span>{prop.value.token}</span>
+                                        </div>
+                                    )}
+                                    <span className="label">{prop.label}</span>
+                                </div>
+                                <div className="right">
+                                    {typeof prop.value === 'string' && (
                                         <span className="token">
-                                            {prop.value.amount}{' '}
-                                            {prop.value.token}
+                                            {prop.value}
                                         </span>
-                                        <span className="dollar">
-                                            {prop.value.symbol ||
-                                                DEFAULT_CURRENCY_SYMBOL}
-                                            {prop.value.mappingPrice}
-                                        </span>
-                                    </React.Fragment>
-                                )}
-                            </div>
-                        </li>
+                                    )}
+                                    {typeof prop.value === 'object' && (
+                                        <React.Fragment>
+                                            <span className="amount">
+                                                {prop.value.amount}
+                                            </span>
+                                            <span className="dollar">
+                                                {prop.value.symbol ||
+                                                    DEFAULT_CURRENCY_SYMBOL}
+                                                {prop.value.mappingPrice}
+                                            </span>
+                                        </React.Fragment>
+                                    )}
+                                </div>
+                            </li>
+                            {prop.direct === 'from' && <i className="arrow" />}
+                        </React.Fragment>
                     );
                 })}
             </ul>
         </Board>
     );
 }
+
+TransitionConfirm.defaultProps = {
+    dataSource: [],
+};
 
 export default TransitionConfirm;
