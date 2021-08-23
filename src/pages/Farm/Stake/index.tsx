@@ -23,13 +23,14 @@ const tabItems = [
     },
 ];
 
-export default () => {
+export default (props) => {
     // const [tabKey, setTabKey] = useState(STAKE_TABS.stake);
     const [tabKey, setTabKey] = useState(tabItems[0].key);
     const onTabChange = (key) => {
         console.log(key);
         setTabKey(key);
     };
+    const { query } = props.location;
     return (
         <div className="provide-container">
             <div className="custom-tabs">
@@ -49,7 +50,7 @@ export default () => {
                             history.goBack();
                         }}
                     />
-                    <StakeForm tabKey={tabKey} />
+                    <StakeForm tabKey={tabKey} lp={query.lp} />
                 </div>
             </div>
         </div>

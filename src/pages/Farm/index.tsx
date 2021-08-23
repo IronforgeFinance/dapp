@@ -3,60 +3,31 @@ import './index.less';
 import { history, useModel } from 'umi';
 import PoolItem from './PoolItem';
 import { useWeb3React } from '@web3-react/core';
+import { LP_TOKENS } from '@/config/';
+import useRefresh from '@/hooks/useRefresh';
 export default () => {
     const { account } = useWeb3React();
-    const { fetchStakePoolList } = useModel('stakeData', (model) => ({
-        ...model,
-    }));
+    const { fetchStakePoolList, stakeDataList } = useModel(
+        'stakeData',
+        (model) => ({
+            ...model,
+        }),
+    );
+    const { slowRefresh } = useRefresh();
     const [ftokenInfo, setfTokenInfo] = useState({
         price: 4.32,
         vol: 633656,
         supply: 588000,
     });
-    const test = [
-        {
-            lp: 'fUSD-FTSLA',
-            apy: '98%',
-            totalStaked: 26262.33,
-            earnedAmount: 100.0,
-            earnedToken: 'FUSD',
-            staked: 1234.0,
-        },
-        {
-            lp: 'fUSD-FTSLA',
-            apy: '98%',
-            totalStaked: 26262.33,
-            earnedAmount: 100.0,
-            earnedToken: 'FUSD',
-            staked: 1234.0,
-        },
-        {
-            lp: 'fUSD-FTSLA',
-            apy: '98%',
-            totalStaked: 26262.33,
-            earnedAmount: 100.0,
-            earnedToken: 'FUSD',
-            staked: 1234.0,
-        },
-        {
-            lp: 'fUSD-FTSLA',
-            apy: '98%',
-            totalStaked: 26262.33,
-            earnedAmount: 100.0,
-            earnedToken: 'FUSD',
-            staked: 1234.0,
-        },
-    ];
 
     useEffect(() => {
         (async () => {
             if (account) {
-                const tokens = [{ poolName: 'USDC-IFT', poolId: 0 }];
-                await fetchStakePoolList(tokens, account);
+                await fetchStakePoolList(LP_TOKENS, account);
             }
         })();
-    }, [account]);
-    const [poolItems, setPoolItems] = useState(test);
+    }, [account, slowRefresh]);
+
     return (
         <div className="farm-container">
             <div className="farm-header">
@@ -82,7 +53,7 @@ export default () => {
                 </button>
             </div>
             <div className="farm-pool">
-                {poolItems.map((item, index) => (
+                {stakeDataList.map((item, index) => (
                     <PoolItem key={index} {...item} />
                 ))}
             </div>

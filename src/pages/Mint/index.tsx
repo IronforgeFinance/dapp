@@ -4,7 +4,7 @@ import * as message from '@/components/Notification';
 import { useIntl, useModel } from 'umi';
 import IconDown from '@/assets/images/down.svg';
 import IconAdd from '@/assets/images/add.svg';
-import { COLLATERAL_TOKENS, MINT_TOKENS, TokenPrices } from '@/config';
+import { COLLATERAL_TOKENS, MINT_TOKENS } from '@/config';
 import { useERC20 } from '@/hooks/useContract';
 import useTokenBalance, { useBep20Balance } from '@/hooks/useTokenBalance';
 import { useWeb3React } from '@web3-react/core';
@@ -89,13 +89,11 @@ export default () => {
         collateralSytemContract,
     );
 
-    const {
-        isApproved: isIFTApproved,
-        setLastUpdated: setLastIFTApproved,
-    } = useCheckERC20ApprovalStatus(
-        Tokens.IFT.address[process.env.APP_CHAIN_ID],
-        collateralSytemContract,
-    );
+    const { isApproved: isIFTApproved, setLastUpdated: setLastIFTApproved } =
+        useCheckERC20ApprovalStatus(
+            Tokens.IFT.address[process.env.APP_CHAIN_ID],
+            collateralSytemContract,
+        );
 
     const prices = usePrices();
 
@@ -145,34 +143,30 @@ export default () => {
     const { balance, refresh: refreshIFTBalance } = useBep20Balance('IFT');
     const fTokenBalance = balance as number;
 
-    const {
-        balance: collateralBalance,
-        refresh: refreshCollateralBalance,
-    } = useBep20Balance(collateralToken);
+    const { balance: collateralBalance, refresh: refreshCollateralBalance } =
+        useBep20Balance(collateralToken);
 
-    const {
-        balance: mintBalance,
-        refresh: refreshMintBalance,
-    } = useBep20Balance(toToken);
+    const { balance: mintBalance, refresh: refreshMintBalance } =
+        useBep20Balance(toToken);
 
     const refreshBalance = () => {
         refreshIFTBalance();
         refreshCollateralBalance();
         refreshMintBalance();
     };
-    // fToken价值/Collateral价值 最高不超过3/10
-    const maxLockedAmount = useMemo(() => {
-        if (collateralToken && collateralAmount) {
-            const amount =
-                (Number(collateralAmount) *
-                    TokenPrices[collateralToken] *
-                    0.3) /
-                TokenPrices['fToken_USDT'];
-            return amount;
-        } else {
-            return fTokenBalance;
-        }
-    }, [collateralAmount, collateralToken, fTokenBalance]);
+    // TODO fToken价值/Collateral价值 最高不超过3/10
+    // const maxLockedAmount = useMemo(() => {
+    //     if (collateralToken && collateralAmount) {
+    //         const amount =
+    //             (Number(collateralAmount) *
+    //                 TokenPrices[collateralToken] *
+    //                 0.3) /
+    //             TokenPrices['fToken_USDT'];
+    //         return amount;
+    //     } else {
+    //         return fTokenBalance;
+    //     }
+    // }, [collateralAmount, collateralToken, fTokenBalance]);
 
     const getTokenPrice = async (token: string) => {
         if (!token) return 0;
@@ -668,8 +662,7 @@ export default () => {
                                                 {toToken || (
                                                     <span>
                                                         {intl.formatMessage({
-                                                            id:
-                                                                'mint.selectCasting',
+                                                            id: 'mint.selectCasting',
                                                         })}
                                                     </span>
                                                 )}
