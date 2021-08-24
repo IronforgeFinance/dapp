@@ -83,9 +83,8 @@ export default (props: ISelectTokensProps) => {
                         _token.isDeliveryAsset = /^\d+$/.test(quarter);
 
                         if (_token.isDeliveryAsset) {
-                            _token.remainDays = getRemainDaysOfQuarterAsset(
-                                quarter,
-                            );
+                            _token.remainDays =
+                                getRemainDaysOfQuarterAsset(quarter);
                         }
                     }
                     return _token;
@@ -141,7 +140,7 @@ export default (props: ISelectTokensProps) => {
                                     </span>
                                 )}
                             </span>
-                            <span className="price">{token.price}</span>
+                            <span className="price">${token.price}</span>
                         </li>
                     ))}
                 </ul>

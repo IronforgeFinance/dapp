@@ -6,7 +6,7 @@ import {
     getContract,
 } from '@/utils/contractHelper';
 import { ethers } from 'ethers';
-import { expandTo18Decimals } from '@/utils/bigNumber';
+import { expandTo18Decimals, toFixedWithoutRound } from '@/utils/bigNumber';
 import Addresses from '@/config/constants/contracts';
 import Tokens from '@/config/constants/tokens';
 import PancakePair from '@/config/abi/PancakePair.json';
@@ -91,13 +91,19 @@ const useStakeDataModel = () => {
         const userInfo = await minerReward.userInfo(poolId, account);
         const staked = parseFloat(ethers.utils.formatEther(userInfo.amount));
         const totalPendingReward = parseFloat(
-            ethers.utils.formatEther(
-                await minerReward.totalPendingReward(poolId, account),
+            toFixedWithoutRound(
+                ethers.utils.formatEther(
+                    await minerReward.totalPendingReward(poolId, account),
+                ),
+                2,
             ),
         );
         const redeemableReward = parseFloat(
-            ethers.utils.formatEther(
-                await minerReward.redeemaleReward(poolId, account),
+            toFixedWithoutRound(
+                ethers.utils.formatEther(
+                    await minerReward.redeemaleReward(poolId, account),
+                ),
+                2,
             ),
         );
 
