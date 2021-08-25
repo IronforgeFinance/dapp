@@ -50,7 +50,6 @@ const useAuth = () => {
             }
           }
         });
-        window.localStorage.removeItem(connectorLocalStorageKey);
       } else {
         alert('Unable to find connector');
       }
