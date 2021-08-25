@@ -12,6 +12,7 @@ import {
 
 import { ConnectorNames, connectorsByName } from '@/utils/web3';
 import { setupNetwork } from '@/utils/wallet';
+import { connectorLocalStorageKey } from '@/layouts/components/WalletModal/config';
 
 // api for login and logout
 const useAuth = () => {
@@ -27,6 +28,7 @@ const useAuth = () => {
               activate(connector);
             }
           } else {
+            window.localStorage.removeItem(connectorLocalStorageKey);
             if (
               error instanceof NoEthereumProviderError ||
               error instanceof NoBscProviderError
@@ -48,6 +50,7 @@ const useAuth = () => {
             }
           }
         });
+        window.localStorage.removeItem(connectorLocalStorageKey);
       } else {
         alert('Unable to find connector');
       }

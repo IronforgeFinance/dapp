@@ -76,11 +76,6 @@ const WalletModal = (props: WalletModalProps) => {
         [],
     );
 
-    React.useEffect(
-        () => !isConnected && localStorage.removeItem(connectorLocalStorageKey),
-        [isConnected],
-    );
-
     React.useLayoutEffect(() => {
         if (visable) {
             setIsConnected(status === 'connected');
