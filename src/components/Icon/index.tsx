@@ -4,3 +4,4 @@ export interface IconProps {
 }
 
 export { default as TokenIcon } from './TokenIcon';
+export { default as WalletIcon } from './WalletIcon';

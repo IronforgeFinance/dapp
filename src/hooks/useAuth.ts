@@ -13,8 +13,6 @@ import {
 import { ConnectorNames, connectorsByName } from '@/utils/web3';
 import { setupNetwork } from '@/utils/wallet';
 
-export const connectorLocalStorageKey = 'connectorId';
-
 // api for login and logout
 const useAuth = () => {
   const { activate, deactivate } = useWeb3React();
@@ -29,7 +27,6 @@ const useAuth = () => {
               activate(connector);
             }
           } else {
-            window.localStorage.removeItem(connectorLocalStorageKey);
             if (
               error instanceof NoEthereumProviderError ||
               error instanceof NoBscProviderError
@@ -51,7 +48,6 @@ const useAuth = () => {
             }
           }
         });
-        window.localStorage.setItem(connectorLocalStorageKey, connectorId);
       } else {
         alert('Unable to find connector');
       }

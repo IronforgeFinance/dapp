@@ -8,6 +8,7 @@ interface ISelectTokensProps {
     title?: String;
     onClose?: Function;
     onCustTitle?: Function;
+    className: string;
 }
 
 export default (props: ISelectTokensProps) => {
@@ -17,11 +18,12 @@ export default (props: ISelectTokensProps) => {
         onClose: _closeHandler,
         onCustTitle: _custTitle = () => {},
         title,
+        className = '',
     } = props;
     const onCloseMemo = useCallback(() => _closeHandler(), []);
     return (
         <Overlay visable={visable} onClose={onCloseMemo}>
-            <div className="board-box">
+            <div className={`board-box ${className}`}>
                 {_custTitle() || (
                     <div className="title-wrapper">
                         <h1 className="common-title silver title">

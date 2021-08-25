@@ -8,6 +8,7 @@ import CommentaryCard from '@/components/CommentaryCard';
 import message from '@iron/Notification';
 // import Popover from '@/components/Popover';
 import TransitionConfirm from '@/components/TransitionConfirm';
+import WalletModal from '@/layouts/components/WalletModal';
 
 export default () => {
     // * 选择token演示
@@ -74,6 +75,22 @@ export default () => {
         );
     };
 
+    const WalletConnectDemo = () => {
+        const [visable, setVisable] = React.useState(false);
+
+        return (
+            <div className="wallet-connect-demo">
+                <WalletModal
+                    visable={visable}
+                    closeOnIconClick={() => setVisable(false)}
+                />
+                <button onClick={() => setVisable(true)}>
+                    Test TransitionConfirm
+                </button>
+            </div>
+        );
+    };
+
     return (
         <div className="demo-container">
             <ul>
@@ -125,6 +142,10 @@ export default () => {
                 <li>
                     <h3>7. Transition Confirm</h3>
                     <TransitionConfirmDemo />
+                </li>
+                <li>
+                    <h3>8. 钱包连接</h3>
+                    <WalletConnectDemo />
                 </li>
             </ul>
         </div>
