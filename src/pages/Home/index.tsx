@@ -31,11 +31,11 @@ export default () => {
 
     return (
         <PreloadAssetsSuspense>
-            <PreloadImages
+            {/* <PreloadImages
                 imageList={[
                     'http://zoneccc.nat300.top/static/blacksmith.0d9279a9.png',
                 ]}
-            />
+            /> */}
             <div className="home-container">
                 <video
                     loop
