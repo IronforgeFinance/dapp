@@ -1,0 +1,92 @@
+@import '../index.less';
+
+.history-view {
+    &:extend(.wallet-container);
+    padding: 117px 32px 60px 32px;
+
+    .record {
+        padding: 16px 0 16px 70px;
+
+        .function {
+            display: flex;
+            align-items: center;
+
+            .icon {
+                @size: 28px;
+
+                &.mint {
+                    #image.icon(@size, '~@/assets/images/wallet-history-icon-mint.png');
+                }
+
+                &.burn {
+                    #image.icon(@size, '~@/assets/images/wallet-history-icon-burn.png');
+                }
+
+                &.trade {
+                    #image.icon(@size, '~@/assets/images/wallet-history-icon-trade.png');
+                }
+
+                &.pool {
+                    #image.icon(@size, '~@/assets/images/wallet-history-icon-pool.png');
+                }
+            }
+
+            .info {
+                display: flex;
+                flex-direction: column;
+                margin-left: 14px;
+
+                span {
+                    font-style: normal;
+                    font-weight: bold;
+                    font-size: 18px;
+                    line-height: 27px;
+                    display: flex;
+                    align-items: center;
+                    color: #292725;
+                }
+
+                time {
+                    font-style: normal;
+                    font-weight: 300;
+                    font-size: 15px;
+                    line-height: 22px;
+                    color: #6f4123;
+                }
+            }
+        }
+
+        .form {
+            font-style: normal;
+            font-weight: 300;
+            font-size: 15px;
+            line-height: 22px;
+            color: #292725;
+            margin-left: 44px;
+            min-width: 112px;
+
+            b {
+                font-weight: bold;
+            }
+        }
+
+        .to {
+            font-style: normal;
+            font-weight: 300;
+            font-size: 15px;
+            line-height: 22px;
+            color: #292725;
+            margin-left: 10px;
+            min-width: 78px;
+
+            b {
+                font-weight: bold;
+            }
+        }
+
+        .skip {
+            #image.icon(18px, '~@/assets/images/wallet-history-skip.svg');
+            margin-left: 137px;
+        }
+    }
+}
