@@ -33,15 +33,15 @@ export default () => {
             <div className="farm-header">
                 <div className="info-item">
                     <p className="value">${ftokenInfo.price}</p>
-                    <p className="label">fToken Price</p>
+                    <p className="label">BS Price</p>
                 </div>
                 <div className="info-item">
                     <p className="value">${ftokenInfo.vol}</p>
-                    <p className="label">fToken VOL</p>
+                    <p className="label">BS VOL</p>
                 </div>
                 <div className="info-item">
                     <p className="value">${ftokenInfo.supply}</p>
-                    <p className="label">fToken Circulating Supply</p>
+                    <p className="label">BS Circulating Supply</p>
                 </div>
                 <button
                     className="common-btn common-btn-red"

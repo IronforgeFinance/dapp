@@ -10,7 +10,7 @@ import {
 } from '@/utils/bigNumber';
 import { InputNumber, Button, Select, Radio } from 'antd';
 import * as message from '@/components/Notification';
-import { COLLATERAL_TOKENS, MINT_TOKENS, TokenPrices } from '@/config';
+import { COLLATERAL_TOKENS, MINT_TOKENS } from '@/config';
 import { useBep20Balance } from '@/hooks/useTokenBalance';
 import './index.less';
 import EstimateData from './components/EstimateData';
@@ -19,7 +19,7 @@ import SelectTokens from '@/components/SelectTokens';
 import MarketDetail from './MarketDetail';
 import { debounce } from 'lodash';
 import classNames from 'classnames';
-import TransitionConfirm from '@iron/TransitionConfirm';
+import TransitionConfirm from '@/components/TransitionConfirm';
 import { TokenIcon } from '@/components/Icon';
 
 //TODO: for test.从配置中读取
@@ -122,19 +122,9 @@ export default () => {
         setFromAmount(v);
     };
 
-    const toAmountHandler = debounce((v) => {
-        if (v && toToken) {
-            const _amount = (TokenPrices[toToken] * v) / TokenPrices[fromToken];
-            if (_amount > parseFloat(fromTokenBalance as string)) {
-                message.error(
-                    `From token balance is not enough. Need ${_amount} ${fromToken}`,
-                );
-                setToAmount(0);
-                return;
-            }
-            setToAmount(v);
-        }
-    }, 500);
+    const toAmountHandler = (v) => {
+        setToAmount(v);
+    };
 
     const settleTrade = async (entryId: number) => {
         const res = await exchangeSystem.settle(entryId);

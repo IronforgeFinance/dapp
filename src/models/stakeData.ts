@@ -119,16 +119,19 @@ const useStakeDataModel = () => {
         );
         const lpPrice = await getLpPrice(poolName);
         console.log('lpPrice of: ', poolName, lpPrice);
+        const totalStakedLpVal = lpPrice * totalStakedVal;
         const totalStaked = Number((totalStakedVal * lpPrice).toFixed(2));
         const rewardPrice = await getTokenPrice('IFT');
         const BSC_BLOCK_TIME = 5; // 5 seconds per block
-        const apy =
-            ((allocPoint / totalAllocPoint) *
-                ((rewardPerBlock * rewardPrice) / lpPrice) *
+        // rate per day
+        const apr =
+            ((((allocPoint / totalAllocPoint) *
+                (rewardPerBlock * rewardPrice)) /
+                totalStakedLpVal) *
                 3600 *
-                24 *
-                365) /
+                24) /
             BSC_BLOCK_TIME;
+        const apy = Math.pow(1 + apr/365, 365) - 1;
         const data: IStakePool = {
             name: poolName,
             poolId,
