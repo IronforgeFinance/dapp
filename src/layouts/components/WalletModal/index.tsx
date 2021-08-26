@@ -56,6 +56,7 @@ const WalletModal = (props: WalletModalProps) => {
     // show more, derive from pancake-uikit, we don't have this requirement, ignore...
     const [showMore, setShowMore] = React.useState(false);
     const [isConnected, setIsConnected] = React.useState(false);
+    const [isChanging, setIsChanging] = React.useState(false);
     const sortedConfig = getPreferredConfig(config);
     const displayListConfig = showMore
         ? sortedConfig
@@ -63,7 +64,7 @@ const WalletModal = (props: WalletModalProps) => {
 
     const currentWallet = React.useMemo(
         () => (isConnected ? localStorage.getItem(walletLocalStorageKey) : ''),
-        [isConnected],
+        [isConnected, isChanging],
     );
 
     const title = React.useMemo(
@@ -72,15 +73,20 @@ const WalletModal = (props: WalletModalProps) => {
     );
 
     const changeAccount = React.useCallback(
-        (login) => invokedChain.then(logout).then(() => setTimeout(login)),
+        (login) =>
+            invokedChain
+                .then(() => setIsChanging(true))
+                .then(logout)
+                .then(login)
+                .then(() => setIsChanging(false)),
         [],
     );
 
     React.useLayoutEffect(() => {
-        if (visable) {
+        if (visable && !isChanging) {
             setIsConnected(status === 'connected');
         }
-    }, [status, visable]);
+    }, [status, visable, isChanging]);
 
     return (
         <Board
