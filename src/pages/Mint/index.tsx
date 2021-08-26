@@ -296,31 +296,37 @@ export default () => {
             }
         })();
     }, [toToken, toAmount]);
-    const collateralAmountHandler = debounce(async (v) => {
-        setCollateralAmount(v);
-        const price = await getTokenPrice(collateralToken);
-        const currentStakeValue = Number(v) * price + stakedData.startValue;
-        setStakedData({
-            ...stakedData,
-            endValue: currentStakeValue,
-        });
-    }, 500);
+    const collateralAmountHandler = React.useCallback(
+        debounce(async (v) => {
+            setCollateralAmount(v);
+            const price = await getTokenPrice(collateralToken);
+            const currentStakeValue = Number(v) * price + stakedData.startValue;
+            setStakedData({
+                ...stakedData,
+                endValue: currentStakeValue,
+            });
+        }, 500),
+        [stakedData],
+    );
 
-    const lockedAmountHandler = debounce((v) => {
-        // TODO comment this for test
-        // if (Number(v) > maxLockedAmount) {
-        //     setLockedAmount(0);
-        //     message.warning('锁仓价值不能超过质押价值的3/10');
-        //     return;
-        // }
-        setLockedAmount(v);
-        setLockedScale(Number(v) / fTokenBalance);
-        const val = parseFloat(toFixedWithoutRound(IFTPrice * v, 2));
-        setLockedData({
-            ...lockedData,
-            endValue: val || 0,
-        });
-    }, 500);
+    const lockedAmountHandler = React.useCallback(
+        debounce((v) => {
+            // TODO comment this for test
+            // if (Number(v) > maxLockedAmount) {
+            //     setLockedAmount(0);
+            //     message.warning('锁仓价值不能超过质押价值的3/10');
+            //     return;
+            // }
+            setLockedAmount(v);
+            setLockedScale(Number(v) / fTokenBalance);
+            const val = parseFloat(toFixedWithoutRound(IFTPrice * v, 2));
+            setLockedData({
+                ...lockedData,
+                endValue: val || 0,
+            });
+        }, 500),
+        [IFTPrice, fTokenBalance, lockedData],
+    );
 
     const scaleHandler = (v) => {
         setLockedScale(v);

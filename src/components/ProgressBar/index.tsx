@@ -138,7 +138,12 @@ const ProgressBar = (props: IProgressBarProps) => {
                 {type === 'f_ratio' && (
                     <Popover
                         placement="rightBottom"
-                        content={<RatioView />}
+                        content={
+                            <RatioView
+                                initialRatio={`${startValue}%`}
+                                currentRatio={`${endValue}%`}
+                            />
+                        }
                         trigger="hover"
                     >
                         <div className="progress-bar" style={barStyle}>
