@@ -8,7 +8,7 @@ interface ISelectTokensProps {
     title?: String;
     onClose?: Function;
     onCustTitle?: Function;
-    className: string;
+    className?: string;
 }
 
 export default (props: ISelectTokensProps) => {

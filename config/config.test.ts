@@ -14,5 +14,7 @@ export default defineConfig({
         'process.env.APP_CHAIN_ID': '97', //'97',
 
         'process.env.BSC_SCAN_URL': 'https://testnet.bscscan.com/address/',
+
+        'process.env.GRAPH_URL': 'http://172.28.10.49:8000',
     },
 });

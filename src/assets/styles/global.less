@@ -459,3 +459,48 @@ dl {
         border-radius: 2px;
     }
 }
+
+.custom-table {
+    width: 100%;
+
+    .ant-pagination {
+        * {
+            background-color: transparent;
+            border: none;
+        }
+    }
+
+    .ant-table {
+        background: transparent;
+        border: none;
+    }
+
+    .ant-table-thead {
+        * {
+            font-style: normal;
+            font-weight: 300;
+            font-size: 15px;
+            line-height: 22px;
+            color: rgba(41, 39, 37, 0.4);
+
+            &:before {
+                display: none;
+            }
+        }
+    }
+
+    .ant-table-placeholder {
+        display: none;
+    }
+
+    .ant-table-cell {
+        background: transparent;
+        border: none;
+        position: relative;
+        z-index: 1;
+    }
+
+    .ant-table-tbody > tr.ant-table-row:hover > td {
+        background: transparent;
+    }
+}

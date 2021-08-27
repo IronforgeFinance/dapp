@@ -30,15 +30,8 @@ interface BigBoardProps {
 }
 
 const DataBoard = (props: BigBoardProps) => {
-    const {
-        visable,
-        onClose,
-        tabItems,
-        tabKey,
-        onChange,
-        title,
-        children,
-    } = props;
+    const { visable, onClose, tabItems, tabKey, onChange, title, children } =
+        props;
 
     return (
         <Overlay visable={visable}>
