@@ -7,6 +7,35 @@
         "type": "address"
       },
       {
+        "internalType": "bytes32",
+        "name": "_currency",
+        "type": "bytes32"
+      },
+      {
+        "internalType": "uint256",
+        "name": "catalystEffect",
+        "type": "uint256"
+      }
+    ],
+    "name": "MaxCanBuildAsset",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "user",
+        "type": "address"
+      },
+      {
         "internalType": "uint256",
         "name": "amount",
         "type": "uint256"
