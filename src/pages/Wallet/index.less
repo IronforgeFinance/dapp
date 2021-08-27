@@ -11,7 +11,7 @@
     height: 100%;
     display: flex;
     flex-direction: column;
-    align-items: center;
+    // align-items: center;
     box-sizing: border-box;
 }
 
@@ -22,6 +22,7 @@
     width: 656px;
     height: 24px;
     justify-content: space-between;
+    padding-left: 45px;
 
     span.col-name {
         font-style: normal;
@@ -42,9 +43,9 @@
         min-height: 60px;
         display: flex;
         align-items: center;
-        padding-left: 75px;
         box-sizing: border-box;
         position: relative;
+        padding-left: 45px;
 
         &:after {
             content: '';
@@ -100,6 +101,8 @@
             font-size: 15px;
             line-height: 22px;
             color: #292725;
+            display: flex;
+            align-items: center;
 
             &.bold {
                 font-weight: bold;
@@ -118,7 +121,7 @@
                 line-height: 24px;
                 display: flex;
                 align-items: center;
-                color: #292725;
+                color: #ac4c06;
             }
 
             .map-dollar {
@@ -158,16 +161,16 @@
 
             .token0 {
                 font-style: normal;
-                font-weight: bold;
+                font-weight: 300;
                 font-size: 16px;
                 line-height: 24px;
                 display: flex;
                 align-items: center;
-                color: #292725;
+                color: rgba(41, 39, 37, 0.5);
 
                 b {
-                    font-weight: 300;
-                    color: #e1ab3b;
+                    font-weight: 700;
+                    color: #ac4c06;
                     margin-right: 4px;
                 }
             }
@@ -177,258 +180,29 @@
                 font-weight: 300;
                 font-size: 15px;
                 line-height: 22px;
-                color: rgba(41, 39, 37, 0.3);
+                color: rgba(41, 39, 37, 0.5);
 
                 b {
-                    font-weight: 300;
-                    color: #e1ab3b;
+                    font-weight: 700;
+                    color: #ac4c06;
+                    margin-right: 4px;
                 }
             }
         }
     }
 }
 
-.holding-container {
-    &:extend(.wallet-container);
-    padding: 76px 32px 60px 32px;
+.token-icon-pair {
+    transform: translateX(-14px);
 
-    .holding-total-value {
-        width: 559px;
-        height: 113px;
-        padding: 34px 0 0 57px;
-        box-sizing: border-box;
-        display: flex;
-        align-items: flex-start;
-        #image.background('~@/assets/images/wallet-holding-bg.png');
-        background-position-y: 5px;
-
-        .wrapper {
-            display: flex;
-            align-items: center;
-        }
-
-        .label {
-            font-style: normal;
-            font-weight: 500;
-            font-size: 20px;
-            line-height: 30px;
-            color: rgba(107, 47, 7, 0.8);
-        }
-
-        .amount {
-            font-style: normal;
-            font-weight: bold;
-            font-size: 28px;
-            line-height: 42px;
-            color: #6b2f07;
-            display: inline-block;
-            margin-left: 16px;
-        }
+    .token-icon:first-child {
+        width: 28px !important;
+        height: 28px !important;
     }
 
-    .cols {
-        width: 656px;
-        height: 24px;
-    }
-
-    .record {
-        .asset {
-            flex-basis: 16%;
-        }
-
-        .price {
-            flex-basis: 16%;
-        }
-
-        .balance {
-            flex-basis: 19%;
-        }
-
-        .rount {
-            flex-basis: 16.5%;
-        }
-
-        .ratio {
-            flex-basis: 12%;
-        }
-    }
-}
-
-.pool-container {
-    &:extend(.wallet-container);
-    padding: 117px 32px 60px 32px;
-
-    .cols {
-        height: 24px;
-        width: 667px;
-
-        span.col-name {
-            &:nth-child(2) {
-                transform: translateX(34px);
-            }
-
-            &:nth-child(3) {
-                transform: translateX(30px);
-            }
-
-            &:nth-child(4) {
-                transform: translateX(-13px);
-            }
-        }
-    }
-
-    .record {
-        padding-left: 70px;
-
-        .pool {
-            flex-basis: 24%;
-        }
-
-        .balance {
-            flex-basis: 23%;
-        }
-
-        .earned {
-            flex-basis: 16.5%;
-        }
-
-        .apy {
-            flex-basis: 8%;
-        }
-    }
-}
-
-.farm-container {
-    &:extend(.wallet-container);
-    padding: 117px 32px 60px 32px;
-
-    .cols {
-        height: 24px;
-        width: 667px;
-
-        span.col-name {
-            &:nth-child(2) {
-                transform: translateX(30px);
-            }
-
-            &:nth-child(3) {
-                transform: translateX(35px);
-            }
-
-            &:nth-child(4) {
-                transform: translateX(-11px);
-            }
-        }
-    }
-
-    .record {
-        padding-left: 70px;
-
-        .pool {
-            flex-basis: 24%;
-        }
-
-        .staked {
-            flex-basis: 23%;
-        }
-
-        .earned {
-            flex-basis: 16.5%;
-        }
-
-        .apy {
-            flex-basis: 8%;
-        }
-    }
-}
-
-.history-container {
-    &:extend(.wallet-container);
-    padding: 117px 32px 60px 32px;
-
-    .record {
-        padding: 16px 0 16px 70px;
-
-        .function {
-            display: flex;
-            align-items: center;
-
-            .icon {
-                @size: 28px;
-
-                &.mint {
-                    #image.icon(@size, '~@/assets/images/wallet-history-icon-mint.png');
-                }
-
-                &.burn {
-                    #image.icon(@size, '~@/assets/images/wallet-history-icon-burn.png');
-                }
-
-                &.trade {
-                    #image.icon(@size, '~@/assets/images/wallet-history-icon-trade.png');
-                }
-
-                &.pool {
-                    #image.icon(@size, '~@/assets/images/wallet-history-icon-pool.png');
-                }
-            }
-
-            .info {
-                display: flex;
-                flex-direction: column;
-                margin-left: 14px;
-
-                span {
-                    font-style: normal;
-                    font-weight: bold;
-                    font-size: 18px;
-                    line-height: 27px;
-                    display: flex;
-                    align-items: center;
-                    color: #292725;
-                }
-
-                time {
-                    font-style: normal;
-                    font-weight: 300;
-                    font-size: 15px;
-                    line-height: 22px;
-                    color: #6f4123;
-                }
-            }
-        }
-
-        .form {
-            font-style: normal;
-            font-weight: 300;
-            font-size: 15px;
-            line-height: 22px;
-            color: #292725;
-            margin-left: 44px;
-            min-width: 112px;
-
-            b {
-                font-weight: bold;
-            }
-        }
-
-        .to {
-            font-style: normal;
-            font-weight: 300;
-            font-size: 15px;
-            line-height: 22px;
-            color: #292725;
-            margin-left: 10px;
-            min-width: 78px;
-
-            b {
-                font-weight: bold;
-            }
-        }
-
-        .skip {
-            #image.icon(18px, '~@/assets/images/wallet-history-skip.svg');
-            margin-left: 137px;
-        }
+    .token-icon:last-child {
+        width: 20px !important;
+        height: 20px !important;
+        transform: translate(5px, -10px);
     }
 }
