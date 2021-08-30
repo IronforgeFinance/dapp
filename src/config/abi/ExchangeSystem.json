@@ -229,6 +229,12 @@
       {
         "indexed": false,
         "internalType": "uint256",
+        "name": "destAmount",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
         "name": "feeForPool",
         "type": "uint256"
       },
@@ -236,6 +242,18 @@
         "indexed": false,
         "internalType": "uint256",
         "name": "feeForFoundation",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "fromCurrencyPrice",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "toCurrencyPrice",
         "type": "uint256"
       }
     ],

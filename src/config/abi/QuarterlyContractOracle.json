@@ -30,30 +30,11 @@
       {
         "indexed": false,
         "internalType": "address",
-        "name": "asset",
+        "name": "addr",
         "type": "address"
       }
     ],
-    "name": "AssetAdded",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": false,
-        "internalType": "bytes32",
-        "name": "name",
-        "type": "bytes32"
-      },
-      {
-        "indexed": false,
-        "internalType": "address",
-        "name": "asset",
-        "type": "address"
-      }
-    ],
-    "name": "AssetRemoved",
+    "name": "CachedAddressUpdated",
     "type": "event"
   },
   {
@@ -81,17 +62,23 @@
       {
         "indexed": false,
         "internalType": "bytes32",
-        "name": "name",
+        "name": "symbol",
         "type": "bytes32"
       },
       {
         "indexed": false,
-        "internalType": "address",
-        "name": "addr",
-        "type": "address"
+        "internalType": "uint256",
+        "name": "price",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "time",
+        "type": "uint256"
       }
     ],
-    "name": "StorageAddressUpdated",
+    "name": "PriceUpdated",
     "type": "event"
   },
   {
@@ -108,38 +95,6 @@
     "type": "function"
   },
   {
-    "inputs": [
-      {
-        "internalType": "contract IAsset",
-        "name": "asset",
-        "type": "address"
-      }
-    ],
-    "name": "addAsset",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "bytes32",
-        "name": "",
-        "type": "bytes32"
-      }
-    ],
-    "name": "addressMap",
-    "outputs": [
-      {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
     "inputs": [],
     "name": "admin",
     "outputs": [
@@ -147,19 +102,6 @@
         "internalType": "address",
         "name": "",
         "type": "address"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "assetNumber",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
       }
     ],
     "stateMutability": "view",
@@ -189,53 +131,28 @@
     "inputs": [
       {
         "internalType": "bytes32",
-        "name": "name",
+        "name": "symbol",
         "type": "bytes32"
       }
     ],
-    "name": "getAddress",
+    "name": "getQuarterlyContractPrice",
     "outputs": [
       {
-        "internalType": "address",
+        "components": [
+          {
+            "internalType": "uint256",
+            "name": "price",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "time",
+            "type": "uint256"
+          }
+        ],
+        "internalType": "struct IQuarterlyContractOracle.PriceData",
         "name": "",
-        "type": "address"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "bytes32",
-        "name": "name",
-        "type": "bytes32"
-      },
-      {
-        "internalType": "string",
-        "name": "reason",
-        "type": "string"
-      }
-    ],
-    "name": "getAddressWithRequire",
-    "outputs": [
-      {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "getAssetAddresses",
-    "outputs": [
-      {
-        "internalType": "address[]",
-        "name": "",
-        "type": "address[]"
+        "type": "tuple"
       }
     ],
     "stateMutability": "view",
@@ -258,16 +175,16 @@
     "inputs": [
       {
         "internalType": "address",
-        "name": "",
+        "name": "account",
         "type": "address"
       }
     ],
-    "name": "mAddress2Names",
+    "name": "isOracleServerRole",
     "outputs": [
       {
-        "internalType": "bytes32",
+        "internalType": "bool",
         "name": "",
-        "type": "bytes32"
+        "type": "bool"
       }
     ],
     "stateMutability": "view",
@@ -276,33 +193,25 @@
   {
     "inputs": [
       {
-        "internalType": "uint256",
+        "internalType": "bytes32",
         "name": "",
+        "type": "bytes32"
+      }
+    ],
+    "name": "prices",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "price",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "time",
         "type": "uint256"
       }
     ],
-    "name": "mAssetList",
-    "outputs": [
-      {
-        "internalType": "contract IAsset",
-        "name": "",
-        "type": "address"
-      }
-    ],
     "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "bytes32",
-        "name": "name",
-        "type": "bytes32"
-      }
-    ],
-    "name": "removeAsset",
-    "outputs": [],
-    "stateMutability": "nonpayable",
     "type": "function"
   },
   {
@@ -319,32 +228,24 @@
     "type": "function"
   },
   {
-    "inputs": [],
-    "name": "totalAssetsInUsd",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "total",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
     "inputs": [
       {
         "internalType": "bytes32",
-        "name": "name",
+        "name": "symbol",
         "type": "bytes32"
       },
       {
-        "internalType": "address",
-        "name": "dest",
-        "type": "address"
+        "internalType": "uint256",
+        "name": "price",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "time",
+        "type": "uint256"
       }
     ],
-    "name": "update",
+    "name": "setQuarterlyContractPrice",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -352,17 +253,12 @@
   {
     "inputs": [
       {
-        "internalType": "bytes32[]",
-        "name": "names",
-        "type": "bytes32[]"
-      },
-      {
-        "internalType": "address[]",
-        "name": "destinations",
-        "type": "address[]"
+        "internalType": "contract IAddressStorage",
+        "name": "_addressStorage",
+        "type": "address"
       }
     ],
-    "name": "updateAll",
+    "name": "updateAddressCache",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"

@@ -281,7 +281,7 @@
   },
   {
     "inputs": [],
-    "name": "token",
+    "name": "rewardToken",
     "outputs": [
       {
         "internalType": "contract IERC20",

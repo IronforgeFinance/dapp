@@ -146,6 +146,19 @@
     "type": "function"
   },
   {
+    "inputs": [],
+    "name": "ROLE_ORACLE_SERVER",
+    "outputs": [
+      {
+        "internalType": "bytes32",
+        "name": "",
+        "type": "bytes32"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
     "inputs": [
       {
         "internalType": "address",
@@ -208,6 +221,24 @@
       }
     ],
     "name": "SetIssueAssetRole",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address[]",
+        "name": "server",
+        "type": "address[]"
+      },
+      {
+        "internalType": "bool[]",
+        "name": "setTo",
+        "type": "bool[]"
+      }
+    ],
+    "name": "SetOracleServerRole",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"

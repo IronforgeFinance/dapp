@@ -338,19 +338,6 @@
     "type": "function"
   },
   {
-    "inputs": [],
-    "name": "manualMinted",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
     "inputs": [
       {
         "internalType": "address",
@@ -363,9 +350,22 @@
         "type": "uint256"
       }
     ],
-    "name": "manulMint",
+    "name": "manualMint",
     "outputs": [],
     "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "manualMinted",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
     "type": "function"
   },
   {
@@ -440,6 +440,19 @@
         "internalType": "string",
         "name": "",
         "type": "string"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "symbolBytes32",
+    "outputs": [
+      {
+        "internalType": "bytes32",
+        "name": "result",
+        "type": "bytes32"
       }
     ],
     "stateMutability": "view",

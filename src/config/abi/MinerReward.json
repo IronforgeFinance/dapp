@@ -23,6 +23,25 @@
     "inputs": [
       {
         "indexed": false,
+        "internalType": "bytes32",
+        "name": "name",
+        "type": "bytes32"
+      },
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "addr",
+        "type": "address"
+      }
+    ],
+    "name": "CachedAddressUpdated",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
         "internalType": "address",
         "name": "oldCandidate",
         "type": "address"
@@ -144,6 +163,12 @@
         "internalType": "uint256",
         "name": "amount",
         "type": "uint256"
+      },
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "to",
+        "type": "address"
       }
     ],
     "name": "Harvest",
@@ -319,45 +344,6 @@
         "internalType": "uint256",
         "name": "",
         "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "DexPrice",
-    "outputs": [
-      {
-        "internalType": "contract DexPriceHelper",
-        "name": "",
-        "type": "address"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "FUSD",
-    "outputs": [
-      {
-        "internalType": "contract IERC20",
-        "name": "",
-        "type": "address"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "IFT",
-    "outputs": [
-      {
-        "internalType": "contract IronForgeToken",
-        "name": "",
-        "type": "address"
       }
     ],
     "stateMutability": "view",
@@ -567,21 +553,6 @@
         "type": "uint256"
       },
       {
-        "internalType": "address",
-        "name": "_platformTokenAddress",
-        "type": "address"
-      },
-      {
-        "internalType": "address",
-        "name": "_fusdAddress",
-        "type": "address"
-      },
-      {
-        "internalType": "address",
-        "name": "_dexPriceHelperAddress",
-        "type": "address"
-      },
-      {
         "internalType": "uint256",
         "name": "_rewardPerBlock",
         "type": "uint256"
@@ -667,6 +638,19 @@
         "internalType": "uint256",
         "name": "",
         "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "platformToken",
+    "outputs": [
+      {
+        "internalType": "contract IPlatformToken",
+        "name": "",
+        "type": "address"
       }
     ],
     "stateMutability": "view",
@@ -887,6 +871,19 @@
       }
     ],
     "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "contract IAddressStorage",
+        "name": "_addressStorage",
+        "type": "address"
+      }
+    ],
+    "name": "updateAddressCache",
+    "outputs": [],
+    "stateMutability": "nonpayable",
     "type": "function"
   },
   {

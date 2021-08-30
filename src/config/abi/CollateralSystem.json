@@ -616,17 +616,7 @@
       },
       {
         "internalType": "address",
-        "name": "_platformToken",
-        "type": "address"
-      },
-      {
-        "internalType": "address",
         "name": "_router",
-        "type": "address"
-      },
-      {
-        "internalType": "address",
-        "name": "_u",
         "type": "address"
       }
     ],
@@ -768,7 +758,7 @@
     "name": "platformToken",
     "outputs": [
       {
-        "internalType": "contract IERC20",
+        "internalType": "contract IPlatformToken",
         "name": "",
         "type": "address"
       }
@@ -964,19 +954,6 @@
         "internalType": "bytes32",
         "name": "",
         "type": "bytes32"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "u",
-    "outputs": [
-      {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
       }
     ],
     "stateMutability": "view",
