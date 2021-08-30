@@ -166,98 +166,6 @@
         }
     }
 
-    .mint-container {
-        &:extend(.modal-container);
-        padding: 114px 39px 60px 35px;
-
-        @farFromLink: 36px;
-
-        .cols {
-            margin-left: @farFromLink + 44px;
-
-            .type.col-name {
-                transform: translateX(-30px);
-            }
-        }
-
-        .rows {
-            margin-left: @farFromLink;
-        }
-
-        .record {
-            padding: 18px 50px 6px 41px;
-        }
-
-        .content-box {
-            min-height: 105.9991455078125px;
-            width: 775px;
-            display: flex;
-
-            .head {
-                > * {
-                    flex-basis: percentage(1/6);
-                }
-            }
-
-            .collateral {
-                display: flex;
-                flex-direction: column;
-
-                .token {
-                    display: flex;
-                    align-items: center;
-                    .dot(18px, 5px);
-                }
-            }
-
-            .locked {
-                padding-left: 35px;
-            }
-
-            .minted {
-                padding-left: 54px;
-                display: flex;
-                flex-direction: column;
-            }
-
-            .ratio {
-                padding-left: 70px;
-            }
-
-            .type {
-                padding-left: 54px;
-            }
-
-            .date {
-                // transform: translateX(440px);
-                display: flex;
-                flex-direction: column;
-                align-items: flex-end;
-            }
-
-            .rate-wrapper {
-                display: flex;
-                align-items: center;
-            }
-
-            .token-rate {
-                display: flex;
-                align-items: center;
-                min-width: 92px;
-
-                &:nth-child(n + 2) {
-                    margin-left: 8px;
-                }
-
-                .rate {
-                    padding-left: 4px;
-                }
-
-                .dot(10, 4px);
-            }
-        }
-    }
-
     .entries {
         display: flex;
         align-items: flex-end;
@@ -284,7 +192,7 @@
         }
     }
 
-    .ftoken {
+    > .ftoken {
         margin-top: 26px;
         font-style: normal;
         font-weight: normal;

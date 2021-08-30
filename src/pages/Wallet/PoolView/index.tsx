@@ -1,53 +1,95 @@
-import { TokenIcon } from '@/components/Icon';
 import './index.less';
+import { Table } from 'antd';
+import { ethers } from 'ethers';
+import {
+    PureView,
+    LpTokenView,
+    PoolViewProps,
+    ActionView,
+    BalanceView,
+} from '@/layouts/components/Footer/components/CommonView';
+
+const columns = [
+    {
+        title: 'Pool',
+        dataIndex: 'lpToken',
+        render: (value, row) => <LpTokenView {...row} />,
+    },
+    {
+        title: 'Balance',
+        dataIndex: 'balance',
+        render: (value, row) => <BalanceView {...row} />,
+    },
+    {
+        title: 'Earned',
+        dataIndex: 'earned',
+        render: (value, row: PoolViewProps) => (
+            <BalanceView
+                {...row}
+                token0={row.earnedToken0}
+                token1={row.earnedToken1}
+            />
+        ),
+    },
+    {
+        title: 'APY',
+        dataIndex: 'apy',
+        render: (value, row) => (
+            <PureView
+                customData={`${+ethers.utils.formatUnits(value, 18) * 100}%`}
+            />
+        ),
+    },
+    {
+        title: 'Action',
+        dataIndex: 'actions',
+        render: (value, row) => <ActionView {...row} />,
+    },
+];
+
+const mockData: PoolViewProps[] = new Array(3).fill('').map((item, index) => ({
+    id: index,
+    token0: {
+        name: 'ETH',
+        amount: '0.03',
+    },
+    token1: {
+        name: 'fUSD',
+        amount: '0.05',
+    },
+    earnedToken0: {
+        name: 'fUSD',
+        amount: '0.05',
+    },
+    earnedToken1: {
+        name: 'USDC',
+        amount: '0.05',
+    },
+    apy: '400000000000000000',
+    actions: [
+        {
+            title: 'Provide',
+            onClick: () => (window.location.href = '/farm/provide'),
+        },
+        {
+            title: 'Withdraw',
+            color: 'yellow',
+            onClick: () =>
+                (window.location.href = '/farm/provide?action=withdraw'),
+        },
+    ],
+}));
 
 const PoolView = () => {
     return (
-        <div className="pool-view">
-            <div className="cols">
-                <span className="col-name">Pool</span>
-                <span className="col-name">Balance</span>
-                <span className="col-name">Earned</span>
-                <span className="col-name">APY</span>
-                <span className="col-name">Action</span>
-            </div>
-            <ul className="rows">
-                {new Array(4).fill('').map((record, index) => {
-                    return (
-                        <li key={index} className="record">
-                            <div className="pool data-token-pair">
-                                <TokenIcon name="ETH-fUSD" />
-                                <span className="name">ETH+fUSD LP</span>
-                            </div>
-                            <div className="balance data-token-pair-balance">
-                                <span className="token0">
-                                    <b>0.03</b> ETH
-                                </span>
-                                <span className="token1">
-                                    <b>0.05</b> fUSD
-                                </span>
-                            </div>
-                            <div className="earned data-token-pair-balance">
-                                <span className="token0">
-                                    <b>0.03</b> ETH
-                                </span>
-                                <span className="token1">
-                                    <b>0.05</b> fUSD
-                                </span>
-                            </div>
-                            <span className="apy data-normal">40%</span>
-                            <div className="action">
-                                <button className="common-btn common-btn-red">
-                                    Trade
-                                </button>
-                                <button className="common-btn common-btn-yellow">
-                                    Withdraw
-                                </button>
-                            </div>
-                        </li>
-                    );
-                })}
-            </ul>
+        <div className="burn-view">
+            <Table
+                className="custom-table"
+                columns={columns}
+                rowKey={(record) => record.id}
+                dataSource={mockData}
+                pagination={false}
+            />
         </div>
     );
 };
