@@ -1,3 +1,98 @@
+.action-view {
+    display: flex;
+    align-items: center;
+
+    > button.common-btn {
+        width: 96px;
+        min-width: 96px;
+        height: 38px;
+
+        font-style: normal;
+        font-weight: bold;
+        font-size: 15px;
+        line-height: 22px;
+
+        color: #ffffff;
+
+        &:nth-child(n + 2) {
+            margin-left: 4px;
+        }
+    }
+}
+
+.price-view {
+    display: flex;
+    flex-direction: column;
+
+    .amount {
+        font-style: normal;
+        font-weight: bold;
+        font-size: 16px;
+        line-height: 24px;
+        display: flex;
+        align-items: center;
+        color: #1c1c1d;
+    }
+
+    .price {
+        font-style: normal;
+        font-weight: 300;
+        font-size: 15px;
+        line-height: 22px;
+        color: rgba(28, 28, 29, 0.3);
+    }
+}
+
+.balance-view {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    .token0 {
+        font-style: normal;
+        font-weight: 300;
+        font-size: 16px;
+        line-height: 24px;
+        display: flex;
+        align-items: center;
+        color: rgba(41, 39, 37, 0.5);
+
+        b {
+            font-weight: 700;
+            color: #ac4c06;
+            margin-right: 4px;
+        }
+    }
+
+    .token1 {
+        font-style: normal;
+        font-weight: 300;
+        font-size: 15px;
+        line-height: 22px;
+        color: rgba(41, 39, 37, 0.5);
+
+        b {
+            font-weight: 700;
+            color: #ac4c06;
+            margin-right: 4px;
+        }
+    }
+}
+
+.lp-token-view {
+    display: flex;
+    align-items: center;
+
+    .name {
+        font-style: normal;
+        font-weight: 500;
+        font-size: 15px;
+        line-height: 22px;
+        color: #292725;
+        padding-left: 6px;
+    }
+}
+
 .token-view {
     display: flex;
     flex-direction: column;

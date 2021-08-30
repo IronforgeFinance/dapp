@@ -1,12 +1,76 @@
 import './index.less';
 
-import { Fragment, useMemo } from 'react';
+import { Fragment, ReactNode, useMemo } from 'react';
 import { getRemainDaysOfQuarterAsset } from '@/utils';
 import { TokenIcon } from '@/components/Icon';
 import { ethers } from 'ethers';
 import { Popover } from 'antd';
 
+/**
+ * TODO PoolView、FarmView、HistoryView后面拆出去，属于wallet这边的组件
+ * TODO 写的有点乱，Record类型应该用范型来解决，后面重构的时候再搞
+ */
+type HistoryType = 'Mint' | 'Burn' | 'Trade' | 'Pool' | 'Farm';
+type VerbType =
+    | 'From'
+    | 'Send'
+    | 'Provide Liquidity'
+    | 'Withdraw Liquidity'
+    | 'Stake LP';
+type ConjType = 'To' | 'and';
+
+type ActionBtnColors = 'yellow' | 'red';
+interface ActionProps {
+    title: string;
+    color?: ActionBtnColors;
+    onClick?(): void;
+}
+
+interface ValueProps {
+    amount: string | number;
+    price: string | number;
+}
+
+interface TokenProps {
+    name: string;
+    amount: string | number;
+}
+
+export interface PoolViewProps {
+    id?: number | string; //key
+    token0?: TokenProps;
+    token1?: TokenProps;
+    earnedToken0?: TokenProps;
+    earnedToken1?: TokenProps;
+    apy?: string | number;
+    actions?: ActionProps[];
+}
+export interface FarmViewProps {
+    id?: number | string; //key
+    value?: ValueProps;
+    token0?: TokenProps;
+    token1?: TokenProps;
+    earnedToken0?: TokenProps;
+    earnedToken1?: TokenProps;
+    apy?: string | number;
+}
+export interface HistoryViewProps {
+    id?: number | string; //key
+    icon?: ReactNode;
+    type?: HistoryType;
+    verb?: VerbType;
+    conj?: ConjType;
+    token0?: TokenProps;
+    token1?: TokenProps;
+    link?: string;
+}
+
 interface MintViewProps {
+    id?: string | number;
+    user?: string;
+    ratio?: string | number;
+    txhash?: string;
+    timestamp?: string | number;
     collateralCurrency?: string;
     collateralAmount?: string | number;
     lockedAmount?: string | number;
@@ -15,20 +79,23 @@ interface MintViewProps {
 }
 
 interface BurnViewProps {
+    id?: string | number;
+    user?: string;
+    ratio?: string | number;
+    txhash?: string;
+    timestamp?: string | number;
     unstakingCurrency?: string;
     unstakingAmount?: string | number;
     unlockedAmount?: string | number;
     cleanedDebt?: string | number;
 }
 
-export interface RecordProps extends MintViewProps, BurnViewProps {
-    // common original data
-    id?: string | number;
-    user?: string;
-    ratio?: string | number;
-    txhash?: string;
-    timestamp?: string | number;
-
+export interface RecordProps
+    extends MintViewProps,
+        BurnViewProps,
+        PoolViewProps,
+        FarmViewProps,
+        HistoryViewProps {
     // extend props
     noToken?: boolean;
     noPrice?: boolean;
@@ -36,9 +103,65 @@ export interface RecordProps extends MintViewProps, BurnViewProps {
     amount?: string | number;
     deliveryCurrency?: string;
     customData?: string;
+    actions?: ActionProps[];
 }
 
 const Br = () => <div dangerouslySetInnerHTML={{ __html: '<br/>' }} />;
+
+export const ActionView = (props: RecordProps) => {
+    const { actions = [] } = props;
+
+    return (
+        <div className="action-view">
+            {actions.map((action) => (
+                <button
+                    className={`common-btn common-btn-${
+                        action.color || ('red' as ActionBtnColors)
+                    }`}
+                >
+                    {action.title}
+                </button>
+            ))}
+        </div>
+    );
+};
+
+export const LpTokenView = (props: RecordProps) => {
+    const { token0, token1 } = props;
+
+    return (
+        <div className="lp-token-view">
+            <TokenIcon name={`${token0.name}-${token1.name}`} />
+            <span className="name">{`${token0.name}+${token1.name}`} LP</span>
+        </div>
+    );
+};
+
+export const BalanceView = (props: RecordProps) => {
+    const { token0, token1 } = props;
+
+    return (
+        <div className="balance-view">
+            <span className="token0">
+                <b>{token0.amount}</b> {token0.name}
+            </span>
+            <span className="token1">
+                <b>{token1.amount}</b> {token1.name}
+            </span>
+        </div>
+    );
+};
+
+export const PriceView = (props: RecordProps) => {
+    const { value } = props;
+
+    return (
+        <div className="price-view">
+            <span className="amount">{value.amount}</span>
+            <span className="price">{value.price}</span>
+        </div>
+    );
+};
 
 export const TokenView = (props: RecordProps) => {
     const { noToken, noPrice, amount, currency } = props;
@@ -128,7 +251,7 @@ export const TypeView = (props: RecordProps) => {
     );
 };
 
-type DebtStatusTypes = 'Active' | 'Static';
+type DebtStatus = 'Active' | 'Static';
 
 export const DebtView = (props: RecordProps) => {
     const { currency, deliveryCurrency, amount } = props;
@@ -138,7 +261,7 @@ export const DebtView = (props: RecordProps) => {
         [currency],
     );
 
-    const status: DebtStatusTypes = useMemo(
+    const status: DebtStatus = useMemo(
         () => (restDays > 0 ? 'Active' : 'Static'),
         [restDays],
     );
