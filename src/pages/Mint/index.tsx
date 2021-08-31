@@ -89,13 +89,11 @@ export default () => {
         collateralSytemContract,
     );
 
-    const {
-        isApproved: isIFTApproved,
-        setLastUpdated: setLastIFTApproved,
-    } = useCheckERC20ApprovalStatus(
-        Tokens.IFT.address[process.env.APP_CHAIN_ID],
-        collateralSytemContract,
-    );
+    const { isApproved: isIFTApproved, setLastUpdated: setLastIFTApproved } =
+        useCheckERC20ApprovalStatus(
+            Tokens.IFT.address[process.env.APP_CHAIN_ID],
+            collateralSytemContract,
+        );
 
     const prices = usePrices();
 
@@ -145,15 +143,11 @@ export default () => {
     const { balance, refresh: refreshIFTBalance } = useBep20Balance('IFT');
     const fTokenBalance = balance as number;
 
-    const {
-        balance: collateralBalance,
-        refresh: refreshCollateralBalance,
-    } = useBep20Balance(collateralToken);
+    const { balance: collateralBalance, refresh: refreshCollateralBalance } =
+        useBep20Balance(collateralToken);
 
-    const {
-        balance: mintBalance,
-        refresh: refreshMintBalance,
-    } = useBep20Balance(toToken);
+    const { balance: mintBalance, refresh: refreshMintBalance } =
+        useBep20Balance(toToken);
 
     const refreshBalance = () => {
         refreshIFTBalance();
@@ -543,28 +537,10 @@ export default () => {
                                         size={24}
                                     />
                                     <SelectTokens
-                                        visable={showSelectFromToken}
                                         value={collateralToken}
                                         tokenList={COLLATERAL_TOKENS}
                                         onSelect={collateralTokenHandler}
-                                        onClose={() => {
-                                            setShowSelectFromToken(false);
-                                        }}
-                                    >
-                                        <button
-                                            className="btn-mint-form"
-                                            onClick={() => {
-                                                setShowSelectFromToken(true);
-                                            }}
-                                        >
-                                            <span>
-                                                {collateralToken || (
-                                                    <span>Select token</span>
-                                                )}
-                                            </span>
-                                            <i className="icon-down size-20"></i>
-                                        </button>
-                                    </SelectTokens>
+                                    ></SelectTokens>
                                 </div>
                             </div>
                         </div>
@@ -654,35 +630,15 @@ export default () => {
                                         size={24}
                                     />
                                     <SelectTokens
-                                        visable={showSelectToToken}
                                         value={toToken}
                                         tokenList={MINT_TOKENS.map((name) => ({
                                             name,
                                         }))}
                                         onSelect={toTokenHandler}
-                                        onClose={() => {
-                                            setShowSelectToToken(false);
-                                        }}
-                                    >
-                                        <button
-                                            className="btn-mint-form"
-                                            onClick={() => {
-                                                setShowSelectToToken(true);
-                                            }}
-                                        >
-                                            <span>
-                                                {toToken || (
-                                                    <span>
-                                                        {intl.formatMessage({
-                                                            id:
-                                                                'mint.selectCasting',
-                                                        })}
-                                                    </span>
-                                                )}
-                                            </span>
-                                            <i className="icon-down size-20"></i>
-                                        </button>
-                                    </SelectTokens>
+                                        placeholder={intl.formatMessage({
+                                            id: 'mint.selectCasting',
+                                        })}
+                                    ></SelectTokens>
                                 </div>
                             </div>
                         </div>

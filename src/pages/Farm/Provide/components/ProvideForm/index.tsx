@@ -23,7 +23,7 @@ import {
 } from '@/hooks/useApprove';
 import { TokenIcon } from '@/components/Icon';
 import Folder from '@/components/Folder';
-import {PROVIDED_LP_TOKENS} from '@/config'
+import { PROVIDED_LP_TOKENS } from '@/config';
 const TOKENS = Array.from(
     new Set(
         PROVIDED_LP_TOKENS.map((item) => item.split('-')).reduce(
@@ -74,21 +74,17 @@ export default () => {
     const routerContract = useRouter();
 
     const pancakeRouter = Contracts.PancakeRouter[process.env.APP_CHAIN_ID];
-    const {
-        isApproved: token1Approved,
-        setLastUpdated: setToken1LastUpdated,
-    } = useCheckERC20ApprovalStatus(
-        token1 ? Tokens[token1].address[process.env.APP_CHAIN_ID] : '',
-        pancakeRouter,
-    );
+    const { isApproved: token1Approved, setLastUpdated: setToken1LastUpdated } =
+        useCheckERC20ApprovalStatus(
+            token1 ? Tokens[token1].address[process.env.APP_CHAIN_ID] : '',
+            pancakeRouter,
+        );
 
-    const {
-        isApproved: token2Approved,
-        setLastUpdated: setToken2LastUpdated,
-    } = useCheckERC20ApprovalStatus(
-        token2 ? Tokens[token2].address[process.env.APP_CHAIN_ID] : '',
-        pancakeRouter,
-    );
+    const { isApproved: token2Approved, setLastUpdated: setToken2LastUpdated } =
+        useCheckERC20ApprovalStatus(
+            token2 ? Tokens[token2].address[process.env.APP_CHAIN_ID] : '',
+            pancakeRouter,
+        );
 
     const {
         handleApprove: handleToken1Approve,
@@ -406,28 +402,10 @@ export default () => {
                             <div className="token">
                                 <TokenIcon name={token1} size={24} />
                                 <SelectTokens
-                                    visable={showSelectFromToken}
                                     value={token1}
                                     tokenList={TOKENS}
                                     onSelect={token1SelectHandler}
-                                    onClose={() =>
-                                        setShowSelectFromToken(false)
-                                    }
-                                >
-                                    <button
-                                        className="btn-mint-form"
-                                        onClick={() =>
-                                            setShowSelectFromToken(true)
-                                        }
-                                    >
-                                        <span>
-                                            {token1 || (
-                                                <span>Select token</span>
-                                            )}
-                                        </span>
-                                        <i className="icon-down size-20"></i>
-                                    </button>
-                                </SelectTokens>
+                                ></SelectTokens>
                             </div>
                         </div>
                     </div>
@@ -455,25 +433,10 @@ export default () => {
                             <div className="token">
                                 <TokenIcon name={token2} size={24} />
                                 <SelectTokens
-                                    visable={showSelectToToken}
                                     value={token2}
                                     tokenList={TOKENS}
                                     onSelect={token2SelectHandler}
-                                    onClose={() => setShowSelectToToken(false)}
                                 >
-                                    <button
-                                        className="btn-mint-form"
-                                        onClick={() =>
-                                            setShowSelectToToken(true)
-                                        }
-                                    >
-                                        <span>
-                                            {token2 || (
-                                                <span>Select token</span>
-                                            )}
-                                        </span>
-                                        <i className="icon-down size-20"></i>
-                                    </button>
                                 </SelectTokens>
                             </div>
                         </div>
