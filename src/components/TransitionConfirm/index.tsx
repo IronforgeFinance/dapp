@@ -1,7 +1,7 @@
 import React from 'react';
 import './index.less';
 import Board from '@/components/Board';
-import { CurrencySymbol } from '@/config/constants/types';
+import { FiatSymbol } from '@/config/constants/types';
 import { TokenIcon } from '../Icon';
 import classNames from 'classnames';
 
@@ -11,7 +11,7 @@ interface TokenMap {
     token: string;
     amount: string | number;
     mappingPrice?: string | number;
-    symbol?: CurrencySymbol;
+    symbol?: FiatSymbol;
 }
 
 interface TransitionData {
@@ -26,7 +26,7 @@ interface TransitionConfirmProps {
     dataSource?: TransitionData[];
 }
 
-const DEFAULT_CURRENCY_SYMBOL: CurrencySymbol = '$';
+const DEFAULT_CURRENCY_SYMBOL: FiatSymbol = '$';
 
 function TransitionConfirm(props: TransitionConfirmProps) {
     const { visable, onClose: _onClose, dataSource } = props;

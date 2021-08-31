@@ -5,13 +5,13 @@ import { useState, useCallback, Fragment, useMemo, useEffect } from 'react';
 import { parseEnumToArray } from '@/utils';
 import {
     ConjType,
-    HistoryType,
     HistoryViewProps,
     IconType,
     VerbType,
-} from '@/layouts/components/Footer/components/CommonView';
+} from '@/components/CommonView';
 import { useWeb3React } from '@web3-react/core';
 import { toFixedWithoutRound } from '@/utils/bigNumber';
+import { DefiActType } from '@/config/constants/types';
 import {
     GET_OPERATIONS,
     GET_BURNS_FROM_PANCAKE,
@@ -163,7 +163,7 @@ const useParseDataOfPancake =
     (item): HistoryViewProps => ({
         id: item.id,
         icon: `pool-${type}`,
-        type: poolTypeToTabType[type] as HistoryType,
+        type: poolTypeToTabType[type] as DefiActType,
         verb: poolTypeToVerbType[type],
         conj: poolTypeToConjType[type],
         token0: {
@@ -193,7 +193,7 @@ const parseDataOfOur = (item): HistoryViewProps => {
         icon: (
             otherTypeToTabType[item.type] as string
         ).toLowerCase() as IconType,
-        type: otherTypeToTabType[item.type] as HistoryType,
+        type: otherTypeToTabType[item.type] as DefiActType,
         verb: otherTypeToVerbType[item.type] as VerbType,
         conj: otherTypeToConjType[item.type] as ConjType,
         token0: {

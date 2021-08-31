@@ -6,7 +6,12 @@ import { useState } from 'react';
 import { ethers } from 'ethers';
 import { useMemo } from 'react';
 import { useWeb3React } from '@web3-react/core';
-import { TokenView, PureView, TypeView, TimeView } from '../CommonView';
+import {
+    TokenView,
+    PureView,
+    TypeView,
+    TimeView,
+} from '@/components/CommonView';
 
 const GET_BURNS = gql`
     query ($offset: Int, $limit: Int, $user: String) {

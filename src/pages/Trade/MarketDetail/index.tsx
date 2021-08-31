@@ -1,6 +1,6 @@
 import React from 'react';
 import './index.less';
-import { CurrencySymbol } from '@/config/constants/types';
+import { FiatSymbol } from '@/config/constants/types';
 import classNames from 'classnames';
 import { copyTextToClipboard } from '@/utils/clipboard';
 import Notification from '@iron/Notification';
@@ -10,7 +10,7 @@ import Folder from '@iron/Folder';
 
 interface Price {
     amount: string | number;
-    symbol?: CurrencySymbol;
+    symbol?: FiatSymbol;
 }
 
 interface Address {
@@ -36,7 +36,7 @@ interface MarketDetailProps {
     dataSource: DetailData<Address | Price>[];
 }
 
-const DEFAULT_CURRENCY_SYMBOL: CurrencySymbol = '$';
+const DEFAULT_CURRENCY_SYMBOL: FiatSymbol = '$';
 
 const MarketDetail = (props: MarketDetailProps) => {
     return (

@@ -1,4 +1,4 @@
-import { HistoryViewProps } from '@/layouts/components/Footer/components/CommonView';
+import { HistoryViewProps } from '@/components/CommonView';
 
 const mockData: HistoryViewProps[] = [
     {

@@ -9,7 +9,7 @@ import {
     ActionView,
     BalanceView,
     PriceView,
-} from '@/layouts/components/Footer/components/CommonView';
+} from '@/components/CommonView';
 import useRefresh from '@/hooks/useRefresh';
 import { useWeb3React } from '@web3-react/core';
 import { history, useModel } from 'umi';

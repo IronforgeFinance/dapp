@@ -12,7 +12,7 @@ import {
     TypeView,
     TimeView,
     DebtView,
-} from '../CommonView';
+} from '@/components/CommonView';
 
 const GET_MINTS = gql`
     query ($offset: Int, $limit: Int, $user: String) {

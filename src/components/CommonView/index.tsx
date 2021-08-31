@@ -5,12 +5,12 @@ import { getRemainDaysOfQuarterAsset } from '@/utils';
 import { TokenIcon } from '@/components/Icon';
 import { ethers } from 'ethers';
 import { Popover } from 'antd';
+import { DefiActType } from '@/config/constants/types';
 
 /**
  * @todo PoolView、FarmView、HistoryView后面拆出去，属于wallet这边的组件
  * @todo 写的有点乱，Record类型应该用范型来解决，后面重构的时候再搞
  */
-export type HistoryType = 'Mint' | 'Burn' | 'Trade' | 'Pool' | 'Farm';
 export type VerbType =
     | 'From'
     | 'Send'
@@ -63,7 +63,7 @@ export interface FarmViewProps {
 export interface HistoryViewProps {
     id?: number | string; //key
     icon?: IconType;
-    type?: HistoryType;
+    type?: DefiActType;
     verb?: VerbType;
     conj?: ConjType;
     token0?: TokenProps;
