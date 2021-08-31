@@ -1,1128 +1,1128 @@
 [
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": false,
-        "internalType": "address",
-        "name": "oldAdmin",
-        "type": "address"
-      },
-      {
-        "indexed": false,
-        "internalType": "address",
-        "name": "newAdmin",
-        "type": "address"
-      }
-    ],
-    "name": "AdminChanged",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": false,
-        "internalType": "address",
-        "name": "user",
-        "type": "address"
-      },
-      {
-        "indexed": false,
-        "internalType": "bytes32",
-        "name": "unstakingCurrency",
-        "type": "bytes32"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "unstakingAmount",
-        "type": "uint256"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "unlockedAmount",
-        "type": "uint256"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "cleanedDebt",
-        "type": "uint256"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "ratio",
-        "type": "uint256"
-      }
-    ],
-    "name": "Burn",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": false,
-        "internalType": "bytes32",
-        "name": "name",
-        "type": "bytes32"
-      },
-      {
-        "indexed": false,
-        "internalType": "address",
-        "name": "addr",
-        "type": "address"
-      }
-    ],
-    "name": "CachedAddressUpdated",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": false,
-        "internalType": "address",
-        "name": "oldCandidate",
-        "type": "address"
-      },
-      {
-        "indexed": false,
-        "internalType": "address",
-        "name": "newCandidate",
-        "type": "address"
-      }
-    ],
-    "name": "CandidateChanged",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": false,
-        "internalType": "address",
-        "name": "user",
-        "type": "address"
-      },
-      {
-        "indexed": false,
-        "internalType": "bytes32",
-        "name": "_currency",
-        "type": "bytes32"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "_amount",
-        "type": "uint256"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "_userTotal",
-        "type": "uint256"
-      }
-    ],
-    "name": "CollateralLog",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": false,
-        "internalType": "address",
-        "name": "fromUser",
-        "type": "address"
-      },
-      {
-        "indexed": false,
-        "internalType": "address",
-        "name": "toUser",
-        "type": "address"
-      },
-      {
-        "indexed": false,
-        "internalType": "bytes32",
-        "name": "currency",
-        "type": "bytes32"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "amount",
-        "type": "uint256"
-      }
-    ],
-    "name": "CollateralMoved",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": false,
-        "internalType": "address",
-        "name": "user",
-        "type": "address"
-      },
-      {
-        "indexed": false,
-        "internalType": "bytes32",
-        "name": "collateralCurrency",
-        "type": "bytes32"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "collateralAmount",
-        "type": "uint256"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "lockedAmount",
-        "type": "uint256"
-      },
-      {
-        "indexed": false,
-        "internalType": "bytes32",
-        "name": "mintedCurrency",
-        "type": "bytes32"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "mintedAmount",
-        "type": "uint256"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "ratio",
-        "type": "uint256"
-      }
-    ],
-    "name": "Mint",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": false,
-        "internalType": "address",
-        "name": "account",
-        "type": "address"
-      }
-    ],
-    "name": "Paused",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": false,
-        "internalType": "address",
-        "name": "user",
-        "type": "address"
-      },
-      {
-        "indexed": false,
-        "internalType": "bytes32",
-        "name": "_currency",
-        "type": "bytes32"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "_amount",
-        "type": "uint256"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "_userTotal",
-        "type": "uint256"
-      }
-    ],
-    "name": "RedeemCollateral",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": false,
-        "internalType": "address",
-        "name": "account",
-        "type": "address"
-      }
-    ],
-    "name": "Unpaused",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": false,
-        "internalType": "bytes32",
-        "name": "symbol",
-        "type": "bytes32"
-      },
-      {
-        "indexed": false,
-        "internalType": "address",
-        "name": "tokenAddress",
-        "type": "address"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "minCollateral",
-        "type": "uint256"
-      },
-      {
-        "indexed": false,
-        "internalType": "bool",
-        "name": "close",
-        "type": "bool"
-      }
-    ],
-    "name": "UpdateTokenSetting",
-    "type": "event"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "_admin",
-        "type": "address"
-      }
-    ],
-    "name": "__AdminUpgradeable_init",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "admin",
-    "outputs": [
-      {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "becomeAdmin",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "buildBurnSystem",
-    "outputs": [
-      {
-        "internalType": "contract IBuildBurnSystem",
-        "name": "",
-        "type": "address"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "burnAmount",
-        "type": "uint256"
-      },
-      {
-        "internalType": "bytes32",
-        "name": "unStakeCurrency",
-        "type": "bytes32"
-      },
-      {
-        "internalType": "uint256",
-        "name": "unStakeAmount",
-        "type": "uint256"
-      }
-    ],
-    "name": "burnAndUnstake",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "burnAmount",
-        "type": "uint256"
-      },
-      {
-        "internalType": "bytes32",
-        "name": "unStakeCurrency",
-        "type": "bytes32"
-      }
-    ],
-    "name": "burnAndUnstakeMax",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "candidate",
-    "outputs": [
-      {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "debtSystem",
-    "outputs": [
-      {
-        "internalType": "contract IDebtSystem",
-        "name": "",
-        "type": "address"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "bytes32",
-        "name": "stakeCurrency",
-        "type": "bytes32"
-      },
-      {
-        "internalType": "uint256",
-        "name": "stakeAmount",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "lockedAmount",
-        "type": "uint256"
-      }
-    ],
-    "name": "getCatalystResult",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "user",
-        "type": "address"
-      },
-      {
-        "internalType": "bytes32",
-        "name": "_currency",
-        "type": "bytes32"
-      }
-    ],
-    "name": "getFreeCollateralInUsd",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "_user",
-        "type": "address"
-      },
-      {
-        "internalType": "bytes32",
-        "name": "_currency",
-        "type": "bytes32"
-      }
-    ],
-    "name": "getRatio",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "getSystemTotalCollateralInUsd",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "total",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "_user",
-        "type": "address"
-      },
-      {
-        "internalType": "bytes32",
-        "name": "_currency",
-        "type": "bytes32"
-      }
-    ],
-    "name": "getUserCollateral",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "_user",
-        "type": "address"
-      },
-      {
-        "internalType": "bytes32",
-        "name": "_currency",
-        "type": "bytes32"
-      }
-    ],
-    "name": "getUserCollateralInUsd",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "total",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "_user",
-        "type": "address"
-      }
-    ],
-    "name": "getUserCollaterals",
-    "outputs": [
-      {
-        "internalType": "bytes32[]",
-        "name": "",
-        "type": "bytes32[]"
-      },
-      {
-        "internalType": "uint256[]",
-        "name": "",
-        "type": "uint256[]"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "_user",
-        "type": "address"
-      }
-    ],
-    "name": "getUserTotalCollateralInUsd",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "total",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "_admin",
-        "type": "address"
-      },
-      {
-        "internalType": "address",
-        "name": "_router",
-        "type": "address"
-      }
-    ],
-    "name": "initialize",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "_user",
-        "type": "address"
-      },
-      {
-        "internalType": "bytes32",
-        "name": "_currency",
-        "type": "bytes32"
-      }
-    ],
-    "name": "isSatisfyTargetRatio",
-    "outputs": [
-      {
-        "internalType": "bool",
-        "name": "",
-        "type": "bool"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "liquidation",
-    "outputs": [
-      {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "mCatalyst",
-    "outputs": [
-      {
-        "internalType": "contract ICatalyst",
-        "name": "",
-        "type": "address"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "mConfig",
-    "outputs": [
-      {
-        "internalType": "contract IConfig",
-        "name": "",
-        "type": "address"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "user",
-        "type": "address"
-      },
-      {
-        "internalType": "bytes32",
-        "name": "_currency",
-        "type": "bytes32"
-      }
-    ],
-    "name": "maxRedeemableToken",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "fromUser",
-        "type": "address"
-      },
-      {
-        "internalType": "address",
-        "name": "toUser",
-        "type": "address"
-      },
-      {
-        "internalType": "bytes32",
-        "name": "currency",
-        "type": "bytes32"
-      },
-      {
-        "internalType": "uint256",
-        "name": "amount",
-        "type": "uint256"
-      }
-    ],
-    "name": "moveCollateral",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "paused",
-    "outputs": [
-      {
-        "internalType": "bool",
-        "name": "",
-        "type": "bool"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "platformToken",
-    "outputs": [
-      {
-        "internalType": "contract IPlatformToken",
-        "name": "",
-        "type": "address"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "priceGetter",
-    "outputs": [
-      {
-        "internalType": "contract IPrices",
-        "name": "",
-        "type": "address"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "bytes32",
-        "name": "_currency",
-        "type": "bytes32"
-      },
-      {
-        "internalType": "uint256",
-        "name": "_amount",
-        "type": "uint256"
-      }
-    ],
-    "name": "redeem",
-    "outputs": [
-      {
-        "internalType": "bool",
-        "name": "",
-        "type": "bool"
-      }
-    ],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "bytes32",
-        "name": "_currency",
-        "type": "bytes32"
-      }
-    ],
-    "name": "redeemMax",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "router",
-    "outputs": [
-      {
-        "internalType": "contract IPancakeRouter02",
-        "name": "",
-        "type": "address"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "_candidate",
-        "type": "address"
-      }
-    ],
-    "name": "setCandidate",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "bool",
-        "name": "_paused",
-        "type": "bool"
-      }
-    ],
-    "name": "setPaused",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "bytes32",
-        "name": "stakeCurrency",
-        "type": "bytes32"
-      },
-      {
-        "internalType": "uint256",
-        "name": "stakeAmount",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "buildAmount",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "lockedAmount",
-        "type": "uint256"
-      }
-    ],
-    "name": "stakeAndBuild",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "bytes32",
-        "name": "stakeCurrency",
-        "type": "bytes32"
-      },
-      {
-        "internalType": "uint256",
-        "name": "stakeAmount",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "lockedAmount",
-        "type": "uint256"
-      }
-    ],
-    "name": "stakeAndBuildMax",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "bytes32",
-        "name": "",
-        "type": "bytes32"
-      }
-    ],
-    "name": "tokenInfos",
-    "outputs": [
-      {
-        "internalType": "address",
-        "name": "tokenAddress",
-        "type": "address"
-      },
-      {
-        "internalType": "uint256",
-        "name": "minCollateral",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "totalCollateral",
-        "type": "uint256"
-      },
-      {
-        "internalType": "bool",
-        "name": "bClose",
-        "type": "bool"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "name": "tokenSymbol",
-    "outputs": [
-      {
-        "internalType": "bytes32",
-        "name": "",
-        "type": "bytes32"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "uniqueId",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "contract IAddressStorage",
-        "name": "_addressStorage",
-        "type": "address"
-      }
-    ],
-    "name": "updateAddressCache",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "bytes32",
-        "name": "_currency",
-        "type": "bytes32"
-      },
-      {
-        "internalType": "address",
-        "name": "_tokenAddress",
-        "type": "address"
-      },
-      {
-        "internalType": "uint256",
-        "name": "_minCollateral",
-        "type": "uint256"
-      },
-      {
-        "internalType": "bool",
-        "name": "_close",
-        "type": "bool"
-      }
-    ],
-    "name": "updateTokenInfo",
-    "outputs": [
-      {
-        "internalType": "bool",
-        "name": "",
-        "type": "bool"
-      }
-    ],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "bytes32[]",
-        "name": "_symbols",
-        "type": "bytes32[]"
-      },
-      {
-        "internalType": "address[]",
-        "name": "_tokenAddresses",
-        "type": "address[]"
-      },
-      {
-        "internalType": "uint256[]",
-        "name": "_minCollateral",
-        "type": "uint256[]"
-      },
-      {
-        "internalType": "bool[]",
-        "name": "_closes",
-        "type": "bool[]"
-      }
-    ],
-    "name": "updateTokenInfos",
-    "outputs": [
-      {
-        "internalType": "bool",
-        "name": "",
-        "type": "bool"
-      }
-    ],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
-      },
-      {
-        "internalType": "bytes32",
-        "name": "",
-        "type": "bytes32"
-      }
-    ],
-    "name": "userCollateralData",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "collateral",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
-      },
-      {
-        "internalType": "bytes32",
-        "name": "",
-        "type": "bytes32"
-      }
-    ],
-    "name": "userLockedData",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "lockedValue",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "_user",
-        "type": "address"
-      },
-      {
-        "internalType": "bytes32",
-        "name": "_currency",
-        "type": "bytes32"
-      }
-    ],
-    "name": "withdrawLockedTokens",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  }
+    {
+        "anonymous": false,
+        "inputs": [
+            {
+                "indexed": false,
+                "internalType": "address",
+                "name": "oldAdmin",
+                "type": "address"
+            },
+            {
+                "indexed": false,
+                "internalType": "address",
+                "name": "newAdmin",
+                "type": "address"
+            }
+        ],
+        "name": "AdminChanged",
+        "type": "event"
+    },
+    {
+        "anonymous": false,
+        "inputs": [
+            {
+                "indexed": false,
+                "internalType": "address",
+                "name": "user",
+                "type": "address"
+            },
+            {
+                "indexed": false,
+                "internalType": "bytes32",
+                "name": "unstakingCurrency",
+                "type": "bytes32"
+            },
+            {
+                "indexed": false,
+                "internalType": "uint256",
+                "name": "unstakingAmount",
+                "type": "uint256"
+            },
+            {
+                "indexed": false,
+                "internalType": "uint256",
+                "name": "unlockedAmount",
+                "type": "uint256"
+            },
+            {
+                "indexed": false,
+                "internalType": "uint256",
+                "name": "cleanedDebt",
+                "type": "uint256"
+            },
+            {
+                "indexed": false,
+                "internalType": "uint256",
+                "name": "ratio",
+                "type": "uint256"
+            }
+        ],
+        "name": "Burn",
+        "type": "event"
+    },
+    {
+        "anonymous": false,
+        "inputs": [
+            {
+                "indexed": false,
+                "internalType": "bytes32",
+                "name": "name",
+                "type": "bytes32"
+            },
+            {
+                "indexed": false,
+                "internalType": "address",
+                "name": "addr",
+                "type": "address"
+            }
+        ],
+        "name": "CachedAddressUpdated",
+        "type": "event"
+    },
+    {
+        "anonymous": false,
+        "inputs": [
+            {
+                "indexed": false,
+                "internalType": "address",
+                "name": "oldCandidate",
+                "type": "address"
+            },
+            {
+                "indexed": false,
+                "internalType": "address",
+                "name": "newCandidate",
+                "type": "address"
+            }
+        ],
+        "name": "CandidateChanged",
+        "type": "event"
+    },
+    {
+        "anonymous": false,
+        "inputs": [
+            {
+                "indexed": false,
+                "internalType": "address",
+                "name": "user",
+                "type": "address"
+            },
+            {
+                "indexed": false,
+                "internalType": "bytes32",
+                "name": "_currency",
+                "type": "bytes32"
+            },
+            {
+                "indexed": false,
+                "internalType": "uint256",
+                "name": "_amount",
+                "type": "uint256"
+            },
+            {
+                "indexed": false,
+                "internalType": "uint256",
+                "name": "_userTotal",
+                "type": "uint256"
+            }
+        ],
+        "name": "CollateralLog",
+        "type": "event"
+    },
+    {
+        "anonymous": false,
+        "inputs": [
+            {
+                "indexed": false,
+                "internalType": "address",
+                "name": "fromUser",
+                "type": "address"
+            },
+            {
+                "indexed": false,
+                "internalType": "address",
+                "name": "toUser",
+                "type": "address"
+            },
+            {
+                "indexed": false,
+                "internalType": "bytes32",
+                "name": "currency",
+                "type": "bytes32"
+            },
+            {
+                "indexed": false,
+                "internalType": "uint256",
+                "name": "amount",
+                "type": "uint256"
+            }
+        ],
+        "name": "CollateralMoved",
+        "type": "event"
+    },
+    {
+        "anonymous": false,
+        "inputs": [
+            {
+                "indexed": false,
+                "internalType": "address",
+                "name": "user",
+                "type": "address"
+            },
+            {
+                "indexed": false,
+                "internalType": "bytes32",
+                "name": "collateralCurrency",
+                "type": "bytes32"
+            },
+            {
+                "indexed": false,
+                "internalType": "uint256",
+                "name": "collateralAmount",
+                "type": "uint256"
+            },
+            {
+                "indexed": false,
+                "internalType": "uint256",
+                "name": "lockedAmount",
+                "type": "uint256"
+            },
+            {
+                "indexed": false,
+                "internalType": "bytes32",
+                "name": "mintedCurrency",
+                "type": "bytes32"
+            },
+            {
+                "indexed": false,
+                "internalType": "uint256",
+                "name": "mintedAmount",
+                "type": "uint256"
+            },
+            {
+                "indexed": false,
+                "internalType": "uint256",
+                "name": "ratio",
+                "type": "uint256"
+            }
+        ],
+        "name": "Mint",
+        "type": "event"
+    },
+    {
+        "anonymous": false,
+        "inputs": [
+            {
+                "indexed": false,
+                "internalType": "address",
+                "name": "account",
+                "type": "address"
+            }
+        ],
+        "name": "Paused",
+        "type": "event"
+    },
+    {
+        "anonymous": false,
+        "inputs": [
+            {
+                "indexed": false,
+                "internalType": "address",
+                "name": "user",
+                "type": "address"
+            },
+            {
+                "indexed": false,
+                "internalType": "bytes32",
+                "name": "_currency",
+                "type": "bytes32"
+            },
+            {
+                "indexed": false,
+                "internalType": "uint256",
+                "name": "_amount",
+                "type": "uint256"
+            },
+            {
+                "indexed": false,
+                "internalType": "uint256",
+                "name": "_userTotal",
+                "type": "uint256"
+            }
+        ],
+        "name": "RedeemCollateral",
+        "type": "event"
+    },
+    {
+        "anonymous": false,
+        "inputs": [
+            {
+                "indexed": false,
+                "internalType": "address",
+                "name": "account",
+                "type": "address"
+            }
+        ],
+        "name": "Unpaused",
+        "type": "event"
+    },
+    {
+        "anonymous": false,
+        "inputs": [
+            {
+                "indexed": false,
+                "internalType": "bytes32",
+                "name": "symbol",
+                "type": "bytes32"
+            },
+            {
+                "indexed": false,
+                "internalType": "address",
+                "name": "tokenAddress",
+                "type": "address"
+            },
+            {
+                "indexed": false,
+                "internalType": "uint256",
+                "name": "minCollateral",
+                "type": "uint256"
+            },
+            {
+                "indexed": false,
+                "internalType": "bool",
+                "name": "close",
+                "type": "bool"
+            }
+        ],
+        "name": "UpdateTokenSetting",
+        "type": "event"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "_admin",
+                "type": "address"
+            }
+        ],
+        "name": "__AdminUpgradeable_init",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "admin",
+        "outputs": [
+            {
+                "internalType": "address",
+                "name": "",
+                "type": "address"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "becomeAdmin",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "buildBurnSystem",
+        "outputs": [
+            {
+                "internalType": "contract IBuildBurnSystem",
+                "name": "",
+                "type": "address"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "uint256",
+                "name": "burnAmount",
+                "type": "uint256"
+            },
+            {
+                "internalType": "bytes32",
+                "name": "unStakeCurrency",
+                "type": "bytes32"
+            },
+            {
+                "internalType": "uint256",
+                "name": "unStakeAmount",
+                "type": "uint256"
+            }
+        ],
+        "name": "burnAndUnstake",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "uint256",
+                "name": "burnAmount",
+                "type": "uint256"
+            },
+            {
+                "internalType": "bytes32",
+                "name": "unStakeCurrency",
+                "type": "bytes32"
+            }
+        ],
+        "name": "burnAndUnstakeMax",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "candidate",
+        "outputs": [
+            {
+                "internalType": "address",
+                "name": "",
+                "type": "address"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "debtSystem",
+        "outputs": [
+            {
+                "internalType": "contract IDebtSystem",
+                "name": "",
+                "type": "address"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "bytes32",
+                "name": "stakeCurrency",
+                "type": "bytes32"
+            },
+            {
+                "internalType": "uint256",
+                "name": "stakeAmount",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "lockedAmount",
+                "type": "uint256"
+            }
+        ],
+        "name": "getCatalystResult",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "user",
+                "type": "address"
+            },
+            {
+                "internalType": "bytes32",
+                "name": "_currency",
+                "type": "bytes32"
+            }
+        ],
+        "name": "getFreeCollateralInUsd",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "_user",
+                "type": "address"
+            },
+            {
+                "internalType": "bytes32",
+                "name": "_currency",
+                "type": "bytes32"
+            }
+        ],
+        "name": "getRatio",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "getSystemTotalCollateralInUsd",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "total",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "_user",
+                "type": "address"
+            },
+            {
+                "internalType": "bytes32",
+                "name": "_currency",
+                "type": "bytes32"
+            }
+        ],
+        "name": "getUserCollateral",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "_user",
+                "type": "address"
+            },
+            {
+                "internalType": "bytes32",
+                "name": "_currency",
+                "type": "bytes32"
+            }
+        ],
+        "name": "getUserCollateralInUsd",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "total",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "_user",
+                "type": "address"
+            }
+        ],
+        "name": "getUserCollaterals",
+        "outputs": [
+            {
+                "internalType": "bytes32[]",
+                "name": "",
+                "type": "bytes32[]"
+            },
+            {
+                "internalType": "uint256[]",
+                "name": "",
+                "type": "uint256[]"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "_user",
+                "type": "address"
+            }
+        ],
+        "name": "getUserTotalCollateralInUsd",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "total",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "_admin",
+                "type": "address"
+            },
+            {
+                "internalType": "address",
+                "name": "_router",
+                "type": "address"
+            }
+        ],
+        "name": "initialize",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "_user",
+                "type": "address"
+            },
+            {
+                "internalType": "bytes32",
+                "name": "_currency",
+                "type": "bytes32"
+            }
+        ],
+        "name": "isSatisfyTargetRatio",
+        "outputs": [
+            {
+                "internalType": "bool",
+                "name": "",
+                "type": "bool"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "liquidation",
+        "outputs": [
+            {
+                "internalType": "address",
+                "name": "",
+                "type": "address"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "mCatalyst",
+        "outputs": [
+            {
+                "internalType": "contract ICatalyst",
+                "name": "",
+                "type": "address"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "mConfig",
+        "outputs": [
+            {
+                "internalType": "contract IConfig",
+                "name": "",
+                "type": "address"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "user",
+                "type": "address"
+            },
+            {
+                "internalType": "bytes32",
+                "name": "_currency",
+                "type": "bytes32"
+            }
+        ],
+        "name": "maxRedeemableToken",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "fromUser",
+                "type": "address"
+            },
+            {
+                "internalType": "address",
+                "name": "toUser",
+                "type": "address"
+            },
+            {
+                "internalType": "bytes32",
+                "name": "currency",
+                "type": "bytes32"
+            },
+            {
+                "internalType": "uint256",
+                "name": "amount",
+                "type": "uint256"
+            }
+        ],
+        "name": "moveCollateral",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "paused",
+        "outputs": [
+            {
+                "internalType": "bool",
+                "name": "",
+                "type": "bool"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "platformToken",
+        "outputs": [
+            {
+                "internalType": "contract IPlatformToken",
+                "name": "",
+                "type": "address"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "priceGetter",
+        "outputs": [
+            {
+                "internalType": "contract IPrices",
+                "name": "",
+                "type": "address"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "bytes32",
+                "name": "_currency",
+                "type": "bytes32"
+            },
+            {
+                "internalType": "uint256",
+                "name": "_amount",
+                "type": "uint256"
+            }
+        ],
+        "name": "redeem",
+        "outputs": [
+            {
+                "internalType": "bool",
+                "name": "",
+                "type": "bool"
+            }
+        ],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "bytes32",
+                "name": "_currency",
+                "type": "bytes32"
+            }
+        ],
+        "name": "redeemMax",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "router",
+        "outputs": [
+            {
+                "internalType": "contract IPancakeRouter02",
+                "name": "",
+                "type": "address"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "_candidate",
+                "type": "address"
+            }
+        ],
+        "name": "setCandidate",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "bool",
+                "name": "_paused",
+                "type": "bool"
+            }
+        ],
+        "name": "setPaused",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "bytes32",
+                "name": "stakeCurrency",
+                "type": "bytes32"
+            },
+            {
+                "internalType": "uint256",
+                "name": "stakeAmount",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "buildAmount",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "lockedAmount",
+                "type": "uint256"
+            }
+        ],
+        "name": "stakeAndBuild",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "bytes32",
+                "name": "stakeCurrency",
+                "type": "bytes32"
+            },
+            {
+                "internalType": "uint256",
+                "name": "stakeAmount",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "lockedAmount",
+                "type": "uint256"
+            }
+        ],
+        "name": "stakeAndBuildMax",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "bytes32",
+                "name": "",
+                "type": "bytes32"
+            }
+        ],
+        "name": "tokenInfos",
+        "outputs": [
+            {
+                "internalType": "address",
+                "name": "tokenAddress",
+                "type": "address"
+            },
+            {
+                "internalType": "uint256",
+                "name": "minCollateral",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "totalCollateral",
+                "type": "uint256"
+            },
+            {
+                "internalType": "bool",
+                "name": "bClose",
+                "type": "bool"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "name": "tokenSymbol",
+        "outputs": [
+            {
+                "internalType": "bytes32",
+                "name": "",
+                "type": "bytes32"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "uniqueId",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "contract IAddressStorage",
+                "name": "_addressStorage",
+                "type": "address"
+            }
+        ],
+        "name": "updateAddressCache",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "bytes32",
+                "name": "_currency",
+                "type": "bytes32"
+            },
+            {
+                "internalType": "address",
+                "name": "_tokenAddress",
+                "type": "address"
+            },
+            {
+                "internalType": "uint256",
+                "name": "_minCollateral",
+                "type": "uint256"
+            },
+            {
+                "internalType": "bool",
+                "name": "_close",
+                "type": "bool"
+            }
+        ],
+        "name": "updateTokenInfo",
+        "outputs": [
+            {
+                "internalType": "bool",
+                "name": "",
+                "type": "bool"
+            }
+        ],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "bytes32[]",
+                "name": "_symbols",
+                "type": "bytes32[]"
+            },
+            {
+                "internalType": "address[]",
+                "name": "_tokenAddresses",
+                "type": "address[]"
+            },
+            {
+                "internalType": "uint256[]",
+                "name": "_minCollateral",
+                "type": "uint256[]"
+            },
+            {
+                "internalType": "bool[]",
+                "name": "_closes",
+                "type": "bool[]"
+            }
+        ],
+        "name": "updateTokenInfos",
+        "outputs": [
+            {
+                "internalType": "bool",
+                "name": "",
+                "type": "bool"
+            }
+        ],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "",
+                "type": "address"
+            },
+            {
+                "internalType": "bytes32",
+                "name": "",
+                "type": "bytes32"
+            }
+        ],
+        "name": "userCollateralData",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "collateral",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "",
+                "type": "address"
+            },
+            {
+                "internalType": "bytes32",
+                "name": "",
+                "type": "bytes32"
+            }
+        ],
+        "name": "userLockedData",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "lockedValue",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "_user",
+                "type": "address"
+            },
+            {
+                "internalType": "bytes32",
+                "name": "_currency",
+                "type": "bytes32"
+            }
+        ],
+        "name": "withdrawLockedTokens",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    }
 ]

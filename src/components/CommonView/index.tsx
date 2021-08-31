@@ -5,21 +5,27 @@ import { getRemainDaysOfQuarterAsset } from '@/utils';
 import { TokenIcon } from '@/components/Icon';
 import { ethers } from 'ethers';
 import { Popover } from 'antd';
+import { DefiActType } from '@/config/constants/types';
 
 /**
- * TODO PoolView、FarmView、HistoryView后面拆出去，属于wallet这边的组件
- * TODO 写的有点乱，Record类型应该用范型来解决，后面重构的时候再搞
+ * @todo PoolView、FarmView、HistoryView后面拆出去，属于wallet这边的组件
+ * @todo 写的有点乱，Record类型应该用范型来解决，后面重构的时候再搞
  */
-type HistoryType = 'Mint' | 'Burn' | 'Trade' | 'Pool' | 'Farm';
-type VerbType =
+export type VerbType =
     | 'From'
     | 'Send'
     | 'Provide Liquidity'
     | 'Withdraw Liquidity'
     | 'Stake LP';
-type ConjType = 'To' | 'and';
-
-type ActionBtnColors = 'yellow' | 'red';
+export type ConjType = 'To' | 'and' | '';
+export type IconType =
+    | 'mint'
+    | 'burn'
+    | 'trade'
+    | 'pool-burn'
+    | 'pool-mint'
+    | 'farm';
+export type ActionBtnColors = 'yellow' | 'red';
 interface ActionProps {
     title: string;
     color?: ActionBtnColors;
@@ -56,13 +62,14 @@ export interface FarmViewProps {
 }
 export interface HistoryViewProps {
     id?: number | string; //key
-    icon?: ReactNode;
-    type?: HistoryType;
+    icon?: IconType;
+    type?: DefiActType;
     verb?: VerbType;
     conj?: ConjType;
     token0?: TokenProps;
     token1?: TokenProps;
     link?: string;
+    dealtime?: string | number;
 }
 
 interface MintViewProps {
@@ -114,6 +121,7 @@ export const ActionView = (props: { actions: ActionProps[] }) => {
             {actions.map((action) => (
                 <button
                     onClick={action.onClick}
+                    key={action.title}
                     className={`common-btn common-btn-${
                         action.color || ('red' as ActionBtnColors)
                     }`}

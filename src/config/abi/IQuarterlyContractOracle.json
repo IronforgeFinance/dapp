@@ -1,56 +1,56 @@
 [
-  {
-    "inputs": [
-      {
-        "internalType": "bytes32",
-        "name": "symbol",
-        "type": "bytes32"
-      }
-    ],
-    "name": "getQuarterlyContractPrice",
-    "outputs": [
-      {
-        "components": [
-          {
-            "internalType": "uint256",
-            "name": "price",
-            "type": "uint256"
-          },
-          {
-            "internalType": "uint256",
-            "name": "time",
-            "type": "uint256"
-          }
+    {
+        "inputs": [
+            {
+                "internalType": "bytes32",
+                "name": "symbol",
+                "type": "bytes32"
+            }
         ],
-        "internalType": "struct IQuarterlyContractOracle.PriceData",
-        "name": "",
-        "type": "tuple"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "bytes32",
-        "name": "symbol",
-        "type": "bytes32"
-      },
-      {
-        "internalType": "uint256",
-        "name": "price",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "time",
-        "type": "uint256"
-      }
-    ],
-    "name": "setQuarterlyContractPrice",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  }
+        "name": "getQuarterlyContractPrice",
+        "outputs": [
+            {
+                "components": [
+                    {
+                        "internalType": "uint256",
+                        "name": "price",
+                        "type": "uint256"
+                    },
+                    {
+                        "internalType": "uint256",
+                        "name": "time",
+                        "type": "uint256"
+                    }
+                ],
+                "internalType": "struct IQuarterlyContractOracle.PriceData",
+                "name": "",
+                "type": "tuple"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "bytes32",
+                "name": "symbol",
+                "type": "bytes32"
+            },
+            {
+                "internalType": "uint256",
+                "name": "price",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "time",
+                "type": "uint256"
+            }
+        ],
+        "name": "setQuarterlyContractPrice",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    }
 ]

@@ -4,10 +4,40 @@
     &:extend(.wallet-container);
     padding: 117px 32px 60px 32px;
 
-    .record {
-        padding: 16px 0 16px 70px;
+    .custom-tabs.ant-tabs {
+        .ant-table-cell {
+            max-width: 805px;
 
-        .function {
+            &:first-child {
+                padding-left: 53px;
+            }
+        }
+
+        .ant-tabs-tab {
+            &:nth-child(2) {
+                margin-left: 114px;
+            }
+
+            &:nth-child(n + 3) {
+                margin-left: 90px;
+            }
+        }
+
+        .ant-tabs-nav-wrap {
+            padding-left: 53px;
+        }
+
+        .ant-tabs-content-holder {
+            overflow-y: scroll;
+        }
+    }
+
+    .history {
+        display: flex;
+        align-items: center;
+        width: 90%;
+
+        .operation {
             display: flex;
             align-items: center;
 
@@ -26,8 +56,16 @@
                     #image.icon(@size, '~@/assets/images/wallet-history-icon-trade.png');
                 }
 
-                &.pool {
-                    #image.icon(@size, '~@/assets/images/wallet-history-icon-pool.png');
+                &.pool-burn {
+                    #image.icon(@size, '~@/assets/images/wallet-history-icon-pool-burn.svg');
+                }
+
+                &.pool-mint {
+                    #image.icon(@size, '~@/assets/images/wallet-history-icon-pool-mint.svg');
+                }
+
+                &.farm {
+                    #image.icon(@size, '~@/assets/images/wallet-history-icon-farm.svg');
                 }
             }
 
@@ -35,6 +73,7 @@
                 display: flex;
                 flex-direction: column;
                 margin-left: 14px;
+                width: 230px;
 
                 span {
                     font-style: normal;
@@ -57,20 +96,22 @@
         }
 
         .form {
+            white-space: nowrap;
             font-style: normal;
             font-weight: 300;
             font-size: 15px;
             line-height: 22px;
             color: #292725;
-            margin-left: 44px;
             min-width: 112px;
 
             b {
+                color: #ac4c06;
                 font-weight: bold;
             }
         }
 
         .to {
+            white-space: nowrap;
             font-style: normal;
             font-weight: 300;
             font-size: 15px;
@@ -80,13 +121,19 @@
             min-width: 78px;
 
             b {
+                color: #ac4c06;
                 font-weight: bold;
             }
         }
 
-        .skip {
-            #image.icon(18px, '~@/assets/images/wallet-history-skip.svg');
-            margin-left: 137px;
+        .skip-wraper {
+            flex: 1;
+            text-align: right;
+
+            .skip {
+                #image.icon(18px, '~@/assets/images/wallet-history-skip.svg');
+                margin-left: 137px;
+            }
         }
     }
 }

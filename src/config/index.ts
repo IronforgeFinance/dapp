@@ -26,4 +26,4 @@ export const LP_TOKENS = [
 ];
 
 //TODO 配置中读取官方预先添加的流动性lp
-export const PROVIDED_LP_TOKENS = ['USDC-ETH', 'USDC-IFT']; 
+export const PROVIDED_LP_TOKENS = ['USDC-ETH', 'USDC-IFT'];

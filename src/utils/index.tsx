@@ -29,3 +29,20 @@ export const isDeliveryAsset = (token: string) => {
     if (!token) return false;
     return token.includes('-'); //quarter is like lBTC-202112
 };
+
+/**
+ * Helper Function, parse string to number
+ * @param {any} value is a string or number
+ */
+const stringIsNumber = (value) => isNaN(Number(value)) === false;
+
+/**
+ * Parse enums to an array
+ * @param {Enum}
+ * @returns {Object} Keys object of enum
+ */
+export const parseEnumToArray = (enumme) => {
+    return Object.keys(enumme)
+        .filter(stringIsNumber)
+        .map((key) => enumme[key]);
+};

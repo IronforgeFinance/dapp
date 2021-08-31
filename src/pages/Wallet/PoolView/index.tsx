@@ -8,7 +8,7 @@ import {
     PoolViewProps,
     ActionView,
     BalanceView,
-} from '@/layouts/components/Footer/components/CommonView';
+} from '@/components//CommonView';
 import { PROVIDED_LP_TOKENS } from '@/config';
 import { history, useModel } from 'umi';
 import { useWeb3React } from '@web3-react/core';
