@@ -1,10 +1,8 @@
 import './index.less';
 import { gql, useQuery } from '@apollo/client';
-import { useEffect } from 'react';
+import { useState, useEffect, useMemo, useCallback } from 'react';
 import { Table } from 'antd';
-import { useState } from 'react';
 import { ethers } from 'ethers';
-import { useMemo } from 'react';
 import { useWeb3React } from '@web3-react/core';
 import {
     TokenView,
@@ -12,22 +10,8 @@ import {
     TypeView,
     TimeView,
 } from '@/components/CommonView';
-
-const GET_BURNS = gql`
-    query ($offset: Int, $limit: Int, $user: String) {
-        burns(skip: $offset, first: $limit, where: { user: $user }) {
-            id
-            user
-            unstakingAmount
-            unstakingCurrency
-            unlockedAmount
-            cleanedDebt
-            timestamp
-            ratio
-            txhash
-        }
-    }
-`;
+import { GET_BURNS } from '@/subgraph/graphql';
+import { ourClient } from '@/subgraph/clientManager';
 
 const columns = [
     {
@@ -83,26 +67,29 @@ const columns = [
 ];
 
 const BurnView = () => {
+    const { account } = useWeb3React();
+    const [burns, setBurns] = useState([]);
     const [pagination, setPagination] = useState({
         current: 1,
         pageSize: 10,
         total: 0,
     });
-    const { account } = useWeb3React();
 
-    const { data } = useQuery(GET_BURNS, {
-        variables: {
-            offset: pagination.current - 1,
-            limit: pagination.pageSize,
-            user: account,
-        },
-    });
-
-    const burns = useMemo(() => data?.burns ?? [], [data]);
+    const fetchBurns = useCallback(async () => {
+        const { data } = await ourClient.query({
+            query: GET_BURNS,
+            variables: {
+                offset: pagination.current - 1,
+                limit: pagination.pageSize,
+                user: account,
+            },
+        });
+        setBurns(data?.burns ?? []);
+    }, [account]);
 
     useEffect(() => {
-        console.log('query burns data %o', data?.burns);
-    }, [burns]);
+        fetchBurns();
+    }, []);
 
     const noData = useMemo(() => !burns?.length, [burns]);
 

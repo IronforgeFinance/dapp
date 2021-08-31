@@ -16,20 +16,9 @@ import {
     GET_OPERATIONS,
     GET_BURNS_FROM_PANCAKE,
     GET_MINTS_FROM_PANCAKE,
-} from '@/config/constants/graphql';
-
-import { ApolloClient, InMemoryCache } from '@apollo/client';
+} from '@/subgraph/graphql';
+import { pancakeswapClient, ourClient } from '@/subgraph/clientManager';
 import { ethers } from 'ethers';
-
-const pancakeswapClient = new ApolloClient({
-    uri: process.env.PACAKE_GRAPH_URL,
-    cache: new InMemoryCache(),
-});
-
-const ourClient = new ApolloClient({
-    uri: process.env.OUR_GRAPH_URL,
-    cache: new InMemoryCache(),
-});
 
 const { TabPane } = Tabs;
 
@@ -226,7 +215,7 @@ const HistoryView = () => {
     const [operations, setOperations] = useState([]);
     const [pagination, setPagination] = useState({
         current: 1,
-        pageSize: 200,
+        pageSize: 20,
         total: 0,
     });
 
@@ -234,42 +223,40 @@ const HistoryView = () => {
      * @description Fetch pool of mints from pancake site.
      * @returns {void}
      */
-    const fetchMintsPool = async () => {
+    const fetchMintsPool = useCallback(async () => {
         try {
             const { data } = await pancakeswapClient.query({
                 query: GET_MINTS_FROM_PANCAKE,
                 variables: {
                     offset: pagination.current - 1,
                     limit: pagination.pageSize * 0.25,
-                    // user: account,
-                    user: '',
+                    user: account,
                 },
             });
             setMintsPool(data.mints.map(useParseDataOfPancake('mint')));
         } catch (error) {
             console.error(error);
         }
-    };
+    }, [account]);
     /**
      * @description Fetch pool of burns from pancake site.
      * @returns {void}
      */
-    const fetchBurnsPool = async () => {
+    const fetchBurnsPool = useCallback(async () => {
         try {
             const { data } = await pancakeswapClient.query({
                 query: GET_BURNS_FROM_PANCAKE,
                 variables: {
                     offset: pagination.current - 1,
                     limit: pagination.pageSize * 0.25,
-                    // user: account,
-                    user: '',
+                    user: account,
                 },
             });
             setBurnsPool(data.burns.map(useParseDataOfPancake('burn')));
         } catch (error) {
             console.error(error);
         }
-    };
+    }, [account]);
 
     /**
      * @description Calculate request type for filtering.
@@ -289,7 +276,7 @@ const HistoryView = () => {
      * @description
      * @returns {void}
      */
-    const fetchOperations = async () => {
+    const fetchOperations = useCallback(async () => {
         try {
             const { data } = await ourClient.query({
                 query: GET_OPERATIONS,
@@ -304,7 +291,7 @@ const HistoryView = () => {
         } catch (error) {
             console.error(error);
         }
-    };
+    }, [account]);
 
     useEffect(() => {
         switch (tabKey) {

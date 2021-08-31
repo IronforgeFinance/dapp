@@ -112,3 +112,27 @@ export const GET_OPERATIONS = gql`
         }
     }
 `;
+
+/**
+ * @description
+ */
+export const GET_MINTS_BY_COLLATERAL = gql`
+    query ($offset: Int, $limit: Int, $user: String) {
+        mints(
+            skip: $offset
+            first: $limit
+            where: { user: $user, collateralCurrency_contains: "-" }
+        ) {
+            id
+            user
+            collateralCurrency
+            collateralAmount
+            lockedAmount
+            mintedCurrency
+            mintedAmount
+            timestamp
+            ratio
+            txhash
+        }
+    }
+`;

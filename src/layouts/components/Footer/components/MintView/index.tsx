@@ -1,10 +1,8 @@
 import './index.less';
 import { gql, useQuery } from '@apollo/client';
-import { useEffect } from 'react';
+import { useState, useEffect, useMemo, useCallback } from 'react';
 import { Table } from 'antd';
-import { useState } from 'react';
 import { ethers } from 'ethers';
-import { useMemo } from 'react';
 import { useWeb3React } from '@web3-react/core';
 import {
     TokenView,
@@ -12,23 +10,8 @@ import {
     TypeView,
     TimeView,
 } from '@/components/CommonView';
-
-const GET_MINTS = gql`
-    query ($offset: Int, $limit: Int, $user: String) {
-        mints(skip: $offset, first: $limit, where: { user: $user }) {
-            id
-            user
-            collateralCurrency
-            collateralAmount
-            lockedAmount
-            mintedCurrency
-            mintedAmount
-            timestamp
-            ratio
-            txhash
-        }
-    }
-`;
+import { GET_MINTS } from '@/subgraph/graphql';
+import { ourClient } from '@/subgraph/clientManager';
 
 const columns = [
     {
@@ -90,26 +73,29 @@ const columns = [
 ];
 
 const MintView = () => {
+    const { account } = useWeb3React();
+    const [mints, setMints] = useState([]);
     const [pagination, setPagination] = useState({
         current: 1,
         pageSize: 10,
         total: 0,
     });
-    const { account } = useWeb3React();
 
-    const { data } = useQuery(GET_MINTS, {
-        variables: {
-            offset: pagination.current - 1,
-            limit: pagination.pageSize,
-            user: account,
-        },
-    });
-
-    const mints = useMemo(() => data?.mints ?? [], [data]);
+    const fetchMints = useCallback(async () => {
+        const { data } = await ourClient.query({
+            query: GET_MINTS,
+            variables: {
+                offset: pagination.current - 1,
+                limit: pagination.pageSize,
+                user: account,
+            },
+        });
+        setMints(data?.mints ?? []);
+    }, [account]);
 
     useEffect(() => {
-        console.log('query mints data %o', data?.mints);
-    }, [mints]);
+        fetchMints();
+    }, []);
 
     const noData = useMemo(() => !mints?.length, [mints]);
 
