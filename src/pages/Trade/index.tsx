@@ -232,29 +232,6 @@ export default () => {
         return fromAmount > 0 || toAmount > 0;
     }, [fromAmount, toAmount]);
 
-    const mockMarketDetailData = {
-        token0: 'fBTC',
-        token1: 'fETH',
-        dataSource: [
-            { label: '24H volume', value: { amount: 6668.15 } },
-            { label: 'Market Cap', value: { amount: 6668.15 } },
-            { label: '24H High', value: { amount: 558.15 } },
-            { label: '24H Low', value: { amount: 6668.15 } },
-            {
-                label: 'Price Feed',
-                value: {
-                    address: '0xDD21D68304503Efe46be7eCe376afaC77C8067c8',
-                },
-            },
-            {
-                label: 'fBTC Contract',
-                value: {
-                    address: '0xDD21D68304503Efe46be7eCe376afaC77C8067c8',
-                },
-            },
-        ],
-    };
-
     const fromTokenHandler = (v) => {
         if (toToken === v) {
             setToToken(fromToken);
@@ -379,7 +356,7 @@ export default () => {
                     </span>
                 </div>
             </div>
-            <MarketDetail {...mockMarketDetailData} />
+            <MarketDetail token0={fromToken} token1={toToken} />
             <TransitionConfirm
                 visable={showTxConfirm}
                 onClose={() => setShowTxConfirm(false)}

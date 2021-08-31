@@ -136,3 +136,22 @@ export const GET_MINTS_BY_COLLATERAL = gql`
         }
     }
 `;
+
+export const GET_TRADE_MARKET_DETAIL = gql`
+    query ($token: String) {
+        tokenDayDatas(
+            first: 1
+            where: { token: $token }
+            orderBy: date
+            orderDirection: desc
+        ) {
+            id
+            date
+            priceHigh
+            priceLow
+            token
+            tradeVolume
+            tradeVolumeUSD
+        }
+    }
+`;
