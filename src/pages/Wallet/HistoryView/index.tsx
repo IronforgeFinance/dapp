@@ -291,9 +291,11 @@ const HistoryView = () => {
         } catch (error) {
             console.error(error);
         }
-    }, [account]);
+    }, [account, requestType]);
 
     useEffect(() => {
+        setPagination({ ...pagination, current: 1 });
+
         switch (tabKey) {
             case 'All': {
                 fetchMintsPool();
@@ -325,11 +327,18 @@ const HistoryView = () => {
                 setOperations([]);
                 break;
             }
-            default:
         }
     }, [tabKey, requestType]);
 
     const changeTab = useCallback((tabKey) => setTabKey(tabKey), []);
+
+    /**
+     * @property {boolean} isEnd
+     */
+    const isEnd = useMemo(
+        () => !(mintsPool?.length || burnsPool?.length || operations?.length),
+        [mintsPool, burnsPool, operations],
+    );
 
     /**
      * @description Combine all kinds of datas for unified data format
@@ -343,11 +352,6 @@ const HistoryView = () => {
             ) => number,
         );
     }, [mintsPool, burnsPool, operations]);
-    const noData = useMemo(() => !records?.length, [records]);
-    const position = useMemo(
-        () => (pagination.total > pagination.pageSize ? 'bottomRight' : 'none'),
-        [pagination],
-    );
 
     return (
         <div className="history-view">
@@ -360,10 +364,10 @@ const HistoryView = () => {
                     <TabPane tab={tabKey} key={tabKey}>
                         <Table
                             className="custom-table"
-                            columns={noData ? [] : columns}
+                            columns={isEnd ? [] : columns}
                             rowKey={(record) => record.id}
                             dataSource={records}
-                            pagination={{ ...pagination, position: [position] }}
+                            pagination={false}
                         />
                     </TabPane>
                 ))}
