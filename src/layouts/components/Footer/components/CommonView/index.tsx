@@ -103,18 +103,17 @@ export interface RecordProps
     amount?: string | number;
     deliveryCurrency?: string;
     customData?: string;
-    actions?: ActionProps[];
 }
 
 const Br = () => <div dangerouslySetInnerHTML={{ __html: '<br/>' }} />;
 
-export const ActionView = (props: RecordProps) => {
-    const { actions = [] } = props;
-
+export const ActionView = (props: { actions: ActionProps[] }) => {
+    const { actions } = props;
     return (
         <div className="action-view">
             {actions.map((action) => (
                 <button
+                    onClick={action.onClick}
                     className={`common-btn common-btn-${
                         action.color || ('red' as ActionBtnColors)
                     }`}
@@ -145,9 +144,11 @@ export const BalanceView = (props: RecordProps) => {
             <span className="token0">
                 <b>{token0.amount}</b> {token0.name}
             </span>
-            <span className="token1">
-                <b>{token1.amount}</b> {token1.name}
-            </span>
+            {token1 && (
+                <span className="token1">
+                    <b>{token1.amount}</b> {token1.name}
+                </span>
+            )}
         </div>
     );
 };
@@ -158,7 +159,7 @@ export const PriceView = (props: RecordProps) => {
     return (
         <div className="price-view">
             <span className="amount">{value.amount}</span>
-            <span className="price">{value.price}</span>
+            <span className="price">${value.price}</span>
         </div>
     );
 };

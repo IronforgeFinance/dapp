@@ -1,3 +1,4 @@
+import React, { useState, useEffect } from 'react';
 import './index.less';
 import { Table } from 'antd';
 import { ethers } from 'ethers';
@@ -9,6 +10,10 @@ import {
     BalanceView,
     PriceView,
 } from '@/layouts/components/Footer/components/CommonView';
+import useRefresh from '@/hooks/useRefresh';
+import { useWeb3React } from '@web3-react/core';
+import { history, useModel } from 'umi';
+import { LP_TOKENS } from '@/config/';
 
 const columns = [
     {
@@ -25,26 +30,35 @@ const columns = [
         title: 'Earned',
         dataIndex: 'earned',
         render: (value, row: FarmViewProps) => (
-            <BalanceView
-                {...row}
-                token0={row.earnedToken0}
-                token1={row.earnedToken1}
-            />
+            <BalanceView token0={row.earnedToken0} />
         ),
     },
     {
+        textWrap: 'word-break',
         title: 'APY',
         dataIndex: 'apy',
         render: (value, row) => (
-            <PureView
-                customData={`${+ethers.utils.formatUnits(value, 18) * 100}%`}
-            />
+            <PureView customData={`${(row.apy * 100).toFixed(2)}%`} />
         ),
     },
     {
         title: 'Action',
         dataIndex: 'actions',
-        render: (value, row) => <ActionView {...row} />,
+        render: (value, row) => (
+            <ActionView
+                actions={[
+                    {
+                        title: 'Stake',
+                        onClick: () => history.push('/farm'),
+                    },
+                    {
+                        title: 'Unstake',
+                        color: 'yellow',
+                        onClick: () => history.push('/farm'), // TODO 建议用锚点，体验会好一些
+                    },
+                ]}
+            />
+        ),
     },
 ];
 
@@ -71,27 +85,53 @@ const mockData: FarmViewProps[] = new Array(3).fill('').map((item, index) => ({
         amount: '0.05',
     },
     apy: '400000000000000000',
-    actions: [
-        {
-            title: 'Stake',
-            onClick: () => (window.location.href = '/farm'),
-        },
-        {
-            title: 'Unstake',
-            color: 'yellow',
-            onClick: () => (window.location.href = '/farm'), // TODO 建议用锚点，体验会好一些
-        },
-    ],
 }));
 
 const FarmView = () => {
+    const [dataSource, setDataSource] = useState([]);
+    const { account } = useWeb3React();
+    const { fetchStakePoolList, stakeDataList } = useModel(
+        'stakeData',
+        (model) => ({
+            ...model,
+        }),
+    );
+    const { slowRefresh } = useRefresh();
+    useEffect(() => {
+        (async () => {
+            if (account) {
+                const list = await fetchStakePoolList(LP_TOKENS, account);
+                const data = list.map((item) => {
+                    const tokens = item.name.split('-');
+                    return {
+                        token0: {
+                            name: tokens[0],
+                        },
+                        token1: {
+                            name: tokens[1],
+                        },
+                        value: {
+                            amount: item.staked,
+                            price: (item.staked * item.lpPrice).toFixed(2),
+                        },
+                        earnedToken0: {
+                            name: 'BS',
+                            amount: item.totalPendingReward,
+                        },
+                        apy: item.apy,
+                    };
+                });
+                setDataSource(data);
+            }
+        })();
+    }, [account, slowRefresh]);
     return (
         <div className="burn-view">
             <Table
                 className="custom-table"
                 columns={columns}
                 rowKey={(record) => record.id}
-                dataSource={mockData}
+                dataSource={dataSource}
                 pagination={false}
             />
         </div>

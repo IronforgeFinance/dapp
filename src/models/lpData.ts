@@ -88,6 +88,7 @@ const useLpDataModel = () => {
             lpTokens.map((token) => fetchLpDataInfo(token, account)),
         );
         setLpDataList(list);
+        return list;
     };
 
     return {
