@@ -16,6 +16,7 @@ import {
     GET_OPERATIONS,
     GET_BURNS_FROM_PANCAKE,
     GET_MINTS_FROM_PANCAKE,
+    GET_OPERATIONS_FUZZY,
 } from '@/subgraph/graphql';
 import { pancakeswapClient, ourClient } from '@/subgraph/clientManager';
 import { ethers } from 'ethers';
@@ -27,6 +28,7 @@ export enum TabKeys {
     'Mint',
     'Burn',
     'Trade',
+    'Farm',
     'Pool',
 }
 
@@ -39,9 +41,9 @@ const otherTypeToTabType = {
     Mint: 'Mint' as TabType,
     Burn: 'Burn' as TabType,
     Exchange: 'Trade' as TabType,
-    Deposit: 'Farm',
-    Withdraw: 'Farm',
-    Harvest: 'Farm',
+    Deposit: 'Farm' as TabType,
+    Withdraw: 'Farm' as TabType,
+    Harvest: 'Farm' as TabType,
 };
 
 const otherTypeToVerbType = {
@@ -269,6 +271,9 @@ const HistoryView = () => {
         if (tabKey === 'Trade') {
             return 'Exchange';
         }
+        if (tabKey === 'Farm') {
+            return ['Deposit', 'Withdraw', 'Harvest'];
+        }
         return tabKey;
     }, [tabKey]);
 
@@ -279,7 +284,9 @@ const HistoryView = () => {
     const fetchOperations = useCallback(async () => {
         try {
             const { data } = await ourClient.query({
-                query: GET_OPERATIONS,
+                query: Array.isArray(requestType)
+                    ? GET_OPERATIONS_FUZZY
+                    : GET_OPERATIONS,
                 variables: {
                     offset: pagination.current - 1,
                     limit: pagination.pageSize * 0.5,
@@ -316,6 +323,12 @@ const HistoryView = () => {
                 break;
             }
             case 'Trade': {
+                setMintsPool([]);
+                setBurnsPool([]);
+                fetchOperations();
+                break;
+            }
+            case 'Farm': {
                 setMintsPool([]);
                 setBurnsPool([]);
                 fetchOperations();
