@@ -12,6 +12,7 @@ import {
 import { useWeb3React } from '@web3-react/core';
 import { toFixedWithoutRound } from '@/utils/bigNumber';
 import { DefiActType } from '@/config/constants/types';
+import { DEFAULT_PAGE_SIZE } from '@/config/constants/constant';
 import {
     GET_OPERATIONS,
     GET_BURNS_FROM_PANCAKE,
@@ -217,7 +218,7 @@ const HistoryView = () => {
     const [operations, setOperations] = useState([]);
     const [pagination, setPagination] = useState({
         current: 1,
-        pageSize: 20,
+        pageSize: DEFAULT_PAGE_SIZE,
         total: 0,
     });
 

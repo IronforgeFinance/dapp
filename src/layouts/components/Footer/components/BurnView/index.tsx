@@ -12,6 +12,7 @@ import {
 } from '@/components/CommonView';
 import { GET_BURNS } from '@/subgraph/graphql';
 import { ourClient } from '@/subgraph/clientManager';
+import { DEFAULT_PAGE_SIZE } from '@/config/constants/constant';
 
 const columns = [
     {
@@ -71,7 +72,7 @@ const BurnView = () => {
     const [burns, setBurns] = useState([]);
     const [pagination, setPagination] = useState({
         current: 1,
-        pageSize: 10,
+        pageSize: DEFAULT_PAGE_SIZE,
         total: 0,
     });
 
