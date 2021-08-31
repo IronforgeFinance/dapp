@@ -421,7 +421,7 @@ export default (props: IProps) => {
                         </div>
                     </div>
                 </div>
-                <span className="debt">Debt : {'0.00'}</span>
+                <span className="debt">Debt : {toTokenDebtInUsd}</span>
             </div>
             <div className="input-item" style={{ zIndex: 2 }}>
                 <p className="label">To</p>

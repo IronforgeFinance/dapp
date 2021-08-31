@@ -16,7 +16,9 @@ export default (props: IProps) => {
     const handleAddLiquidity = () => {
         setCurrentLpData({ ...data });
     };
-    const handleRemove = () => {};
+    const handleRemove = () => {
+        //TODO
+    };
     return (
         <div className="lp-item-container">
             <div className="header">

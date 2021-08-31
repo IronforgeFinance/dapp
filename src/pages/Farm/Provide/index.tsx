@@ -23,8 +23,10 @@ const tabItems = [
 
 export const ITabKeyContext = React.createContext<string>('');
 
-export default () => {
-    const [tabKey, setTabKey] = useState('1');
+export default (props) => {
+    const { location } = props;
+    const { action } = location.query;
+    const [tabKey, setTabKey] = useState(action || '1');
     const onTabChange = (key) => {
         console.log(key);
         setTabKey(key);

@@ -1,17 +1,17 @@
 [
-  {
-    "constant": true,
-    "inputs": [
-      {
-        "internalType": "bytes32",
-        "name": "c__0x9eca682f",
-        "type": "bytes32"
-      }
-    ],
-    "name": "c_0x9eca682f",
-    "outputs": [],
-    "payable": false,
-    "stateMutability": "pure",
-    "type": "function"
-  }
+    {
+        "constant": true,
+        "inputs": [
+            {
+                "internalType": "bytes32",
+                "name": "c__0x0ca02087",
+                "type": "bytes32"
+            }
+        ],
+        "name": "c_0x0ca02087",
+        "outputs": [],
+        "payable": false,
+        "stateMutability": "pure",
+        "type": "function"
+    }
 ]

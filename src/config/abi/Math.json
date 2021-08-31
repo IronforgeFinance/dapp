@@ -1,15 +1,15 @@
 [
-  {
-    "inputs": [
-      {
-        "internalType": "bytes32",
-        "name": "c__0x880da070",
-        "type": "bytes32"
-      }
-    ],
-    "name": "c_0x880da070",
-    "outputs": [],
-    "stateMutability": "pure",
-    "type": "function"
-  }
+    {
+        "inputs": [
+            {
+                "internalType": "bytes32",
+                "name": "c__0xa040dcdc",
+                "type": "bytes32"
+            }
+        ],
+        "name": "c_0xa040dcdc",
+        "outputs": [],
+        "stateMutability": "pure",
+        "type": "function"
+    }
 ]

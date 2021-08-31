@@ -375,7 +375,9 @@ export default () => {
                     >
                         Trade
                     </Button>
-                    <span className="fee-cost">Fee cost：0</span>
+                    <span className="fee-cost">
+                        Fee cost：{feeRate * 100 + '%'}
+                    </span>
                 </div>
             </div>
             <MarketDetail {...mockMarketDetailData} />

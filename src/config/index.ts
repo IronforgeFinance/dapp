@@ -24,3 +24,6 @@ export const LP_TOKENS = [
     { poolName: 'USDC-IFT', poolId: 0 },
     { poolName: 'USDC-ETH', poolId: 1 },
 ];
+
+//TODO 配置中读取官方预先添加的流动性lp
+export const PROVIDED_LP_TOKENS = ['USDC-ETH', 'USDC-IFT'];

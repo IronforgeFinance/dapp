@@ -15,6 +15,7 @@ import { usePrices } from '@/hooks/useContract';
 export interface IStakePool {
     name: string; // USDC-IFT
     lpAddress: string;
+    lpPrice: number;
     apy: number;
     totalStaked: number;
     poolId: number;
@@ -61,13 +62,12 @@ const useStakeDataModel = () => {
         const reserve1 = parseFloat(ethers.utils.formatEther(r0));
         const reserve2 = parseFloat(ethers.utils.formatEther(r1));
         let lpPrice;
+        const price0 = await getTokenPrice(token0);
+        const price1 = await getTokenPrice(token1);
+        console.log('price01: ', price0, price1);
         if (token0Obj.address[chainId] === token1Address) {
-            const price0 = await getTokenPrice(token0);
-            const price1 = await getTokenPrice(token1);
             lpPrice = (reserve1 * price0 + reserve2 * price1) / total;
         } else {
-            const price0 = await getTokenPrice(token1);
-            const price1 = await getTokenPrice(token0);
             lpPrice = (reserve2 * price0 + reserve1 * price1) / total;
         }
         return lpPrice;
@@ -131,11 +131,12 @@ const useStakeDataModel = () => {
                 3600 *
                 24) /
             BSC_BLOCK_TIME;
-        const apy = Math.pow(1 + apr/365, 365) - 1;
+        const apy = Math.pow(1 + apr / 365, 365) - 1;
         const data: IStakePool = {
             name: poolName,
             poolId,
             lpAddress,
+            lpPrice,
             apy,
             staked,
             totalStaked,
@@ -156,6 +157,7 @@ const useStakeDataModel = () => {
             ),
         );
         setStakeDataList(list);
+        return list;
     };
 
     const updateStakePoolItem = async (

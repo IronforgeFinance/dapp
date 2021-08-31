@@ -23,10 +23,10 @@ import {
 } from '@/hooks/useApprove';
 import { TokenIcon } from '@/components/Icon';
 import Folder from '@/components/Folder';
-export const LP_TOKENS = ['USDC-ETH', 'USDC-IFT']; //TODO 配置中读取官方预先添加的流动性lp
+import { PROVIDED_LP_TOKENS } from '@/config';
 const TOKENS = Array.from(
     new Set(
-        LP_TOKENS.map((item) => item.split('-')).reduce(
+        PROVIDED_LP_TOKENS.map((item) => item.split('-')).reduce(
             (arr, item) => arr.concat(item),
             [],
         ),
@@ -74,21 +74,17 @@ export default () => {
     const routerContract = useRouter();
 
     const pancakeRouter = Contracts.PancakeRouter[process.env.APP_CHAIN_ID];
-    const {
-        isApproved: token1Approved,
-        setLastUpdated: setToken1LastUpdated,
-    } = useCheckERC20ApprovalStatus(
-        token1 ? Tokens[token1].address[process.env.APP_CHAIN_ID] : '',
-        pancakeRouter,
-    );
+    const { isApproved: token1Approved, setLastUpdated: setToken1LastUpdated } =
+        useCheckERC20ApprovalStatus(
+            token1 ? Tokens[token1].address[process.env.APP_CHAIN_ID] : '',
+            pancakeRouter,
+        );
 
-    const {
-        isApproved: token2Approved,
-        setLastUpdated: setToken2LastUpdated,
-    } = useCheckERC20ApprovalStatus(
-        token2 ? Tokens[token2].address[process.env.APP_CHAIN_ID] : '',
-        pancakeRouter,
-    );
+    const { isApproved: token2Approved, setLastUpdated: setToken2LastUpdated } =
+        useCheckERC20ApprovalStatus(
+            token2 ? Tokens[token2].address[process.env.APP_CHAIN_ID] : '',
+            pancakeRouter,
+        );
 
     const {
         handleApprove: handleToken1Approve,
@@ -121,7 +117,7 @@ export default () => {
 
     const refresh = async () => {
         try {
-            await fetchLpDataList(LP_TOKENS, account);
+            await fetchLpDataList(PROVIDED_LP_TOKENS, account);
         } catch (error) {
             console.error(error);
         }
@@ -153,8 +149,8 @@ export default () => {
 
     const isValidLp = (token1, token2) => {
         if (
-            LP_TOKENS.includes(`${token1}-${token2}`) ||
-            LP_TOKENS.includes(`${token2}-${token1}`)
+            PROVIDED_LP_TOKENS.includes(`${token1}-${token2}`) ||
+            PROVIDED_LP_TOKENS.includes(`${token2}-${token1}`)
         ) {
             return true;
         } else {
