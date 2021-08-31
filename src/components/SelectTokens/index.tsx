@@ -13,23 +13,24 @@ interface TokenOption {
 
 interface ISelectTokensProps {
     children?: Object;
-    visable: Boolean;
+    // visible: Boolean;
     value?: String;
     onClose?: Function;
     onSelect?: Function;
     tokenList?: TokenOption[];
+    placeholder?: string;
 }
 
 export default (props: ISelectTokensProps) => {
     const {
         children,
-        visable,
         value,
         tokenList = [],
         onClose,
         onSelect,
+        placeholder,
     } = props;
-
+    const [visible, setVisible] = useState(false);
     const [tokens, setTokens] = useState([]);
     const isMounted = useRef(false);
 
@@ -53,7 +54,7 @@ export default (props: ISelectTokensProps) => {
     React.useEffect(() => {
         const wrapperBox: HTMLElement = document.querySelector('.common-box');
         if (wrapperBox?.style) {
-            if (visable) {
+            if (visible) {
                 wrapperBox.style.filter = 'none';
             } else {
                 // * fade out效果占用了一些时间，这里延迟处理
@@ -65,7 +66,7 @@ export default (props: ISelectTokensProps) => {
                 );
             }
         }
-    }, [visable]);
+    }, [visible]);
 
     useEffect(() => {
         (async () => {
@@ -102,16 +103,25 @@ export default (props: ISelectTokensProps) => {
         };
     }, []);
 
-    const _onClose = useCallback(() => onClose(), []);
-    const _onSelect = useCallback((token) => {
+    const _onClose = () => {
+        onClose?.();
+        setVisible(false);
+    };
+    // const _onSelect = useCallback((token) => {
+    //     onSelect(token);
+    //     _onClose();
+    // }, []);
+    const _onSelect = (token) => {
+        if (token === value) {
+            return;
+        }
         onSelect(token);
         _onClose();
-    }, []);
-    // const tokenList = new Array(100).fill('').map((item, index) => index + 1);
+    };
 
     return (
         <div className="select-tokens">
-            <Board visable={visable} onClose={_onClose} title="Select a Token">
+            <Board visable={visible} onClose={_onClose} title="Select a Token">
                 <ul className="tokenlist">
                     <input
                         className="search"
@@ -145,7 +155,12 @@ export default (props: ISelectTokensProps) => {
                     ))}
                 </ul>
             </Board>
-            {children}
+            <button className="btn-mint-form" onClick={() => setVisible(true)}>
+                <span>
+                    {value || <span>{placeholder || 'Select token'}</span>}
+                </span>
+                <i className="icon-down size-20"></i>
+            </button>
         </div>
     );
 };

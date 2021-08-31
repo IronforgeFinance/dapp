@@ -39,7 +39,6 @@ export default (props: IProps) => {
     const [submitting, setSubmitting] = useState(false);
     const [burnInitialAvailable, setBurnInitialAvailable] = useState(false);
     const [burnMaxAvailable, setBurnMaxAvailable] = useState(false);
-    const [showSelectToToken, setShowSelectToToken] = useState(false);
 
     const { currencyRatio } = useDataView(toToken);
 
@@ -446,26 +445,10 @@ export default (props: IProps) => {
                         <div className="token">
                             <TokenIcon name={toToken.toLowerCase()} size={24} />
                             <SelectTokens
-                                visable={showSelectToToken}
                                 value={toToken}
                                 tokenList={COLLATERAL_TOKENS}
                                 onSelect={toTokenHandler}
-                                onClose={() => {
-                                    setShowSelectToToken(false);
-                                }}
-                            >
-                                <button
-                                    className="btn-mint-form"
-                                    onClick={() => {
-                                        setShowSelectToToken(true);
-                                    }}
-                                >
-                                    <span>
-                                        {toToken || <span>Select token</span>}
-                                    </span>
-                                    <i className="icon-down size-20"></i>
-                                </button>
-                            </SelectTokens>
+                            ></SelectTokens>
                         </div>
                     </div>
                 </div>

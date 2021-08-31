@@ -21,7 +21,6 @@ import { debounce } from 'lodash';
 import classNames from 'classnames';
 import TransitionConfirm from '@/components/TransitionConfirm';
 import { TokenIcon } from '@/components/Icon';
-
 //TODO: for test.从配置中读取
 const TOKEN_OPTIONS = [
     { name: 'lBTC-202112' },
@@ -256,6 +255,28 @@ export default () => {
         ],
     };
 
+    const fromTokenHandler = (v) => {
+        if (toToken === v) {
+            setToToken(fromToken);
+            setToAmount(fromAmount);
+            setFromToken(v);
+            setFromAmount(toAmount);
+        } else {
+            setFromToken(v);
+        }
+    };
+
+    const toTokenHandler = (v) => {
+        if (fromToken === v) {
+            setFromToken(toToken);
+            setFromAmount(toAmount);
+            setToToken(v);
+            setToAmount(fromAmount);
+        } else {
+            setToToken(v);
+        }
+    };
+
     return (
         <div className="trade-container">
             <div className="shop common-box">
@@ -291,13 +312,9 @@ export default () => {
                                 <div className="token">
                                     <TokenIcon size={24} name={fromToken} />
                                     <SelectTokens
-                                        visable={showSelectFromToken}
                                         value={fromToken}
                                         tokenList={TOKEN_OPTIONS}
-                                        onSelect={(v) => setFromToken(v)}
-                                        onClose={() => {
-                                            setShowSelectFromToken(false);
-                                        }}
+                                        onSelect={fromTokenHandler}
                                     >
                                         <button
                                             className="btn-mint-form"
@@ -341,28 +358,10 @@ export default () => {
                                 <div className="token">
                                     <TokenIcon size={24} name={toToken} />
                                     <SelectTokens
-                                        visable={showSelectToToken}
                                         value={toToken}
                                         tokenList={TOKEN_OPTIONS}
-                                        onSelect={(v) => setToToken(v)}
-                                        onClose={() => {
-                                            setShowSelectToToken(false);
-                                        }}
-                                    >
-                                        <button
-                                            className="btn-mint-form"
-                                            onClick={() => {
-                                                setShowSelectToToken(true);
-                                            }}
-                                        >
-                                            <span>
-                                                {toToken || (
-                                                    <span>Select token</span>
-                                                )}
-                                            </span>
-                                            <i className="icon-down size-20"></i>
-                                        </button>
-                                    </SelectTokens>
+                                        onSelect={toTokenHandler}
+                                    ></SelectTokens>
                                 </div>
                             </div>
                         </div>

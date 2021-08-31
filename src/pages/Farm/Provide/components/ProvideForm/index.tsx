@@ -402,28 +402,10 @@ export default () => {
                             <div className="token">
                                 <TokenIcon name={token1} size={24} />
                                 <SelectTokens
-                                    visable={showSelectFromToken}
                                     value={token1}
                                     tokenList={TOKENS}
                                     onSelect={token1SelectHandler}
-                                    onClose={() =>
-                                        setShowSelectFromToken(false)
-                                    }
-                                >
-                                    <button
-                                        className="btn-mint-form"
-                                        onClick={() =>
-                                            setShowSelectFromToken(true)
-                                        }
-                                    >
-                                        <span>
-                                            {token1 || (
-                                                <span>Select token</span>
-                                            )}
-                                        </span>
-                                        <i className="icon-down size-20"></i>
-                                    </button>
-                                </SelectTokens>
+                                ></SelectTokens>
                             </div>
                         </div>
                     </div>
@@ -451,25 +433,10 @@ export default () => {
                             <div className="token">
                                 <TokenIcon name={token2} size={24} />
                                 <SelectTokens
-                                    visable={showSelectToToken}
                                     value={token2}
                                     tokenList={TOKENS}
                                     onSelect={token2SelectHandler}
-                                    onClose={() => setShowSelectToToken(false)}
                                 >
-                                    <button
-                                        className="btn-mint-form"
-                                        onClick={() =>
-                                            setShowSelectToToken(true)
-                                        }
-                                    >
-                                        <span>
-                                            {token2 || (
-                                                <span>Select token</span>
-                                            )}
-                                        </span>
-                                        <i className="icon-down size-20"></i>
-                                    </button>
                                 </SelectTokens>
                             </div>
                         </div>

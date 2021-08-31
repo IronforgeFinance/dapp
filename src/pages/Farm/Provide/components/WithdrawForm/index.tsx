@@ -12,7 +12,7 @@ import { DEADLINE } from '@/config/constants/constant';
 import Tokens from '@/config/constants/tokens';
 import Contracts from '@/config/constants/contracts';
 import { ethers } from 'ethers';
-import SelectTokens from '@iron/SelectTokens';
+import SelectTokens from '@/components/SelectTokens';
 import TransitionConfirm from '@iron/TransitionConfirm';
 import {
     useCheckERC20ApprovalStatus,
@@ -184,25 +184,11 @@ export default () => {
                             <div className="token">
                                 <TokenIcon name={lp} size={24} />
                                 <SelectTokens
-                                    visable={showSelectFromToken}
                                     value={lp}
                                     tokenList={selectOptions}
                                     onSelect={(v) => setLp(v)}
-                                    onClose={() =>
-                                        setShowSelectFromToken(false)
-                                    }
+                                    placeholder={'Select LP'}
                                 >
-                                    <button
-                                        className="btn-mint-form"
-                                        onClick={() =>
-                                            setShowSelectFromToken(true)
-                                        }
-                                    >
-                                        <span>
-                                            {lp || <span>Select LP</span>}
-                                        </span>
-                                        <i className="icon-down size-20"></i>
-                                    </button>
                                 </SelectTokens>
                             </div>
                         </div>

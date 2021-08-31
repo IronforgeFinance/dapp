@@ -17,8 +17,6 @@ export default () => {
 
         return (
             <SelectTokens
-                visable={showSetting}
-                onClose={() => setShowSetting(false)}
             >
                 <button
                     className="btn-select-tokens"

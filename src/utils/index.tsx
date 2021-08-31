@@ -8,7 +8,7 @@ export const getRemainDaysOfQuarterAsset = (quarter: string) => {
     try {
         let date = dayjs([
             Number(quarter.substr(0, 4)),
-            Number(quarter.substr(5)),
+            Number(quarter.substr(4)) - 1, // month starts from 0
         ]).endOf('month');
         while (date.day() !== 5) {
             date = date.subtract(1, 'days');

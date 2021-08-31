@@ -99,21 +99,10 @@ export default () => {
                 </div>
                 <div className="pledge-ratio-box">
                     <SelectTokens
-                        visable={showSelectFromToken}
                         value={collateralToken}
                         tokenList={COLLATERAL_TOKENS}
                         onSelect={(v) => setCollateralToken(v)}
-                        onClose={() => setShowSelectFromToken(false)}
                     >
-                        <button
-                            className="btn-mint-form"
-                            onClick={() => setShowSelectFromToken(true)}
-                        >
-                            <span>
-                                {collateralToken || <span>Select token</span>}
-                            </span>
-                            <i className="icon-down size-20"></i>
-                        </button>
                     </SelectTokens>
                     <span className="ratio">{computedRatio}%</span>
                     <p className="desc">My Current Pledge Ratio</p>
