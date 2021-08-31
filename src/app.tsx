@@ -1,4 +1,3 @@
-import React from 'react';
 import { Web3ReactProvider } from '@web3-react/core';
 import { HelmetProvider } from 'react-helmet-async';
 import { RefreshContextProvider } from '@/contexts/RefreshContext';
@@ -13,7 +12,7 @@ BigNumber.config({
 });
 export function rootContainer(container: any) {
     const client = new ApolloClient({
-        uri: process.env.GRAPH_URL,
+        uri: process.env.OUR_GRAPH_URL,
         cache: new InMemoryCache(),
     });
 
