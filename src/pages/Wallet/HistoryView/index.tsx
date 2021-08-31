@@ -12,10 +12,12 @@ import {
 import { useWeb3React } from '@web3-react/core';
 import { toFixedWithoutRound } from '@/utils/bigNumber';
 import { DefiActType } from '@/config/constants/types';
+import { DEFAULT_PAGE_SIZE } from '@/config/constants/constant';
 import {
     GET_OPERATIONS,
     GET_BURNS_FROM_PANCAKE,
     GET_MINTS_FROM_PANCAKE,
+    GET_OPERATIONS_FUZZY,
 } from '@/subgraph/graphql';
 import { pancakeswapClient, ourClient } from '@/subgraph/clientManager';
 import { ethers } from 'ethers';
@@ -27,6 +29,7 @@ export enum TabKeys {
     'Mint',
     'Burn',
     'Trade',
+    'Farm',
     'Pool',
 }
 
@@ -39,9 +42,9 @@ const otherTypeToTabType = {
     Mint: 'Mint' as TabType,
     Burn: 'Burn' as TabType,
     Exchange: 'Trade' as TabType,
-    Deposit: 'Farm',
-    Withdraw: 'Farm',
-    Harvest: 'Farm',
+    Deposit: 'Farm' as TabType,
+    Withdraw: 'Farm' as TabType,
+    Harvest: 'Farm' as TabType,
 };
 
 const otherTypeToVerbType = {
@@ -215,7 +218,7 @@ const HistoryView = () => {
     const [operations, setOperations] = useState([]);
     const [pagination, setPagination] = useState({
         current: 1,
-        pageSize: 20,
+        pageSize: DEFAULT_PAGE_SIZE,
         total: 0,
     });
 
@@ -269,6 +272,9 @@ const HistoryView = () => {
         if (tabKey === 'Trade') {
             return 'Exchange';
         }
+        if (tabKey === 'Farm') {
+            return ['Deposit', 'Withdraw', 'Harvest'];
+        }
         return tabKey;
     }, [tabKey]);
 
@@ -279,7 +285,9 @@ const HistoryView = () => {
     const fetchOperations = useCallback(async () => {
         try {
             const { data } = await ourClient.query({
-                query: GET_OPERATIONS,
+                query: Array.isArray(requestType)
+                    ? GET_OPERATIONS_FUZZY
+                    : GET_OPERATIONS,
                 variables: {
                     offset: pagination.current - 1,
                     limit: pagination.pageSize * 0.5,
@@ -291,9 +299,11 @@ const HistoryView = () => {
         } catch (error) {
             console.error(error);
         }
-    }, [account]);
+    }, [account, requestType]);
 
     useEffect(() => {
+        setPagination({ ...pagination, current: 1 });
+
         switch (tabKey) {
             case 'All': {
                 fetchMintsPool();
@@ -319,17 +329,30 @@ const HistoryView = () => {
                 fetchOperations();
                 break;
             }
+            case 'Farm': {
+                setMintsPool([]);
+                setBurnsPool([]);
+                fetchOperations();
+                break;
+            }
             case 'Pool': {
                 fetchMintsPool();
                 fetchBurnsPool();
                 setOperations([]);
                 break;
             }
-            default:
         }
     }, [tabKey, requestType]);
 
     const changeTab = useCallback((tabKey) => setTabKey(tabKey), []);
+
+    /**
+     * @property {boolean} isEnd
+     */
+    const isEnd = useMemo(
+        () => !(mintsPool?.length || burnsPool?.length || operations?.length),
+        [mintsPool, burnsPool, operations],
+    );
 
     /**
      * @description Combine all kinds of datas for unified data format
@@ -343,11 +366,6 @@ const HistoryView = () => {
             ) => number,
         );
     }, [mintsPool, burnsPool, operations]);
-    const noData = useMemo(() => !records?.length, [records]);
-    const position = useMemo(
-        () => (pagination.total > pagination.pageSize ? 'bottomRight' : 'none'),
-        [pagination],
-    );
 
     return (
         <div className="history-view">
@@ -360,10 +378,10 @@ const HistoryView = () => {
                     <TabPane tab={tabKey} key={tabKey}>
                         <Table
                             className="custom-table"
-                            columns={noData ? [] : columns}
+                            columns={isEnd ? [] : columns}
                             rowKey={(record) => record.id}
                             dataSource={records}
-                            pagination={{ ...pagination, position: [position] }}
+                            pagination={false}
                         />
                     </TabPane>
                 ))}

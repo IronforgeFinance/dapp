@@ -112,6 +112,24 @@ export const GET_OPERATIONS = gql`
         }
     }
 `;
+export const GET_OPERATIONS_FUZZY = gql`
+    query ($offset: Int, $limit: Int, $user: String, $type: [String]) {
+        operations(
+            skip: $offset
+            first: $limit
+            where: { user_contains: $user, type_in: $type }
+        ) {
+            id
+            type
+            fromCurrency
+            fromAmount
+            toCurrency
+            toAmount
+            txhash
+            timestamp
+        }
+    }
+`;
 
 /**
  * @description

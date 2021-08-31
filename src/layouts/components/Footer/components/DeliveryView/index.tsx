@@ -13,6 +13,7 @@ import {
 } from '@/components/CommonView';
 import { GET_MINTS_BY_COLLATERAL } from '@/subgraph/graphql';
 import { ourClient } from '@/subgraph/clientManager';
+import { DEFAULT_PAGE_SIZE } from '@/config/constants/constant';
 
 const columns = [
     {
@@ -90,7 +91,7 @@ const DeliveryView = () => {
     const [mints, setMints] = useState([]);
     const [pagination, setPagination] = useState({
         current: 1,
-        pageSize: 10,
+        pageSize: DEFAULT_PAGE_SIZE,
         total: 0,
     });
 
