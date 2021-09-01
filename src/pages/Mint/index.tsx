@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { InputNumber, Select, Progress, Button, Popover } from 'antd';
 import * as message from '@/components/Notification';
-import { useIntl, useModel } from 'umi';
+import { request, useIntl, useModel } from 'umi';
 import IconDown from '@/assets/images/down.svg';
 import IconAdd from '@/assets/images/add.svg';
 import { COLLATERAL_TOKENS, MINT_TOKENS } from '@/config';
@@ -138,6 +138,10 @@ export default () => {
         setfRatioData,
     } = useModel('dataView', (model) => ({
         ...model,
+    }));
+
+    const { requestConnectWallet } = useModel('app', (model) => ({
+        requestConnectWallet: model.requestConnectWallet,
     }));
 
     const { balance, refresh: refreshIFTBalance } = useBep20Balance('IFT');
@@ -658,7 +662,16 @@ export default () => {
                             />
                         </div>
                     )}
-
+                    {!account && (
+                        <Button
+                            className="btn-mint common-btn common-btn-yellow"
+                            onClick={() => {
+                                requestConnectWallet();
+                            }}
+                        >
+                            {intl.formatMessage({ id: 'app.unlockWallet' })}
+                        </Button>
+                    )}
                     {isApproved && isIFTApproved && (
                         <Button
                             className="btn-mint common-btn common-btn-red"
@@ -668,15 +681,19 @@ export default () => {
                             {intl.formatMessage({ id: 'mint.mint' })}
                         </Button>
                     )}
-                    {((!isApproved && collateralToken) || !isIFTApproved) && (
-                        <Button
-                            className="btn-mint common-btn common-btn-red"
-                            onClick={handleAllApprove}
-                            loading={requestedApproval || requestIFTApproval}
-                        >
-                            Approve To Mint
-                        </Button>
-                    )}
+                    {account &&
+                        ((!isApproved && collateralToken) ||
+                            !isIFTApproved) && (
+                            <Button
+                                className="btn-mint common-btn common-btn-red"
+                                onClick={handleAllApprove}
+                                loading={
+                                    requestedApproval || requestIFTApproval
+                                }
+                            >
+                                Approve To Mint
+                            </Button>
+                        )}
                 </div>
             </div>
             <TransitionConfirm

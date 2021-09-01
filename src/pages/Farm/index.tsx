@@ -22,9 +22,7 @@ export default () => {
 
     useEffect(() => {
         (async () => {
-            if (account) {
-                await fetchStakePoolList(LP_TOKENS, account);
-            }
+            await fetchStakePoolList(LP_TOKENS, account);
         })();
     }, [account, slowRefresh]);
 

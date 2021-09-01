@@ -4,7 +4,7 @@ import * as message from '@/components/Notification';
 import IconDown from '@/assets/images/icon-down.svg';
 import './index.less';
 import { debounce } from 'lodash';
-import { useModel } from 'umi';
+import { useModel, useIntl } from 'umi';
 import { useBep20Balance } from '@/hooks/useTokenBalance';
 import { useRouter } from '@/hooks/useContract';
 import { useWeb3React } from '@web3-react/core';
@@ -19,6 +19,7 @@ import {
     useERC20Approve,
 } from '@/hooks/useApprove';
 import { TokenIcon } from '@/components/Icon';
+
 export default () => {
     const [lp, setLp] = useState<string>();
     const [lpAmount, setLpAmount] = useState<number>();
@@ -27,12 +28,16 @@ export default () => {
     const [showTxConfirm, setShowTxConfirm] = useState(false);
     const [tx, setTx] = useState<any | null>(null);
     const [showSelectFromToken, setShowSelectFromToken] = useState(false);
-
+    const intl = useIntl();
     const routerContract = useRouter();
     const { account } = useWeb3React();
 
     const { lpDataList } = useModel('lpData', (model) => ({
         ...model,
+    }));
+
+    const { requestConnectWallet } = useModel('app', (model) => ({
+        requestConnectWallet: model.requestConnectWallet,
     }));
 
     const pancakeRouter = Contracts.PancakeRouter[process.env.APP_CHAIN_ID];
@@ -188,8 +193,7 @@ export default () => {
                                     tokenList={selectOptions}
                                     onSelect={(v) => setLp(v)}
                                     placeholder={'Select LP'}
-                                >
-                                </SelectTokens>
+                                ></SelectTokens>
                             </div>
                         </div>
                     </div>
@@ -209,6 +213,18 @@ export default () => {
                     </div>
                 </div>
                 <div className="withdraw-btn-footer">
+                    {!account && (
+                        <Button
+                            className="btn-mint common-btn common-btn-yellow"
+                            onClick={() => {
+                                requestConnectWallet();
+                            }}
+                        >
+                            {intl.formatMessage({
+                                id: 'app.unlockWallet',
+                            })}
+                        </Button>
+                    )}
                     {lp && !isApproved && (
                         <Button
                             className="common-btn common-btn-yellow"

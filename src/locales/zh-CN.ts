@@ -7,4 +7,6 @@ export default {
   'nav.farm': 'FARM',
   'nav.wallet': 'WALLET',
   'nav.connectWallet': 'Connect Wallet',
+
+  'app.unlockWallet': 'Unlock Wallet'
 };

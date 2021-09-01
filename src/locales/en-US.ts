@@ -16,4 +16,6 @@ export default {
     'mint.selectCasting': 'Select a casting',
     'mint.mint': 'Mint',
     'mint.balance': 'Balance: ',
+
+    'app.unlockWallet': 'Unlock Wallet',
 };

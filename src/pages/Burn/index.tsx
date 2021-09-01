@@ -12,13 +12,18 @@ import BurnForm from './components/BurnForm';
 import { useMemo } from 'react';
 import IDebtItem from '@/components/DebtItem';
 import classNames from 'classnames';
-
+import { useModel, useIntl } from 'umi';
 export default () => {
     const { account } = useWeb3React();
     const collateralSystem = useCollateralSystem();
     const debtSystem = useDebtSystem();
     const [showForm, setShowForm] = useState(false);
     const [currentDebt, setCurrentDebt] = useState(0);
+    const intl = useIntl();
+
+    const { requestConnectWallet } = useModel('app', (model) => ({
+        requestConnectWallet: model.requestConnectWallet,
+    }));
 
     const onSubmitSuccess = () => {
         setShowForm(false);
@@ -95,12 +100,26 @@ export default () => {
                                     mintedTokenName="USD"
                                 />
                             </div>
-                            <Button
-                                className="btn-mint common-btn common-btn-red"
-                                onClick={() => setShowForm(!showForm)}
-                            >
-                                Burn
-                            </Button>
+                            {account && (
+                                <Button
+                                    className="btn-mint common-btn common-btn-red"
+                                    onClick={() => setShowForm(!showForm)}
+                                >
+                                    Burn
+                                </Button>
+                            )}
+                            {!account && (
+                                <Button
+                                    className="btn-mint common-btn common-btn-yellow"
+                                    onClick={() => {
+                                        requestConnectWallet();
+                                    }}
+                                >
+                                    {intl.formatMessage({
+                                        id: 'app.unlockWallet',
+                                    })}
+                                </Button>
+                            )}
                         </div>
                     )}
                 </div>

@@ -1,6 +1,6 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo, useState, useEffect } from 'react';
 import { useWeb3React } from '@web3-react/core';
-import { useIntl } from 'umi';
+import { useIntl, useModel } from 'umi';
 import useAuth from '@/hooks/useAuth';
 import { ConnectorNames } from '@/utils/web3';
 import IconBinance from '@/assets/images/binance.svg';
@@ -20,6 +20,16 @@ export default () => {
     const { login, logout } = useAuth();
     const [showDropdown, setShowDropdown] = useState(false);
     const [visable, setVisable] = useState(false);
+
+    const { connectWalletSignal } = useModel('app', (model) => ({
+        connectWalletSignal: model.connectWalletSignal,
+    }));
+
+    useEffect(() => {
+        if (connectWalletSignal) {
+            setVisable(true);
+        }
+    }, [connectWalletSignal]);
 
     const handleLogout = () => {
         logout();

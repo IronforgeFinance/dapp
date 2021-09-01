@@ -4,7 +4,7 @@ import { InputNumber, Select, Progress, Button } from 'antd';
 import * as message from '@/components/Notification';
 import IconAdd from '@/assets/images/icon-add.svg';
 import { useBep20Balance } from '@/hooks/useTokenBalance';
-import { useModel } from 'umi';
+import { useModel, useIntl } from 'umi';
 import { useWeb3React } from '@web3-react/core';
 import LpItem from '../LpItem';
 import Contracts from '@/config/constants/contracts';
@@ -71,6 +71,12 @@ export default () => {
         fetchLpDataList,
     } = useModel('lpData', (model) => ({ ...model }));
 
+    const intl = useIntl();
+
+    const { requestConnectWallet } = useModel('app', (model) => ({
+        requestConnectWallet: model.requestConnectWallet,
+    }));
+
     const routerContract = useRouter();
 
     const pancakeRouter = Contracts.PancakeRouter[process.env.APP_CHAIN_ID];
@@ -124,9 +130,7 @@ export default () => {
     };
 
     useEffect(() => {
-        if (account) {
-            refresh();
-        }
+        refresh();
     }, [account]);
 
     useEffect(() => {
@@ -436,13 +440,24 @@ export default () => {
                                     value={token2}
                                     tokenList={TOKENS}
                                     onSelect={token2SelectHandler}
-                                >
-                                </SelectTokens>
+                                ></SelectTokens>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div className="provide-btn-footer">
+                    {!account && (
+                        <Button
+                            className="btn-mint common-btn common-btn-yellow"
+                            onClick={() => {
+                                requestConnectWallet();
+                            }}
+                        >
+                            {intl.formatMessage({
+                                id: 'app.unlockWallet',
+                            })}
+                        </Button>
+                    )}
                     {token1Approved && token2Approved && (
                         <Button
                             className="common-btn common-btn-red"
@@ -452,19 +467,20 @@ export default () => {
                             Provide
                         </Button>
                     )}
-                    {((token1 && !token1Approved) ||
-                        (token2 && !token2Approved)) && (
-                        <Button
-                            className="btn-mint common-btn common-btn-red"
-                            onClick={handleAllApprove}
-                            loading={
-                                requestedToken1Approval ||
-                                requestedToken2Approval
-                            }
-                        >
-                            Approve To Provide
-                        </Button>
-                    )}
+                    {account &&
+                        ((token1 && !token1Approved) ||
+                            (token2 && !token2Approved)) && (
+                            <Button
+                                className="btn-mint common-btn common-btn-red"
+                                onClick={handleAllApprove}
+                                loading={
+                                    requestedToken1Approval ||
+                                    requestedToken2Approval
+                                }
+                            >
+                                Approve To Provide
+                            </Button>
+                        )}
                 </div>
             </div>
             {token1 && token2 && (
