@@ -12,7 +12,7 @@ import {
     expandTo18Decimals,
 } from '@/utils/bigNumber';
 import { ethers } from 'ethers';
-import { COLLATERAL_TOKENS, MINT_TOKENS, TokenPrices } from '@/config';
+import { COLLATERAL_TOKENS, PLATFORM_TOKEN } from '@/config';
 import { useBep20Balance } from '@/hooks/useTokenBalance';
 import useDataView, { useSelectedDebtInUSD } from '@/hooks/useDataView';
 import { useInitialRatio } from '@/hooks/useConfig';
@@ -293,16 +293,24 @@ export default (props: IProps) => {
         try {
             setSubmitting(true);
             setShowTxConfirm(true);
+            const toTokenPrice = await getTokenPrice(toToken);
+            const lockedPrice = await getTokenPrice(PLATFORM_TOKEN);
+            const unlockedAmount = lockedData.startValue - lockedData.endValue;
             setTx({
                 from: {
                     token: 'fUSD',
                     amount: burnAmount,
-                    price: '--',
+                    price: burnAmount,
                 },
                 to: {
                     token: toToken,
                     amount: unstakeAmount,
-                    price: '--',
+                    price: (toTokenPrice * unstakeAmount).toFixed(2),
+                },
+                locked: {
+                    token: 'BS',
+                    amount: lockedData.startValue - lockedData.endValue,
+                    price: (lockedPrice * unlockedAmount).toFixed(2),
                 },
             });
             if (burnType === 'max') {

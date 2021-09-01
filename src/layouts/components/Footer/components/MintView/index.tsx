@@ -13,6 +13,7 @@ import {
 import { GET_MINTS } from '@/subgraph/graphql';
 import { ourClient } from '@/subgraph/clientManager';
 import { DEFAULT_PAGE_SIZE } from '@/config/constants/constant';
+import dayjs from 'dayjs';
 
 const columns = [
     {
@@ -55,7 +56,10 @@ const columns = [
         dataIndex: 'ratio',
         render: (value, row) => (
             <PureView
-                customData={`${+ethers.utils.formatUnits(value, 18) * 100}%`}
+                customData={`${(
+                    (1 / parseFloat(ethers.utils.formatEther(value))) *
+                    100
+                ).toFixed(2)}%`}
             />
         ),
     },

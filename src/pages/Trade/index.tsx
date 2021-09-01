@@ -160,16 +160,18 @@ export default () => {
         try {
             setSubmitting(true);
             setShowTxConfirm(true);
+            const fromTokenPrice = await getTokenPrice(fromToken);
+            const toTokenPrice = await getTokenPrice(toToken);
             setTx({
                 from: {
                     token: fromToken,
                     amount: fromAmount,
-                    price: '--',
+                    price: (fromTokenPrice * fromAmount).toFixed(2),
                 },
                 to: {
                     token: toToken,
                     amount: toAmount,
-                    price: '--',
+                    price: (toTokenPrice * toAmount).toFixed(2),
                 },
             });
 
