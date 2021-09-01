@@ -1,13 +1,17 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import './index.less';
 import { FiatSymbol } from '@/config/constants/types';
 import classNames from 'classnames';
 import { copyTextToClipboard } from '@/utils/clipboard';
 import Notification from '@iron/Notification';
 import Folder from '@iron/Folder';
-
+import { ourClient } from '@/subgraph/clientManager';
+import { GET_TRADE_MARKET_DETAIL } from '@/subgraph/graphql';
 // type DataType = 'address' | 'mouney';
-
+import { ethers } from 'ethers';
+import { useERC20, usePrices } from '@/hooks/useContract';
+import Tokens from '@/config/constants/tokens';
+import Contracts from '@/config/constants/contracts';
 interface Price {
     amount: string | number;
     symbol?: FiatSymbol;
@@ -33,12 +37,89 @@ function instanceOfPrice(object: any): object is Price {
 interface MarketDetailProps {
     token0: string;
     token1: string;
-    dataSource: DetailData<Address | Price>[];
 }
 
-const DEFAULT_CURRENCY_SYMBOL: FiatSymbol = '$';
+interface IMarketTokenData {
+    token: string;
+    tradeVolumeUSD: number;
+    marketCap: number;
+    priceHigh: number;
+    priceLow: number;
+    priceFeedContract: string;
+    contract: string;
+}
+
+const DEFAULT_TOKEN_DATA = {
+    id: '',
+    token: '',
+    tradeVolumeUSD: 0,
+    marketCap: 0,
+    priceHigh: 0,
+    priceLow: 0,
+    priceFeedContract: '',
+    contract: '',
+};
 
 const MarketDetail = (props: MarketDetailProps) => {
+    const { token0, token1 } = props;
+    const [data0, setData0] = useState<IMarketTokenData>(DEFAULT_TOKEN_DATA);
+    const [data1, setData1] = useState<IMarketTokenData>(DEFAULT_TOKEN_DATA);
+
+    const token0Contract = useERC20(
+        Tokens[token0].address[process.env.APP_CHAIN_ID],
+    );
+    const token1Contract = useERC20(
+        Tokens[token1].address[process.env.APP_CHAIN_ID],
+    );
+    const prices = usePrices();
+
+    const getTokenPrice = async (token: string) => {
+        if (!token) return 0;
+        const res = await prices.getPrice(
+            ethers.utils.formatBytes32String(token),
+        );
+        return parseFloat(ethers.utils.formatEther(res));
+    };
+    const fetchData = async (token, index) => {
+        const dataRes = await ourClient.query({
+            query: GET_TRADE_MARKET_DETAIL,
+            variables: {
+                token: token,
+            },
+        });
+        const data = { ...dataRes.data.tokenDayDatas[0] };
+        if (!data.id) {
+            return { ...DEFAULT_TOKEN_DATA, token };
+        }
+        data.priceHigh = ethers.utils.formatEther(data.priceHigh);
+        data.priceLow = ethers.utils.formatEther(data.priceLow);
+        data.tradeVolumeUSD = ethers.utils.formatEther(data.tradeVolumeUSD);
+        const tokenContract = index === 0 ? token0Contract : token1Contract;
+        const totalSupply = parseFloat(
+            ethers.utils.formatEther(await tokenContract.totalSupply()),
+        );
+        const price = await getTokenPrice(token);
+        const marketCap = parseFloat((totalSupply * price).toFixed(2));
+        data.marketCap = marketCap;
+        data.priceFeedContract = Contracts.Prices[process.env.APP_CHAIN_ID];
+        data.contract = Tokens[token].address[process.env.APP_CHAIN_ID];
+        return data;
+    };
+
+    useEffect(() => {
+        (async () => {
+            const data = await fetchData(token0, 0);
+            setData0(data);
+        })();
+    }, [token0]);
+
+    useEffect(() => {
+        (async () => {
+            const data = await fetchData(token1, 1);
+            setData1(data);
+        })();
+    }, [token1]);
+
     return (
         <Folder>
             <div className="market-details">
@@ -49,44 +130,71 @@ const MarketDetail = (props: MarketDetailProps) => {
                             {props.token0}/{props.token1}
                         </span>
                     </p>
-                    <span className="token0">{props.token0}</span>
                 </div>
-                <div className="main">
-                    <ul className="props">
-                        {props.dataSource.map((prop) => {
-                            return (
-                                <li key={prop.label} className="prop">
-                                    <span className="label">{prop.label}</span>
-                                    {instanceOfAddress(prop.value) && (
-                                        <span
-                                            className="value address"
-                                            onClick={() => {
-                                                copyTextToClipboard(
-                                                    (prop.value as Address)
-                                                        .address,
-                                                );
-                                                Notification.success(
-                                                    'Copy Address Successfully',
-                                                );
-                                            }}
-                                        >
-                                            {prop.value.address.replace(
-                                                /^(0x[\d\w]{4}).*([\d\w]{4})$/,
-                                                '$1...$2',
-                                            )}
-                                        </span>
-                                    )}
-                                    {instanceOfPrice(prop.value) && (
-                                        <span className="value price">
-                                            {prop.value.symbol ||
-                                                DEFAULT_CURRENCY_SYMBOL}
-                                            {prop.value.amount}
-                                        </span>
-                                    )}
+                <div className="main-content">
+                    {[data0, data1].map((data, index) => (
+                        <div className="main" key={index}>
+                            <p className="token">{data.token}</p>
+                            <ul className="props">
+                                <li className="prop">
+                                    <span className="label">24H volume</span>
+                                    <span className="value price">
+                                        ${data.tradeVolumeUSD}
+                                    </span>
                                 </li>
-                            );
-                        })}
-                    </ul>
+                                <li className="prop">
+                                    <span className="label">Market Cap</span>
+                                    <span className="value price">
+                                        ${data.marketCap}
+                                    </span>
+                                </li>
+                                <li className="prop">
+                                    <span className="label">24H High</span>
+                                    <span className="value price">
+                                        ${data.priceHigh}
+                                    </span>
+                                </li>
+                                <li className="prop">
+                                    <span className="label">24H Low</span>
+                                    <span className="value price">
+                                        ${data.priceLow}
+                                    </span>
+                                </li>
+                                <li className="prop">
+                                    <span className="label">Price Feed</span>
+                                    <span
+                                        className="value address"
+                                        onClick={() => {
+                                            const url = `${process.env.BSC_SCAN_URL}/address/${data.priceFeedContract}`;
+                                            window.open(url, '_blank');
+                                        }}
+                                    >
+                                        {data.priceFeedContract?.replace(
+                                            /^(0x[\d\w]{4}).*([\d\w]{4})$/,
+                                            '$1...$2',
+                                        )}
+                                    </span>
+                                </li>
+                                <li className="prop">
+                                    <span className="label">
+                                        {data.token} Contract
+                                    </span>
+                                    <span
+                                        className="value address"
+                                        onClick={() => {
+                                            const url = `${process.env.BSC_SCAN_URL}/address/${data.contract}`;
+                                            window.open(url, '_blank');
+                                        }}
+                                    >
+                                        {data.contract?.replace(
+                                            /^(0x[\d\w]{4}).*([\d\w]{4})$/,
+                                            '$1...$2',
+                                        )}
+                                    </span>
+                                </li>
+                            </ul>
+                        </div>
+                    ))}
                 </div>
             </div>
         </Folder>
