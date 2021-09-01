@@ -2,7 +2,7 @@ import { useState } from 'react';
 import useWeb3Provider from '@/hooks/useWeb3Provider';
 import { getContract } from '@/utils/contractHelper';
 import { ethers } from 'ethers';
-import { expandTo18Decimals } from '@/utils/bigNumber';
+import { expandTo18Decimals, toFixedWithoutRound } from '@/utils/bigNumber';
 import PancakePair from '@/config/abi/PancakePair.json';
 import Tokens from '@/config/constants/tokens';
 
@@ -85,8 +85,8 @@ const useLpDataModel = () => {
         const res: ILpDataProps = {
             symbol: lpToken,
             address: lpContract,
-            balance: parseFloat(balance),
-            total: parseFloat(total),
+            balance: parseFloat(toFixedWithoutRound(balance, 2)),
+            total: parseFloat(toFixedWithoutRound(total, 2)),
             reserve1,
             reserve2,
             token1,
