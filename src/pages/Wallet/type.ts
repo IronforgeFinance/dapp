@@ -6,6 +6,8 @@ export type OperationType = 'Mint' | 'Burn' | 'Trade' | 'Pool' | 'Farm';
 
 export type PoolType = 'Provide' | 'Withdraw';
 
+export type ChainIds = '1337' | '97' | '56';
+
 export interface PoolData {
     token0: TokenData;
     token1: TokenData;

@@ -1,29 +1,58 @@
+import { ChainIds } from '@/pages/Wallet/type';
+
+/**
+ * @description 合并自定义contracts配置
+ * @property {Object} mergedOutput
+ */
+
+let mergedOutput;
+try {
+    switch (process.env.APP_CHAIN_ID as ChainIds) {
+        case '1337': {
+            mergedOutput = require('../../../contracts.local.json') ?? {};
+            break;
+        }
+        case '97': {
+            mergedOutput = require('../../../contracts.test.json') ?? {};
+            break;
+        }
+        case '56': {
+            mergedOutput = require('../../../contracts.prod.json') ?? {};
+            break;
+        }
+    }
+} catch (error) {
+    console.warn(
+        "⚠️ There's no mreged config of contracts. It will use default config.",
+    );
+}
+
 export const localOutput = {
-    PlatformToken: '0x1CF1B1C4d3560756E429EB6116C29c0D9EfFf785',
-    pancakeFactory: '0xE65235491B0975eeC79af76E618F530A56f50362',
-    pancakeRouter: '0xEbc6138b5708f173f85720007329bc0598a1ce3d',
-    usdcToken: '0xf5702BA406A8FB9A2314c9A4E3a693D29FC5857B',
-    'USDC-IFT': '0x79eCC5aAd69755496C5C31b3183F5c7FD863614c',
-    AssetSystem: '0xd43fE630EC9c501f29CdA033BF58799424B25FF7',
-    BuildBurnSystem: '0x49F390583024E048D0F68dC711818f1B78EceD1e',
-    Config: '0x49c770aC4BB7b10FA49eACd6A19758535CFC4fd5',
-    AccessControl: '0x7E2bd89347c282bd0c5e48A6a368208fB1f70D23',
-    Prices: '0xCe1dEe932b17b659185F99Be9D4f7E663AAFdD35',
-    DebtSystem: '0xE019C25363D004187b6c4328B50e4043Ce9AB2e9',
-    CollateralSystem: '0xF1555a0F1Ec7648f459192bdA255490F9F3cF4D7',
-    ExchangeSystem: '0xCb7D181999E4B43206579433d200448aeC8E8002',
-    Liquidation: '0xe607baC15ca9939B52C712Dda6B85201F85E6892',
-    DexPriceHelper: '0xAFAE5Ea71F760308927978f04Bb624AD6465505A',
-    fusdToken: '0xE9e9396e7C2Ec52a6dbde7016FA7c019b938E454',
-    lbtcToken: '0x914370d5554f9088C28ddE7FCe626f64330a3B79',
-    lbtcToken202112: '0xc3D5061a475b685f8dbd4e62c4d006152a2f1d74',
-    btcToken: '0x7EDd7B5E895F4109aaf22CdEb9C5DfD3868F99A9',
-    ethToken: '0xd589FAA0DddfE4998Ed91C00cd56778b9537e6d8',
-    usdtToken: '0xCCe9B6c96aBAd41E33Cf5FCacb3B4e6E2c1a7Cd5',
-    RewardSystem: '0x67f8D82eFdF82ECe598dC35640b552D5fD53D629',
-    MinerReward: '0x81D352650750754827eB81A61BCE654c496C851F',
-    LinearRelease: '0x86D6D8265D1A69C733779b7bdD6b7aE7402c178F',
-    'USDC-ETH': '0x6246B32Af2FC310896246Cae258A6C25cc7f47aC',
+    PlatformToken: '0x5cd474fEC769D3a5Fe9BAb2c5651D6D45F91dFe8',
+    pancakeFactory: '0x2e58536d243E6ba5194FA8fAC978553a0dCf4d2D',
+    pancakeRouter: '0x1Fd8e4d766161Ae9a611113ae0bE777525CA8D1c',
+    usdcToken: '0xC0C837C0eAD64050850B249Cd2ec2e5787A5635f',
+    'USDC-IFT': '0xe0a93aB85784555186EAB38E2C1d53aB407FE0F4',
+    AssetSystem: '0x16365E250b30C36d6E92aaac8cC866539731c04F',
+    BuildBurnSystem: '0x6f636436c65B1798861F279b6769d28B6ef50872',
+    Config: '0xe7f6159A2B2a1D0eF4B77238A1A45A2aB659A9F5',
+    AccessControl: '0x3BC86fad19e7Fed6EE36a0D224EA50277a40E4cC',
+    Prices: '0x203338E9F735328c73D679e79254b59bc539c3F3',
+    DebtSystem: '0x568B1192ae14f51FE3694Da9bEc240cB119F6E31',
+    CollateralSystem: '0x181668B5f694ab3488DFe43a7E622a0772CFF245',
+    ExchangeSystem: '0x2991072b30755f474d81B3F05d6a632b5fEd7BCe',
+    Liquidation: '0x81590f5593f7DF70A40e0a1B98940318756A6f40',
+    DexPriceHelper: '0x48Df29BCC2edA321544a0f87EacF0f0Acf62a90f',
+    fusdToken: '0x970c4D173C7Ec5c719313DF7ccbD168C2De8B855',
+    lbtcToken: '0x7D25ef82d92f508d5C24Ab52db9C1a76eD71252A',
+    lbtcToken202112: '0x848d3E41333C7bE47FE42dd2b16F16406B9ad61d',
+    btcToken: '0x2eA107747AE72D001D598F6558e80ea1f55EE6e6',
+    ethToken: '0x22C1beC67bdc4F0702838e8E4F8aB147123c8f92',
+    usdtToken: '0x631a8E2BaC1D7f64345C6fE9Dbe41E8F9c78BdC9',
+    RewardSystem: '0x5808E6FF0fAFC23e710a03eaD0Ec5EE5A89d7f9f',
+    MinerReward: '0x59358bCD31115D2352f57366246c8dA69AAa3370',
+    LinearRelease: '0xd4a88A8b1F1705b7267B05D1A8c47F25DD7AD254',
+    ...mergedOutput,
 };
 export const testnetOutput = {
     PlatformToken: '0xa3f86034719B1BB5170f9C96b9BaE86eAAf416a3',
@@ -46,6 +75,7 @@ export const testnetOutput = {
     ethToken: '0x8Ec086904a9e7eDAb3B888c613D6Ca4badEac0B7',
     usdtToken: '0x86702905E8d5995649882fb3275aC7d3fef759a5',
     RewardSystem: '0xf04d8F9880A5BeeE47E82db0405F42Dc7fD31e55',
+    ...mergedOutput,
 };
 export default {
     masterChef: {

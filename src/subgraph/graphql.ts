@@ -8,7 +8,7 @@ import { gql } from '@apollo/client';
  * @description
  */
 export const GET_MINTS_FROM_PANCAKE = gql`
-    query ($offset: Int, $limit: Int, $user: String) {
+    query PancakeMints($offset: Int, $limit: Int, $user: String) {
         mints(skip: $offset, first: $limit, where: { sender_contains: $user }) {
             id
             pair {
@@ -32,7 +32,7 @@ export const GET_MINTS_FROM_PANCAKE = gql`
  * @description
  */
 export const GET_BURNS_FROM_PANCAKE = gql`
-    query ($offset: Int, $limit: Int, $user: String) {
+    query PancakeBurns($offset: Int, $limit: Int, $user: String) {
         burns(skip: $offset, first: $limit, where: { sender_contains: $user }) {
             id
             pair {
@@ -57,7 +57,7 @@ export const GET_BURNS_FROM_PANCAKE = gql`
  */
 
 export const GET_MINTS = gql`
-    query ($offset: Int, $limit: Int, $user: String) {
+    query Mints($offset: Int, $limit: Int, $user: String) {
         mints(skip: $offset, first: $limit, where: { user_contains: $user }) {
             id
             user
@@ -74,7 +74,7 @@ export const GET_MINTS = gql`
 `;
 
 export const GET_BURNS = gql`
-    query ($offset: Int, $limit: Int, $user: String) {
+    query Burns($offset: Int, $limit: Int, $user: String) {
         burns(skip: $offset, first: $limit, where: { user_contains: $user }) {
             id
             user
@@ -95,7 +95,7 @@ export const GET_BURNS = gql`
  * @property {HexString} txhash 交易哈希
  */
 export const GET_OPERATIONS = gql`
-    query ($offset: Int, $limit: Int, $user: String, $type: String) {
+    query Operations($offset: Int, $limit: Int, $user: String, $type: String) {
         operations(
             skip: $offset
             first: $limit
@@ -113,7 +113,12 @@ export const GET_OPERATIONS = gql`
     }
 `;
 export const GET_OPERATIONS_FUZZY = gql`
-    query ($offset: Int, $limit: Int, $user: String, $type: [String]) {
+    query OperationsByFilter(
+        $offset: Int
+        $limit: Int
+        $user: String
+        $type: [String]
+    ) {
         operations(
             skip: $offset
             first: $limit
@@ -135,7 +140,7 @@ export const GET_OPERATIONS_FUZZY = gql`
  * @description
  */
 export const GET_MINTS_BY_COLLATERAL = gql`
-    query ($offset: Int, $limit: Int, $user: String) {
+    query MintsByCollateral($offset: Int, $limit: Int, $user: String) {
         mints(
             skip: $offset
             first: $limit
@@ -156,7 +161,7 @@ export const GET_MINTS_BY_COLLATERAL = gql`
 `;
 
 export const GET_TRADE_MARKET_DETAIL = gql`
-    query ($token: String) {
+    query MarketDetail($token: String) {
         tokenDayDatas(
             first: 1
             where: { token: $token }
