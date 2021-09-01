@@ -4,7 +4,7 @@ import PoolItem from './components/PoolItem';
 import './index.less';
 import classnames from 'classnames';
 import { IStakePool } from '@/models/stakeData';
-
+import { TokenIcon } from '@/components/Icon';
 export default (props: IStakePool) => {
     const [showStakeForm, setShowStakeForm] = useState(false);
     const handleFlipper = () => {
@@ -21,20 +21,20 @@ export default (props: IStakePool) => {
             <div className="flipper">
                 <div className="front">
                     <div className={`lp-token lp-token-left`}>
-                        <div className={`lp-token-${token1}`}></div>
+                        <TokenIcon name={token1}></TokenIcon>
                     </div>
                     <div className={`lp-token lp-token-right`}>
-                        <div className={`lp-token-${token2}`}></div>
+                        <TokenIcon name={token2}></TokenIcon>
                     </div>
 
                     <PoolItem pool={props} handleFlipper={handleFlipper} />
                 </div>
                 <div className="back">
                     <div className={`lp-token lp-token-left`}>
-                        <div className={`lp-token-${token1}`}></div>
+                        <TokenIcon name={token1}></TokenIcon>
                     </div>
                     <div className={`lp-token lp-token-right`}>
-                        <div className={`lp-token-${token2}`}></div>
+                        <TokenIcon name={token2}></TokenIcon>
                     </div>
                     <StakeForm lp={props.name} handleFlipper={handleFlipper} />
                 </div>
