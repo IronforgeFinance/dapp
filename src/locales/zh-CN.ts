@@ -1,3 +1,16 @@
+/**
+ * @todo 转换脚本
+ *
+ * 临时方案：
+ * @description 直接复制当前文件，重新命名对应国家的本土配置，再用下面脚本清空内容
+ * @description 转换用来翻译的json需要的正则表达
+ *
+ * @example 文本比对，处理新词
+ * @see https://text-compare.com/
+ *
+ * @example IDE使用正则去除内容： ('?.+')?:\s+('?.+'?) -> $1: ''
+ */
+
 export default {
     /**
      * @description 首页
@@ -28,6 +41,7 @@ export default {
      */
     'mint.from': '铸币',
     'mint.to': '获得',
+    'mint.selectCasting': '选择铸造',
     'mint.locked': '锁定',
     'mint.collateral': '质押物',
     'mint.ftoken': 'FToken',
@@ -156,5 +170,5 @@ export default {
     'conj.to': '到',
     'conj.and': '和',
     'conj.x': ' ',
-    'app.unlockWallet': 'Unlock Wallet',
+    'app.unlockWallet': '解锁钱包',
 };
