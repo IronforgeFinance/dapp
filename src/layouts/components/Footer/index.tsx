@@ -9,18 +9,19 @@ import { history } from 'umi';
 import MintView from './components/MintView';
 import BurnView from './components/BurnView';
 import DeliveryView from './components/DeliveryView';
+import { useIntl } from 'umi';
 
 const tabItems = [
     {
-        name: 'Mint',
+        name: 'history.mint',
         key: 'mint',
     },
     {
-        name: 'Burn',
+        name: 'history.burn',
         key: 'burn',
     },
     {
-        name: 'Delivery',
+        name: 'history.delivery',
         key: 'delivery',
     },
 ];
@@ -28,6 +29,7 @@ const tabItems = [
 const filterList = ['/', '/farm'];
 
 export default () => {
+    const intl = useIntl();
     const { price, rate } = useFtokenPrice();
     const { balance } = useGetBnbBalance();
     const [tabKey, setTabKey] = React.useState(tabItems[0].key);
@@ -86,11 +88,12 @@ export default () => {
                             {price}
                         </p>
                         <p className="label">
-                            fToken Price <span className="rate">{rate}</span>
+                            {intl.formatMessage({ id: 'footer.ftoken.price' })}{' '}
+                            <span className="rate">{rate}</span>
                         </p>
                     </div>
                     <button className="btn-buy-token common-btn common-btn-red">
-                        Buy Token
+                        {intl.formatMessage({ id: 'footer.ftoken.button' })}
                     </button>
                     {/* <p className="balance">Balance: {balance}</p> */}
                     <div className="medias">
@@ -103,8 +106,11 @@ export default () => {
                         // title={tabKey.replace(/^([\w]{1})/, (v) =>
                         //     v.toUpperCase(),
                         // )}
-                        title="History"
-                        tabItems={tabItems}
+                        title={intl.formatMessage({ id: 'history' })}
+                        tabItems={tabItems.map((item) => ({
+                            ...item,
+                            name: intl.formatMessage({ id: item.name }),
+                        }))}
                         tabKey={tabKey}
                         onChange={(key) => setTabKey(key)}
                         onClose={() => setVisable(false)}

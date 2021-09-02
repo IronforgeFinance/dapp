@@ -6,8 +6,10 @@ import { getRemainDaysOfQuarterAsset, isDeliveryAsset } from '@/utils';
 import { usePrices } from '@/hooks/useContract';
 import { ethers } from 'ethers';
 import { TokenIcon } from '@/components/Icon';
+import { useIntl } from 'umi';
+
 interface TokenOption {
-    name: string;
+    name?: string;
     ratio?: Number;
 }
 
@@ -22,6 +24,7 @@ interface ISelectTokensProps {
 }
 
 export default (props: ISelectTokensProps) => {
+    const intl = useIntl();
     const {
         children,
         value,
@@ -121,7 +124,11 @@ export default (props: ISelectTokensProps) => {
 
     return (
         <div className="select-tokens">
-            <Board visable={visible} onClose={_onClose} title="Select a Token">
+            <Board
+                visable={visible}
+                onClose={_onClose}
+                title={intl.formatMessage({ id: 'selecttoken' })}
+            >
                 <ul className="tokenlist">
                     <input
                         className="search"
@@ -157,9 +164,14 @@ export default (props: ISelectTokensProps) => {
             </Board>
             <button className="btn-mint-form" onClick={() => setVisible(true)}>
                 <span>
-                    {value || <span>{placeholder || 'Select token'}</span>}
+                    {value || (
+                        <span>
+                            {placeholder ||
+                                intl.formatMessage({ id: 'selecttoken' })}
+                        </span>
+                    )}
                 </span>
-                <i className="icon-down size-20"></i>
+                <i className="icon-down size-20" />
             </button>
         </div>
     );

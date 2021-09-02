@@ -14,12 +14,14 @@ import Contracts from '@/config/constants/contracts';
 import { ethers } from 'ethers';
 import SelectTokens from '@/components/SelectTokens';
 import TransitionConfirm from '@iron/TransitionConfirm';
+import { useIntl } from 'umi';
 import {
     useCheckERC20ApprovalStatus,
     useERC20Approve,
 } from '@/hooks/useApprove';
 import { TokenIcon } from '@/components/Icon';
 export default () => {
+    const intl = useIntl();
     const [lp, setLp] = useState<string>();
     const [lpAmount, setLpAmount] = useState<number>();
     const [receiveTokens, setReceiveTokens] = useState([]);
@@ -166,11 +168,15 @@ export default () => {
         <div>
             <div className="provide-form common-box">
                 <div className="input-item">
-                    <p className="label">LP</p>
+                    <p className="label">
+                        {intl.formatMessage({ id: 'liquidity.withdraw.lp' })}
+                    </p>
                     <div className="input-item-content">
                         <div className="content-label">
                             <p className="right">
-                                Balance:
+                                {intl.formatMessage({
+                                    id: 'balance:',
+                                })}
                                 <span className="balance">{balance}</span>
                             </p>
                         </div>
@@ -188,8 +194,7 @@ export default () => {
                                     tokenList={selectOptions}
                                     onSelect={(v) => setLp(v)}
                                     placeholder={'Select LP'}
-                                >
-                                </SelectTokens>
+                                ></SelectTokens>
                             </div>
                         </div>
                     </div>
@@ -198,7 +203,11 @@ export default () => {
                 <img src={IconDown} alt="" className="icon-add" />
 
                 <div className="input-item">
-                    <p className="label">You'll Receive</p>
+                    <p className="label">
+                        {intl.formatMessage({
+                            id: 'liquidity.withdraw.willreceive',
+                        })}
+                    </p>
                     <div className="input-item-content receive-tokens">
                         {receiveTokens.map((item) => (
                             <div className="receive-token-item">
@@ -215,7 +224,9 @@ export default () => {
                             onClick={handleApprove}
                             loading={requestedApproval}
                         >
-                            Approve to withdraw
+                            {intl.formatMessage({
+                                id: 'liquidity.withdraw.approve',
+                            })}
                         </Button>
                     )}
                     {isApproved && (
@@ -224,7 +235,7 @@ export default () => {
                             onClick={handleWithdraw}
                             loading={submitting}
                         >
-                            Withdraw
+                            {intl.formatMessage({ id: 'liquidity.withdraw' })}
                         </Button>
                     )}
                 </div>

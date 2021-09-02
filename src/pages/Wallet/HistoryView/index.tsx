@@ -21,6 +21,7 @@ import {
 } from '@/subgraph/graphql';
 import { pancakeswapClient, ourClient } from '@/subgraph/clientManager';
 import { ethers } from 'ethers';
+import { useIntl } from 'umi';
 
 const { TabPane } = Tabs;
 
@@ -91,57 +92,80 @@ const columns = [
     {
         title: 'history',
         dataIndex: 'id',
-        render: (value, row: HistoryViewProps) => (
-            <div className="history">
-                <div className="operation">
-                    <i className={`icon ${row.icon}`} />
-                    <div className="info">
-                        <span>{row.type}</span>
-                        <time>
-                            {new Date(
-                                Number(row.dealtime) * 1000,
-                            ).toLocaleString()}
-                        </time>
+        render: (value, row: HistoryViewProps) => {
+            const intl = useIntl();
+
+            return (
+                <div className="history">
+                    <div className="operation">
+                        <i className={`icon ${row.icon}`} />
+                        <div className="info">
+                            <span>{row.type}</span>
+                            <time>
+                                {new Date(
+                                    Number(row.dealtime) * 1000,
+                                ).toLocaleString()}
+                            </time>
+                        </div>
                     </div>
+                    {row.token0 && (
+                        <div className="form">
+                            {row.token0 && (
+                                <Fragment>
+                                    {intl
+                                        .formatMessage({
+                                            id: `verb.${
+                                                (row.verb as string)
+                                                    .toLocaleLowerCase()
+                                                    .replace(' ', '.') || 'x'
+                                            }`,
+                                        })
+                                        .trimEnd()}{' '}
+                                    <b>{row.token0.amount}</b>{' '}
+                                    {isOverflow([row.token0.name], 8) ? (
+                                        <Fragment>
+                                            <br />
+                                            {row.token0.name}
+                                        </Fragment>
+                                    ) : (
+                                        row.token0.name
+                                    )}
+                                </Fragment>
+                            )}
+                            {row.token1 && row.conj && (
+                                <Fragment>
+                                    {' '}
+                                    {isOverflow(
+                                        [row.token0.name, row.token0.amount],
+                                        8,
+                                    ) && <br />}
+                                    {intl
+                                        .formatMessage({
+                                            id: `conj.${
+                                                (row.conj as string)
+                                                    .toLocaleLowerCase()
+                                                    .replace(' ', '.') || 'x'
+                                            }`,
+                                        })
+                                        .trimEnd()}{' '}
+                                    <b>{row.token1.amount}</b> {row.token1.name}
+                                </Fragment>
+                            )}
+                        </div>
+                    )}
+                    {row.link && (
+                        <div className="skip-wraper">
+                            <button
+                                className="skip"
+                                onClick={() =>
+                                    (window.location.href = row.link)
+                                }
+                            />
+                        </div>
+                    )}
                 </div>
-                {row.token0 && (
-                    <div className="form">
-                        {row.token0 && (
-                            <Fragment>
-                                {row.verb} <b>{row.token0.amount}</b>{' '}
-                                {isOverflow([row.token0.name], 8) ? (
-                                    <Fragment>
-                                        <br />
-                                        {row.token0.name}
-                                    </Fragment>
-                                ) : (
-                                    row.token0.name
-                                )}
-                            </Fragment>
-                        )}
-                        {row.token1 && (
-                            <Fragment>
-                                {' '}
-                                {isOverflow(
-                                    [row.token0.name, row.token0.amount],
-                                    8,
-                                ) && <br />}
-                                {row.conj} <b>{row.token1.amount}</b>{' '}
-                                {row.token1.name}
-                            </Fragment>
-                        )}
-                    </div>
-                )}
-                {row.link && (
-                    <div className="skip-wraper">
-                        <button
-                            className="skip"
-                            onClick={() => (window.location.href = row.link)}
-                        />
-                    </div>
-                )}
-            </div>
-        ),
+            );
+        },
     },
 ];
 
@@ -211,6 +235,7 @@ const parseDataOfOur = (item): HistoryViewProps => {
  * @returns {ReactNode}
  */
 const HistoryView = () => {
+    const intl = useIntl();
     const { account } = useWeb3React();
     const [tabKey, setTabKey] = useState('All' as TabType);
     const [mintsPool, setMintsPool] = useState([]);
@@ -375,10 +400,17 @@ const HistoryView = () => {
                 onChange={changeTab}
             >
                 {tabItems.map((tabKey) => (
-                    <TabPane tab={tabKey} key={tabKey}>
+                    <TabPane
+                        tab={intl.formatMessage({
+                            id: `wallet.tab.${(
+                                tabKey as string
+                            ).toLowerCase()}`,
+                        })}
+                        key={tabKey}
+                    >
                         <Table
                             className="custom-table"
-                            columns={isEnd ? [] : columns}
+                            columns={columns}
                             rowKey={(record) => record.id}
                             dataSource={records}
                             pagination={false}

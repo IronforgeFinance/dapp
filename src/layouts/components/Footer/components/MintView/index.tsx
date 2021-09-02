@@ -13,6 +13,8 @@ import {
 import { GET_MINTS } from '@/subgraph/graphql';
 import { ourClient } from '@/subgraph/clientManager';
 import { DEFAULT_PAGE_SIZE } from '@/config/constants/constant';
+import { useIntl } from 'umi';
+import { toFixedWithoutRound } from '@/utils/bigNumber';
 
 const columns = [
     {
@@ -55,7 +57,10 @@ const columns = [
         dataIndex: 'ratio',
         render: (value, row) => (
             <PureView
-                customData={`${+ethers.utils.formatUnits(value, 18) * 100}%`}
+                customData={`${toFixedWithoutRound(
+                    +ethers.utils.formatUnits(value, 18) * 100,
+                    6,
+                )}%`}
             />
         ),
     },
@@ -74,6 +79,7 @@ const columns = [
 ];
 
 const MintView = () => {
+    const intl = useIntl();
     const { account } = useWeb3React();
     const [mints, setMints] = useState([]);
     const [pagination, setPagination] = useState({
@@ -109,7 +115,14 @@ const MintView = () => {
         <div className="mint-view">
             <Table
                 className="custom-table"
-                columns={noData ? [] : columns}
+                columns={columns.map((col) => ({
+                    ...col,
+                    title: intl.formatMessage({
+                        id: `history.mint.col.${(
+                            col.title as string
+                        ).toLocaleLowerCase()}`,
+                    }),
+                }))}
                 rowKey={(record) => record.id}
                 dataSource={mints}
                 pagination={{ ...pagination, position: [position] }}

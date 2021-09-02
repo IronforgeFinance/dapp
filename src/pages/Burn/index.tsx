@@ -1,4 +1,10 @@
-import React, { useState, useEffect, useCallback, createContext } from 'react';
+import React, {
+    useState,
+    useEffect,
+    useCallback,
+    createContext,
+    Fragment,
+} from 'react';
 import DataView from '../Mint/DataView';
 import { useWeb3React } from '@web3-react/core';
 import { useDebtSystem, useCollateralSystem } from '@/hooks/useContract';
@@ -12,19 +18,23 @@ import BurnForm from './components/BurnForm';
 import { useMemo } from 'react';
 import IDebtItem from '@/components/DebtItem';
 import classNames from 'classnames';
+import { useBep20Balance } from '@/hooks/useTokenBalance';
+import { useIntl } from 'umi';
 
 export default () => {
+    const intl = useIntl();
     const { account } = useWeb3React();
     const collateralSystem = useCollateralSystem();
     const debtSystem = useDebtSystem();
     const [showForm, setShowForm] = useState(false);
     const [currentDebt, setCurrentDebt] = useState(0);
+    const { balance: fusdBalance } = useBep20Balance('FUSD');
 
     const onSubmitSuccess = () => {
         setShowForm(false);
     };
 
-    const haveAssets = useMemo(() => true, []); // TODO 获取资产总计
+    const haveAssets = useMemo(() => /*fusdBalance > 0*/ true, []); // TODO 获取资产总计
 
     const BackBtn = () => {
         return (
@@ -46,12 +56,14 @@ export default () => {
 
         return (
             <div className="no-assets-view common-box">
-                <p className="tip">Don`t have any fAsset</p>
+                <p className="tip">
+                    {intl.formatMessage({ id: 'burn.noassets' })}
+                </p>
                 <Button
                     className="btn-mint common-btn common-btn-red"
                     onClick={toMintPageHandler}
                 >
-                    Lets Mint
+                    {intl.formatMessage({ id: 'burn.tomint' })}
                 </Button>
             </div>
         );
@@ -61,7 +73,10 @@ export default () => {
         return (
             <div className="search-debts">
                 <div className="search-input-wrapper">
-                    <input type="text" placeholder="Search name or your debt" />
+                    <input
+                        type="text"
+                        placeholder={intl.formatMessage({ id: 'burn.search' })}
+                    />
                 </div>
                 <button className="search-btn" />
             </div>
@@ -71,49 +86,47 @@ export default () => {
     return (
         <div className="burn-container">
             <DataView />
-            {!showForm ? (
-                <div className="burn-box">
-                    <CommentaryCard
-                        title="Your Debt"
-                        description="Buy and burn fAsset to clean your total debt and unstake all collateral"
-                    />
-                    {!haveAssets ? (
-                        <NoAssetsView />
-                    ) : (
-                        <div className="form-view common-box">
-                            <SearchDebts />
-                            <div className="my-debt">
-                                <button
-                                    className={classNames({
-                                        ratio: true,
-                                        active: currentDebt == 0,
-                                    })}
-                                    onClick={() => setCurrentDebt(0)}
-                                />
-                                <DebtItem
-                                    mintedToken="FUSD"
-                                    mintedTokenName="USD"
-                                />
+            <div className="burn-box">
+                <CommentaryCard
+                    title={intl.formatMessage({ id: 'burn.title' })}
+                    description={intl.formatMessage({ id: 'burn.desc' })}
+                />
+                {!showForm ? (
+                    <Fragment>
+                        {!haveAssets ? (
+                            <NoAssetsView />
+                        ) : (
+                            <div className="form-view common-box">
+                                <SearchDebts />
+                                <div className="my-debt">
+                                    <button
+                                        className={classNames({
+                                            ratio: true,
+                                            active: currentDebt == 0,
+                                        })}
+                                        onClick={() => setCurrentDebt(0)}
+                                    />
+                                    <DebtItem
+                                        mintedToken="FUSD"
+                                        mintedTokenName="USD"
+                                    />
+                                </div>
+                                <Button
+                                    className="btn-mint common-btn common-btn-red"
+                                    onClick={() => setShowForm(!showForm)}
+                                >
+                                    {intl.formatMessage({ id: 'burn.burn' })}
+                                </Button>
                             </div>
-                            <Button
-                                className="btn-mint common-btn common-btn-red"
-                                onClick={() => setShowForm(!showForm)}
-                            >
-                                Burn
-                            </Button>
-                        </div>
-                    )}
-                </div>
-            ) : (
-                <div className="burn-box">
-                    <CommentaryCard
-                        title="Your Debt"
-                        description="Buy and burn fAsset to clean your total debt and unstake all collateral"
-                    />
-                    <BurnForm onSubmitSuccess={onSubmitSuccess} />
-                    <BackBtn />
-                </div>
-            )}
+                        )}
+                    </Fragment>
+                ) : (
+                    <Fragment>
+                        <BurnForm onSubmitSuccess={onSubmitSuccess} />
+                        <BackBtn />
+                    </Fragment>
+                )}
+            </div>
         </div>
     );
 };

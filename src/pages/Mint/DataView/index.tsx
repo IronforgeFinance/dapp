@@ -1,7 +1,7 @@
 import React from 'react';
 import './index.less';
 import { Popover } from 'antd';
-import { useModel } from 'umi';
+import { useModel, useIntl } from 'umi';
 import { useWeb3React } from '@web3-react/core';
 import ProgressBar, { StatusType } from '@/components/ProgressBar';
 
@@ -10,6 +10,7 @@ interface DataViewProps {
 }
 
 export default (props: DataViewProps) => {
+    const intl = useIntl();
     const { stakedData, lockedData, debtData, fRatioData } = useModel(
         'dataView',
         (model) => ({
@@ -20,24 +21,41 @@ export default (props: DataViewProps) => {
 
     const { account } = useWeb3React();
 
-    const loginStatus = React.useMemo(() => (account ? status : 'unconnect'), [
-        account,
-    ]);
+    const loginStatus = React.useMemo(
+        () => (account ? status : 'unconnect'),
+        [account],
+    );
 
     return (
         <div className="data-view-container">
-            <ProgressBar {...stakedData} status={loginStatus} />
-            <ProgressBar {...lockedData} status={loginStatus} />
-            <ProgressBar {...debtData} status={loginStatus} />
+            <ProgressBar
+                {...stakedData}
+                name={intl.formatMessage({ id: 'assetsbar.staked' })}
+                status={loginStatus}
+            />
+            <ProgressBar
+                {...lockedData}
+                name={intl.formatMessage({ id: 'assetsbar.lockedtoken' })}
+                status={loginStatus}
+            />
+            <ProgressBar
+                {...debtData}
+                name={intl.formatMessage({ id: 'assetsbar.acitvedebt' })}
+                status={loginStatus}
+            />
             <ProgressBar
                 {...fRatioData}
                 status={loginStatus}
                 name={
                     <React.Fragment>
-                        <span>{fRatioData.name}</span>
+                        <span>
+                            {intl.formatMessage({ id: 'assetsbar.fratio' })}
+                        </span>
                         <Popover
                             placement="topLeft"
-                            content="这是一段解释f-ratio变化规则的文字"
+                            content={intl.formatMessage({
+                                id: 'assetsbar.fratio.desc',
+                            })}
                             trigger="hover"
                         >
                             <i className="icon-question size-16 ml-8" />

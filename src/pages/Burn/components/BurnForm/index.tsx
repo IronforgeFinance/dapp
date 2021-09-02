@@ -22,12 +22,14 @@ import { Group as ScaleGroup, Button as ScaleOption } from '@/components/Scale';
 import SelectTokens from '@/components/SelectTokens';
 import TransitionConfirm from '@iron/TransitionConfirm';
 import { TokenIcon } from '@/components/Icon';
+import { useIntl } from 'umi';
 
 const TO_TOKENS = ['BTC'];
 interface IProps {
     onSubmitSuccess: () => void;
 }
 export default (props: IProps) => {
+    const intl = useIntl();
     const { onSubmitSuccess } = props;
     const [debtBalance, setDebtBalance] = useState(0.0);
     const [burnAmount, setBurnAmount] = useState<number>();
@@ -360,13 +362,13 @@ export default (props: IProps) => {
             <ScaleGroup value={scale} updateScale={(scale) => setScale(scale)}>
                 {[
                     {
-                        label: 'Burn to initial',
+                        label: intl.formatMessage({ id: 'burn.initial' }),
                         value: 'initial',
                         disabled: !burnInitialAvailable,
                         onClick: (scale) => burnInitialHandler(scale),
                     },
                     {
-                        label: 'Burn Max',
+                        label: intl.formatMessage({ id: 'burn.max' }),
                         value: 'max',
                         disabled: !burnMaxAvailable,
                         onClick: (scale) => burnMaxHandler(scale),
@@ -383,12 +385,16 @@ export default (props: IProps) => {
                 ))}
             </ScaleGroup>
             <div className="input-item from-input">
-                <p className="label">From</p>
+                <p className="label">
+                    {intl.formatMessage({ id: 'burn.from' })}
+                </p>
                 <div className="from-content input-item-content">
                     <div className="content-label">
-                        <p className="left">Burned</p>
+                        <p className="left">
+                            {intl.formatMessage({ id: 'burn.burned' })}
+                        </p>
                         <p className="right">
-                            Balance:{' '}
+                            {intl.formatMessage({ id: 'balance:' })}
                             <span className="balance">{fusdBalance}</span>
                         </p>
                     </div>
@@ -420,15 +426,20 @@ export default (props: IProps) => {
                         </div>
                     </div>
                 </div>
-                <span className="debt">Debt : {toTokenDebtInUsd}</span>
+                <span className="debt">
+                    {intl.formatMessage({ id: 'burn.debt:' })}
+                    {toTokenDebtInUsd}
+                </span>
             </div>
             <div className="input-item" style={{ zIndex: 2 }}>
-                <p className="label">To</p>
+                <p className="label">{intl.formatMessage({ id: 'burn.to' })}</p>
                 <div className="to-content input-item-content">
                     <div className="content-label">
-                        <p className="left">Unstaking</p>
+                        <p className="left">
+                            {intl.formatMessage({ id: 'burn.unstaking' })}
+                        </p>
                         <p className="right">
-                            Balance:{' '}
+                            {intl.formatMessage({ id: 'balance:' })}
                             <span className="balance">{toTokenDebt}</span>
                         </p>
                     </div>
@@ -459,7 +470,7 @@ export default (props: IProps) => {
                     className="btn-mint common-btn common-btn-red"
                     onClick={onSubmit}
                 >
-                    Burn
+                    {intl.formatMessage({ id: 'burn.burn' })}
                 </Button>
             </div>
 

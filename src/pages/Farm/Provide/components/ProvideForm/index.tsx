@@ -24,6 +24,8 @@ import {
 import { TokenIcon } from '@/components/Icon';
 import Folder from '@/components/Folder';
 import { PROVIDED_LP_TOKENS } from '@/config';
+import { useIntl } from 'umi';
+
 const TOKENS = Array.from(
     new Set(
         PROVIDED_LP_TOKENS.map((item) => item.split('-')).reduce(
@@ -51,6 +53,7 @@ const NO_LIQUIDITY_LP = {
 export default () => {
     // const [token1Balance, setToken1Balance] = useState();
     // const [token2Balance, setToken2Balance] = useState();
+    const intl = useIntl();
     const { account } = useWeb3React();
     const [token1, setToken1] = useState<string>();
     const [token2, setToken2] = useState<string>();
@@ -384,11 +387,15 @@ export default () => {
             </Folder>
             <div className="provide-form common-box">
                 <div className="input-item">
-                    <p className="label">Asset</p>
+                    <p className="label">
+                        {intl.formatMessage({ id: 'liquidity.provide.asset0' })}
+                    </p>
                     <div className="input-item-content">
                         <div className="content-label">
                             <p className="right">
-                                Balance:
+                                {intl.formatMessage({
+                                    id: 'balance:',
+                                })}
                                 <span className="balance">{token1Balance}</span>
                             </p>
                         </div>
@@ -414,12 +421,16 @@ export default () => {
                 <img src={IconAdd} alt="" className="icon-add" />
 
                 <div className="input-item">
-                    <p className="label">Asset</p>
+                    <p className="label">
+                        {intl.formatMessage({ id: 'liquidity.provide.asset1' })}
+                    </p>
                     <div className="input-item-content">
                         <div className="content-label">
                             <p className="left"></p>
                             <p className="right">
-                                Balance:
+                                {intl.formatMessage({
+                                    id: 'balance:',
+                                })}
                                 <span className="balance">{token2Balance}</span>
                             </p>
                         </div>
@@ -436,8 +447,7 @@ export default () => {
                                     value={token2}
                                     tokenList={TOKENS}
                                     onSelect={token2SelectHandler}
-                                >
-                                </SelectTokens>
+                                ></SelectTokens>
                             </div>
                         </div>
                     </div>
@@ -449,7 +459,7 @@ export default () => {
                             onClick={handleProvide}
                             loading={submitting}
                         >
-                            Provide
+                            {intl.formatMessage({ id: 'liquidity.provide' })}
                         </Button>
                     )}
                     {((token1 && !token1Approved) ||
@@ -462,7 +472,9 @@ export default () => {
                                 requestedToken2Approval
                             }
                         >
-                            Approve To Provide
+                            {intl.formatMessage({
+                                id: 'liquidity.provide.approve',
+                            })}
                         </Button>
                     )}
                 </div>

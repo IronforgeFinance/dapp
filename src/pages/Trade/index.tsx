@@ -21,6 +21,8 @@ import { debounce } from 'lodash';
 import classNames from 'classnames';
 import TransitionConfirm from '@/components/TransitionConfirm';
 import { TokenIcon } from '@/components/Icon';
+import { useIntl } from 'umi';
+
 //TODO: for test.从配置中读取
 const TOKEN_OPTIONS = [
     { name: 'lBTC-202112' },
@@ -29,6 +31,7 @@ const TOKEN_OPTIONS = [
 ];
 
 export default () => {
+    const intl = useIntl();
     const configContract = useConfig();
     const exchangeSystem = useExchangeSystem();
     const { account } = useWeb3React();
@@ -266,12 +269,16 @@ export default () => {
                 />
                 <div className="form">
                     <div className="input-item">
-                        <p className="label">From</p>
+                        <p className="label">
+                            {intl.formatMessage({ id: 'trade.from' })}
+                        </p>
                         <div className="input-item-content">
                             <div className="content-label">
                                 <p className="left"></p>
                                 <p className="right">
-                                    Balance:
+                                    {intl.formatMessage({
+                                        id: 'balance:',
+                                    })}
                                     <WhiteSpace />
                                     <span className="balance">
                                         {fromTokenBalance}
@@ -301,7 +308,11 @@ export default () => {
                                         >
                                             <span>
                                                 {fromToken || (
-                                                    <span>Select token</span>
+                                                    <span>
+                                                        {intl.formatMessage({
+                                                            id: 'trade.selecttoken',
+                                                        })}
+                                                    </span>
                                                 )}
                                             </span>
                                             <i className="icon-down size-20"></i>
@@ -312,12 +323,16 @@ export default () => {
                         </div>
                     </div>
                     <div className="input-item">
-                        <p className="label">To</p>
+                        <p className="label">
+                            {intl.formatMessage({ id: 'trade.to' })}
+                        </p>
                         <div className="input-item-content">
                             <div className="content-label">
                                 <p className="left"></p>
                                 <p className="right">
-                                    Balance:{' '}
+                                    {intl.formatMessage({
+                                        id: 'balance:',
+                                    })}
                                     <span className="balance">
                                         {toTokenBalance}
                                     </span>
@@ -349,10 +364,11 @@ export default () => {
                         onClick={onSubmit}
                         loading={submitting}
                     >
-                        Trade
+                        {intl.formatMessage({ id: 'trade.button' })}
                     </Button>
                     <span className="fee-cost">
-                        Fee cost：{feeRate * 100 + '%'}
+                        {intl.formatMessage({ id: 'trade.feecost' })}
+                        {feeRate * 100 + '%'}
                     </span>
                 </div>
             </div>

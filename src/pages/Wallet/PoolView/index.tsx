@@ -13,14 +13,16 @@ import { PROVIDED_LP_TOKENS } from '@/config';
 import { history, useModel } from 'umi';
 import { useWeb3React } from '@web3-react/core';
 import useRefresh from '@/hooks/useRefresh';
+import { useIntl } from 'umi';
+
 const columns = [
     {
-        title: 'Pool',
+        title: 'wallet.pool',
         dataIndex: 'lpToken',
         render: (value, row) => <LpTokenView {...row} />,
     },
     {
-        title: 'Balance',
+        title: 'balance',
         dataIndex: 'balance',
         render: (value, row) => <BalanceView {...row} />,
     },
@@ -45,7 +47,7 @@ const columns = [
     //     ),
     // },
     {
-        title: 'Action',
+        title: 'action',
         dataIndex: 'actions',
         render: (value, row) => (
             <ActionView
@@ -87,6 +89,7 @@ const mockData: PoolViewProps[] = new Array(3).fill('').map((item, index) => ({
 }));
 
 const PoolView = () => {
+    const intl = useIntl();
     const [dataSource, setDataSource] = useState([]);
     const { account } = useWeb3React();
     const { slowRefresh } = useRefresh();
@@ -123,7 +126,10 @@ const PoolView = () => {
         <div className="burn-view">
             <Table
                 className="custom-table"
-                columns={columns}
+                columns={columns.map((item) => ({
+                    ...item,
+                    title: intl.formatMessage({ id: item.title }),
+                }))}
                 rowKey={(record) => record.id}
                 dataSource={dataSource}
                 pagination={false}

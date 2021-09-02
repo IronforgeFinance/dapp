@@ -1,4 +1,4 @@
-import React, { useState, useMemo, Suspense } from 'react';
+import React, { useState, useMemo } from 'react';
 import './index.less';
 import useEagerConnect from '@/hooks/useEagerConnect';
 import Blacksmith from '@/assets/images/blacksmith.png';
@@ -8,14 +8,15 @@ import { useInitialRatio } from '@/hooks/useConfig';
 import { COLLATERAL_TOKENS } from '@/config';
 import SelectTokens from '@/components/SelectTokens';
 import { useBep20Balance } from '@/hooks/useTokenBalance';
-import PreloadImages from '@/components/PreloadImages';
 import PreloadAssetsSuspense from '@/components/PreloadAssetsSuspense';
+import { useIntl } from 'umi';
 
 export default () => {
     useEagerConnect();
     const isDev = () => {
         return process.env.NODE_ENV === 'development';
     };
+    const intl = useIntl();
     const [showSelectFromToken, setShowSelectFromToken] = useState(false);
     const [collateralToken, setCollateralToken] = useState(
         COLLATERAL_TOKENS[0].name,
@@ -71,29 +72,33 @@ export default () => {
                 </video>
                 <div className="sheepskin-box">
                     <div className="sheepskin-book mint">
-                        <h3>Mint</h3>
-                        <p className="summary">Mint fUSD by staking a Token</p>
+                        <h3>{intl.formatMessage({ id: 'entry.mint' })}</h3>
+                        <p className="summary">
+                            {intl.formatMessage({ id: 'entry.mint.summary' })}
+                        </p>
                         <p className="words">
-                            Mint fUSD by staking your Token. Token stakers earn
-                            weekly staking rewards in exchange for managing
-                            their Collateralization Ratio and debt.{' '}
-                            <Link to="/mint">Learn more</Link>
+                            {intl.formatMessage({ id: 'entry.mint.desc' })}{' '}
+                            <Link to="/mint">
+                                {intl.formatMessage({ id: 'entry.learnmore' })}
+                            </Link>
                         </p>
                     </div>
                     <div className="sheepskin-book trade">
-                        <h3>Trade</h3>
+                        <h3>{intl.formatMessage({ id: 'entry.trade' })}</h3>
                         <p className="words">
-                            Earn rewards staking fToken. You will need a Binance
-                            Chain wallet for the transaction.{' '}
-                            <Link to="/trade">Learn more</Link>
+                            {intl.formatMessage({ id: 'entry.trade.desc' })}{' '}
+                            <Link to="/trade">
+                                {intl.formatMessage({ id: 'entry.learnmore' })}
+                            </Link>
                         </p>
                     </div>
                     <div className="sheepskin-book buy-ftoken">
-                        <h3>Buy ftoken</h3>
+                        <h3>{intl.formatMessage({ id: 'entry.buyToken' })}</h3>
                         <p className="words">
-                            Earn rewards staking fToken. You will need a Binance
-                            Chain wallet for the transaction.{' '}
-                            <Link to="/farm">Learn more</Link>
+                            {intl.formatMessage({ id: 'entry.buyToken.desc' })}{' '}
+                            <Link to="/farm">
+                                {intl.formatMessage({ id: 'entry.learnmore' })}
+                            </Link>
                         </p>
                     </div>
                 </div>
@@ -102,14 +107,17 @@ export default () => {
                         value={collateralToken}
                         tokenList={COLLATERAL_TOKENS}
                         onSelect={(v) => setCollateralToken(v)}
-                    >
-                    </SelectTokens>
+                    />
                     <span className="ratio">{computedRatio}%</span>
-                    <p className="desc">My Current Pledge Ratio</p>
+                    <p className="desc">
+                        {intl.formatMessage({ id: 'data.pledgrate' })}
+                    </p>
                 </div>
                 <div className="amount-box">
                     <span className="amount">{fusdBalance} fUSD</span>
-                    <span className="desc">Active Debt</span>
+                    <span className="desc">
+                        {intl.formatMessage({ id: 'data.activedebt' })}
+                    </span>
                 </div>
             </div>
         </PreloadAssetsSuspense>

@@ -5,7 +5,10 @@ import StakeItem from './Stake';
 import { useWeb3React } from '@web3-react/core';
 import { LP_TOKENS } from '@/config/';
 import useRefresh from '@/hooks/useRefresh';
+import { useIntl } from 'umi';
+
 export default () => {
+    const intl = useIntl();
     const { account } = useWeb3React();
     const { fetchStakePoolList, stakeDataList } = useModel(
         'stakeData',
@@ -33,15 +36,23 @@ export default () => {
             <div className="farm-header">
                 <div className="info-item">
                     <p className="value">${ftokenInfo.price}</p>
-                    <p className="label">BS Price</p>
+                    <p className="label">
+                        {intl.formatMessage({ id: 'liquidity.bs.price' })}
+                    </p>
                 </div>
                 <div className="info-item">
                     <p className="value">${ftokenInfo.vol}</p>
-                    <p className="label">BS VOL</p>
+                    <p className="label">
+                        {intl.formatMessage({ id: 'liquidity.bs.vol' })}
+                    </p>
                 </div>
                 <div className="info-item">
                     <p className="value">${ftokenInfo.supply}</p>
-                    <p className="label">BS Circulating Supply</p>
+                    <p className="label">
+                        {intl.formatMessage({
+                            id: 'liquidity.bs.circulatingsupply',
+                        })}
+                    </p>
                 </div>
                 <button
                     className="common-btn common-btn-red"
@@ -49,7 +60,11 @@ export default () => {
                         history.push('/farm/provide');
                     }}
                 >
-                    <span>Provide Liquidity</span>
+                    <span>
+                        {intl.formatMessage({
+                            id: 'liquidity.toprovide',
+                        })}
+                    </span>
                 </button>
             </div>
             <div className="farm-pool">
