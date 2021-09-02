@@ -4,11 +4,6 @@ import { ProgressBarType } from '@/config/constants/types';
 import { IDebtItemInfo } from '../pages/Burn/components/DebtItem/index';
 
 import { useWeb3React } from '@web3-react/core';
-import { useDebtSystem, useCollateralSystem } from '@/hooks/useContract';
-import { ethers } from 'ethers';
-import { TokenPrices } from '@/config';
-import { toFixedWithoutRound } from '@/utils/bigNumber';
-import useWeb3Provider from '@/hooks/useWeb3Provider';
 
 const testData = [
     {

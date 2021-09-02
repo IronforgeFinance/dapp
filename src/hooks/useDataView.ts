@@ -10,7 +10,7 @@ import {
     useConfig,
 } from '@/hooks/useContract';
 import { ethers } from 'ethers';
-import { TokenPrices } from '@/config';
+import { PLATFORM_TOKEN } from '@/config';
 import { toFixedWithoutRound } from '@/utils/bigNumber';
 import useWeb3Provider from '@/hooks/useWeb3Provider';
 import useRefresh from './useRefresh';
@@ -71,6 +71,16 @@ const useDataView = (currency: string) => {
 
     const initialRatio = useInitialRatio(currency);
 
+    const prices = usePrices();
+
+    const getTokenPrice = async (token: string) => {
+        if (!token) return 0;
+        const res = await prices.getPrice(
+            ethers.utils.formatBytes32String(token),
+        );
+        return parseFloat(ethers.utils.formatEther(res));
+    };
+
     const fetchStakedData = async () => {
         if (account) {
             const res = await collateralSystem.getUserCollateralInUsd(
@@ -95,10 +105,11 @@ const useDataView = (currency: string) => {
         );
         const data = parseFloat(ethers.utils.formatEther(res));
         console.log('fetchLockedData: ', data);
+        const price = await getTokenPrice(PLATFORM_TOKEN);
         const newVal = {
             ...lockedData,
-            startValue: data,
-            endValue: data,
+            startValue: data * price,
+            endValue: data * price,
         };
         setLockedDataInModel(newVal);
     };
@@ -126,12 +137,13 @@ const useDataView = (currency: string) => {
             console.log('getRatio: ', resVal);
             const _val = Number(resVal[0]) === 0 ? 0 : 1 / Number(res[0]);
 
-            const val = parseFloat(toFixedWithoutRound(_val, 6)); // 保留多位精度
+            const val = toFixedWithoutRound(_val, 6); // 保留多位精度
+            const ratioData = parseFloat((val * 100).toFixed(2));
             console.log('fetchCurrencyRatio: ', val, resVal);
             const newVal = {
                 ...fRatioData,
-                startValue: parseFloat((val * 100).toFixed(2)),
-                endValue: initialRatio * 100,
+                startValue: ratioData,
+                endValue: ratioData,
             };
             setfRatioDataInModel(newVal);
             setCurrencyRatio(val);

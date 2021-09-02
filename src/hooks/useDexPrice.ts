@@ -46,9 +46,9 @@ const useDexPrice = (token1, token2) => {
 
                 let value;
                 if (token1Contract === (await lp.token0())) {
-                    value = r0.mul(expandTo18Decimals(1)).div(r1);
-                } else {
                     value = r1.mul(expandTo18Decimals(1)).div(r0);
+                } else {
+                    value = r0.mul(expandTo18Decimals(1)).div(r1);
                 }
                 value = Number(ethers.utils.formatUnits(value, 18));
                 console.log('dex price: ', value);

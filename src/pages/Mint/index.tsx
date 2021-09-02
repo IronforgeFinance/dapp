@@ -183,65 +183,33 @@ export default () => {
     // 实时计算的ratio。用来判断能否mint和计算能mint多少toToken
     useEffect(() => {
         (async () => {
-            let computedRatio;
-            if (!collateralAmount || !collateralToken || !lockedAmount) {
-                computedRatio = initialRatio;
-            } else if (!lockedAmount || Number(lockedAmount) === 0) {
-                computedRatio = initialRatio;
-            } else {
-                const [
-                    catalystEffectContract,
-                    proportionContract,
-                    priceContract,
-                ] = await collateralSystem.getCatalystResult(
+            let newRatio = currencyRatio;
+            if (
+                account &&
+                collateralToken &&
+                collateralAmount &&
+                lockedAmount
+            ) {
+                const _buildRatio = await collateralSystem.calcBuildRatio(
+                    account,
                     ethers.utils.formatBytes32String(collateralToken), // stake currency
                     expandTo18Decimals(collateralAmount), //stake amount
                     expandTo18Decimals(lockedAmount), // locked amount
                 );
-                console.log(
-                    'getCatalystResult: ',
-                    ethers.utils.formatEther(catalystEffectContract),
-                    ethers.utils.formatEther(proportionContract),
-                    ethers.utils.formatEther(priceContract),
+                const buildRatio = parseFloat(
+                    ethers.utils.formatEther(_buildRatio),
                 );
-                // 合约计算的是利用率增加了catalystEffectContract
-                const catalystEffect = parseFloat(
-                    ethers.utils.formatEther(catalystEffectContract),
-                );
-                const newURatio = (1 / initialRatio) * (1 + catalystEffect);
-                computedRatio = 1 / newURatio;
-            }
-            setComputedRatio(computedRatio);
-        })();
-    }, [collateralAmount, collateralToken, lockedAmount, initialRatio]);
 
-    useEffect(() => {
-        console.log('initialRatio ', initialRatio);
-    }, [initialRatio]);
-
-    useEffect(() => {
-        (async () => {
-            if (collateralAmount && toAmount && collateralToken && toToken) {
-                const collateralPrice = await getTokenPrice(collateralToken);
-                const toTokenPrice = await getTokenPrice(toToken);
-                const totalCollateral =
-                    stakedData.startValue + collateralAmount * collateralPrice;
-                const totalDebt = debtData.startValue + toAmount * toTokenPrice;
-                const ratio =
-                    totalDebt > 0
-                        ? toFixedWithoutRound(
-                              (totalCollateral * 100) / totalDebt,
-                              2,
-                          )
-                        : 0;
+                console.log('calcBuildRatio: ', buildRatio);
+                newRatio = 1 / buildRatio;
                 setfRatioData({
                     ...fRatioData,
-                    startValue: parseFloat((currencyRatio * 100).toFixed(2)),
-                    endValue: Number(ratio),
+                    endValue: parseFloat((newRatio * 100).toFixed(2)),
                 });
             }
+            setComputedRatio(newRatio);
         })();
-    }, [collateralAmount, toAmount, collateralToken, toToken]);
+    }, [collateralAmount, collateralToken, lockedAmount, account]);
 
     // 计算toAmount
     useEffect(() => {
@@ -255,10 +223,10 @@ export default () => {
                 // TODO 铸造物的价格，FUSD是1，其它的从合约获取
                 const toTokenPrice = await getTokenPrice(toToken);
                 const amount = toFixedWithoutRound(
-                    parseFloat(fusdAmount) / toTokenPrice,
+                    fusdAmount / toTokenPrice,
                     2,
                 );
-                setToAmount(parseFloat(amount));
+                setToAmount(amount);
             } else {
                 setToAmount(0);
             }
@@ -276,12 +244,12 @@ export default () => {
         (async () => {
             if (toToken && toAmount) {
                 const toTokenPrice = await getTokenPrice(toToken);
-                const val =
-                    parseFloat(
-                        new BigNumber(toAmount)
-                            .multipliedBy(toTokenPrice)
-                            .toFixed(2),
-                    ) + debtData.startValue;
+                const val = parseFloat(
+                    new BigNumber(toAmount)
+                        .multipliedBy(toTokenPrice)
+                        .plus(debtData.startValue)
+                        .toFixed(2),
+                );
                 setDebtData({
                     ...debtData,
                     endValue: val,
@@ -317,10 +285,10 @@ export default () => {
             // }
             setLockedAmount(v);
             setLockedScale(Number(v) / fTokenBalance);
-            const val = parseFloat(toFixedWithoutRound(IFTPrice * v, 2));
+            const val = toFixedWithoutRound(IFTPrice * v, 2);
             setLockedData({
                 ...lockedData,
-                endValue: val || 0,
+                endValue: val + lockedData.startValue,
             });
         }, 500),
         [IFTPrice, fTokenBalance, lockedData],
@@ -330,7 +298,7 @@ export default () => {
         setLockedScale(v);
         const amount = fTokenBalance * Number(v);
         setLockedAmount(amount);
-        const val = parseFloat(toFixedWithoutRound(IFTPrice * amount, 2));
+        const val = toFixedWithoutRound(IFTPrice * amount, 2);
         setLockedData({
             ...lockedData,
             endValue: val || 0,

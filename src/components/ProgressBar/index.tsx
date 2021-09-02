@@ -90,7 +90,7 @@ const ProgressBar = (props: IProgressBarProps) => {
     }, [isStakeRatioInitial, endValue]);
     const initialRatio = useMemo(() => {
         if (isStakeRatioInitial) {
-            return 50;
+            return 0;
         }
 
         return startValue > 0 ? 50 : 0;
@@ -213,7 +213,7 @@ const ProgressBar = (props: IProgressBarProps) => {
                             >
                                 {type === 'f_ratio'
                                     ? `${endValue}%`
-                                    : `${unit}${endValue}`}
+                                    : `${unit}${endValue.toFixed(2)}`}
                             </span>
                             <span
                                 className={`icon-arrow ${
@@ -234,9 +234,9 @@ const ProgressBar = (props: IProgressBarProps) => {
                             ? `${
                                   isStakeRatioInitial
                                       ? stakeRatioInitial
-                                      : startValue
+                                      : startValue.toFixed(2)
                               }%`
-                            : `${unit}${startValue}`}
+                            : `${unit}${startValue.toFixed(2)}`}
                     </span>
                     {isTrading && isRaised && (
                         <React.Fragment>
@@ -247,8 +247,8 @@ const ProgressBar = (props: IProgressBarProps) => {
                                 }`}
                             >
                                 {type === 'f_ratio'
-                                    ? `${endValue}%`
-                                    : `${unit}${endValue}`}
+                                    ? `${endValue.toFixed(2)}%`
+                                    : `${unit}${endValue.toFixed(2)}`}
                             </span>
                         </React.Fragment>
                     )}

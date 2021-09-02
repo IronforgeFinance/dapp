@@ -105,7 +105,7 @@ export default () => {
         const toTokenPrice = await getTokenPrice(toToken);
         const val = (fromTokenPrice * fromAmount) / toTokenPrice;
         const toAmount = toFixedWithoutRound(val, 2);
-        setToAmount(parseFloat(toAmount));
+        setToAmount(toAmount);
     }, 500);
     useEffect(() => {
         computeToAmount();
@@ -116,7 +116,7 @@ export default () => {
         const toTokenPrice = await getTokenPrice(toToken);
         const val =
             (fromTokenPrice * fromAmount * (1 - feeRate)) / toTokenPrice;
-        const amount = parseFloat(toFixedWithoutRound(val, 6));
+        const amount =toFixedWithoutRound(val, 6);
         setEstimateAmount(amount);
     }, 500);
     useEffect(() => {

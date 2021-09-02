@@ -63,9 +63,7 @@ export default (props: IDebtItemProps) => {
             if (Number(selectedDebtInUSD) > 0) {
                 const price = await getTokenPrice(mintedToken);
                 const num = price
-                    ? parseFloat(
-                          toFixedWithoutRound(selectedDebtInUSD / price, 2),
-                      )
+                    ? toFixedWithoutRound(selectedDebtInUSD / price, 2)
                     : 0;
                 setMintedTokenNum(num);
             }
@@ -101,7 +99,7 @@ export default (props: IDebtItemProps) => {
             total += val;
             return total;
         }, 0);
-        const val = parseFloat(toFixedWithoutRound(totalDebtInUsd, 2));
+        const val = toFixedWithoutRound(totalDebtInUsd, 2);
         console.log('getDebtInUSD: ', totalDebtInUsd);
         setSelectedDebtInUSD(val);
     };
@@ -140,11 +138,11 @@ export default (props: IDebtItemProps) => {
         const totalLocked = res.reduce((total, item) => {
             return total + item.locked;
         }, 0);
-        setLockedData({
-            ...lockedData,
-            startValue: totalLocked,
-            endValue: totalLocked,
-        });
+        // setLockedData({
+        //     ...lockedData,
+        //     startValue: totalLocked,
+        //     endValue: totalLocked,
+        // });
         const infos = res.map((item, index) => {
             const ratioValue =
                 total > 0 ? Number((100 * item.inUSD) / total).toFixed(2) : 0;

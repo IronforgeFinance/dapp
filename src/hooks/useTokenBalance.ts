@@ -85,11 +85,9 @@ export const useBep20Balance = (token: string) => {
                     provider.getSigner(),
                 );
                 const res = await contract.balanceOf(account);
-                const amount = parseFloat(
-                    toFixedWithoutRound(
-                        ethers.utils.formatUnits(res, tokenObj.decimals),
-                        2,
-                    ),
+                const amount = toFixedWithoutRound(
+                    ethers.utils.formatUnits(res, tokenObj.decimals),
+                    2,
                 );
                 setBalanceState({
                     balance: amount,

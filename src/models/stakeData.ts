@@ -129,21 +129,17 @@ const useStakeDataModel = () => {
         }
         const userInfo = await minerReward.userInfo(poolId, account);
         const staked = parseFloat(ethers.utils.formatEther(userInfo.amount));
-        const totalPendingReward = parseFloat(
-            toFixedWithoutRound(
-                ethers.utils.formatEther(
-                    await minerReward.totalPendingReward(poolId, account),
-                ),
-                2,
+        const totalPendingReward = toFixedWithoutRound(
+            ethers.utils.formatEther(
+                await minerReward.totalPendingReward(poolId, account),
             ),
+            2,
         );
-        const redeemableReward = parseFloat(
-            toFixedWithoutRound(
-                ethers.utils.formatEther(
-                    await minerReward.redeemaleReward(poolId, account),
-                ),
-                2,
+        const redeemableReward = toFixedWithoutRound(
+            ethers.utils.formatEther(
+                await minerReward.redeemaleReward(poolId, account),
             ),
+            2,
         );
 
         const data: IStakePool = {
