@@ -183,13 +183,18 @@ export default () => {
     // 实时计算的ratio。用来判断能否mint和计算能mint多少toToken
     useEffect(() => {
         (async () => {
-            let newRatio = initialRatio;
-            if (account && collateralToken) {
+            let newRatio = currencyRatio;
+            if (
+                account &&
+                collateralToken &&
+                collateralAmount &&
+                lockedAmount
+            ) {
                 const _buildRatio = await collateralSystem.calcBuildRatio(
                     account,
                     ethers.utils.formatBytes32String(collateralToken), // stake currency
-                    expandTo18Decimals(collateralAmount || 0), //stake amount
-                    expandTo18Decimals(lockedAmount || 0), // locked amount
+                    expandTo18Decimals(collateralAmount), //stake amount
+                    expandTo18Decimals(lockedAmount), // locked amount
                 );
                 const buildRatio = parseFloat(
                     ethers.utils.formatEther(_buildRatio),
@@ -197,12 +202,12 @@ export default () => {
 
                 console.log('calcBuildRatio: ', buildRatio);
                 newRatio = 1 / buildRatio;
+                setfRatioData({
+                    ...fRatioData,
+                    endValue: parseFloat((newRatio * 100).toFixed(2)),
+                });
             }
             setComputedRatio(newRatio);
-            setfRatioData({
-                ...fRatioData,
-                endValue: parseFloat((newRatio * 100).toFixed(2)),
-            });
         })();
     }, [collateralAmount, collateralToken, lockedAmount, account]);
 
@@ -280,7 +285,7 @@ export default () => {
             // }
             setLockedAmount(v);
             setLockedScale(Number(v) / fTokenBalance);
-            const val =toFixedWithoutRound(IFTPrice * v, 2);
+            const val = toFixedWithoutRound(IFTPrice * v, 2);
             setLockedData({
                 ...lockedData,
                 endValue: val + lockedData.startValue,

@@ -138,11 +138,11 @@ export default (props: IDebtItemProps) => {
         const totalLocked = res.reduce((total, item) => {
             return total + item.locked;
         }, 0);
-        setLockedData({
-            ...lockedData,
-            startValue: totalLocked,
-            endValue: totalLocked,
-        });
+        // setLockedData({
+        //     ...lockedData,
+        //     startValue: totalLocked,
+        //     endValue: totalLocked,
+        // });
         const infos = res.map((item, index) => {
             const ratioValue =
                 total > 0 ? Number((100 * item.inUSD) / total).toFixed(2) : 0;

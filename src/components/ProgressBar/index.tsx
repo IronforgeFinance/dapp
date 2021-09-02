@@ -90,7 +90,7 @@ const ProgressBar = (props: IProgressBarProps) => {
     }, [isStakeRatioInitial, endValue]);
     const initialRatio = useMemo(() => {
         if (isStakeRatioInitial) {
-            return 50;
+            return 0;
         }
 
         return startValue > 0 ? 50 : 0;
