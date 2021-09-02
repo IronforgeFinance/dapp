@@ -7,12 +7,16 @@ import {
     ConjType,
     HistoryViewProps,
     IconType,
+    TimeView,
     VerbType,
 } from '@/components/CommonView';
 import { useWeb3React } from '@web3-react/core';
 import { toFixedWithoutRound } from '@/utils/bigNumber';
 import { DefiActType } from '@/config/constants/types';
-import { DEFAULT_PAGE_SIZE } from '@/config/constants/constant';
+import {
+    BSCSCAN_EXPLORER,
+    DEFAULT_PAGE_SIZE,
+} from '@/config/constants/constant';
 import {
     GET_OPERATIONS,
     GET_BURNS_FROM_PANCAKE,
@@ -101,11 +105,7 @@ const columns = [
                         <i className={`icon ${row.icon}`} />
                         <div className="info">
                             <span>{row.type}</span>
-                            <time>
-                                {new Date(
-                                    Number(row.dealtime) * 1000,
-                                ).toLocaleString()}
-                            </time>
+                            <TimeView timestamp={row.dealtime} />
                         </div>
                     </div>
                     {row.token0 && (
@@ -155,11 +155,10 @@ const columns = [
                     )}
                     {row.link && (
                         <div className="skip-wraper">
-                            <button
+                            <a
                                 className="skip"
-                                onClick={() =>
-                                    (window.location.href = row.link)
-                                }
+                                target="_blank"
+                                href={row.link}
                             />
                         </div>
                     )}
@@ -190,7 +189,7 @@ const useParseDataOfPancake =
             name: item.pair.token1.name,
             amount: toFixedWithoutRound(item.amount1, 6),
         },
-        link: '/mint',
+        link: BSCSCAN_EXPLORER,
         dealtime: item.timestamp,
     });
 
@@ -226,7 +225,7 @@ const parseDataOfOur = (item): HistoryViewProps => {
                 6,
             ),
         },
-        link: '/mint',
+        link: BSCSCAN_EXPLORER,
         dealtime: item.timestamp,
     };
 };

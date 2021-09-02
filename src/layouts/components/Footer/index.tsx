@@ -10,6 +10,8 @@ import MintView from './components/MintView';
 import BurnView from './components/BurnView';
 import DeliveryView from './components/DeliveryView';
 import { useIntl } from 'umi';
+import { Button } from 'antd';
+import { MDEX_SWAP_EXPLORER } from '@/config/constants/constant';
 
 const tabItems = [
     {
@@ -92,9 +94,11 @@ export default () => {
                             <span className="rate">{rate}</span>
                         </p>
                     </div>
-                    <button className="btn-buy-token common-btn common-btn-red">
-                        {intl.formatMessage({ id: 'footer.ftoken.button' })}
-                    </button>
+                    <Button className="btn-buy-token common-btn common-btn-red">
+                        <a target="_blank" href={MDEX_SWAP_EXPLORER}>
+                            {intl.formatMessage({ id: 'footer.ftoken.button' })}
+                        </a>
+                    </Button>
                     {/* <p className="balance">Balance: {balance}</p> */}
                     <div className="medias">
                         <img key={1} src={IconTwitter} />
