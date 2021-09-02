@@ -12,14 +12,14 @@ try {
             mergedOutput = require('../../../contracts.local.json') ?? {};
             break;
         }
-        case '97': {
-            mergedOutput = require('../../../contracts.test.json') ?? {};
-            break;
-        }
-        case '56': {
-            mergedOutput = require('../../../contracts.prod.json') ?? {};
-            break;
-        }
+        // case '97': {
+        //     mergedOutput = require('../../../contracts.test.json') ?? {};
+        //     break;
+        // }
+        // case '56': {
+        //     mergedOutput = require('../../../contracts.prod.json') ?? {};
+        //     break;
+        // }
     }
 } catch (error) {
     console.warn(
@@ -75,7 +75,6 @@ export const testnetOutput = {
     ethToken: '0x8Ec086904a9e7eDAb3B888c613D6Ca4badEac0B7',
     usdtToken: '0x86702905E8d5995649882fb3275aC7d3fef759a5',
     RewardSystem: '0xf04d8F9880A5BeeE47E82db0405F42Dc7fD31e55',
-    ...mergedOutput,
 };
 export default {
     masterChef: {

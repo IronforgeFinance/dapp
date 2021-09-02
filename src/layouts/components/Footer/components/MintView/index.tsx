@@ -15,6 +15,7 @@ import { ourClient } from '@/subgraph/clientManager';
 import { DEFAULT_PAGE_SIZE } from '@/config/constants/constant';
 import { useIntl } from 'umi';
 import { toFixedWithoutRound } from '@/utils/bigNumber';
+import dayjs from 'dayjs';
 
 const columns = [
     {
@@ -57,10 +58,10 @@ const columns = [
         dataIndex: 'ratio',
         render: (value, row) => (
             <PureView
-                customData={`${toFixedWithoutRound(
-                    +ethers.utils.formatUnits(value, 18) * 100,
-                    6,
-                )}%`}
+                customData={`${(
+                    (1 / parseFloat(ethers.utils.formatEther(value))) *
+                    100
+                ).toFixed(2)}%`}
             />
         ),
     },

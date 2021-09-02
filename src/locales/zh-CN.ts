@@ -156,4 +156,5 @@ export default {
     'conj.to': '到',
     'conj.and': '和',
     'conj.x': ' ',
+    'app.unlockWallet': 'Unlock Wallet',
 };

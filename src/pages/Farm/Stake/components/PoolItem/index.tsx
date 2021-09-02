@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import './index.less';
-import { history } from 'umi';
+import { history, useIntl } from 'umi';
 import { IStakePool } from '@/models/stakeData';
 import { useMinerReward } from '@/hooks/useContract';
 import { Button, Popover } from 'antd';
@@ -25,6 +25,11 @@ export default (props: { pool: IStakePool; handleFlipper: () => void }) => {
     const { updateStakePoolItem } = useModel('stakeData', (model) => ({
         ...model,
     }));
+    const { requestConnectWallet } = useModel('app', (model) => ({
+        requestConnectWallet: model.requestConnectWallet,
+    }));
+
+    const intl = useIntl();
 
     const handleHarvest = async () => {
         try {
@@ -42,7 +47,6 @@ export default (props: { pool: IStakePool; handleFlipper: () => void }) => {
     };
     return (
         <div className="pool-item">
-           
             <div className="pool-item-container">
                 <div className="pool-item-title">
                     <p>{name}</p>
@@ -105,7 +109,7 @@ export default (props: { pool: IStakePool; handleFlipper: () => void }) => {
                                 className="common-btn common-btn-yellow common-btn-s"
                                 onClick={handleHarvest}
                                 loading={submitting}
-                                disabled={redeemableReward === 0}
+                                disabled={redeemableReward === 0 || !account}
                             >
                                 Harvest
                             </Button>
@@ -114,18 +118,38 @@ export default (props: { pool: IStakePool; handleFlipper: () => void }) => {
                     <div className="user-info-item">
                         <p className="label">{name} STAKED</p>
                         <div className="value">
-                            <p className={staked === 0 ? 'value-zero' : ''}>
-                                {staked}
-                            </p>
-                            <button
-                                className="common-btn common-btn-red common-btn-s"
-                                onClick={() => {
-                                    props.handleFlipper();
-                                    // history.push('/farm/stake?lp=' + name);
-                                }}
-                            >
-                                Stake LP
-                            </button>
+                            {account && (
+                                <>
+                                    <p
+                                        className={
+                                            staked === 0 ? 'value-zero' : ''
+                                        }
+                                    >
+                                        {staked}
+                                    </p>
+                                    <button
+                                        className="common-btn common-btn-red common-btn-s"
+                                        onClick={() => {
+                                            props.handleFlipper();
+                                            // history.push('/farm/stake?lp=' + name);
+                                        }}
+                                    >
+                                        Stake LP
+                                    </button>
+                                </>
+                            )}
+                            {!account && (
+                                <Button
+                                    className="btn-mint common-btn common-btn-yellow"
+                                    onClick={() => {
+                                        requestConnectWallet();
+                                    }}
+                                >
+                                    {intl.formatMessage({
+                                        id: 'app.unlockWallet',
+                                    })}
+                                </Button>
+                            )}
                         </div>
                     </div>
                 </div>

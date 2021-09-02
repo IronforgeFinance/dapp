@@ -2,7 +2,7 @@ import { useState } from 'react';
 import useWeb3Provider from '@/hooks/useWeb3Provider';
 import { getContract } from '@/utils/contractHelper';
 import { ethers } from 'ethers';
-import { expandTo18Decimals } from '@/utils/bigNumber';
+import { expandTo18Decimals, toFixedWithoutRound } from '@/utils/bigNumber';
 import PancakePair from '@/config/abi/PancakePair.json';
 import Tokens from '@/config/constants/tokens';
 
@@ -37,8 +37,37 @@ const useLpDataModel = () => {
         }
         const lpContract = lpObj.address[chainId];
         const lp = getContract(PancakePair, lpContract, provider.getSigner());
-
         const total = ethers.utils.formatEther(await lp.totalSupply());
+        const [r0, r1] = await lp.getReserves();
+        console.log('r0: ', ethers.utils.formatEther(r0));
+        console.log('r1: ', ethers.utils.formatEther(r1));
+        const token1 = lpToken.split('-')[0];
+        const token2 = lpToken.split('-')[1];
+        const reserve1 = parseFloat(ethers.utils.formatEther(r0));
+        const reserve2 = parseFloat(ethers.utils.formatEther(r1));
+        const value1 = r1.mul(expandTo18Decimals(1)).div(r0);
+        const value2 = r0.mul(expandTo18Decimals(1)).div(r1);
+        const token1Price = Number(ethers.utils.formatUnits(value1, 18));
+        const token2Price = Number(ethers.utils.formatUnits(value2, 18));
+        if (!account) {
+            const res: ILpDataProps = {
+                symbol: lpToken,
+                address: lpContract,
+                balance: 0,
+                total: parseFloat(total),
+                reserve1,
+                reserve2,
+                token1,
+                token2,
+                token1Balance: 0,
+                token2Balance: 0,
+                token1Price,
+                token2Price,
+                share: 0,
+            };
+            return res;
+        }
+
         const balance = ethers.utils.formatEther(await lp.balanceOf(account));
         console.log('total: ', total);
         console.log('balance: ', balance);
@@ -50,25 +79,14 @@ const useLpDataModel = () => {
 
         const shareVal = parseFloat(balance) / parseFloat(total);
 
-        const [r0, r1] = await lp.getReserves();
-        console.log('r0: ', ethers.utils.formatEther(r0));
-        console.log('r1: ', ethers.utils.formatEther(r1));
-        const token1 = lpToken.split('-')[0];
-        const token2 = lpToken.split('-')[1];
-        const reserve1 = parseFloat(ethers.utils.formatEther(r0));
-        const reserve2 = parseFloat(ethers.utils.formatEther(r1));
-        const token1Balance = reserve1 * shareVal;
-        const token2Balance = reserve2 * shareVal;
+        const token1Balance = parseFloat((reserve1 * shareVal).toFixed(2));
+        const token2Balance = parseFloat((reserve2 * shareVal).toFixed(2));
 
-        const value1 = r1.mul(expandTo18Decimals(1)).div(r0);
-        const value2 = r0.mul(expandTo18Decimals(1)).div(r1);
-        const token1Price = Number(ethers.utils.formatUnits(value1, 18));
-        const token2Price = Number(ethers.utils.formatUnits(value2, 18));
         const res: ILpDataProps = {
             symbol: lpToken,
             address: lpContract,
-            balance: parseFloat(balance),
-            total: parseFloat(total),
+            balance: parseFloat(toFixedWithoutRound(balance, 2)),
+            total: parseFloat(toFixedWithoutRound(total, 2)),
             reserve1,
             reserve2,
             token1,

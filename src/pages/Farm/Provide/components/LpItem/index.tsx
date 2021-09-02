@@ -3,6 +3,8 @@ import React, { useState } from 'react';
 import './index.less';
 import IconDown from '@/assets/images/down.svg';
 import { useModel } from 'umi';
+import { TokenIcon } from '@/components/Icon';
+
 interface IProps {
     data: ILpDataProps;
 }
@@ -19,12 +21,16 @@ export default (props: IProps) => {
     const handleRemove = () => {
         //TODO
     };
+    const tokens = data.symbol.split('-');
     return (
         <div className="lp-item-container">
             <div className="header">
                 <div className="left">
-                    <p className="title">{data.symbol}</p>
-                    <p className="value">{data.balance}</p>
+                    <TokenIcon name={`${tokens[0]}-${tokens[1]}`}></TokenIcon>
+                    <div>
+                        <p className="title">{data.symbol}</p>
+                        <p className="value">{data.balance}</p>
+                    </div>
                 </div>
                 <img
                     src={IconDown}

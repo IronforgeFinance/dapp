@@ -21,8 +21,7 @@ import { debounce } from 'lodash';
 import classNames from 'classnames';
 import TransitionConfirm from '@/components/TransitionConfirm';
 import { TokenIcon } from '@/components/Icon';
-import { useIntl } from 'umi';
-
+import { useIntl, useModel } from 'umi';
 //TODO: for test.从配置中读取
 const TOKEN_OPTIONS = [
     { name: 'lBTC-202112' },
@@ -47,6 +46,10 @@ export default () => {
     const [showSelectToToken, setShowSelectToToken] = useState(false);
 
     const prices = usePrices();
+
+    const { requestConnectWallet } = useModel('app', (model) => ({
+        requestConnectWallet: model.requestConnectWallet,
+    }));
 
     const { balance: fromTokenBalance } = useBep20Balance(fromToken);
     const { balance: toTokenBalance } = useBep20Balance(toToken);
@@ -157,16 +160,18 @@ export default () => {
         try {
             setSubmitting(true);
             setShowTxConfirm(true);
+            const fromTokenPrice = await getTokenPrice(fromToken);
+            const toTokenPrice = await getTokenPrice(toToken);
             setTx({
                 from: {
                     token: fromToken,
                     amount: fromAmount,
-                    price: '--',
+                    price: (fromTokenPrice * fromAmount).toFixed(2),
                 },
                 to: {
                     token: toToken,
                     amount: toAmount,
-                    price: '--',
+                    price: (toTokenPrice * toAmount).toFixed(2),
                 },
             });
 
@@ -358,14 +363,30 @@ export default () => {
                             </div>
                         </div>
                     </div>
-                    <Button
-                        className="btn-trade common-btn common-btn-red"
-                        disabled={!canTrade}
-                        onClick={onSubmit}
-                        loading={submitting}
-                    >
-                        {intl.formatMessage({ id: 'trade.button' })}
-                    </Button>
+                    {account && (
+                        <Button
+                            className="btn-trade common-btn common-btn-red"
+                            disabled={!canTrade}
+                            onClick={onSubmit}
+                            loading={submitting}
+                        >
+                            {intl.formatMessage({
+                                id: 'trade.button',
+                            })}
+                        </Button>
+                    )}
+                    {!account && (
+                        <Button
+                            className="btn-mint common-btn common-btn-yellow"
+                            onClick={() => {
+                                requestConnectWallet();
+                            }}
+                        >
+                            {intl.formatMessage({
+                                id: 'app.unlockWallet',
+                            })}
+                        </Button>
+                    )}
                     <span className="fee-cost">
                         {intl.formatMessage({ id: 'trade.feecost' })}
                         {feeRate * 100 + '%'}

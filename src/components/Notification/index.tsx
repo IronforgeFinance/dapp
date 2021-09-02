@@ -57,10 +57,10 @@ const TimerBar = function (props: TimerBarProps) {
     return <ITimerBar />;
 };
 
-export const success = (props: string | SuccessProps) => {
+export const success = (props: string | SuccessProps, duration?: number) => {
     if (typeof props === 'string') {
         notification.success({
-            duration: DEFAULT_DURATION,
+            duration: duration || DEFAULT_DURATION,
             className: 'iron-notification success',
             message: <h3>{DEFAULT_SUCCESS_MESSAGE}</h3>,
             description: (
@@ -115,10 +115,10 @@ export const success = (props: string | SuccessProps) => {
     }
 };
 
-export const fail = (props: string | FailProps) => {
+export const fail = (props: string | FailProps, duration?: number) => {
     if (typeof props === 'string') {
         notification.error({
-            duration: DEFAULT_DURATION,
+            duration: duration || DEFAULT_DURATION,
             className: 'iron-notification fail',
             message: <h3>{DEFAULT_FAIL_MESSAGE}</h3>,
             description: (

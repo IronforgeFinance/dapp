@@ -18,9 +18,8 @@ import BurnForm from './components/BurnForm';
 import { useMemo } from 'react';
 import IDebtItem from '@/components/DebtItem';
 import classNames from 'classnames';
+import { useModel, useIntl } from 'umi';
 import { useBep20Balance } from '@/hooks/useTokenBalance';
-import { useIntl } from 'umi';
-
 export default () => {
     const intl = useIntl();
     const { account } = useWeb3React();
@@ -29,6 +28,10 @@ export default () => {
     const [showForm, setShowForm] = useState(false);
     const [currentDebt, setCurrentDebt] = useState(0);
     const { balance: fusdBalance } = useBep20Balance('FUSD');
+
+    const { requestConnectWallet } = useModel('app', (model) => ({
+        requestConnectWallet: model.requestConnectWallet,
+    }));
 
     const onSubmitSuccess = () => {
         setShowForm(false);
@@ -91,41 +94,61 @@ export default () => {
                     title={intl.formatMessage({ id: 'burn.title' })}
                     description={intl.formatMessage({ id: 'burn.desc' })}
                 />
-                {!showForm ? (
-                    <Fragment>
-                        {!haveAssets ? (
-                            <NoAssetsView />
-                        ) : (
-                            <div className="form-view common-box">
-                                <SearchDebts />
-                                <div className="my-debt">
-                                    <button
-                                        className={classNames({
-                                            ratio: true,
-                                            active: currentDebt == 0,
-                                        })}
-                                        onClick={() => setCurrentDebt(0)}
-                                    />
-                                    <DebtItem
-                                        mintedToken="FUSD"
-                                        mintedTokenName="USD"
-                                    />
+                <Fragment>
+                    {!showForm && (
+                        <Fragment>
+                            {!haveAssets && <NoAssetsView />}
+                            {haveAssets && (
+                                <div className="form-view common-box">
+                                    <SearchDebts />
+                                    <div className="my-debt">
+                                        <button
+                                            className={classNames({
+                                                ratio: true,
+                                                active: currentDebt == 0,
+                                            })}
+                                            onClick={() => setCurrentDebt(0)}
+                                        />
+                                        <DebtItem
+                                            mintedToken="FUSD"
+                                            mintedTokenName="USD"
+                                        />
+                                    </div>
+                                    {account && (
+                                        <Button
+                                            className="btn-mint common-btn common-btn-red"
+                                            onClick={() =>
+                                                setShowForm(!showForm)
+                                            }
+                                        >
+                                            {intl.formatMessage({
+                                                id: 'burn.burn',
+                                            })}
+                                        </Button>
+                                    )}
+                                    {!account && (
+                                        <Button
+                                            className="btn-mint common-btn common-btn-yellow"
+                                            onClick={() => {
+                                                requestConnectWallet();
+                                            }}
+                                        >
+                                            {intl.formatMessage({
+                                                id: 'app.unlockWallet',
+                                            })}
+                                        </Button>
+                                    )}
                                 </div>
-                                <Button
-                                    className="btn-mint common-btn common-btn-red"
-                                    onClick={() => setShowForm(!showForm)}
-                                >
-                                    {intl.formatMessage({ id: 'burn.burn' })}
-                                </Button>
-                            </div>
-                        )}
-                    </Fragment>
-                ) : (
-                    <Fragment>
-                        <BurnForm onSubmitSuccess={onSubmitSuccess} />
-                        <BackBtn />
-                    </Fragment>
-                )}
+                            )}
+                        </Fragment>
+                    )}
+                    {showForm && (
+                        <Fragment>
+                            <BurnForm onSubmitSuccess={onSubmitSuccess} />
+                            <BackBtn />
+                        </Fragment>
+                    )}
+                </Fragment>
             </div>
         </div>
     );

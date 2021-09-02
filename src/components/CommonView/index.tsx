@@ -7,6 +7,7 @@ import { ethers } from 'ethers';
 import { Popover } from 'antd';
 import { DefiActType } from '@/config/constants/types';
 import { useIntl } from 'umi';
+import dayjs from 'dayjs';
 
 /**
  * @todo PoolView、FarmView、HistoryView后面拆出去，属于wallet这边的组件
@@ -91,7 +92,7 @@ interface BurnViewProps {
     user?: string;
     ratio?: string | number;
     txhash?: string;
-    timestamp?: string | number;
+    timestamp?: string;
     unstakingCurrency?: string;
     unstakingAmount?: string | number;
     unlockedAmount?: string | number;
@@ -209,8 +210,8 @@ export const TokenView = (props: RecordProps) => {
                 }}
             >
                 {!(noToken ?? false) && <TokenIcon name={currency} />}
-                <span className="currency">$</span>
-                <span className="price">--</span>
+                {/* <span className="currency">$</span> */}
+                {/* <span className="price">--</span> */}
             </div>
         </div>
     );
@@ -313,12 +314,15 @@ export const DebtView = (props: RecordProps) => {
 export const TimeView = (props: RecordProps) => {
     const { timestamp } = props;
 
-    const date = useMemo(() => new Date(+timestamp * 1000), [timestamp]);
+    const date = useMemo(
+        () => dayjs(Number(timestamp) * 1000).format('YYYY-MM-DD HH:mm:ss'),
+        [timestamp],
+    );
 
     return (
         <time className="time-view">
-            <PureView customData={date.toDateString()} />
-            <PureView customData={date.toLocaleTimeString()} />
+            <PureView customData={date} />
+            {/* <PureView customData={date.toLocaleTimeString()} /> */}
         </time>
     );
 };

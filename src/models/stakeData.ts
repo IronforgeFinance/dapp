@@ -88,25 +88,6 @@ const useStakeDataModel = () => {
                 await lpContract.balanceOf(minerRewardAddress),
             ),
         );
-        const userInfo = await minerReward.userInfo(poolId, account);
-        const staked = parseFloat(ethers.utils.formatEther(userInfo.amount));
-        const totalPendingReward = parseFloat(
-            toFixedWithoutRound(
-                ethers.utils.formatEther(
-                    await minerReward.totalPendingReward(poolId, account),
-                ),
-                2,
-            ),
-        );
-        const redeemableReward = parseFloat(
-            toFixedWithoutRound(
-                ethers.utils.formatEther(
-                    await minerReward.redeemaleReward(poolId, account),
-                ),
-                2,
-            ),
-        );
-
         const poolInfo = await minerReward.poolInfo(poolId);
         const allocPoint = parseFloat(
             ethers.utils.formatEther(poolInfo.allocPoint),
@@ -132,6 +113,39 @@ const useStakeDataModel = () => {
                 24) /
             BSC_BLOCK_TIME;
         const apy = Math.pow(1 + apr / 365, 365) - 1;
+        if (!account) {
+            const data: IStakePool = {
+                name: poolName,
+                poolId,
+                lpAddress,
+                lpPrice,
+                apy,
+                staked: 0,
+                totalStaked,
+                totalPendingReward: 0,
+                redeemableReward: 0,
+            };
+            return data;
+        }
+        const userInfo = await minerReward.userInfo(poolId, account);
+        const staked = parseFloat(ethers.utils.formatEther(userInfo.amount));
+        const totalPendingReward = parseFloat(
+            toFixedWithoutRound(
+                ethers.utils.formatEther(
+                    await minerReward.totalPendingReward(poolId, account),
+                ),
+                2,
+            ),
+        );
+        const redeemableReward = parseFloat(
+            toFixedWithoutRound(
+                ethers.utils.formatEther(
+                    await minerReward.redeemaleReward(poolId, account),
+                ),
+                2,
+            ),
+        );
+
         const data: IStakePool = {
             name: poolName,
             poolId,
