@@ -105,10 +105,10 @@ const ProgressBar = (props: IProgressBarProps) => {
 
         return isTrading ? 50 + (increment / (startValue || 1)) * 50 : 0;
     }, [increment, startValue, stakeRatioInitial]);
-    const isRaised = useMemo(() => initialRatio < currentRatio, [
-        initialRatio,
-        currentRatio,
-    ]);
+    const isRaised = useMemo(
+        () => initialRatio < currentRatio,
+        [initialRatio, currentRatio],
+    );
     const barStyle = useMemo(
         (): React.CSSProperties => ({
             opacity: isTrading
@@ -206,7 +206,7 @@ const ProgressBar = (props: IProgressBarProps) => {
                             >
                                 {type === 'f_ratio'
                                     ? `${endValue}%`
-                                    : `${unit}${endValue}`}
+                                    : `${unit}${endValue.toFixed(2)}`}
                             </span>
                             <span
                                 className={`icon-arrow ${
@@ -227,9 +227,9 @@ const ProgressBar = (props: IProgressBarProps) => {
                             ? `${
                                   isStakeRatioInitial
                                       ? stakeRatioInitial
-                                      : startValue
+                                      : startValue.toFixed(2)
                               }%`
-                            : `${unit}${startValue}`}
+                            : `${unit}${startValue.toFixed(2)}`}
                     </span>
                     {isTrading && isRaised && (
                         <React.Fragment>
@@ -240,8 +240,8 @@ const ProgressBar = (props: IProgressBarProps) => {
                                 }`}
                             >
                                 {type === 'f_ratio'
-                                    ? `${endValue}%`
-                                    : `${unit}${endValue}`}
+                                    ? `${endValue.toFixed(2)}%`
+                                    : `${unit}${endValue.toFixed(2)}`}
                             </span>
                         </React.Fragment>
                     )}

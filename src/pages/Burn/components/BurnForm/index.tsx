@@ -84,22 +84,33 @@ export default (props: IProps) => {
         setBurnAmount(v);
         setDebtData({
             ...debtData,
-            endValue: debtData.startValue - v,
+            endValue: parseFloat((debtData.startValue - v).toFixed(2)),
         });
         if (toToken) {
+            let _unstakeAmount;
             const toTokenPrice = await getTokenPrice(toToken);
-            const val = parseFloat(
-                toFixedWithoutRound((v * initialRatio) / toTokenPrice, 2),
-            );
-            setUnstakeAmount(val);
+            if (currencyRatio < initialRatio) {
+                _unstakeAmount = 0;
+            } else {
+                _unstakeAmount = toFixedWithoutRound(
+                    (v * initialRatio) / toTokenPrice,
+                    2,
+                );
+            }
+
+            setUnstakeAmount(_unstakeAmount);
             setStakedData({
                 ...stakedData,
-                endValue: stakedData.startValue - val * toTokenPrice,
+                endValue: toFixedWithoutRound(
+                    stakedData.startValue - _unstakeAmount * toTokenPrice,
+                    2,
+                ),
             });
             const ratio =
                 debtData.startValue - v > 0
                     ? toFixedWithoutRound(
-                          ((stakedData.startValue - val * toTokenPrice) /
+                          ((stakedData.startValue -
+                              _unstakeAmount * toTokenPrice) /
                               (debtData.startValue - v)) *
                               100,
                           2,
@@ -116,8 +127,9 @@ export default (props: IProps) => {
         setUnstakeAmount(v);
         if (toToken) {
             const toTokenPrice = await getTokenPrice(toToken);
-            const val = parseFloat(
-                toFixedWithoutRound((v * toTokenPrice) / initialRatio, 2),
+            const val = toFixedWithoutRound(
+                (v * toTokenPrice) / initialRatio,
+                2,
             );
             setBurnAmount(val);
             setDebtData({
@@ -188,7 +200,6 @@ export default (props: IProps) => {
     }, [toToken, currencyRatio, initialRatio]);
 
     // 计算burned 和unstaking amount
-    //TODO 替换 collateralSystem.getUserCollateralInUsd 方法。还没部署。
     const burnInitialHandler = async (v) => {
         setBurnType(v);
         setUnstakeAmount(0);
@@ -206,6 +217,9 @@ export default (props: IProps) => {
             ).toFixed(2),
         );
         setBurnAmount(burnAmount);
+        setStakedData({
+            ...stakedData,
+        });
         setDebtData({
             ...debtData,
             endValue: debtData.startValue - burnAmount,
@@ -279,6 +293,16 @@ export default (props: IProps) => {
             message.warning(
                 '钱包余额不足。请到dex购买fUSD，保证余额大于您的债务',
                 5,
+            );
+            return;
+        }
+        if (
+            currencyRatio < initialRatio &&
+            unstakeAmount > 0 &&
+            burnType !== 'max'
+        ) {
+            message.warning(
+                '当前抵押率低于初始抵押率。不能解锁抵押物。请燃烧多余的债务后解锁。',
             );
             return;
         }

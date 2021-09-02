@@ -21,13 +21,14 @@ export const toFixedWithoutRound = (
     fixed: number,
 ) => {
     var re = new RegExp('^-?\\d+(?:.\\d{0,' + (fixed || -1) + '})?');
-    return num
+    const _num = num
         .toString()
         .match(re)![0]
         .replace(
             /^(\d+)$/,
             '$1' + (fixed > 0 ? `.${new Array(fixed).fill('0').join('')}` : ''),
         );
+    return parseFloat(_num);
 };
 
 export function expandTo18Decimals(num: number | string): BigNumber {

@@ -85,8 +85,8 @@ const useLpDataModel = () => {
         const res: ILpDataProps = {
             symbol: lpToken,
             address: lpContract,
-            balance: parseFloat(toFixedWithoutRound(balance, 2)),
-            total: parseFloat(toFixedWithoutRound(total, 2)),
+            balance: toFixedWithoutRound(balance, 2),
+            total: toFixedWithoutRound(total, 2),
             reserve1,
             reserve2,
             token1,

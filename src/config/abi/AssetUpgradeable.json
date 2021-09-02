@@ -301,11 +301,6 @@
   {
     "inputs": [
       {
-        "internalType": "bytes32",
-        "name": "_key",
-        "type": "bytes32"
-      },
-      {
         "internalType": "string",
         "name": "_name",
         "type": "string"
@@ -328,12 +323,12 @@
   },
   {
     "inputs": [],
-    "name": "keyName",
+    "name": "isPurgeableAsset",
     "outputs": [
       {
-        "internalType": "bytes32",
+        "internalType": "bool",
         "name": "",
-        "type": "bytes32"
+        "type": "bool"
       }
     ],
     "stateMutability": "view",
@@ -414,6 +409,19 @@
         "internalType": "string",
         "name": "",
         "type": "string"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "symbolBytes32",
+    "outputs": [
+      {
+        "internalType": "bytes32",
+        "name": "result",
+        "type": "bytes32"
       }
     ],
     "stateMutability": "view",
