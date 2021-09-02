@@ -29,4 +29,4 @@ export const LP_TOKENS = [
 export const PROVIDED_LP_TOKENS = ['USDC-ETH', 'USDC-IFT'];
 
 //TODO to be updated
-export const PLATFORM_TOKEN = 'IFT'
+export const PLATFORM_TOKEN = 'IFT';

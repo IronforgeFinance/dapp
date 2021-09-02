@@ -6,6 +6,7 @@ import { TokenIcon } from '@/components/Icon';
 import { ethers } from 'ethers';
 import { Popover } from 'antd';
 import { DefiActType } from '@/config/constants/types';
+import { useIntl } from 'umi';
 import dayjs from 'dayjs';
 
 /**
@@ -223,6 +224,7 @@ export const PureView = (props: RecordProps) => {
 };
 
 export const TypeView = (props: RecordProps) => {
+    const intl = useIntl();
     const { currency } = props;
 
     const isDelivery = useMemo(
@@ -240,11 +242,13 @@ export const TypeView = (props: RecordProps) => {
         <div className="type-view">
             {isDelivery && (
                 <div className="delivery">
-                    <span className="name">Delivery</span>
+                    <span className="name">
+                        {intl.formatMessage({ id: 'delivery' })}
+                    </span>
                     <div className="rest-days">
                         <p className="time">
                             {restDays}
-                            <span>Days</span>
+                            <span>{intl.formatMessage({ id: 'days' })}</span>
                         </p>
                         <Popover
                             placement="top"
@@ -256,7 +260,11 @@ export const TypeView = (props: RecordProps) => {
                     </div>
                 </div>
             )}
-            {!isDelivery && <PureView customData="Perpetual" />}
+            {!isDelivery && (
+                <PureView
+                    customData={intl.formatMessage({ id: 'perpetual' })}
+                />
+            )}
         </div>
     );
 };

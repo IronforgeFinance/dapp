@@ -3,7 +3,7 @@ import './index.less';
 import { ProgressBarType } from '@/config/constants/types';
 import { Popover } from 'antd';
 import classnames from 'classnames';
-import { toFixedWithoutRound } from '@/utils/bigNumber';
+import { useIntl } from 'umi';
 import { useEffect } from 'react';
 import classNames from 'classnames';
 
@@ -27,11 +27,18 @@ export interface RatioViewProps {
 
 const RatioView = (props: RatioViewProps) => {
     const { initialRatio = 0, currentRatio = 0 } = props;
+    const intl = useIntl();
 
     return (
         <ul className="popover-ratios">
-            <li className="current">f-Ratio current: {currentRatio}</li>
-            <li className="initial">f-Ratio initial: {initialRatio}</li>
+            <li className="current">
+                {intl.formatMessage({ id: 'assetsbar.fratio.current' })}
+                {currentRatio}
+            </li>
+            <li className="initial">
+                {intl.formatMessage({ id: 'assetsbar.fratio.initial' })}
+                {initialRatio}
+            </li>
         </ul>
     );
 };

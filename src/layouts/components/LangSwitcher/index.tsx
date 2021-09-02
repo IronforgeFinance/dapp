@@ -10,7 +10,7 @@ export type LocaleType = 'en-US' | 'zh-CN';
 
 export const LangMap = {
     EN: 'English',
-    ZH: 'Chinese',
+    ZH: '中文',
 };
 
 export const LocaleMap = {
@@ -18,13 +18,18 @@ export const LocaleMap = {
     ZH: 'zh-CN',
 };
 
+export const LANG_CACHE_KEY = 'lang';
+
 export default () => {
-    const [lang, setLang] = useState('EN');
+    const [lang, setLang] = useState(
+        localStorage.getItem(LANG_CACHE_KEY) ?? ('EN' as keyof typeof LangMap),
+    );
     const [show, setShow] = useState(false);
 
     useEffect(() => {
         setShow(false);
         setLocale(LocaleMap[lang as LocaleType], false);
+        localStorage.setItem(LANG_CACHE_KEY, lang);
     }, [lang]);
 
     return (

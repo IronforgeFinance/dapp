@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import TabGroup from '@/components/TabGroup';
 import ProvideForm from './components/ProvideForm';
 import WithdrawForm from './components/WithdrawForm';
@@ -9,21 +9,12 @@ import { history } from 'umi';
 import { Tabs } from 'antd';
 import IsShow from '@/components/IsShow';
 const { TabPane } = Tabs;
-
-const tabItems = [
-    {
-        name: 'Provide',
-        key: '1',
-    },
-    {
-        name: 'Widthdraw',
-        key: '2',
-    },
-];
+import { useIntl } from 'umi';
 
 export const ITabKeyContext = React.createContext<string>('');
 
 export default (props) => {
+    const intl = useIntl();
     const { location } = props;
     const { action } = location.query;
     const [tabKey, setTabKey] = useState(action || '1');
@@ -31,6 +22,24 @@ export default (props) => {
         console.log(key);
         setTabKey(key);
     };
+
+    const provideTitle = intl.formatMessage({ id: 'liquidity.tab.provide' });
+    const withdrawTitle = intl.formatMessage({ id: 'liquidity.tab.withdraw' });
+
+    const tabItems = useMemo(
+        () => [
+            {
+                name: provideTitle,
+                key: '1',
+            },
+            {
+                name: withdrawTitle,
+                key: '2',
+            },
+        ],
+        [provideTitle, withdrawTitle],
+    );
+
     return (
         <div className="provide-container">
             <div className="custom-tabs">

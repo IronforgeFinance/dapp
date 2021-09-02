@@ -21,6 +21,7 @@ import {
 import { TokenIcon } from '@/components/Icon';
 
 export default () => {
+    const intl = useIntl();
     const [lp, setLp] = useState<string>();
     const [lpAmount, setLpAmount] = useState<number>();
     const [receiveTokens, setReceiveTokens] = useState([]);
@@ -28,7 +29,6 @@ export default () => {
     const [showTxConfirm, setShowTxConfirm] = useState(false);
     const [tx, setTx] = useState<any | null>(null);
     const [showSelectFromToken, setShowSelectFromToken] = useState(false);
-    const intl = useIntl();
     const routerContract = useRouter();
     const { account } = useWeb3React();
 
@@ -171,11 +171,15 @@ export default () => {
         <div>
             <div className="provide-form common-box">
                 <div className="input-item">
-                    <p className="label">LP</p>
+                    <p className="label">
+                        {intl.formatMessage({ id: 'liquidity.withdraw.lp' })}
+                    </p>
                     <div className="input-item-content">
                         <div className="content-label">
                             <p className="right">
-                                Balance:
+                                {intl.formatMessage({
+                                    id: 'balance:',
+                                })}
                                 <span className="balance">{balance}</span>
                             </p>
                         </div>
@@ -202,7 +206,11 @@ export default () => {
                 <img src={IconDown} alt="" className="icon-add" />
 
                 <div className="input-item">
-                    <p className="label">You'll Receive</p>
+                    <p className="label">
+                        {intl.formatMessage({
+                            id: 'liquidity.withdraw.willreceive',
+                        })}
+                    </p>
                     <div className="input-item-content receive-tokens">
                         {receiveTokens.map((item) => (
                             <div className="receive-token-item">
@@ -231,7 +239,9 @@ export default () => {
                             onClick={handleApprove}
                             loading={requestedApproval}
                         >
-                            Approve to withdraw
+                            {intl.formatMessage({
+                                id: 'liquidity.withdraw.approve',
+                            })}
                         </Button>
                     )}
                     {isApproved && (
@@ -240,7 +250,7 @@ export default () => {
                             onClick={handleWithdraw}
                             loading={submitting}
                         >
-                            Withdraw
+                            {intl.formatMessage({ id: 'liquidity.withdraw' })}
                         </Button>
                     )}
                 </div>

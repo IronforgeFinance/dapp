@@ -469,10 +469,8 @@ export default () => {
             <DataView />
             <div className="right-box">
                 <CommentaryCard
-                    title="Begin To Mint"
-                    description={
-                        'Mint fUSD by staking your Token. Token stakers earn weekly staking rewards .'
-                    }
+                    title={intl.formatMessage({ id: 'mint.title' })}
+                    description={intl.formatMessage({ id: 'mint.desc' })}
                 />
                 <div className="mint-box common-box">
                     <div className="input-item">
@@ -482,10 +480,12 @@ export default () => {
                         <div className="input-item-content">
                             <div className="content-label">
                                 <p className="left">
-                                    {intl.formatMessage({ id: 'collateral' })}
+                                    {intl.formatMessage({
+                                        id: 'mint.collateral',
+                                    })}
                                 </p>
                                 <p className="right">
-                                    Balance:{' '}
+                                    {intl.formatMessage({ id: 'balance:' })}
                                     <span className="balance">
                                         {collateralBalance}
                                     </span>
@@ -531,9 +531,11 @@ export default () => {
                         </div>
                         <div className="input-item-content">
                             <div className="content-label">
-                                <p className="left">FToken</p>
+                                <p className="left">
+                                    {intl.formatMessage({ id: 'mint.ftoken' })}
+                                </p>
                                 <p className="right">
-                                    Balance:{' '}
+                                    {intl.formatMessage({ id: 'balance:' })}
                                     <span className="balance">
                                         {fTokenBalance}
                                     </span>
@@ -575,10 +577,10 @@ export default () => {
                         <div className="input-item-content">
                             <div className="content-label">
                                 <p className="left">
-                                    {intl.formatMessage({ id: 'mint.mint' })}
+                                    {intl.formatMessage({ id: 'mint.fassets' })}
                                 </p>
                                 <p className="right">
-                                    {intl.formatMessage({ id: 'mint.balance' })}
+                                    {intl.formatMessage({ id: 'balance:' })}
                                     <span className="balance">
                                         {mintBalance}
                                     </span>
@@ -644,7 +646,7 @@ export default () => {
                             onClick={onSubmit}
                             loading={submitting}
                         >
-                            {intl.formatMessage({ id: 'mint.mint' })}
+                            {intl.formatMessage({ id: 'mint.cast' })}
                         </Button>
                     )}
                     {account &&
@@ -657,7 +659,7 @@ export default () => {
                                     requestedApproval || requestIFTApproval
                                 }
                             >
-                                Approve To Mint
+                                {intl.formatMessage({ id: 'mint.approve' })}
                             </Button>
                         )}
                 </div>

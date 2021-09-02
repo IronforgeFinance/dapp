@@ -12,6 +12,8 @@ import { ethers } from 'ethers';
 import { useERC20, usePrices } from '@/hooks/useContract';
 import Tokens from '@/config/constants/tokens';
 import Contracts from '@/config/constants/contracts';
+import { useIntl } from 'umi';
+
 interface Price {
     amount: string | number;
     symbol?: FiatSymbol;
@@ -61,6 +63,7 @@ const DEFAULT_TOKEN_DATA = {
 };
 
 const MarketDetail = (props: MarketDetailProps) => {
+    const intl = useIntl();
     const { token0, token1 } = props;
     const [data0, setData0] = useState<IMarketTokenData>(DEFAULT_TOKEN_DATA);
     const [data1, setData1] = useState<IMarketTokenData>(DEFAULT_TOKEN_DATA);
@@ -125,7 +128,7 @@ const MarketDetail = (props: MarketDetailProps) => {
             <div className="market-details">
                 <div className="head">
                     <p className="details">
-                        Market Details:{' '}
+                        {intl.formatMessage({ id: 'trade.marketing:' })}
                         <span className="token-pair">
                             {props.token0}/{props.token1}
                         </span>
@@ -137,31 +140,51 @@ const MarketDetail = (props: MarketDetailProps) => {
                             <p className="token">{data.token}</p>
                             <ul className="props">
                                 <li className="prop">
-                                    <span className="label">24H volume</span>
+                                    <span className="label">
+                                        {intl.formatMessage({
+                                            id: 'trade.24h.volume',
+                                        })}
+                                    </span>
                                     <span className="value price">
                                         ${data.tradeVolumeUSD}
                                     </span>
                                 </li>
                                 <li className="prop">
-                                    <span className="label">Market Cap</span>
+                                    <span className="label">
+                                        {intl.formatMessage({
+                                            id: 'trade.24h.marketcap',
+                                        })}
+                                    </span>
                                     <span className="value price">
                                         ${data.marketCap}
                                     </span>
                                 </li>
                                 <li className="prop">
-                                    <span className="label">24H High</span>
+                                    <span className="label">
+                                        {intl.formatMessage({
+                                            id: 'trade.24h.hightest',
+                                        })}
+                                    </span>
                                     <span className="value price">
                                         ${data.priceHigh}
                                     </span>
                                 </li>
                                 <li className="prop">
-                                    <span className="label">24H Low</span>
+                                    <span className="label">
+                                        {intl.formatMessage({
+                                            id: 'trade.24h.lowest',
+                                        })}
+                                    </span>
                                     <span className="value price">
                                         ${data.priceLow}
                                     </span>
                                 </li>
                                 <li className="prop">
-                                    <span className="label">Price Feed</span>
+                                    <span className="label">
+                                        {intl.formatMessage({
+                                            id: 'trade.pricefeed',
+                                        })}
+                                    </span>
                                     <span
                                         className="value address"
                                         onClick={() => {
@@ -177,7 +200,10 @@ const MarketDetail = (props: MarketDetailProps) => {
                                 </li>
                                 <li className="prop">
                                     <span className="label">
-                                        {data.token} Contract
+                                        {data.token}{' '}
+                                        {intl.formatMessage({
+                                            id: 'trade.contract',
+                                        })}
                                     </span>
                                     <span
                                         className="value address"

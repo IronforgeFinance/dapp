@@ -14,20 +14,21 @@ import useRefresh from '@/hooks/useRefresh';
 import { useWeb3React } from '@web3-react/core';
 import { history, useModel } from 'umi';
 import { LP_TOKENS } from '@/config/';
+import { useIntl } from 'umi';
 
 const columns = [
     {
-        title: 'Farm',
+        title: 'wallet.farm',
         dataIndex: 'lpToken',
         render: (value, row) => <LpTokenView {...row} />,
     },
     {
-        title: 'Staked',
+        title: 'wallet.staked',
         dataIndex: 'staked',
         render: (value, row) => <PriceView {...row} />,
     },
     {
-        title: 'Earned',
+        title: 'wallet.earned',
         dataIndex: 'earned',
         render: (value, row: FarmViewProps) => (
             <BalanceView token0={row.earnedToken0} />
@@ -35,14 +36,14 @@ const columns = [
     },
     {
         textWrap: 'word-break',
-        title: 'APY',
+        title: 'apy',
         dataIndex: 'apy',
         render: (value, row) => (
             <PureView customData={`${(row.apy * 100).toFixed(2)}%`} />
         ),
     },
     {
-        title: 'Action',
+        title: 'action',
         dataIndex: 'actions',
         render: (value, row) => (
             <ActionView
@@ -88,6 +89,7 @@ const mockData: FarmViewProps[] = new Array(3).fill('').map((item, index) => ({
 }));
 
 const FarmView = () => {
+    const intl = useIntl();
     const [dataSource, setDataSource] = useState([]);
     const { account } = useWeb3React();
     const { fetchStakePoolList, stakeDataList } = useModel(
@@ -129,7 +131,10 @@ const FarmView = () => {
         <div className="burn-view">
             <Table
                 className="custom-table"
-                columns={columns}
+                columns={columns.map((item) => ({
+                    ...item,
+                    title: intl.formatMessage({ id: item.title }),
+                }))}
                 rowKey={(record) => record.id}
                 dataSource={dataSource}
                 pagination={false}

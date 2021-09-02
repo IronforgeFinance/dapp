@@ -5,6 +5,7 @@ import HoldingView from './HoldingView';
 import PoolView from './PoolView';
 import HistoryView from './HistoryView';
 import FarmView from './FarmView';
+import { useIntl } from 'umi';
 
 const tabItems = [
     // {
@@ -12,20 +13,21 @@ const tabItems = [
     //     key: 'holding',
     // },
     {
-        name: 'Pool',
+        name: 'wallet.pool',
         key: 'pool',
     },
     {
-        name: 'Farm',
+        name: 'wallet.farm',
         key: 'farm',
     },
     {
-        name: 'History',
+        name: 'history',
         key: 'history',
     },
 ];
 
 export default () => {
+    const intl = useIntl();
     const [tabKey, setTabKey] = React.useState(tabItems[0].key);
 
     const CurrentView = React.useMemo(() => {
@@ -50,7 +52,7 @@ export default () => {
     return (
         <div className="wallet">
             <BigBoard
-                title="My Wallet"
+                title={intl.formatMessage({ id: 'wallet.title' })}
                 tabItems={tabItems}
                 tabKey={tabKey}
                 onChange={(key) => setTabKey(key)}
