@@ -11,7 +11,9 @@ function filter(newJson, referJson) {
     const referKeys = Object.keys(referJson);
     const newTrans = referKeys.reduce((curr, next) => {
         try {
-            !newJson[next] ? (curr[next] = '') : (curr[next] = newJson[next]);
+            !newJson[next]
+                ? (curr[next] = referJson[next])
+                : (curr[next] = newJson[next]);
             return curr;
         } catch (error) {
             console.error(error);
