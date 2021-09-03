@@ -159,6 +159,10 @@ export default {
     action: '操作',
     from: 'From',
     to: 'To',
+    disconnect: '断开',
+    change: '修改',
+    changeWallet: '更换钱包',
+    connectWallet: '连接钱包',
     /** @description 动词 */
     'verb.from': '从', //就当动词省略
     'verb.send': '发送',
