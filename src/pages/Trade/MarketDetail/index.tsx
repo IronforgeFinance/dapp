@@ -13,6 +13,7 @@ import { useERC20, usePrices } from '@/hooks/useContract';
 import Tokens from '@/config/constants/tokens';
 import Contracts from '@/config/constants/contracts';
 import { useIntl } from 'umi';
+import { getTokenPrice } from '@/utils';
 
 interface Price {
     amount: string | number;
@@ -74,15 +75,7 @@ const MarketDetail = (props: MarketDetailProps) => {
     const token1Contract = useERC20(
         Tokens[token1].address[process.env.APP_CHAIN_ID],
     );
-    const prices = usePrices();
 
-    const getTokenPrice = async (token: string) => {
-        if (!token) return 0;
-        const res = await prices.getPrice(
-            ethers.utils.formatBytes32String(token),
-        );
-        return parseFloat(ethers.utils.formatEther(res));
-    };
     const fetchData = async (token, index) => {
         const dataRes = await ourClient.query({
             query: GET_TRADE_MARKET_DETAIL,

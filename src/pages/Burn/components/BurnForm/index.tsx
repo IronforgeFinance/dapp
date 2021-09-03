@@ -23,6 +23,7 @@ import SelectTokens from '@/components/SelectTokens';
 import TransitionConfirm from '@iron/TransitionConfirm';
 import { TokenIcon } from '@/components/Icon';
 import { useIntl } from 'umi';
+import { getTokenPrice } from '@/utils';
 
 const TO_TOKENS = ['BTC'];
 interface IProps {
@@ -75,12 +76,6 @@ export default (props: IProps) => {
     const prices = usePrices();
     const { account } = useWeb3React();
 
-    const getTokenPrice = async (token: string) => {
-        const res = await prices.getPrice(
-            ethers.utils.formatBytes32String(token),
-        );
-        return parseFloat(ethers.utils.formatEther(res));
-    };
 
     const burnAmountHandler = debounce(async (v) => {
         setBurnAmount(v);

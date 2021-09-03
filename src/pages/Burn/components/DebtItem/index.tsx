@@ -6,7 +6,6 @@ import {
     usePrices,
 } from '@/hooks/useContract';
 import { ethers } from 'ethers';
-import { TokenPrices } from '@/config';
 import { toFixedWithoutRound } from '@/utils/bigNumber';
 import './index.less';
 import IconDown from '@/assets/images/down.svg';
@@ -17,6 +16,8 @@ import { useBep20Balance } from '@/hooks/useTokenBalance';
 import { useModel } from 'umi';
 import { COLLATERAL_TOKENS } from '@/config';
 import { TokenIcon } from '@/components/Icon';
+import { getTokenPrice } from '@/utils';
+
 interface IDebtItemProps {
     mintedToken: string;
     mintedTokenName: string;
@@ -72,13 +73,6 @@ export default (props: IDebtItemProps) => {
 
     const { balance: fusdBalance } = useBep20Balance('FUSD');
     const prices = usePrices();
-
-    const getTokenPrice = async (token: string) => {
-        const res = await prices.getPrice(
-            ethers.utils.formatBytes32String(token),
-        );
-        return parseFloat(ethers.utils.formatEther(res));
-    };
 
     /* TODO:合约接口没有查询total debt in usd，
     只能查询某个抵押物currency 对应的debt in usd。

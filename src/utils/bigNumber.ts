@@ -20,6 +20,7 @@ export const toFixedWithoutRound = (
     num: number | BigNumber | string,
     fixed: number,
 ) => {
+    if (num === 0 || !num) return 0;
     var re = new RegExp('^-?\\d+(?:.\\d{0,' + (fixed || -1) + '})?');
     const _num = num
         .toString()

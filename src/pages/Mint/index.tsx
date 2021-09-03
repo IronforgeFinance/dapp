@@ -47,6 +47,7 @@ import { isDeliveryAsset } from '@/utils';
 import { TokenIcon } from '@/components/Icon';
 import TransitionConfirm from '@iron/TransitionConfirm';
 import { StatusType } from '@/components/ProgressBar';
+import { getTokenPrice } from '@/utils';
 
 export default () => {
     const intl = useIntl();
@@ -172,13 +173,6 @@ export default () => {
     //     }
     // }, [collateralAmount, collateralToken, fTokenBalance]);
 
-    const getTokenPrice = async (token: string) => {
-        if (!token) return 0;
-        const res = await prices.getPrice(
-            ethers.utils.formatBytes32String(token),
-        );
-        return parseFloat(ethers.utils.formatEther(res));
-    };
 
     // 实时计算的ratio。用来判断能否mint和计算能mint多少toToken
     useEffect(() => {
@@ -490,7 +484,7 @@ export default () => {
                                     })}
                                 </p>
                                 <p className="right">
-                                    {intl.formatMessage({ id: 'balance:' })}
+                                    {intl.formatMessage({ id: 'balance:' })}{' '}
                                     <span className="balance">
                                         {collateralBalance}
                                     </span>

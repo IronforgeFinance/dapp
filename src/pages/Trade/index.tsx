@@ -22,6 +22,8 @@ import classNames from 'classnames';
 import TransitionConfirm from '@/components/TransitionConfirm';
 import { TokenIcon } from '@/components/Icon';
 import { useIntl, useModel } from 'umi';
+import { getTokenPrice } from '@/utils';
+
 //TODO: for test.从配置中读取
 const TOKEN_OPTIONS = [
     { name: 'lBTC-202112' },
@@ -53,23 +55,6 @@ export default () => {
 
     const { balance: fromTokenBalance } = useBep20Balance(fromToken);
     const { balance: toTokenBalance } = useBep20Balance(toToken);
-
-    const getTokenPrice = async (token: string) => {
-        try {
-            if (!token) return 0;
-            const res = await prices.getPrice(
-                ethers.utils.formatBytes32String(token),
-            );
-            const val = parseFloat(ethers.utils.formatEther(res));
-            if (val === 0) {
-                throw new Error('Wrong token price: ' + token);
-            }
-            return val;
-        } catch (error) {
-            console.error(error);
-        }
-        return 0;
-    };
 
     const getFeeRate = async () => {
         if (toToken) {

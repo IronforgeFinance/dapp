@@ -19,6 +19,7 @@ import {
     useERC20Approve,
 } from '@/hooks/useApprove';
 import { TokenIcon } from '@/components/Icon';
+import { toFixedWithoutRound } from '@/utils/bigNumber';
 
 export default () => {
     const intl = useIntl();
@@ -64,10 +65,14 @@ export default () => {
             if (lp && lpAmount) {
                 const lpData = lpDataList.find((item) => item.symbol === lp);
                 if (lpData) {
-                    const token1Amount =
-                        (lpAmount * lpData.token1Balance) / lpData.balance;
-                    const token2Amount =
-                        (lpAmount * lpData.token2Balance) / lpData.balance;
+                    const token1Amount = toFixedWithoutRound(
+                        (lpAmount * lpData.token1Balance) / lpData.balance,
+                        2,
+                    );
+                    const token2Amount = toFixedWithoutRound(
+                        (lpAmount * lpData.token2Balance) / lpData.balance,
+                        2,
+                    );
                     setReceiveTokens([
                         {
                             token: lpData.token1,
@@ -284,10 +289,10 @@ export default () => {
                     </div>
                 </div>
             )}
-            <TransitionConfirm
+            {/* <TransitionConfirm
                 visable={showTxConfirm}
                 onClose={() => setShowTxConfirm(false)}
-            />
+            /> */}
         </div>
     );
 };

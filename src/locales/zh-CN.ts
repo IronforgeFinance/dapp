@@ -83,7 +83,7 @@ export default {
     'trade.24h.marketcap': '市值',
     'trade.24h.hightest': '24H最高价',
     'trade.24h.lowest': '24H最低价',
-    'trade.pricefeed': 'DEX价格',
+    'trade.pricefeed': 'DEX合约',
     'trade.contract': '合约',
     'trade.button': '交换',
     'trade.selecttoken': '选择Token',

@@ -53,8 +53,9 @@ export const useCheckERC20ApprovalStatus = (
                 setIsApproved(false);
             }
         };
-
-        checkApprovalStatus();
+        if(account) {
+            checkApprovalStatus();
+        }
     }, [account, erc20, spender, address, lastUpdated]);
 
     return { isApproved, setLastUpdated };

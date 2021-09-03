@@ -7,7 +7,7 @@ import { usePrices } from '@/hooks/useContract';
 import { ethers } from 'ethers';
 import { TokenIcon } from '@/components/Icon';
 import { useIntl } from 'umi';
-
+import { getTokenPrice } from '@/utils/index';
 interface TokenOption {
     name?: string;
     ratio?: Number;
@@ -37,16 +37,6 @@ export default (props: ISelectTokensProps) => {
     const [tokens, setTokens] = useState([]);
     const isMounted = useRef(false);
 
-    const prices = usePrices();
-
-    const getTokenPrice = async (token: string) => {
-        if (!token) return 0;
-        const res = await prices.getPrice(
-            ethers.utils.formatBytes32String(token),
-        );
-        return parseFloat(ethers.utils.formatEther(res));
-    };
-
     /**
      * 该代码用于处理包含块的问题
      * 参考资料：https://juejin.cn/post/6844904046663303181
@@ -71,32 +61,32 @@ export default (props: ISelectTokensProps) => {
         }
     }, [visible]);
 
-    useEffect(() => {
-        (async () => {
-            const tokenPrices = await Promise.all(
-                tokenList.map((token) => getTokenPrice(token.name)),
-            );
-            if (isMounted.current) {
-                const tokens = tokenList.map((item, index) => {
-                    const _token: any = {
-                        name: item.name,
-                        price: tokenPrices[index],
-                    };
-                    if (isDeliveryAsset(item.name)) {
-                        const quarter = item.name.split('-')[1];
-                        _token.isDeliveryAsset = /^\d+$/.test(quarter);
+    // useEffect(() => {
+    //     (async () => {
+    //         const tokenPrices = await Promise.all(
+    //             tokenList.map((token) => getTokenPrice(token.name)),
+    //         );
+    //         if (isMounted.current) {
+    //             const tokens = tokenList.map((item, index) => {
+    //                 const _token: any = {
+    //                     name: item.name,
+    //                     price: tokenPrices[index],
+    //                 };
+    //                 if (isDeliveryAsset(item.name)) {
+    //                     const quarter = item.name.split('-')[1];
+    //                     _token.isDeliveryAsset = /^\d+$/.test(quarter);
 
-                        if (_token.isDeliveryAsset) {
-                            _token.remainDays =
-                                getRemainDaysOfQuarterAsset(quarter);
-                        }
-                    }
-                    return _token;
-                });
-                setTokens(tokens);
-            }
-        })();
-    }, [tokenList]);
+    //                     if (_token.isDeliveryAsset) {
+    //                         _token.remainDays =
+    //                             getRemainDaysOfQuarterAsset(quarter);
+    //                     }
+    //                 }
+    //                 return _token;
+    //             });
+    //             setTokens(tokens);
+    //         }
+    //     })();
+    // }, [tokenList]);
 
     useEffect(() => {
         isMounted.current = true;

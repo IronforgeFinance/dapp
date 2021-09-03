@@ -14,7 +14,7 @@ export default {
         symbol: 'USDT',
         address: {
             56: '0x55d398326f99059fF775485246999027B3197955',
-            97: '0x6708eef5a96348171a0f4246aec0a33adf67fc00',
+            97: testnetOutput.buildTokens.usdtToken,
             1337: localOutput.usdtToken,
         },
         decimals: 18,
@@ -24,7 +24,7 @@ export default {
         symbol: 'USDC',
         address: {
             56: '',
-            97: testnetOutput.usdcToken,
+            97: testnetOutput.buildTokens.usdcToken,
             1337: localOutput.usdcToken,
         },
         decimals: 18,
@@ -34,7 +34,7 @@ export default {
         symbol: 'BTCB',
         address: {
             56: '0x7130d2A12B9BCbFAe4f2634d864A1Ee1Ce3Ead9c',
-            97: testnetOutput.btcToken,
+            97: testnetOutput.buildTokens.btcToken,
             1337: localOutput.btcToken,
         },
         decimals: 18,
@@ -44,7 +44,7 @@ export default {
         symbol: 'ETH',
         address: {
             56: '0x2170Ed0880ac9A755fd29B2688956BD959F933F8',
-            97: '0xf02ff1287b82aabd2d441077004b60a4c4fdcbcd',
+            97: testnetOutput.buildTokens.ethToken,
             1337: localOutput.ethToken,
         },
         decimals: 18,
@@ -54,7 +54,7 @@ export default {
         symbol: 'IFT',
         address: {
             56: '0x55d398326f99059fF775485246999027B3197955', //TODO usdt for test
-            97: testnetOutput.PlatformToken, //TODO usdt for test
+            97: testnetOutput.buildTokens.platformToken, //TODO usdt for test
             1337: localOutput.PlatformToken,
         },
         decimals: 18,
@@ -90,7 +90,7 @@ export default {
         symbol: 'USDC-IFT',
         address: {
             56: '',
-            97: '',
+            97: testnetOutput['USDC-IFT'],
             1337: localOutput['USDC-IFT'],
         },
         decimals: 18,
@@ -99,7 +99,7 @@ export default {
         symbol: 'USDC-ETH',
         address: {
             56: '',
-            97: '',
+            97: testnetOutput['USDC-ETH'],
             1337: localOutput['USDC-ETH'],
         },
         decimals: 18,

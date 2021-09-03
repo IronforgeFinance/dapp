@@ -16,7 +16,6 @@ export default function Layout({
         clearDataView: model.clearDataView,
     }));
     const player = useRef<HTMLVideoElement>(null);
-    console.log('location ', process.env.NODE_ENV);
 
     const isDev = () => {
         return process.env.NODE_ENV === 'development';

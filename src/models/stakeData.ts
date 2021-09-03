@@ -11,6 +11,7 @@ import Addresses from '@/config/constants/contracts';
 import Tokens from '@/config/constants/tokens';
 import PancakePair from '@/config/abi/PancakePair.json';
 import { usePrices } from '@/hooks/useContract';
+import { getTokenPrice } from '@/utils/index';
 // apy = ap/totalAp * rewardPerBlock
 export interface IStakePool {
     name: string; // USDC-IFT
@@ -30,13 +31,13 @@ const useStakeDataModel = () => {
     const provider = useWeb3Provider();
     const prices = usePrices();
 
-    const getTokenPrice = async (token: string) => {
-        if (!token) return 0;
-        const res = await prices.getPrice(
-            ethers.utils.formatBytes32String(token),
-        );
-        return parseFloat(ethers.utils.formatEther(res));
-    };
+    // const getTokenPrice = async (token: string) => {
+    //     if (!token) return 0;
+    //     const res = await prices.getPrice(
+    //         ethers.utils.formatBytes32String(token),
+    //     );
+    //     return parseFloat(ethers.utils.formatEther(res));
+    // };
 
     const getLpPrice = async (lpToken: string) => {
         const chainId = process.env.APP_CHAIN_ID;
@@ -51,7 +52,7 @@ const useStakeDataModel = () => {
         }
 
         const lpContract = lpObj.address[chainId];
-        const lp = getContract(PancakePair, lpContract, provider.getSigner());
+        const lp = getContract(PancakePair, lpContract);
 
         const total = parseFloat(
             ethers.utils.formatEther(await lp.totalSupply()),
@@ -167,6 +168,7 @@ const useStakeDataModel = () => {
             ),
         );
         setStakeDataList(list);
+        console.log(list);
         return list;
     };
 

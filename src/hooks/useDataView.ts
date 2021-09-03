@@ -17,6 +17,7 @@ import useRefresh from './useRefresh';
 import { COLLATERAL_TOKENS } from '@/config';
 import { useModel } from 'umi';
 import { useInitialRatio } from '@/hooks/useConfig';
+import { getTokenPrice } from '@/utils';
 const testData = [
     {
         type: ProgressBarType.staked,
@@ -73,81 +74,91 @@ const useDataView = (currency: string) => {
 
     const prices = usePrices();
 
-    const getTokenPrice = async (token: string) => {
-        if (!token) return 0;
-        const res = await prices.getPrice(
-            ethers.utils.formatBytes32String(token),
-        );
-        return parseFloat(ethers.utils.formatEther(res));
-    };
-
     const fetchStakedData = async () => {
         if (account) {
-            const res = await collateralSystem.getUserCollateralInUsd(
-                account,
-                ethers.utils.formatBytes32String(currency),
-            );
-            const amount = parseFloat(ethers.utils.formatUnits(res, 18));
-            console.log('getUserCollateralInUsd', amount);
-            const newVal = {
-                ...stakedData,
-                token: currency,
-                startValue: amount,
-                endValue: amount,
-            };
-            setStakedDataInModel(newVal);
+            try {
+                const res = await collateralSystem.getUserCollateralInUsd(
+                    account,
+                    ethers.utils.formatBytes32String(currency),
+                );
+                const amount = parseFloat(ethers.utils.formatUnits(res, 18));
+                console.log('getUserCollateralInUsd', amount);
+                const newVal = {
+                    ...stakedData,
+                    token: currency,
+                    startValue: amount,
+                    endValue: amount,
+                };
+                setStakedDataInModel(newVal);
+            } catch (err) {
+                console.log(err);
+            }
         }
     };
     const fetchLockedData = async () => {
-        const res = await collateralSystem.userLockedData(
-            account,
-            ethers.utils.formatBytes32String(currency),
-        );
-        const data = parseFloat(ethers.utils.formatEther(res));
-        console.log('fetchLockedData: ', data);
-        const price = await getTokenPrice(PLATFORM_TOKEN);
-        const newVal = {
-            ...lockedData,
-            startValue: data * price,
-            endValue: data * price,
-        };
-        setLockedDataInModel(newVal);
+        try {
+            const res = await collateralSystem.userLockedData(
+                account,
+                ethers.utils.formatBytes32String(currency),
+            );
+            const data = parseFloat(ethers.utils.formatEther(res));
+            console.log('fetchLockedData: ', data);
+            const price = await getTokenPrice(PLATFORM_TOKEN);
+            const newVal = {
+                ...lockedData,
+                startValue: data * price,
+                endValue: data * price,
+            };
+            setLockedDataInModel(newVal);
+        } catch (err) {
+            console.log(err);
+        }
     };
     const fetchDebtData = async () => {
-        const res = await debtSystem.GetUserDebtBalanceInUsd(
-            account,
-            ethers.utils.formatBytes32String(currency),
-        );
-        const debt = parseFloat(ethers.utils.formatUnits(res[0], 18));
-        const newVal = {
-            ...debtData,
-            startValue: debt,
-            endValue: debt,
-        };
-        setDebtDataInModel(newVal);
+        try {
+            const res = await debtSystem.GetUserDebtBalanceInUsd(
+                account,
+                ethers.utils.formatBytes32String(currency),
+            );
+            const debt = parseFloat(ethers.utils.formatUnits(res[0], 18));
+            const newVal = {
+                ...debtData,
+                startValue: debt,
+                endValue: debt,
+            };
+            setDebtDataInModel(newVal);
+        } catch (err) {
+            console.log(err);
+        }
     };
 
     const fetchCurrencyRatio = async () => {
         if (currency) {
-            const res = await collateralSystem.getRatio(
-                account,
-                ethers.utils.formatBytes32String(currency),
-            );
-            const resVal = res.map((item) => ethers.utils.formatEther(item));
-            console.log('getRatio: ', resVal);
-            const _val = Number(resVal[0]) === 0 ? 0 : 1 / Number(res[0]);
+            try {
+                const res = await collateralSystem.getRatio(
+                    account,
+                    ethers.utils.formatBytes32String(currency),
+                );
+                const resVal = res.map((item) =>
+                    ethers.utils.formatEther(item),
+                );
+                console.log('getRatio: ', resVal);
+                const _val = Number(resVal[0]) === 0 ? 0 : 1 / Number(res[0]);
 
-            const val = toFixedWithoutRound(_val, 6); // 保留多位精度
-            const ratioData = parseFloat((val * 100).toFixed(2));
-            console.log('fetchCurrencyRatio: ', val, resVal);
-            const newVal = {
-                ...fRatioData,
-                startValue: ratioData,
-                endValue: ratioData,
-            };
-            setfRatioDataInModel(newVal);
-            setCurrencyRatio(val);
-            return val;
+                const val = toFixedWithoutRound(_val, 6); // 保留多位精度
+                const ratioData = parseFloat((val * 100).toFixed(2));
+                console.log('fetchCurrencyRatio: ', val, resVal);
+                const newVal = {
+                    ...fRatioData,
+                    startValue: ratioData,
+                    endValue: ratioData,
+                };
+                setfRatioDataInModel(newVal);
+                setCurrencyRatio(val);
+                return val;
+            } catch (err) {
+                console.log(err);
+            }
         }
         return 0;
     };
@@ -160,7 +171,7 @@ const useDataView = (currency: string) => {
     }, [account, currency, provider]);
 
     useEffect(() => {
-        if (currency) {
+        if (currency && account) {
             fetchCurrencyRatio();
         }
     }, [currency, account, provider, initialRatio]);

@@ -1,5 +1,8 @@
 import dayjs from 'dayjs';
 import arraySupport from 'dayjs/plugin/arraySupport';
+import { getPricesContract } from '@/utils/contractHelper';
+import { simpleRpcProvider } from '@/utils/providers';
+import { ethers } from 'ethers';
 dayjs.extend(arraySupport);
 //quarter is like 202112
 export const getRemainDaysOfQuarterAsset = (quarter: string) => {
@@ -45,4 +48,21 @@ export const parseEnumToArray = (enumme) => {
     return Object.keys(enumme)
         .filter(stringIsNumber)
         .map((key) => enumme[key]);
+};
+
+export const getTokenPrice = async (token: string) => {
+    if (!token) return 0;
+    try {
+        if (token === 'FUSD') return 1; // TODO for test
+        const prices = getPricesContract(simpleRpcProvider);
+        const res = await prices.getPrice(
+            ethers.utils.formatBytes32String(token),
+        );
+        console.log('getTokenPrice: ', token, res);
+        return parseFloat(ethers.utils.formatEther(res));
+    } catch (err) {
+        console.log(err);
+        console.log('getTokenPrice error:', token);
+        return 0;
+    }
 };
