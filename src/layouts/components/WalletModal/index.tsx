@@ -8,6 +8,7 @@ import config, {
 import { ConnectorNames, Config } from './types';
 import classNames from 'classnames';
 import useAuth from '@/hooks/useAuth';
+import { useIntl } from 'umi';
 
 type ConnectStatus = 'connected' | 'unconnect';
 
@@ -50,6 +51,7 @@ const getPreferredConfig = (walletConfig: Config[]) => {
 };
 
 const WalletModal = (props: WalletModalProps) => {
+    const intl = useIntl();
     const { visable, closeOnIconClick, status, displayCount } = props;
     const { login, logout } = useAuth();
 
@@ -68,7 +70,10 @@ const WalletModal = (props: WalletModalProps) => {
     );
 
     const title = React.useMemo(
-        () => (isConnected ? 'Connect Wallet' : 'Change Wallet'),
+        () =>
+            isConnected
+                ? intl.formatMessage({ id: 'changeWallet' })
+                : intl.formatMessage({ id: 'connectWallet' }),
         [isConnected],
     );
 

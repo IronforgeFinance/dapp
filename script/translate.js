@@ -75,5 +75,5 @@ function translate(filename, temp) {
         root,
         './src/locales/dist/zh-CN.js',
     )).default;
-    translate('japan', temp);
+    translate('en-US', temp);
 })();

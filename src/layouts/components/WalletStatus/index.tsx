@@ -58,7 +58,7 @@ export default () => {
                     className="btn-change btn-common"
                     onClick={() => setVisable(true)}
                 >
-                    Change
+                    {intl.formatMessage({ id: 'change' })}
                 </button>
             </p>
             <p className="item">{addressDisplay}</p>
@@ -84,7 +84,7 @@ export default () => {
                     className="btn-disconnect common-btn-red"
                     onClick={handleLogout}
                 >
-                    DISCONNECT
+                    {intl.formatMessage({ id: 'disconnect' })}
                 </button>
             </p>
         </div>
