@@ -56,6 +56,16 @@ dl {
     margin-bottom: 0 !important;
 }
 
+#root {
+    position: relative;
+    z-index: 1;
+}
+
+#root ~ div {
+    position: relative;
+    z-index: 10;
+}
+
 .input-item {
     margin-bottom: 10px;
 
