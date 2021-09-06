@@ -36,7 +36,8 @@ const useLpDataModel = () => {
             throw new Error('Wrong lp token ' + lpToken);
         }
         const lpContract = lpObj.address[chainId];
-        const lp = getContract(PancakePair, lpContract, provider.getSigner());
+        const lp = getContract(PancakePair, lpContract);
+        console.log('total: ', await lp.totalSupply());
         const total = ethers.utils.formatEther(await lp.totalSupply());
         const [r0, r1] = await lp.getReserves();
         console.log('r0: ', ethers.utils.formatEther(r0));

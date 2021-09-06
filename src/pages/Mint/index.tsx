@@ -38,7 +38,6 @@ import { useTokenPrice } from '@/hooks/useTokenPrice';
 import Scale from '@/components/Scale';
 // import SettingView from './SettingView';
 import classNames from 'classnames';
-import useDexPrice from '@/hooks/useDexPrice';
 import SelectTokens from '@/components/SelectTokens';
 import CommentaryCard from '@/components/CommentaryCard';
 import { useCallback } from 'react';
@@ -74,8 +73,6 @@ export default () => {
     const configContract = useConfig();
 
     const initialRatio = useInitialRatio(collateralToken);
-
-    const IFTPrice = useDexPrice('IFT', 'USDC');
 
     const collateralTokenAddress = useMemo(() => {
         if (collateralToken) {
@@ -173,7 +170,6 @@ export default () => {
     //     }
     // }, [collateralAmount, collateralToken, fTokenBalance]);
 
-
     // 实时计算的ratio。用来判断能否mint和计算能mint多少toToken
     useEffect(() => {
         (async () => {
@@ -270,7 +266,7 @@ export default () => {
     );
 
     const lockedAmountHandler = React.useCallback(
-        debounce((v) => {
+        debounce(async (v) => {
             // TODO comment this for test
             // if (Number(v) > maxLockedAmount) {
             //     setLockedAmount(0);
@@ -279,20 +275,22 @@ export default () => {
             // }
             setLockedAmount(v);
             setLockedScale(Number(v) / fTokenBalance);
-            const val = toFixedWithoutRound(IFTPrice * v, 2);
+            const bsPrice = await getTokenPrice(PLATFORM_TOKEN);
+            const val = toFixedWithoutRound(bsPrice * v, 2);
             setLockedData({
                 ...lockedData,
                 endValue: val + lockedData.startValue,
             });
         }, 500),
-        [IFTPrice, fTokenBalance, lockedData],
+        [fTokenBalance, lockedData],
     );
 
-    const scaleHandler = (v) => {
+    const scaleHandler = async (v) => {
         setLockedScale(v);
         const amount = fTokenBalance * Number(v);
         setLockedAmount(amount);
-        const val = toFixedWithoutRound(IFTPrice * amount, 2);
+        const bsPrice = await getTokenPrice(PLATFORM_TOKEN);
+        const val = toFixedWithoutRound(bsPrice * amount, 2);
         setLockedData({
             ...lockedData,
             endValue: val || 0,
@@ -381,11 +379,10 @@ export default () => {
                     );
                 } else {
                     const token = Tokens[collateralToken];
-                    const decimal = token.decimals;
                     const tx0 = await collateralSystem.stakeAndBuild(
                         ethers.utils.formatBytes32String(collateralToken), // stakeCurrency
-                        expandToNDecimals(collateralAmount!, decimal), // stakeAmount
-                        expandToNDecimals(toAmount!, 18), // buildAmount
+                        expandTo18Decimals(collateralAmount!), // stakeAmount
+                        expandTo18Decimals(toAmount!), // buildAmount
                         expandTo18Decimals(lockedAmount || 0),
                     );
                     message.info(

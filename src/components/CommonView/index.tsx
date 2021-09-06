@@ -1,7 +1,7 @@
 import './index.less';
 
 import { Fragment, ReactNode, useMemo } from 'react';
-import { getRemainDaysOfQuarterAsset } from '@/utils';
+import { getRemainDaysOfQuarterAsset, isDeliveryAsset } from '@/utils';
 import { TokenIcon } from '@/components/Icon';
 import { ethers } from 'ethers';
 import { Popover } from 'antd';
@@ -229,7 +229,7 @@ export const TypeView = (props: RecordProps) => {
 
     const isDelivery = useMemo(
         // Delivery Sample: LBTC-20170207
-        () => /^.+(-\d+)$/.test(currency),
+        () => isDeliveryAsset(currency),
         [currency],
     );
 

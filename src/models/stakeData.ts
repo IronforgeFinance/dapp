@@ -12,6 +12,8 @@ import Tokens from '@/config/constants/tokens';
 import PancakePair from '@/config/abi/PancakePair.json';
 import { usePrices } from '@/hooks/useContract';
 import { getTokenPrice } from '@/utils/index';
+import { LP_TOKENS } from '@/config';
+
 // apy = ap/totalAp * rewardPerBlock
 export interface IStakePool {
     name: string; // USDC-IFT
@@ -25,8 +27,26 @@ export interface IStakePool {
     redeemableReward: number;
 }
 
+const DEFAULT_POOL = {
+    name: '',
+    lpAddress: '',
+    lpPrice: 0,
+    apy: 0,
+    totalStaked: 0,
+    poolId: 0,
+    staked: 0,
+    totalPendingReward: 0,
+    redeemableReward: 0,
+};
+
 const useStakeDataModel = () => {
-    const [stakeDataList, setStakeDataList] = useState<IStakePool[]>([]);
+    const [stakeDataList, setStakeDataList] = useState<IStakePool[]>(
+        LP_TOKENS.map((item) => ({
+            ...DEFAULT_POOL,
+            name: item.poolName,
+            poolId: item.poolId,
+        })),
+    );
     const [currentStakePool, setCurrentStakePool] = useState<IStakePool>();
     const provider = useWeb3Provider();
     const prices = usePrices();

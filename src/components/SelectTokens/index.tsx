@@ -61,32 +61,33 @@ export default (props: ISelectTokensProps) => {
         }
     }, [visible]);
 
-    // useEffect(() => {
-    //     (async () => {
-    //         const tokenPrices = await Promise.all(
-    //             tokenList.map((token) => getTokenPrice(token.name)),
-    //         );
-    //         if (isMounted.current) {
-    //             const tokens = tokenList.map((item, index) => {
-    //                 const _token: any = {
-    //                     name: item.name,
-    //                     price: tokenPrices[index],
-    //                 };
-    //                 if (isDeliveryAsset(item.name)) {
-    //                     const quarter = item.name.split('-')[1];
-    //                     _token.isDeliveryAsset = /^\d+$/.test(quarter);
+    useEffect(() => {
+        (async () => {
+            const tokenPrices = await Promise.all(
+                tokenList.map((token) => getTokenPrice(token.name)),
+            );
+            if (isMounted.current) {
+                const tokens = tokenList.map((item, index) => {
+                    const _token: any = {
+                        name: item.name,
+                        price: tokenPrices[index],
+                    };
+                    if (isDeliveryAsset(item.name)) {
+                        const reg = /^.+(\d{6})$/;
+                        const quarter = item.name.match(reg)[1];
+                        _token.isDeliveryAsset = true;
 
-    //                     if (_token.isDeliveryAsset) {
-    //                         _token.remainDays =
-    //                             getRemainDaysOfQuarterAsset(quarter);
-    //                     }
-    //                 }
-    //                 return _token;
-    //             });
-    //             setTokens(tokens);
-    //         }
-    //     })();
-    // }, [tokenList]);
+                        if (_token.isDeliveryAsset) {
+                            _token.remainDays =
+                                getRemainDaysOfQuarterAsset(quarter);
+                        }
+                    }
+                    return _token;
+                });
+                setTokens(tokens);
+            }
+        })();
+    }, [tokenList]);
 
     useEffect(() => {
         isMounted.current = true;
