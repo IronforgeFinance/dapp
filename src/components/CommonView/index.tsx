@@ -207,6 +207,7 @@ export const TokenView = (props: RecordProps) => {
                 className="bottom"
                 style={{
                     visibility: noPrice ?? false ? 'hidden' : 'unset',
+                    minHeight: 24,
                 }}
             >
                 {!(noToken ?? false) && <TokenIcon name={currency} />}
