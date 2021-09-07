@@ -1,8 +1,9 @@
+import './less/index.less';
+
 import React, { useState, useMemo } from 'react';
 import TabGroup from '@/components/TabGroup';
 import ProvideForm from './components/ProvideForm';
 import WithdrawForm from './components/WithdrawForm';
-import './index.less';
 import IconBack from '@/assets/images/icon-back.png';
 import { history } from 'umi';
 
