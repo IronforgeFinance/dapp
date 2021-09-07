@@ -31,24 +31,30 @@
         "type": "address"
       },
       {
-        "internalType": "address",
-        "name": "rewarder",
-        "type": "address"
-      },
-      {
         "internalType": "bytes32",
-        "name": "currency",
+        "name": "stakeCurrency",
         "type": "bytes32"
       },
       {
         "internalType": "uint256",
-        "name": "amount",
+        "name": "stakeAmount",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "lockedAmount",
         "type": "uint256"
       }
     ],
-    "name": "collateralFromUnlockReward",
-    "outputs": [],
-    "stateMutability": "nonpayable",
+    "name": "calcBuildRatio",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
     "type": "function"
   },
   {
@@ -66,6 +72,35 @@
     ],
     "name": "getFreeCollateralInUsd",
     "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_user",
+        "type": "address"
+      },
+      {
+        "internalType": "bytes32",
+        "name": "_currency",
+        "type": "bytes32"
+      }
+    ],
+    "name": "getRatio",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      },
       {
         "internalType": "uint256",
         "name": "",
@@ -161,6 +196,24 @@
       }
     ],
     "name": "moveCollateral",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_user",
+        "type": "address"
+      },
+      {
+        "internalType": "bytes32",
+        "name": "_currency",
+        "type": "bytes32"
+      }
+    ],
+    "name": "withdrawLockedTokens",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"

@@ -12,6 +12,7 @@ import {
     getPricesContract,
     getRouterContract,
     getPancakeFactoryContract,
+    getMinerRewardContract
 } from '@/utils/contractHelper';
 
 export const useERC20 = (address: string) => {
@@ -75,6 +76,13 @@ export const useRouter = () => {
 export const usePancakeFactory = () => {
     const provider = useWeb3Provider();
     return useMemo(() => getPancakeFactoryContract(provider.getSigner()), [
+        provider,
+    ]);
+};
+
+export const useMinerReward = () => {
+    const provider = useWeb3Provider();
+    return useMemo(() => getMinerRewardContract(provider.getSigner()), [
         provider,
     ]);
 };

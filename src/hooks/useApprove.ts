@@ -4,7 +4,8 @@ import { ethers, Contract } from 'ethers';
 import BigNumber from 'bignumber.js';
 import { useERC20 } from '@/hooks/useContract';
 import useLastUpdated from '@/hooks/useLastUpdated';
-import { message } from 'antd';
+// import { message } from 'antd';
+import * as message from '@/components/Notification';
 
 // Approve erc20
 export const useERC20Approve = (
@@ -52,8 +53,9 @@ export const useCheckERC20ApprovalStatus = (
                 setIsApproved(false);
             }
         };
-
-        checkApprovalStatus();
+        if(account) {
+            checkApprovalStatus();
+        }
     }, [account, erc20, spender, address, lastUpdated]);
 
     return { isApproved, setLastUpdated };

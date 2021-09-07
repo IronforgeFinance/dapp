@@ -23,31 +23,6 @@
     "inputs": [
       {
         "indexed": false,
-        "internalType": "bytes32",
-        "name": "currencyKey",
-        "type": "bytes32"
-      },
-      {
-        "indexed": false,
-        "internalType": "string",
-        "name": "bandCurrencyKey",
-        "type": "string"
-      },
-      {
-        "indexed": false,
-        "internalType": "address",
-        "name": "oracle",
-        "type": "address"
-      }
-    ],
-    "name": "BandOracleAdded",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": false,
         "internalType": "address",
         "name": "oldCandidate",
         "type": "address"
@@ -130,6 +105,25 @@
       },
       {
         "indexed": false,
+        "internalType": "address",
+        "name": "oracle",
+        "type": "address"
+      }
+    ],
+    "name": "QuarterlyContractOracleAdded",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "bytes32",
+        "name": "currencyKey",
+        "type": "bytes32"
+      },
+      {
+        "indexed": false,
         "internalType": "uint256",
         "name": "oldStalePeriod",
         "type": "uint256"
@@ -159,7 +153,7 @@
   },
   {
     "inputs": [],
-    "name": "ORACLE_TYPE_BAND",
+    "name": "ORACLE_TYPE_CHAINLINK",
     "outputs": [
       {
         "internalType": "uint8",
@@ -172,7 +166,20 @@
   },
   {
     "inputs": [],
-    "name": "ORACLE_TYPE_CHAINLINK",
+    "name": "ORACLE_TYPE_DEX",
+    "outputs": [
+      {
+        "internalType": "uint8",
+        "name": "",
+        "type": "uint8"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "ORACLE_TYPE_QUARTERLY_CONTRACT",
     "outputs": [
       {
         "internalType": "uint8",
@@ -192,62 +199,6 @@
       }
     ],
     "name": "__AdminUpgradeable_init",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "bytes32",
-        "name": "currencyKey",
-        "type": "bytes32"
-      },
-      {
-        "internalType": "string",
-        "name": "bandCurrencyKey",
-        "type": "string"
-      },
-      {
-        "internalType": "address",
-        "name": "oracleAddress",
-        "type": "address"
-      },
-      {
-        "internalType": "bool",
-        "name": "removeExisting",
-        "type": "bool"
-      }
-    ],
-    "name": "addBandOracle",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "bytes32[]",
-        "name": "currencyKeys",
-        "type": "bytes32[]"
-      },
-      {
-        "internalType": "string[]",
-        "name": "bandCurrencyKeys",
-        "type": "string[]"
-      },
-      {
-        "internalType": "address[]",
-        "name": "oracleAddresses",
-        "type": "address[]"
-      },
-      {
-        "internalType": "bool",
-        "name": "removeExisting",
-        "type": "bool"
-      }
-    ],
-    "name": "addBandOracles",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -294,6 +245,98 @@
       }
     ],
     "name": "addChainlinkOracles",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "currencyKey",
+        "type": "bytes32"
+      },
+      {
+        "internalType": "address",
+        "name": "oracleAddress",
+        "type": "address"
+      },
+      {
+        "internalType": "bool",
+        "name": "removeExisting",
+        "type": "bool"
+      }
+    ],
+    "name": "addDexOracle",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes32[]",
+        "name": "currencyKeys",
+        "type": "bytes32[]"
+      },
+      {
+        "internalType": "address[]",
+        "name": "oracleAddresses",
+        "type": "address[]"
+      },
+      {
+        "internalType": "bool",
+        "name": "removeExisting",
+        "type": "bool"
+      }
+    ],
+    "name": "addDexOracles",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "currencyKey",
+        "type": "bytes32"
+      },
+      {
+        "internalType": "address",
+        "name": "oracleAddress",
+        "type": "address"
+      },
+      {
+        "internalType": "bool",
+        "name": "removeExisting",
+        "type": "bool"
+      }
+    ],
+    "name": "addQuarterlyContractOracle",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes32[]",
+        "name": "currencyKeys",
+        "type": "bytes32[]"
+      },
+      {
+        "internalType": "address[]",
+        "name": "oracleAddresses",
+        "type": "address[]"
+      },
+      {
+        "internalType": "bool",
+        "name": "removeExisting",
+        "type": "bool"
+      }
+    ],
+    "name": "addQuarterlyContractOracles",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -452,16 +495,16 @@
     "inputs": [
       {
         "internalType": "bytes32",
-        "name": "",
+        "name": "currencyKey",
         "type": "bytes32"
       }
     ],
-    "name": "ironForgeCurrencyKeysToBandCurrencyKeys",
+    "name": "isFrozen",
     "outputs": [
       {
-        "internalType": "string",
+        "internalType": "bool",
         "name": "",
-        "type": "string"
+        "type": "bool"
       }
     ],
     "stateMutability": "view",
@@ -532,6 +575,24 @@
       }
     ],
     "name": "setCandidate",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "currencyKey",
+        "type": "bytes32"
+      },
+      {
+        "internalType": "bool",
+        "name": "frozen",
+        "type": "bool"
+      }
+    ],
+    "name": "setFrozen",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"

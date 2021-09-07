@@ -1,6 +1,5 @@
 @import './button.less';
 @import './icon.less';
-@import './token.less';
 
 @max-phone-width: 414px; //phone最大宽度
 @min-ipad-width: 768px; //ipad最小宽度
@@ -32,7 +31,7 @@
 }
 
 body {
-    font-family: PingFangSC-Regular, sans-serif;
+    font-family: Poppins, sans-serif;
 }
 
 img {
@@ -55,6 +54,16 @@ ul,
 dl {
     margin-top: 0;
     margin-bottom: 0 !important;
+}
+
+#root {
+    position: relative;
+    z-index: 1;
+}
+
+#root ~ div {
+    position: relative;
+    z-index: 10;
 }
 
 .input-item {
@@ -150,6 +159,8 @@ dl {
 }
 
 .custom-input {
+    flex: 1;
+
     &.disabled {
         .ant-input-number-input-wrap {
             color: rgba(255, 255, 255, 0.5);
@@ -189,29 +200,12 @@ dl {
     border: none !important;
     background: none !important;
     width: 60%;
-    min-width: 140px !important;
+    // min-width: 140px !important;
 }
 
-.common-btn {
-    min-width: 236px;
-    height: 68px;
-
-    font-style: normal;
-    font-weight: bold;
-    font-size: 18px;
-    display: flex;
-    align-items: center;
-    text-align: center;
-    color: #fffefe;
-    text-align: center;
-    display: block;
-    cursor: pointer;
-    border: none;
-}
-
-.common-btn:hover {
-    color: #fffefe !important;
-}
+// .common-btn:hover {
+//     color: #fffefe !important;
+// }
 
 .common-btn-s {
     height: 38px;
@@ -231,6 +225,7 @@ dl {
     background-position: center;
     background-size: 100% 100%;
     position: relative;
+    filter: drop-shadow(12px 12px 70px #e78231);
 
     > * {
         position: relative;
@@ -247,6 +242,7 @@ dl {
         background: url('~@/assets/images/common-box-corner.png') no-repeat;
         background-size: cover;
         background-position: center top;
+        pointer-events: none;
     }
 
     &:after {
@@ -260,6 +256,7 @@ dl {
         background: url('~@/assets/images/common-box-corner.png') no-repeat;
         background-size: cover;
         background-position: center bottom;
+        pointer-events: none;
     }
 }
 
@@ -356,4 +353,205 @@ dl {
     align-items: center;
     color: #e1ab3b;
     display: inline-block;
+}
+
+.common-title {
+    width: 268px;
+    height: 58px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    left: 50%;
+    transform: translate(-50%);
+    position: absolute;
+
+    &.silver {
+        &:after {
+            background-image: url('~@/assets/images/common-title-silver.png');
+        }
+
+        &:before {
+            background-image: url('~@/assets/images/common-title-silver.png');
+        }
+    }
+
+    &.gold {
+        &:after {
+            background-image: url('~@/assets/images/common-title-gold.png');
+        }
+
+        &:before {
+            background-image: url('~@/assets/images/common-title-gold.png');
+        }
+    }
+
+    span {
+        position: relative;
+        z-index: 1;
+        font-style: normal;
+        font-weight: bold;
+        font-size: 16px;
+        line-height: 24px;
+        text-align: center;
+        color: #1c1c1d;
+    }
+
+    &:before {
+        flex: 1;
+        content: '';
+        position: absolute;
+        width: 50%;
+        height: 100%;
+        top: 50%;
+        transform: translateY(-50%);
+        left: 0;
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-position: left center;
+    }
+
+    &:after {
+        flex: 1;
+        content: '';
+        position: absolute;
+        width: 50%;
+        height: 100%;
+        top: 50%;
+        transform: translateY(-50%);
+        right: 0;
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-position: right center;
+    }
+}
+
+.common-select.ant-select {
+    *,
+    .ant-select-focused,
+    .ant-select-selector {
+        background-color: transparent;
+        color: #e1ab3b;
+        border: none;
+        border-color: transparent;
+
+        &:active,
+        &:focus {
+            border-color: transparent;
+            border: none;
+        }
+    }
+}
+
+.ant-btn.ant-btn-loading::before {
+    display: none;
+}
+
+.ant-popover {
+    .ant-popover-arrow-content {
+        background-color: #ac4c06;
+    }
+
+    .ant-popover-inner {
+        background-color: #ac4c06;
+        box-shadow: 0px 4px 30px rgba(231, 130, 49, 0.4);
+    }
+
+    .ant-popover-inner-content {
+        font-style: normal;
+        font-weight: 300;
+        font-size: 15px;
+        line-height: 22px;
+        display: flex;
+        align-items: center;
+        text-align: center;
+        color: #ffffff;
+        border-radius: 2px;
+    }
+}
+
+.custom-table.ant-table-wrapper {
+    width: 100%;
+
+    .ant-pagination {
+        * {
+            background-color: transparent;
+            border: none;
+        }
+    }
+
+    .ant-table {
+        background: transparent;
+        border: none;
+    }
+
+    .ant-table-thead {
+        * {
+            font-style: normal;
+            font-weight: 300;
+            font-size: 15px;
+            line-height: 22px;
+            color: rgba(41, 39, 37, 0.4);
+
+            &:before {
+                display: none;
+            }
+        }
+    }
+
+    .ant-table-placeholder {
+        display: none;
+    }
+
+    .ant-table-cell {
+        background: transparent;
+        border: none;
+        position: relative;
+        z-index: 1;
+    }
+
+    .ant-table-tbody > tr.ant-table-row:hover > td {
+        background: transparent;
+    }
+}
+
+.custom-tabs.ant-tabs {
+    width: 100%;
+
+    .ant-table-thead {
+        display: none;
+    }
+
+    .ant-tabs-nav {
+        &:before {
+            display: none;
+        }
+    }
+
+    .ant-tabs-top > .ant-tabs-nav,
+    .ant-tabs-bottom > .ant-tabs-nav,
+    .ant-tabs-top > div > .ant-tabs-nav,
+    .ant-tabs-bottom > div > .ant-tabs-nav {
+        margin: 0;
+    }
+
+    .ant-tabs-tab-btn {
+        font-style: normal;
+        font-weight: 300;
+        font-size: 15px;
+        line-height: 22px;
+        color: rgba(41, 39, 37, 0.4);
+    }
+
+    .ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn {
+        color: #ac4c06;
+    }
+
+    .ant-tabs-tab:hover {
+        color: #ac4c06;
+    }
+
+    .ant-tabs-ink-bar {
+        background: #ac4c06;
+    }
 }

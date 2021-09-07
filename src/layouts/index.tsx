@@ -16,7 +16,6 @@ export default function Layout({
         clearDataView: model.clearDataView,
     }));
     const player = useRef<HTMLVideoElement>(null);
-    console.log('location ', process.env.NODE_ENV);
 
     const isDev = () => {
         return process.env.NODE_ENV === 'development';
@@ -50,8 +49,14 @@ export default function Layout({
                     'container-video': true,
                     'container-mint': location.pathname === '/mint',
                     'container-burn': location.pathname === '/burn',
-                    'container-trade': location.pathname === '/trade',
-                    'container-farm': location.pathname === '/farm',
+                    'container-trade': [
+                        '/trade',
+                        '/farm',
+                        '/wallet',
+                        '/farm/provide',
+                        '/farm/stake',
+                    ].includes(location.pathname),
+                    'container-home': location.pathname === '/',
                 })}
             >
                 <source
@@ -62,7 +67,7 @@ export default function Layout({
             </video>
             <CommonHeader />
             {children}
-            {/* <CommonFooter /> */}
+            <CommonFooter />
         </div>
     );
 }

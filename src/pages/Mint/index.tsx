@@ -1,14 +1,20 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { InputNumber, Select, Progress, message, Button } from 'antd';
-import { useIntl, useModel } from 'umi';
+import { InputNumber, Select, Progress, Button, Popover } from 'antd';
+import * as message from '@/components/Notification';
+import { request, useIntl, useModel } from 'umi';
 import IconDown from '@/assets/images/down.svg';
 import IconAdd from '@/assets/images/add.svg';
-import { COLLATERAL_TOKENS, MINT_TOKENS, TokenPrices } from '@/config';
+import { COLLATERAL_TOKENS, MINT_TOKENS, PLATFORM_TOKEN } from '@/config';
 import { useERC20 } from '@/hooks/useContract';
 import useTokenBalance, { useBep20Balance } from '@/hooks/useTokenBalance';
 import { useWeb3React } from '@web3-react/core';
 import { getBep20Contract } from '@/utils/contractHelper';
-import { useCollateralSystem, usePrices } from '@/hooks/useContract';
+import {
+    useCollateralSystem,
+    usePrices,
+    useExchangeSystem,
+    useConfig,
+} from '@/hooks/useContract';
 import Tokens from '@/config/constants/tokens';
 import Contracts from '@/config/constants/contracts';
 import { ethers } from 'ethers';
@@ -29,13 +35,19 @@ import {
 import './index.less';
 import useDataView from '@/hooks/useDataView';
 import { useTokenPrice } from '@/hooks/useTokenPrice';
-import ScaleGroup from '@/components/ScaleGroup';
+import Scale from '@/components/Scale';
 // import SettingView from './SettingView';
 import classNames from 'classnames';
-import useDexPrice from '@/hooks/useDexPrice';
 import SelectTokens from '@/components/SelectTokens';
 import CommentaryCard from '@/components/CommentaryCard';
 import { useCallback } from 'react';
+import { isDeliveryAsset } from '@/utils';
+// import Popover from '@/components/Popover';
+import { TokenIcon } from '@/components/Icon';
+import TransitionConfirm from '@iron/TransitionConfirm';
+import { StatusType } from '@/components/ProgressBar';
+import { getTokenPrice } from '@/utils';
+
 export default () => {
     const intl = useIntl();
     const { account } = useWeb3React();
@@ -51,13 +63,16 @@ export default () => {
     const [toToken, setToToken] = useState(MINT_TOKENS[0]);
     const [submitting, setSubmitting] = useState(false);
     const [computedRatio, setComputedRatio] = useState(0);
-    const [lockedScale, setLockedScale] = useState('0');
+    const [lockedScale, setLockedScale] = useState<string | number>('0');
+
+    const [showSelectFromToken, setShowSelectFromToken] = useState(false);
+    const [showSelectToToken, setShowSelectToToken] = useState(false);
 
     const collateralSystem = useCollateralSystem();
+    const exchangeSystem = useExchangeSystem();
+    const configContract = useConfig();
 
     const initialRatio = useInitialRatio(collateralToken);
-
-    const IFTPrice = useDexPrice('IFT', 'USDC');
 
     const collateralTokenAddress = useMemo(() => {
         if (collateralToken) {
@@ -123,110 +138,85 @@ export default () => {
         ...model,
     }));
 
-    const { balance } = useBep20Balance('IFT');
+    const { requestConnectWallet } = useModel('app', (model) => ({
+        requestConnectWallet: model.requestConnectWallet,
+    }));
+
+    const { balance, refresh: refreshIFTBalance } = useBep20Balance('IFT');
     const fTokenBalance = balance as number;
 
-    const { balance: collateralBalance } = useBep20Balance(collateralToken);
+    const { balance: collateralBalance, refresh: refreshCollateralBalance } =
+        useBep20Balance(collateralToken);
 
-    // fToken价值/Collateral价值 最高不超过3/10
-    const maxLockedAmount = useMemo(() => {
-        if (collateralToken && collateralAmount) {
-            const amount =
-                (Number(collateralAmount) *
-                    TokenPrices[collateralToken] *
-                    0.3) /
-                TokenPrices['fToken_USDT'];
-            return amount;
-        } else {
-            return fTokenBalance;
-        }
-    }, [collateralAmount, collateralToken, fTokenBalance]);
+    const { balance: mintBalance, refresh: refreshMintBalance } =
+        useBep20Balance(toToken);
 
-    const getTokenPrice = async (token: string) => {
-        if (!token) return 0;
-        const res = await prices.getPrice(
-            ethers.utils.formatBytes32String(token),
-        );
-        return parseFloat(ethers.utils.formatEther(res));
+    const refreshBalance = () => {
+        refreshIFTBalance();
+        refreshCollateralBalance();
+        refreshMintBalance();
     };
+    // TODO fToken价值/Collateral价值 最高不超过3/10
+    // const maxLockedAmount = useMemo(() => {
+    //     if (collateralToken && collateralAmount) {
+    //         const amount =
+    //             (Number(collateralAmount) *
+    //                 TokenPrices[collateralToken] *
+    //                 0.3) /
+    //             TokenPrices['fToken_USDT'];
+    //         return amount;
+    //     } else {
+    //         return fTokenBalance;
+    //     }
+    // }, [collateralAmount, collateralToken, fTokenBalance]);
 
     // 实时计算的ratio。用来判断能否mint和计算能mint多少toToken
     useEffect(() => {
         (async () => {
-            let computedRatio;
-            if (!collateralAmount || !collateralToken || !lockedAmount) {
-                computedRatio = initialRatio;
-            } else if (!lockedAmount || Number(lockedAmount) === 0) {
-                computedRatio = initialRatio;
-            } else {
-                const [
-                    catalystEffectContract,
-                    proportionContract,
-                    priceContract,
-                ] = await collateralSystem.getCatalystResult(
+            let newRatio = currencyRatio;
+            if (
+                account &&
+                collateralToken &&
+                collateralAmount &&
+                lockedAmount
+            ) {
+                const _buildRatio = await collateralSystem.calcBuildRatio(
+                    account,
                     ethers.utils.formatBytes32String(collateralToken), // stake currency
                     expandTo18Decimals(collateralAmount), //stake amount
                     expandTo18Decimals(lockedAmount), // locked amount
                 );
-                console.log(
-                    'getCatalystResult: ',
-                    ethers.utils.formatEther(catalystEffectContract),
-                    ethers.utils.formatEther(proportionContract),
-                    ethers.utils.formatEther(priceContract),
+                const buildRatio = parseFloat(
+                    ethers.utils.formatEther(_buildRatio),
                 );
-                // 合约计算的是利用率增加了catalystEffectContract
-                const catalystEffect = parseFloat(
-                    ethers.utils.formatEther(catalystEffectContract),
-                );
-                const newURatio = (1 / initialRatio) * (1 + catalystEffect);
-                computedRatio = 1 / newURatio;
-            }
-            setComputedRatio(computedRatio);
-        })();
-    }, [collateralAmount, collateralToken, lockedAmount, initialRatio]);
 
-    useEffect(() => {
-        console.log('initialRatio ', initialRatio);
-    }, [initialRatio]);
-
-    useEffect(() => {
-        (async () => {
-            if (collateralAmount && toAmount && collateralToken && toToken) {
-                const collateralPrice = await getTokenPrice(collateralToken);
-                const totalCollateral =
-                    stakedData.startValue + collateralAmount * collateralPrice;
-                const totalDebt = debtData.startValue + toAmount * 1; // TODO 目前铸造物只有FUSD
-                const ratio =
-                    totalDebt > 0
-                        ? toFixedWithoutRound(
-                              (totalCollateral * 100) / totalDebt,
-                              2,
-                          )
-                        : 0;
+                console.log('calcBuildRatio: ', buildRatio);
+                newRatio = 1 / buildRatio;
                 setfRatioData({
                     ...fRatioData,
-                    startValue: parseFloat((currencyRatio * 100).toFixed(2)),
-                    endValue: Number(ratio),
+                    endValue: parseFloat((newRatio * 100).toFixed(2)),
                 });
             }
+            setComputedRatio(newRatio);
         })();
-    }, [collateralAmount, toAmount, collateralToken, toToken]);
+    }, [collateralAmount, collateralToken, lockedAmount, account]);
 
     // 计算toAmount
     useEffect(() => {
         (async () => {
             if (computedRatio >= 2 && toToken && collateralAmount) {
                 const price = await getTokenPrice(collateralToken);
-                const amount = toFixedWithoutRound(
+                const fusdAmount = toFixedWithoutRound(
                     (Number(collateralAmount) * price) / computedRatio,
                     2,
                 );
                 // TODO 铸造物的价格，FUSD是1，其它的从合约获取
-                // const amount = toFixedWithoutRound(
-                //     val / TokenPrices[toToken.substr(1)],
-                //     2,
-                // );
-                setToAmount(parseFloat(amount));
+                const toTokenPrice = await getTokenPrice(toToken);
+                const amount = toFixedWithoutRound(
+                    fusdAmount / toTokenPrice,
+                    2,
+                );
+                setToAmount(amount);
             } else {
                 setToAmount(0);
             }
@@ -241,54 +231,66 @@ export default () => {
 
     // 计算新的债务
     useEffect(() => {
-        if (toToken && toAmount) {
-            const val =
-                parseFloat(
+        (async () => {
+            if (toToken && toAmount) {
+                const toTokenPrice = await getTokenPrice(toToken);
+                const val = parseFloat(
                     new BigNumber(toAmount)
-                        .multipliedBy(TokenPrices[toToken!]) //TODO 铸造物价格从合约获取
+                        .multipliedBy(toTokenPrice)
+                        .plus(debtData.startValue)
                         .toFixed(2),
-                ) + debtData.startValue;
-            setDebtData({
-                ...debtData,
-                endValue: val,
-            });
-        } else {
-            setDebtData({
-                ...debtData,
-                endValue: debtData.startValue,
-            });
-        }
+                );
+                setDebtData({
+                    ...debtData,
+                    endValue: val,
+                });
+            } else {
+                setDebtData({
+                    ...debtData,
+                    endValue: debtData.startValue,
+                });
+            }
+        })();
     }, [toToken, toAmount]);
-    const collateralAmountHandler = debounce(async (v) => {
-        setCollateralAmount(v);
-        const price = await getTokenPrice(collateralToken);
-        const currentStakeValue = Number(v) * price + stakedData.startValue;
-        setStakedData({
-            ...stakedData,
-            endValue: currentStakeValue,
-        });
-    }, 500);
+    const collateralAmountHandler = React.useCallback(
+        debounce(async (v) => {
+            setCollateralAmount(v);
+            const price = await getTokenPrice(collateralToken);
+            const currentStakeValue = Number(v) * price + stakedData.startValue;
+            setStakedData({
+                ...stakedData,
+                endValue: currentStakeValue,
+            });
+        }, 500),
+        [stakedData],
+    );
 
-    const lockedAmountHandler = debounce((v) => {
-        // TODO comment this for test
-        // if (Number(v) > maxLockedAmount) {
-        //     setLockedAmount(0);
-        //     message.warning('锁仓价值不能超过质押价值的3/10');
-        //     return;
-        // }
-        setLockedAmount(v);
-        const val = parseFloat(toFixedWithoutRound(IFTPrice * v, 2));
-        setLockedData({
-            ...lockedData,
-            endValue: val || 0,
-        });
-    }, 500);
+    const lockedAmountHandler = React.useCallback(
+        debounce(async (v) => {
+            // TODO comment this for test
+            // if (Number(v) > maxLockedAmount) {
+            //     setLockedAmount(0);
+            //     message.warning('锁仓价值不能超过质押价值的3/10');
+            //     return;
+            // }
+            setLockedAmount(v);
+            setLockedScale(Number(v) / fTokenBalance);
+            const bsPrice = await getTokenPrice(PLATFORM_TOKEN);
+            const val = toFixedWithoutRound(bsPrice * v, 2);
+            setLockedData({
+                ...lockedData,
+                endValue: val + lockedData.startValue,
+            });
+        }, 500),
+        [fTokenBalance, lockedData],
+    );
 
-    const scaleHandler = (v) => {
+    const scaleHandler = async (v) => {
         setLockedScale(v);
         const amount = fTokenBalance * Number(v);
         setLockedAmount(amount);
-        const val = parseFloat(toFixedWithoutRound(IFTPrice * amount, 2));
+        const bsPrice = await getTokenPrice(PLATFORM_TOKEN);
+        const val = toFixedWithoutRound(bsPrice * amount, 2);
         setLockedData({
             ...lockedData,
             endValue: val || 0,
@@ -310,6 +312,9 @@ export default () => {
         setToAmount(0);
     };
 
+    const [showTxConfirm, setShowTxConfirm] = useState(false);
+    const [tx, setTx] = useState<any | null>(null);
+
     const onSubmit = async () => {
         if (!account) {
             message.warning('Pls connect wallet first');
@@ -320,96 +325,148 @@ export default () => {
             return;
         }
         if (isApproved && isIFTApproved) {
+            setShowTxConfirm(true);
+            const collateralTokenPrice = await getTokenPrice(collateralToken);
+            const toTokenPrice = await getTokenPrice(toToken);
+            const lockedPrice = await getTokenPrice(PLATFORM_TOKEN); // TODO change name
+            setTx({
+                collateral: {
+                    token: collateralToken,
+                    amount: collateralAmount,
+                    price: (collateralAmount * collateralTokenPrice).toFixed(2),
+                },
+                minted: {
+                    token: toToken,
+                    amount: toAmount,
+                    price: (toTokenPrice * toAmount).toFixed(2),
+                },
+                locked: {
+                    token: 'BS',
+                    amount: lockedAmount,
+                    price: (lockedPrice * lockedAmount).toFixed(2),
+                },
+                type: isDeliveryAsset(toToken) ? 'Delivery' : 'Perpetuation',
+            });
+
             try {
                 setSubmitting(true);
-                const token = Tokens[collateralToken];
-                const decimal = token.decimals;
-                const tx = await collateralSystem.stakeAndBuild(
-                    ethers.utils.formatBytes32String(collateralToken), // stakeCurrency
-                    expandToNDecimals(collateralAmount!, decimal), // stakeAmount
-                    expandToNDecimals(toAmount!, 18), // buildAmount
-                    expandTo18Decimals(lockedAmount || 0),
-                );
-                message.info(
-                    'Mint tx sent out successfully. Pls wait for a while......',
-                );
-                const receipt = await tx.wait();
-                console.log(receipt);
-                setSubmitting(false);
-                // fetchCollateralBalance();
-                message.success('Mint successfully. Pls check your balance.');
+                //TODO 目前仅支持mint fusd。其它合成资产需要调用mint和trade两步操作。后续优化成一步操作。
+                if (isDeliveryAsset(toToken)) {
+                    const tokenPrice = await getTokenPrice(toToken);
+                    const fusdAmount = toAmount * tokenPrice; // fusd price is 1
+                    const tx1 = await collateralSystem.stakeAndBuild(
+                        ethers.utils.formatBytes32String(collateralToken), // stakeCurrency
+                        expandTo18Decimals(collateralAmount), // stakeAmount
+                        expandTo18Decimals(fusdAmount), // buildAmount
+                        expandTo18Decimals(lockedAmount || 0),
+                    );
+                    const receipt1 = await tx1.wait();
+                    console.log(receipt1);
+                    const tx2 = await exchangeSystem.exchange(
+                        ethers.utils.formatBytes32String('FUSD'), // sourceKey
+                        expandTo18Decimals(fusdAmount), // sourceAmount
+                        account, // destAddr
+                        ethers.utils.formatBytes32String(toToken), // destKey
+                    );
+                    const receipt2 = await tx2.wait();
+                    console.log(receipt2);
+                    await handleTxReceipt(receipt2);
+                    refreshBalance();
+                    setSubmitting(false);
+                    // fetchCollateralBalance();
+                    message.success(
+                        'Mint successfully. Pls check your balance.',
+                    );
+                } else {
+                    const token = Tokens[collateralToken];
+                    const tx0 = await collateralSystem.stakeAndBuild(
+                        ethers.utils.formatBytes32String(collateralToken), // stakeCurrency
+                        expandTo18Decimals(collateralAmount!), // stakeAmount
+                        expandTo18Decimals(toAmount!), // buildAmount
+                        expandTo18Decimals(lockedAmount || 0),
+                    );
+                    message.info(
+                        'Mint tx0 sent out successfully. Pls wait for a while......',
+                    );
+                    const receipt = await tx0.wait();
+                    console.log(receipt);
+                    setSubmitting(false);
+                    // fetchCollateralBalance();
+                    message.success(
+                        'Mint successfully. Pls check your balance.',
+                    );
+                    refreshBalance();
+                }
             } catch (err) {
                 setSubmitting(false);
                 console.log(err);
+            } finally {
+                setShowTxConfirm(false);
             }
         }
     };
 
-    const SelectFromTokensView = () => {
-        const [show, setShow] = useState(false);
-        const onCloseMemo = useCallback(() => setShow(false), []);
-        const onShowMemo = useCallback(() => setShow(true), []);
-
-        const DefaultView = () => {
-            return <span>Select token</span>;
-        };
-
-        return (
-            <SelectTokens
-                visable={show}
-                value={collateralToken}
-                tokenList={COLLATERAL_TOKENS}
-                onSelect={collateralTokenHandler}
-                onClose={onCloseMemo}
-            >
-                <button className="btn-mint-form" onClick={onShowMemo}>
-                    <span>{collateralToken || <DefaultView />}</span>
-                    <i className="icon-down size-20"></i>
-                </button>
-            </SelectTokens>
+    // *****TODO to be removed starts *********
+    const getTradeSettlementDelay = async () => {
+        const res = await configContract.getUint(
+            ethers.utils.formatBytes32String('TradeSettlementDelay'),
         );
+        console.log('getTradeSettlementDelay', res.toNumber());
+    };
+    const getRevertDelay = async () => {
+        const res = await configContract.getUint(
+            ethers.utils.formatBytes32String('TradeRevertDelay'),
+        );
+        console.log('getRevertDelay', res.toNumber());
+    };
+    const settleTrade = async (entryId: number) => {
+        const res = await exchangeSystem.settle(entryId);
+        console.log(res);
     };
 
-    const SelectToTokensView = () => {
-        const [show, setShow] = useState(false);
-        const onCloseMemo = useCallback(() => setShow(false), []);
-        const onShowMemo = useCallback(() => setShow(true), []);
-
-        const DefaultView = () => {
-            return (
-                <span>
-                    {intl.formatMessage({
-                        id: 'mint.selectCasting',
-                    })}
-                </span>
-            );
-        };
-
-        return (
-            <SelectTokens
-                visable={show}
-                value={toToken}
-                tokenList={MINT_TOKENS.map((name) => ({ name }))}
-                onSelect={toTokenHandler}
-                onClose={onCloseMemo}
-            >
-                <button className="btn-mint-form" onClick={onShowMemo}>
-                    <span>{toToken || <DefaultView />}</span>
-                    <i className="icon-down size-20"></i>
-                </button>
-            </SelectTokens>
-        );
+    // 超时的只能revert
+    const revertTrade = async (entryId: number) => {
+        const res = await exchangeSystem.revertPendingExchange(entryId);
+        console.log(res);
     };
+    const handleTxReceipt = (receipt) => {
+        getTradeSettlementDelay();
+        getRevertDelay();
+        const exchangeContract =
+            Contracts.ExchangeSystem[process.env.APP_CHAIN_ID];
+        for (const event of receipt.events) {
+            if (event.address === exchangeContract) {
+                const lastEntryId = event.args[0].toNumber();
+                console.log('>>> lastEntryId <<<', lastEntryId);
+                setTimeout(async () => {
+                    try {
+                        await settleTrade(lastEntryId);
+                        message.success(
+                            'Trade has been settled.Pls check your balance',
+                        );
+                    } catch (err) {
+                        setTimeout(async () => {
+                            await revertTrade(lastEntryId);
+                            message.error(
+                                'Trade has been reverted. Pls try again.',
+                            );
+                        }, 60000);
+                        console.log(err);
+                    }
+                }, 6000); // 合约目前设置的delay是6秒,revert delay 是1min。
+            }
+        }
+    };
+
+    // *****TODO to be removed ends *********
 
     return (
         <div className="mint-container">
             <DataView />
             <div className="right-box">
                 <CommentaryCard
-                    title="Begin To Mint"
-                    description={
-                        'Mint fUSD by staking your Token. Token stakers earn weekly staking rewards .'
-                    }
+                    title={intl.formatMessage({ id: 'mint.title' })}
+                    description={intl.formatMessage({ id: 'mint.desc' })}
                 />
                 <div className="mint-box common-box">
                     <div className="input-item">
@@ -419,10 +476,12 @@ export default () => {
                         <div className="input-item-content">
                             <div className="content-label">
                                 <p className="left">
-                                    {intl.formatMessage({ id: 'collateral' })}
+                                    {intl.formatMessage({
+                                        id: 'mint.collateral',
+                                    })}
                                 </p>
                                 <p className="right">
-                                    Balance:{' '}
+                                    {intl.formatMessage({ id: 'balance:' })}{' '}
                                     <span className="balance">
                                         {collateralBalance}
                                     </span>
@@ -439,16 +498,15 @@ export default () => {
                                     })}
                                 />
                                 <div className="token">
-                                    <i
-                                        className={classNames({
-                                            'icon-token': true,
-                                            [String(
-                                                collateralToken,
-                                            ).toLowerCase()]: true,
-                                            'size-24': true,
-                                        })}
+                                    <TokenIcon
+                                        name={collateralToken.toLowerCase()}
+                                        size={24}
                                     />
-                                    <SelectFromTokensView />
+                                    <SelectTokens
+                                        value={collateralToken}
+                                        tokenList={COLLATERAL_TOKENS}
+                                        onSelect={collateralTokenHandler}
+                                    ></SelectTokens>
                                 </div>
                             </div>
                         </div>
@@ -457,15 +515,23 @@ export default () => {
                     <img src={IconAdd} alt="" className="icon-add" />
 
                     <div className="input-item">
-                        <p className="label">
+                        <div className="label">
                             {intl.formatMessage({ id: 'mint.locked' })}
-                            <i className="icon-question size-16"></i>
-                        </p>
+                            <Popover
+                                content={'这是一段文字这是一段文字这是一段文字'}
+                                trigger="hover"
+                                placement="topLeft"
+                            >
+                                <i className="icon-question size-16"></i>
+                            </Popover>
+                        </div>
                         <div className="input-item-content">
                             <div className="content-label">
-                                <p className="left">FToken</p>
+                                <p className="left">
+                                    {intl.formatMessage({ id: 'mint.ftoken' })}
+                                </p>
                                 <p className="right">
-                                    Balance:{' '}
+                                    {intl.formatMessage({ id: 'balance:' })}
                                     <span className="balance">
                                         {fTokenBalance}
                                     </span>
@@ -478,16 +544,24 @@ export default () => {
                                     placeholder="0.00"
                                     className="custom-input"
                                 />
-                                <ScaleGroup
-                                    scaleRange={[
+                                <Scale.Group
+                                    value={lockedScale}
+                                    updateScale={scaleHandler}
+                                >
+                                    {[
                                         { label: '0', value: 0 },
                                         { label: '1/10', value: 0.1 },
                                         { label: '1/5', value: 0.2 },
                                         { label: '3/10', value: 0.3 },
-                                    ]}
-                                    value={lockedScale}
-                                    updateScale={scaleHandler}
-                                />
+                                    ].map((option) => (
+                                        <Scale.Option
+                                            key={option.label}
+                                            value={option.value}
+                                        >
+                                            <span>{option.label}</span>
+                                        </Scale.Option>
+                                    ))}
+                                </Scale.Group>
                             </div>
                         </div>
                     </div>
@@ -499,10 +573,13 @@ export default () => {
                         <div className="input-item-content">
                             <div className="content-label">
                                 <p className="left">
-                                    {intl.formatMessage({ id: 'mint.mint' })}
+                                    {intl.formatMessage({ id: 'mint.fassets' })}
                                 </p>
                                 <p className="right">
-                                    {intl.formatMessage({ id: 'mint.balance' })}
+                                    {intl.formatMessage({ id: 'balance:' })}
+                                    <span className="balance">
+                                        {mintBalance}
+                                    </span>
                                 </p>
                             </div>
                             <div className="input">
@@ -516,15 +593,20 @@ export default () => {
                                     onChange={toAmountHandler}
                                 />
                                 <div className="token">
-                                    <i
-                                        className={classNames({
-                                            'icon-token': true,
-                                            [String(toToken).toLowerCase()]:
-                                                true,
-                                            'size-24': true,
-                                        })}
+                                    <TokenIcon
+                                        name={String(toToken).toLowerCase()}
+                                        size={24}
                                     />
-                                    <SelectToTokensView />
+                                    <SelectTokens
+                                        value={toToken}
+                                        tokenList={MINT_TOKENS.map((name) => ({
+                                            name,
+                                        }))}
+                                        onSelect={toTokenHandler}
+                                        placeholder={intl.formatMessage({
+                                            id: 'mint.selectCasting',
+                                        })}
+                                    ></SelectTokens>
                                 </div>
                             </div>
                         </div>
@@ -544,27 +626,75 @@ export default () => {
                             />
                         </div>
                     )}
-
+                    {!account && (
+                        <Button
+                            className="btn-mint common-btn common-btn-yellow"
+                            onClick={() => {
+                                requestConnectWallet();
+                            }}
+                        >
+                            {intl.formatMessage({ id: 'app.unlockWallet' })}
+                        </Button>
+                    )}
                     {isApproved && isIFTApproved && (
                         <Button
                             className="btn-mint common-btn common-btn-red"
                             onClick={onSubmit}
                             loading={submitting}
                         >
-                            {intl.formatMessage({ id: 'mint.mint' })}
+                            {intl.formatMessage({ id: 'mint.cast' })}
                         </Button>
                     )}
-                    {((!isApproved && collateralToken) || !isIFTApproved) && (
-                        <Button
-                            className="btn-mint common-btn common-btn-red"
-                            onClick={handleAllApprove}
-                            loading={requestedApproval || requestIFTApproval}
-                        >
-                            Approve To Mint
-                        </Button>
-                    )}
+                    {account &&
+                        ((!isApproved && collateralToken) ||
+                            !isIFTApproved) && (
+                            <Button
+                                className="btn-mint common-btn common-btn-red"
+                                onClick={handleAllApprove}
+                                loading={
+                                    requestedApproval || requestIFTApproval
+                                }
+                            >
+                                {intl.formatMessage({ id: 'mint.approve' })}
+                            </Button>
+                        )}
                 </div>
             </div>
+            <TransitionConfirm
+                visable={showTxConfirm}
+                onClose={() => setShowTxConfirm(false)}
+                dataSource={
+                    tx && [
+                        {
+                            label: 'Collateral',
+                            direct: 'from',
+                            value: {
+                                token: tx.collateral.token,
+                                amount: tx.collateral.amount,
+                                mappingPrice: tx.collateral.price,
+                            },
+                        },
+                        {
+                            label: 'Minted',
+                            direct: 'to',
+                            value: {
+                                token: tx.minted.token,
+                                amount: tx.minted.amount,
+                                mappingPrice: tx.minted.price,
+                            },
+                        },
+                        {
+                            label: 'Locked',
+                            value: {
+                                token: tx.locked.token,
+                                amount: tx.locked.amount,
+                                mappingPrice: tx.locked.price,
+                            },
+                        },
+                        { label: 'Type', value: tx.type },
+                    ]
+                }
+            />
         </div>
     );
 };

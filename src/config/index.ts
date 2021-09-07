@@ -1,5 +1,5 @@
 export const BASE_BSC_SCAN_URL = 'https://bscscan.com';
-
+//TODO 从配置或者合约中获取
 export const COLLATERAL_TOKENS = [
     {
         name: 'USDC',
@@ -9,24 +9,24 @@ export const COLLATERAL_TOKENS = [
         name: 'BTC',
         ratio: 5,
     },
+
     // {
     //     name: 'ETH',
     //     ratio: 5,
     // },
 ];
 
-export const MINT_TOKENS = ['fUSDT'];
+//TODO 从配置或者合约中获取
+export const MINT_TOKENS = ['FUSD','lBTC', 'BTCUSD_210924', 'BTCUSD_211231'];
 
-//TODO 从Prices合约接口获取质押token的价格。现在假定1fToken=1U，1BTC=5000U，1ETH=2000U
-export const TokenPrices = {
-    BTC: 10000,
-    ETH: 1000,
-    fToken: 1,
-    USDT: 1,
-    fBTC: 10000,
-    fUSDT: 1,
-    fUSD: 1,
-    FUSD: 1,
-    fETH: 1000,
-    lBTC: 10000,
-};
+// TODO 从后台接口或合约中获取
+export const LP_TOKENS = [
+    { poolName: 'USDC-IFT', poolId: 0 },
+    { poolName: 'USDC-ETH', poolId: 1 },
+];
+
+//TODO 配置中读取官方预先添加的流动性lp
+export const PROVIDED_LP_TOKENS = ['USDC-ETH', 'USDC-IFT'];
+
+//TODO to be updated
+export const PLATFORM_TOKEN = 'IFT';

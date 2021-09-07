@@ -12,8 +12,7 @@ import {
 
 import { ConnectorNames, connectorsByName } from '@/utils/web3';
 import { setupNetwork } from '@/utils/wallet';
-
-export const connectorLocalStorageKey = 'connectorId';
+import { connectorLocalStorageKey } from '@/layouts/components/WalletModal/config';
 
 // api for login and logout
 const useAuth = () => {
@@ -51,7 +50,6 @@ const useAuth = () => {
             }
           }
         });
-        window.localStorage.setItem(connectorLocalStorageKey, connectorId);
       } else {
         alert('Unable to find connector');
       }

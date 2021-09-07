@@ -1,0 +1,110 @@
+[
+  {
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "sourceKey",
+        "type": "bytes32"
+      },
+      {
+        "internalType": "uint256",
+        "name": "sourceAmount",
+        "type": "uint256"
+      },
+      {
+        "internalType": "address",
+        "name": "destAddress",
+        "type": "address"
+      },
+      {
+        "internalType": "bytes32",
+        "name": "destKey",
+        "type": "bytes32"
+      }
+    ],
+    "name": "exchange",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "holder",
+        "type": "address"
+      },
+      {
+        "internalType": "bytes32",
+        "name": "sourceKey",
+        "type": "bytes32"
+      },
+      {
+        "internalType": "uint256",
+        "name": "sourceAmount",
+        "type": "uint256"
+      },
+      {
+        "internalType": "bytes32",
+        "name": "destKey",
+        "type": "bytes32"
+      }
+    ],
+    "name": "purge",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "pendingExchangeEntryId",
+        "type": "uint256"
+      }
+    ],
+    "name": "rollback",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bool",
+        "name": "newValue",
+        "type": "bool"
+      }
+    ],
+    "name": "setExitPositionOnly",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_foundationFeeHolder",
+        "type": "address"
+      }
+    ],
+    "name": "setFoundationFeeHolder",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "pendingExchangeEntryId",
+        "type": "uint256"
+      }
+    ],
+    "name": "settle",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  }
+]

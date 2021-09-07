@@ -1,4 +1,4 @@
-@import '../../assets/styles/util.less';
+@import '../../assets/styles/iron.less';
 
 @commentary-card-title-h: 22px - 10px;
 
@@ -30,7 +30,7 @@
     display: block;
     font-size: 18px;
     border: none;
-    margin: 30px auto;
+    margin: 10px auto 0 auto;
     width: 236px;
     height: 70px;
     span {
@@ -46,6 +46,10 @@
     display: flex;
     flex-direction: column;
     margin: 46.21px + @commentary-card-title-h 178px 0 178px;
+
+    .ratio {
+        margin-top: 22px;
+    }
 }
 
 .btn-setting {
@@ -81,9 +85,14 @@
 
     .icon-question {
         margin-left: 6px;
+        cursor: pointer;
     }
 }
 
 .iron-progress {
     width: 382px;
+}
+
+.balance {
+    font-weight: bold;
 }

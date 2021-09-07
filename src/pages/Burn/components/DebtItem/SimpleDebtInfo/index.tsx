@@ -1,3 +1,4 @@
+import RainbowBar from '@/components/RainbowBar';
 import React from 'react';
 import { IDebtItemInfo } from '../index';
 import './index.less';
@@ -11,23 +12,23 @@ export default (props: IProps) => {
         <div className="info-simple">
             <div className="token-names">
                 {infos.map((item) => (
-                    <div className="token" key={item.collateralToken}>
-                        <span
-                            className={`symbol token-${item.collateralToken}`}
-                        ></span>
+                    <div
+                        className={`token dot dot-${item.collateralToken.toLowerCase()}`}
+                        key={item.collateralToken}
+                    >
                         <span>{item.collateralToken}</span>
                         <span>{item.ratio}</span>
                     </div>
                 ))}
             </div>
             <div className="token-ratios">
-                {infos.map((item) => (
-                    <div
-                        key={item.collateralToken}
-                        className={`ratio token-${item.collateralToken.toLowerCase()}`}
-                        style={{ width: item.ratio }}
-                    ></div>
-                ))}
+                <RainbowBar
+                    width={318}
+                    dataSource={infos.map((item) => ({
+                        token: item.collateralToken,
+                        rate: Number(item.ratioValue) / 100,
+                    }))}
+                />
             </div>
         </div>
     );

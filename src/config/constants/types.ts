@@ -10,3 +10,7 @@ export enum ProgressBarType {
     active_debt = 'active_debt',
     f_ratio = 'f_ratio',
 }
+
+export type FiatSymbol = '$' | '¥';
+
+export type DefiActType = 'Mint' | 'Burn' | 'Trade' | 'Pool' | 'Farm';

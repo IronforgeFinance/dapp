@@ -1,48 +1,93 @@
+import { ChainIds } from '@/pages/Wallet/type';
+
+/**
+ * @description 合并自定义contracts配置
+ * @property {Object} mergedOutput
+ */
+
+let mergedOutput;
+try {
+    switch (process.env.APP_CHAIN_ID as ChainIds) {
+        case '1337': {
+            mergedOutput = require('../../../contracts.local.json') ?? {};
+            break;
+        }
+        // case '97': {
+        //     mergedOutput = require('../../../contracts.test.json') ?? {};
+        //     break;
+        // }
+        // case '56': {
+        //     mergedOutput = require('../../../contracts.prod.json') ?? {};
+        //     break;
+        // }
+    }
+} catch (error) {
+    console.warn(
+        "⚠️ There's no mreged config of contracts. It will use default config.",
+    );
+}
+
 export const localOutput = {
-    "PlatformToken": "0x9705dAB47d69ac6E815C05A4Aa7B9bE1bEbcb260",
-    "pancakeFactory": "0xf45229790bA1b74d5F871E6BA582f655579DFB45",
-    "pancakeRouter": "0xE65235491B0975eeC79af76E618F530A56f50362",
-    "usdcToken": "0x4A2CB2965bf51F106af06bB5dffE8958D2049dC7",
-    "AssetSystem": "0x9625E74a9587ae5Da25F2d484a7081D86bB95637",
-    "BuildBurnSystem": "0xd43fE630EC9c501f29CdA033BF58799424B25FF7",
-    "Config": "0xD8043De47c8607222351759c17dF5cCd64dB0763",
-    "AccessControl": "0x49F390583024E048D0F68dC711818f1B78EceD1e",
-    "Prices": "0x49c770aC4BB7b10FA49eACd6A19758535CFC4fd5",
-    "DebtSystem": "0xCe1dEe932b17b659185F99Be9D4f7E663AAFdD35",
-    "CollateralSystem": "0xE019C25363D004187b6c4328B50e4043Ce9AB2e9",
-    "ExchangeSystem": "0x94E9250D1Cae09F4581444B3141502E2754cc9EB",
-    "Liquidation": "0x3aA6636bc45ea6c8785cb26f0Eae84838a9e77E5",
-    "fusdToken": "0xfA22b274c70d19db203202A23E3a3332FFADf0B9",
-    "lbtcToken": "0x33fde29231aCf48A9500232749e7430cF402bc53",
-    "btcToken": "0x4759f04Cd03E02E00F31310838D31C2f673Fb589",
-    "ethToken": "0x914370d5554f9088C28ddE7FCe626f64330a3B79",
-    "usdtToken": "0x301de7ac7cdd9A1EbDbE68482da03675db92D54D",
-    "RewardSystem": "0x7D66ABFa6BE02AfDF6727B69741BAA73972Bd3f1",
-    "USDC-IFT": "0x295b4Ce0ED71198F781f1A13A7c5a60899270626",
-    "USDC-ETH": "0x3d0a0B2B05996f44B60967a18F325a6a0B069217"
-}
-const testnetOutput = {
-    "PlatformToken": "0xa3f86034719B1BB5170f9C96b9BaE86eAAf416a3",
-    "pancakeFactory": "0x8CD195dd9744d01147b28FBC4bD50Fa6FA1676e2",
-    "pancakeRouter": "0xD9f4c527B889549c03765837d87C4D4B7CacDF83",
-    "usdcToken": "0xdC0233DB217F56525d6B0C777942f0F46a593299",
-    "USDC-IFT": "0x0000000000000000000000000000000000000000",
-    "AssetSystem": "0x660f63668784810118eDd80f25DbB928ecdFa3aB",
-    "BuildBurnSystem": "0xbD1a8b5312C6BA4B5B3db2207C543ceD018613D8",
-    "Config": "0x77454Baab0F18E3DeF4Be4Ed8ADF9b0dC9595279",
-    "AccessControl": "0xC82aa413ada7fb4c232dC86F636d0B9cb5C4DdE3",
-    "Prices": "0x08115fad2dc5F4e432Bb89D73b822Ec4C7dbFe0F",
-    "DebtSystem": "0x04b45565E529c1446a889d5FBA12217e3f37D054",
-    "CollateralSystem": "0x2329f7CBB6017327C2cE66ff8dbA23b711c2F61d",
-    "ExchangeSystem": "0x5f38A8Bdd57150C0A456B8Fb9582456Ea73CfBff",
-    "Liquidation": "0xBAbEE967D254A15e47197F639962601e6FA0A3D8",
-    "fusdToken": "0xccA0516c6143c63C619602Df875F5829A5B31aD4",
-    "lbtcToken": "0x3FF4644dfDBbE922AD7b014f230Ddfba7728496B",
-    "btcToken": "0xBeCfcDF455647F3272515610d1d160D58B56c007",
-    "ethToken": "0x8Ec086904a9e7eDAb3B888c613D6Ca4badEac0B7",
-    "usdtToken": "0x86702905E8d5995649882fb3275aC7d3fef759a5",
-    "RewardSystem": "0xf04d8F9880A5BeeE47E82db0405F42Dc7fD31e55"
-}
+    PlatformToken: '0x5cd474fEC769D3a5Fe9BAb2c5651D6D45F91dFe8',
+    pancakeFactory: '0x2e58536d243E6ba5194FA8fAC978553a0dCf4d2D',
+    pancakeRouter: '0x1Fd8e4d766161Ae9a611113ae0bE777525CA8D1c',
+    usdcToken: '0xC0C837C0eAD64050850B249Cd2ec2e5787A5635f',
+    'USDC-IFT': '0xe0a93aB85784555186EAB38E2C1d53aB407FE0F4',
+    AssetSystem: '0x16365E250b30C36d6E92aaac8cC866539731c04F',
+    BuildBurnSystem: '0x6f636436c65B1798861F279b6769d28B6ef50872',
+    Config: '0xe7f6159A2B2a1D0eF4B77238A1A45A2aB659A9F5',
+    AccessControl: '0x3BC86fad19e7Fed6EE36a0D224EA50277a40E4cC',
+    Prices: '0x203338E9F735328c73D679e79254b59bc539c3F3',
+    DebtSystem: '0x568B1192ae14f51FE3694Da9bEc240cB119F6E31',
+    CollateralSystem: '0x181668B5f694ab3488DFe43a7E622a0772CFF245',
+    ExchangeSystem: '0x2991072b30755f474d81B3F05d6a632b5fEd7BCe',
+    Liquidation: '0x81590f5593f7DF70A40e0a1B98940318756A6f40',
+    DexPriceHelper: '0x48Df29BCC2edA321544a0f87EacF0f0Acf62a90f',
+    fusdToken: '0x970c4D173C7Ec5c719313DF7ccbD168C2De8B855',
+    lbtcToken: '0x7D25ef82d92f508d5C24Ab52db9C1a76eD71252A',
+    lbtcToken202112: '0x848d3E41333C7bE47FE42dd2b16F16406B9ad61d',
+    btcToken: '0x2eA107747AE72D001D598F6558e80ea1f55EE6e6',
+    ethToken: '0x22C1beC67bdc4F0702838e8E4F8aB147123c8f92',
+    usdtToken: '0x631a8E2BaC1D7f64345C6fE9Dbe41E8F9c78BdC9',
+    RewardSystem: '0x5808E6FF0fAFC23e710a03eaD0Ec5EE5A89d7f9f',
+    MinerReward: '0x59358bCD31115D2352f57366246c8dA69AAa3370',
+    LinearRelease: '0xd4a88A8b1F1705b7267B05D1A8c47F25DD7AD254',
+    ...mergedOutput,
+};
+export const testnetOutput = {
+    buildTokens: {
+        platformToken: '0xBd38e6B30206dcc02155e8303988588e46feec3f',
+        usdcToken: '0x4abcaD271e0B5A2Ab9B9d0cD4d29732D9b91a56b',
+        btcToken: '0xAf24Df7D020Da2F6153bB31f05Fd05Cd499d1EA9',
+        ethToken: '0xa02c8b48d4C5c7AFc93e47d370C2f072AeA94be6',
+        usdtToken: '0x6a7Ff2637F62deC78AC94EB9aABfb003C3d55636',
+    },
+    platformToken: '0xBd38e6B30206dcc02155e8303988588e46feec3f',
+    pancakeFactory: '0xDa0A1aB4b2EF3b274741e2E2e622f57d6639E952',
+    pancakeRouter: '0x82AB341ba8419C19B5a501FA5B33BfCE8612f83D',
+    'USDC-IFT': '0x846aA8d47028fe4D7A246fDA2bf9779feF426bfa',
+    AssetSystem: '0xCB45d30571BE90bF411837ffA7049f0037A03075',
+    BuildBurnSystem: '0x1511a962c5d9A905505081218e75b5bfB78BFE08',
+    AccessControl: '0xc73377267359B2665a603a0e4bBf7F95f042F405',
+    DebtSystem: '0x53804680a256a9e507336Ceb0D01BE3696b87102',
+    CollateralSystem: '0x4E3E7B4C8d6C68d01E576C0C98557E2F015f6E1D',
+    ExchangeSystem: '0x20c32A03C24256b17CD4b6D37e19899156115c05',
+    Prices: '0x1C6034955b7c2b494824d97a8d6ae868Acb5165C',
+    QuarterlyContractOracle: '0x2d3eB6f1e0a16853aA1a1069E2c0809EB0e68D73',
+    platformTokenDexOracle: '0x43Cc6d09dae81b1159D5A5FCbB154A96cB8d2288',
+    Config: '0x6D2f557434375A62C54303d2d73670b530AdA23d',
+    Liquidation: '0x11770AE80e3c748E2c47400612D2C85758f6aFcd',
+    fusdToken: '0xF2F977040FEe0F11dBFA2b893C223C87cdF2F97b',
+    lbtcToken: '0xc13A0D2D8ae2BCf6a7Ea971Aea623FEF95d3725b',
+    quarterlyContracts: {
+        BTCUSD_210924: '0x3F7443908C6b4Fb45ed0E581eAd87F630feBB864',
+        BTCUSD_211231: '0x637dbAF095a6032Ccf4f3378639445133E8132c7',
+    },
+    RewardSystem: '0x4c07c1Bf9d5e2A8F43E9DC763116901C4A698288',
+    MinerReward: '0xfD6e515734c2D4A81c37495ED13ca73bFFA796ec',
+    LinearRelease: '0x2B7C66d658E8C023Bd66F96F09693D4C4F84C490',
+    'USDC-ETH': '0x5Ed6E11CA01039E4AEA297D058251248E334C4b3',
+};
 export default {
     masterChef: {
         97: '0x1d32c2945C8FDCBc7156c553B7cEa4325a17f4f9',
@@ -84,45 +129,18 @@ export default {
         1337: localOutput.Prices,
     },
     PancakeRouter: {
-        97: '',
+        97: testnetOutput.pancakeRouter,
         56: '',
         1337: localOutput.pancakeRouter,
     },
     PancakeFactory: {
-        97: '',
+        97: testnetOutput.pancakeFactory,
         56: '',
         1337: localOutput.pancakeFactory,
     },
-
-    //1337
-    //     platformToken proxy deployed to: 0xB5a5cbB095e4eb3f64dF43A517363C94A95E39bA
-    // AssetSystem proxy deployed to: 0xB296a2A9FB4A387E7C128b5DE9db18Bd21Ace6B4
-    // BuildBurnSystem proxy deployed to: 0xf7A6092F167112D91e9d68b8351a52dE176B0aF3
-    // Config proxy deployed to: 0x284c5Df2285b0B3aaAc7373A2aAb9696Bd673E33
-    // AccessControl proxy deployed to: 0x8635DD1d19f3fD7186E96D5A0C6d9c374D09686F
-    // Prices deployed to: 0x76A7AeeA53331bc354b60182912fA8dc7A864513
-    // DebtSystem proxy deployed to: 0x41eD9771dd3745AF62eD963C08dfB23113942914
-    // CollateralSystem proxy deployed to: 0xE5C06a2c0254Ed450Ee485FF63563ca0bAAF7598
-    // ExchangeSystem proxy deployed to: 0x353DB1182C1C42A9dc6BF56eDBD18b9F246D270f
-    // Liquidation proxy deployed to: 0xda52f8F4795D2Cf8376e140e978B90a04803F9b9
-    // fusdToken proxy deployed to: 0x51866ba97CAa9496E2b0D6b3C1C2B2ed22264541
-    // lbtcToken proxy deployed to: 0xf41bC45493e5351DF8DFB19dF46b4d02dEA4e5de
-    // btcToken proxy deployed to: 0x236AE89e0D90D152342e8a71164e273B0cA6e97b
-
-    // 97: {
-    //     PlatformToken: '0x6702C65c26894a6213aFe6A05D6cc869F5f3A640',
-    //     AssetSystem: '0xbd7C00d5341E3d5B3B633B342aBBC1B6DD973258',
-    //     BuildBurnSystem: '0xa6d92C401A8c1b6dee1F1b97C4fc91be162037Cb',
-    //     Config: '0x52B0FdCE2c92f8361308649c7F1752ed38EAd0C4',
-    //     AccessControl: '0xB1660E901dABA5d5B2e1B0D9b8aC8798f1B491E5',
-    //     Prices: '0xc62c9aCab4044D68e42Ea2Af4F38219C51feF0c5',
-    //     DebtSystem: '0x19683bB92d1AFfe9d97BC688D01A8FD62736E106',
-    //     CollateralSystem: '0xA80169DE808EbE29d4bF18BDADB09251b725a285',
-    //     ExchangeSystem: '0xfc2531d45609e335BBF99Be32a2908972218513E',
-    //     Liquidation: '0xCeFE2cACa6c45A1f6D5e9Dc9d07CAe958fd29a6e',
-    //     fusdToken: '0x2A696b216a6262a15fA742750c49c463c9412307',
-    //     lbtcToken: '0xD850Ce117c4620930FF8C2D80838c5688dfc9E11',
-    //     btcToken: '0x59CF41A042728e8668f8d8e3bD48320D26D74b6A',
-    //     RewardSystem: '0xE3137934A6Ed1a89ecA8c51A33DeAD8893A33768',
-    // },
+    MinerReward: {
+        97: testnetOutput.MinerReward,
+        56: '',
+        1337: localOutput.MinerReward,
+    },
 };

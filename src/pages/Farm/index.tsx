@@ -1,62 +1,58 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './index.less';
-import { history } from 'umi';
-import PoolItem from './PoolItem';
+import { history, useModel } from 'umi';
+import StakeItem from './Stake';
+import { useWeb3React } from '@web3-react/core';
+import { LP_TOKENS } from '@/config';
+import useRefresh from '@/hooks/useRefresh';
+import { useIntl } from 'umi';
+
 export default () => {
+    const intl = useIntl();
+    const { account } = useWeb3React();
+    const { fetchStakePoolList, stakeDataList } = useModel(
+        'stakeData',
+        (model) => ({
+            ...model,
+        }),
+    );
+    const { slowRefresh } = useRefresh();
     const [ftokenInfo, setfTokenInfo] = useState({
         price: 4.32,
         vol: 633656,
         supply: 588000,
     });
-    const test = [
-        {
-            lp: 'fUSD-FTSLA',
-            apy: '98%',
-            totalStaked: 26262.33,
-            earnedAmount: 100.0,
-            earnedToken: 'FUSD',
-            staked: 1234.0,
-        },
-        {
-            lp: 'fUSD-FTSLA',
-            apy: '98%',
-            totalStaked: 26262.33,
-            earnedAmount: 100.0,
-            earnedToken: 'FUSD',
-            staked: 1234.0,
-        },
-        {
-            lp: 'fUSD-FTSLA',
-            apy: '98%',
-            totalStaked: 26262.33,
-            earnedAmount: 100.0,
-            earnedToken: 'FUSD',
-            staked: 1234.0,
-        },
-        {
-            lp: 'fUSD-FTSLA',
-            apy: '98%',
-            totalStaked: 26262.33,
-            earnedAmount: 100.0,
-            earnedToken: 'FUSD',
-            staked: 1234.0,
-        },
-    ];
-    const [poolItems, setPoolItems] = useState(test);
+
+    useEffect(() => {
+        (async () => {
+            if(account) {
+                await fetchStakePoolList(LP_TOKENS, account);
+            }
+        })();
+    }, [account, slowRefresh]);
+
     return (
         <div className="farm-container">
             <div className="farm-header">
                 <div className="info-item">
                     <p className="value">${ftokenInfo.price}</p>
-                    <p className="label">fToken Price</p>
+                    <p className="label">
+                        {intl.formatMessage({ id: 'liquidity.bs.price' })}
+                    </p>
                 </div>
                 <div className="info-item">
                     <p className="value">${ftokenInfo.vol}</p>
-                    <p className="label">fToken VOL</p>
+                    <p className="label">
+                        {intl.formatMessage({ id: 'liquidity.bs.vol' })}
+                    </p>
                 </div>
                 <div className="info-item">
                     <p className="value">${ftokenInfo.supply}</p>
-                    <p className="label">fToken Circulating Supply</p>
+                    <p className="label">
+                        {intl.formatMessage({
+                            id: 'liquidity.bs.circulatingsupply',
+                        })}
+                    </p>
                 </div>
                 <button
                     className="common-btn common-btn-red"
@@ -64,12 +60,16 @@ export default () => {
                         history.push('/farm/provide');
                     }}
                 >
-                    <span>Provide Liquidity</span>
+                    <span>
+                        {intl.formatMessage({
+                            id: 'liquidity.toprovide',
+                        })}
+                    </span>
                 </button>
             </div>
             <div className="farm-pool">
-                {poolItems.map((item) => (
-                    <PoolItem {...item} />
+                {stakeDataList.map((item, index) => (
+                    <StakeItem key={index} {...item} />
                 ))}
             </div>
         </div>

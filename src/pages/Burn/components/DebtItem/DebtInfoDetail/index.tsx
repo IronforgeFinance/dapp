@@ -1,21 +1,23 @@
 import React from 'react';
 import { IDebtItemInfo } from '../index';
 import './index.less';
+import { useIntl } from 'umi';
 
 const colors = ['yellow', 'green', 'blue', 'red', 'cyan'];
 interface IProps {
     infos: IDebtItemInfo[];
 }
 export default (props: IProps) => {
+    const intl = useIntl();
     const { infos } = props;
     console.log(infos);
     return (
         <div className="infos">
             <ul className="cols">
-                <li>Collateral</li>
-                <li>Ratio</li>
-                <li>Debt</li>
-                <li>Locked</li>
+                <li>{intl.formatMessage({ id: 'burn.collateral' })}</li>
+                <li>{intl.formatMessage({ id: 'burn.ratio' })}</li>
+                <li>{intl.formatMessage({ id: 'burn.debt' })}</li>
+                <li>{intl.formatMessage({ id: 'burn.locked' })}</li>
             </ul>
             <ul className="rows">
                 {infos.map((item, index) => {
@@ -24,7 +26,7 @@ export default (props: IProps) => {
                             <ul className="debt-head">
                                 <li className="collateral">
                                     <i
-                                        className={`dot token-${item.collateralToken.toLowerCase()}`}
+                                        className={`dot dot-${item.collateralToken.toLowerCase()}`}
                                     />
                                     <span>{item.collateralToken}</span>
                                 </li>
@@ -34,7 +36,7 @@ export default (props: IProps) => {
                             </ul>
                             <div
                                 style={{ width: item.ratio }}
-                                className={`bar token-${item.collateralToken.toLowerCase()}`}
+                                className={`move-bar bar-${item.collateralToken.toLowerCase()}`}
                             />
                         </li>
                     );

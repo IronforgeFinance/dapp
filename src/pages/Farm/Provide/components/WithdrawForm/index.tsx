@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { InputNumber, Select, Button, message } from 'antd';
+import { InputNumber, Select, Button } from 'antd';
+import * as message from '@/components/Notification';
 import IconDown from '@/assets/images/icon-down.svg';
 import './index.less';
 import { debounce } from 'lodash';
-import { useModel } from 'umi';
+import { useModel, useIntl } from 'umi';
 import { useBep20Balance } from '@/hooks/useTokenBalance';
 import { useRouter } from '@/hooks/useContract';
 import { useWeb3React } from '@web3-react/core';
@@ -11,21 +12,33 @@ import { DEADLINE } from '@/config/constants/constant';
 import Tokens from '@/config/constants/tokens';
 import Contracts from '@/config/constants/contracts';
 import { ethers } from 'ethers';
+import SelectTokens from '@/components/SelectTokens';
+import TransitionConfirm from '@iron/TransitionConfirm';
 import {
     useCheckERC20ApprovalStatus,
     useERC20Approve,
 } from '@/hooks/useApprove';
+import { TokenIcon } from '@/components/Icon';
+import { toFixedWithoutRound } from '@/utils/bigNumber';
+
 export default () => {
+    const intl = useIntl();
     const [lp, setLp] = useState<string>();
     const [lpAmount, setLpAmount] = useState<number>();
     const [receiveTokens, setReceiveTokens] = useState([]);
     const [submitting, setSubmitting] = useState(false);
-
+    const [showTxConfirm, setShowTxConfirm] = useState(false);
+    const [tx, setTx] = useState<any | null>(null);
+    const [showSelectFromToken, setShowSelectFromToken] = useState(false);
     const routerContract = useRouter();
     const { account } = useWeb3React();
 
     const { lpDataList } = useModel('lpData', (model) => ({
         ...model,
+    }));
+
+    const { requestConnectWallet } = useModel('app', (model) => ({
+        requestConnectWallet: model.requestConnectWallet,
     }));
 
     const pancakeRouter = Contracts.PancakeRouter[process.env.APP_CHAIN_ID];
@@ -52,10 +65,14 @@ export default () => {
             if (lp && lpAmount) {
                 const lpData = lpDataList.find((item) => item.symbol === lp);
                 if (lpData) {
-                    const token1Amount =
-                        (lpAmount * lpData.token1Balance) / lpData.balance;
-                    const token2Amount =
-                        (lpAmount * lpData.token2Balance) / lpData.balance;
+                    const token1Amount = toFixedWithoutRound(
+                        (lpAmount * lpData.token1Balance) / lpData.balance,
+                        2,
+                    );
+                    const token2Amount = toFixedWithoutRound(
+                        (lpAmount * lpData.token2Balance) / lpData.balance,
+                        2,
+                    );
                     setReceiveTokens([
                         {
                             token: lpData.token1,
@@ -74,6 +91,12 @@ export default () => {
         handleReceiveTokens();
     }, [lpAmount, lp]);
 
+    const selectOptions = React.useMemo(() => {
+        return lpDataList.map((item) => ({
+            name: item.symbol,
+        }));
+    }, [lpDataList]);
+
     const handleWithdraw = async () => {
         if (!account) {
             message.warning('Pls connect wallet');
@@ -89,6 +112,34 @@ export default () => {
         }
         try {
             setSubmitting(true);
+            setShowTxConfirm(true);
+            setTx([
+                {
+                    label: 'LP',
+                    value: {
+                        token: lp,
+                        amount: lpAmount,
+                        mappingPrice: '--',
+                    },
+                },
+                {
+                    label: 'Token0',
+                    value: {
+                        token: receiveTokens[0].token,
+                        amount: receiveTokens[0].amount,
+                        mappingPrice: '--',
+                    },
+                },
+                {
+                    label: 'Token1',
+                    value: {
+                        token: receiveTokens[1].token,
+                        amount: receiveTokens[1].amount,
+                        mappingPrice: '--',
+                    },
+                },
+            ]);
+
             const deadline = DEADLINE;
             const chainId = process.env.APP_CHAIN_ID;
             const token1 = receiveTokens[0].token;
@@ -116,6 +167,8 @@ export default () => {
         } catch (err) {
             console.log(err);
             setSubmitting(false);
+        } finally {
+            setShowTxConfirm(false);
         }
     };
 
@@ -123,11 +176,15 @@ export default () => {
         <div>
             <div className="provide-form common-box">
                 <div className="input-item">
-                    <p className="label">LP</p>
+                    <p className="label">
+                        {intl.formatMessage({ id: 'liquidity.withdraw.lp' })}
+                    </p>
                     <div className="input-item-content">
                         <div className="content-label">
                             <p className="right">
-                                Balance:
+                                {intl.formatMessage({
+                                    id: 'balance:',
+                                })}
                                 <span className="balance">{balance}</span>
                             </p>
                         </div>
@@ -139,22 +196,13 @@ export default () => {
                                 className="custom-input"
                             />
                             <div className="token">
-                                <Select
+                                <TokenIcon name={lp} size={24} />
+                                <SelectTokens
                                     value={lp}
-                                    onSelect={(v) => {
-                                        setLp(v);
-                                    }}
+                                    tokenList={selectOptions}
+                                    onSelect={(v) => setLp(v)}
                                     placeholder={'Select LP'}
-                                >
-                                    {lpDataList.map((item) => (
-                                        <Select.Option
-                                            value={item.symbol}
-                                            key={item.symbol}
-                                        >
-                                            {item.symbol}
-                                        </Select.Option>
-                                    ))}
-                                </Select>
+                                ></SelectTokens>
                             </div>
                         </div>
                     </div>
@@ -163,7 +211,11 @@ export default () => {
                 <img src={IconDown} alt="" className="icon-add" />
 
                 <div className="input-item">
-                    <p className="label">You'll Receive</p>
+                    <p className="label">
+                        {intl.formatMessage({
+                            id: 'liquidity.withdraw.willreceive',
+                        })}
+                    </p>
                     <div className="input-item-content receive-tokens">
                         {receiveTokens.map((item) => (
                             <div className="receive-token-item">
@@ -174,13 +226,27 @@ export default () => {
                     </div>
                 </div>
                 <div className="withdraw-btn-footer">
+                    {!account && (
+                        <Button
+                            className="btn-mint common-btn common-btn-yellow"
+                            onClick={() => {
+                                requestConnectWallet();
+                            }}
+                        >
+                            {intl.formatMessage({
+                                id: 'app.unlockWallet',
+                            })}
+                        </Button>
+                    )}
                     {lp && !isApproved && (
                         <Button
                             className="common-btn common-btn-yellow"
                             onClick={handleApprove}
                             loading={requestedApproval}
                         >
-                            Approve to withdraw
+                            {intl.formatMessage({
+                                id: 'liquidity.withdraw.approve',
+                            })}
                         </Button>
                     )}
                     {isApproved && (
@@ -189,7 +255,7 @@ export default () => {
                             onClick={handleWithdraw}
                             loading={submitting}
                         >
-                            Withdraw
+                            {intl.formatMessage({ id: 'liquidity.withdraw' })}
                         </Button>
                     )}
                 </div>
@@ -223,6 +289,10 @@ export default () => {
                     </div>
                 </div>
             )}
+            {/* <TransitionConfirm
+                visable={showTxConfirm}
+                onClose={() => setShowTxConfirm(false)}
+            /> */}
         </div>
     );
 };

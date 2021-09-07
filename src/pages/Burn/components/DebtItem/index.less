@@ -94,38 +94,12 @@
     }
 }
 
-.bubble {
-    width: 36px;
-    height: 36px;
-    border-radius: 50%;
-    flex-shrink: 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-style: normal;
-    font-weight: 300;
-    font-size: 15px;
-    line-height: 22px;
-    color: #ffffff;
-
-    &.usd {
-        background: linear-gradient(116.98deg, #611bf6 31.39%, #8d33ff 83.13%);
-    }
-
-    &.btc {
-        background: linear-gradient(116.98deg, #f6911b 31.39%, #ffcb44 83.13%);
-    }
-
-    &.eth {
-        background: linear-gradient(116.98deg, #c4c3c7 31.39%, #72727a 83.13%);
-    }
-}
-
 .infos {
-    ul.cols {
+    > ul.cols {
         display: flex;
         align-items: center;
         list-style: none;
+        width: 100%;
 
         > li {
             margin: 0;
@@ -207,7 +181,7 @@
                     font-size: 12px;
                     line-height: 18px;
                     display: flex;
-                    align-items: center;
+                    // align-items: center;
                     color: #ffffff;
                 }
 
@@ -222,53 +196,6 @@
                     color: #ffffff;
                 }
             }
-
-            .bar {
-                margin-top: 4px;
-                max-width: 318px;
-                height: 2px;
-                border-radius: 6px;
-            }
         }
-    }
-}
-
-.color {
-    &-yellow {
-        background: #fcd144;
-    }
-
-    &-green {
-        background: #26a17b;
-    }
-
-    &-blue {
-        background: #627eea;
-    }
-
-    &-red {
-        background: #e31837;
-    }
-
-    &-cyan {
-        background: #49d5dc;
-    }
-}
-
-.symbol {
-    background: #6e646a;
-}
-
-.token {
-    &-btc {
-        background: #fcd144;
-    }
-
-    &-usdc {
-        background: #26a17b;
-    }
-
-    &-eth {
-        background: #627eea;
     }
 }

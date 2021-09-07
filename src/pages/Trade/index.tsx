@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useMemo, useCallback } from 'react';
-import { useConfig, useExchangeSystem } from '@/hooks/useContract';
+import { useConfig, useExchangeSystem, usePrices } from '@/hooks/useContract';
 import Tokens from '@/config/constants/tokens';
 import { useWeb3React } from '@web3-react/core';
 import { ethers } from 'ethers';
@@ -8,34 +8,48 @@ import {
     expandToNDecimals,
     expandTo18Decimals,
 } from '@/utils/bigNumber';
-import { InputNumber, Button, Select, Radio, message } from 'antd';
-import { COLLATERAL_TOKENS, MINT_TOKENS, TokenPrices } from '@/config';
+import { InputNumber, Button, Select, Radio } from 'antd';
+import * as message from '@/components/Notification';
+import { COLLATERAL_TOKENS, MINT_TOKENS } from '@/config';
 import { useBep20Balance } from '@/hooks/useTokenBalance';
 import './index.less';
 import EstimateData from './components/EstimateData';
 import Contracts from '@/config/constants/contracts';
 import SelectTokens from '@/components/SelectTokens';
+import MarketDetail from './MarketDetail';
 import { debounce } from 'lodash';
 import classNames from 'classnames';
-//Fixme: for test
-const TO_TOKENS = [{ name: 'lBTC' }];
-const FROM_TOKENS = [{ name: 'FUSD' }];
+import TransitionConfirm from '@/components/TransitionConfirm';
+import { TokenIcon } from '@/components/Icon';
+import { useIntl, useModel } from 'umi';
+import { getTokenPrice } from '@/utils';
+//TODO: for test.从配置中读取
+const TOKEN_OPTIONS = MINT_TOKENS.map((token) => ({ name: token }));
 
 export default () => {
+    const intl = useIntl();
     const configContract = useConfig();
     const exchangeSystem = useExchangeSystem();
     const { account } = useWeb3React();
-    const [fromToken, setFromToken] = useState(FROM_TOKENS[0].name);
+    const [fromToken, setFromToken] = useState(TOKEN_OPTIONS[0].name);
     const [fromAmount, setFromAmount] = useState(0.0);
-    const [toggle, setToggle] = useState(false);
-    const [toToken, setToToken] = useState(TO_TOKENS[0].name);
+    const [toToken, setToToken] = useState(TOKEN_OPTIONS[1].name);
     const [toAmount, setToAmount] = useState(0.0);
     const [fromBalance, setFromBalance] = useState(0.0);
     const [submitting, setSubmitting] = useState(false);
     const [feeRate, setFeeRate] = useState(0);
+    const [estimateAmount, setEstimateAmount] = useState(0);
+    const [showSelectFromToken, setShowSelectFromToken] = useState(false);
+    const [showSelectToToken, setShowSelectToToken] = useState(false);
+
+    const prices = usePrices();
+
+    const { requestConnectWallet } = useModel('app', (model) => ({
+        requestConnectWallet: model.requestConnectWallet,
+    }));
 
     const { balance: fromTokenBalance } = useBep20Balance(fromToken);
-    const { balance: toTokenBalance } = useBep20Balance(toToken);
+    const { balance: toTokenBalance } = useBep20Balance(toToken, 6);
 
     const getFeeRate = async () => {
         if (toToken) {
@@ -66,37 +80,36 @@ export default () => {
         getFeeRate();
     }, [configContract, toToken]);
 
+    const computeToAmount = debounce(async () => {
+        const fromTokenPrice = await getTokenPrice(fromToken);
+        const toTokenPrice = await getTokenPrice(toToken);
+        const val = (fromTokenPrice * fromAmount) / toTokenPrice;
+        const toAmount = toFixedWithoutRound(val, 6);
+        setToAmount(toAmount);
+    }, 500);
     useEffect(() => {
-        const val =
-            (TokenPrices[fromToken] * fromAmount) / TokenPrices[toToken];
-        const toAmount = toFixedWithoutRound(val, 2);
-        setToAmount(parseFloat(toAmount));
+        computeToAmount();
     }, [fromToken, fromAmount, toToken]);
 
-    const estimateAmount = useMemo(() => {
+    const computeEstimateAmount = debounce(async () => {
+        const fromTokenPrice = await getTokenPrice(fromToken);
+        const toTokenPrice = await getTokenPrice(toToken);
         const val =
-            (TokenPrices[fromToken] * fromAmount * (1 - feeRate)) /
-            TokenPrices[toToken];
-        return toFixedWithoutRound(val, 6);
+            (fromTokenPrice * fromAmount * (1 - feeRate)) / toTokenPrice;
+        const amount = toFixedWithoutRound(val, 6);
+        setEstimateAmount(amount);
+    }, 500);
+    useEffect(() => {
+        computeEstimateAmount();
     }, [feeRate, fromAmount, fromToken, toToken]);
 
     const fromAmountHandler = (v) => {
         setFromAmount(v);
     };
 
-    const toAmountHandler = debounce((v) => {
-        if (v && toToken) {
-            const _amount = (TokenPrices[toToken] * v) / TokenPrices[fromToken];
-            if (_amount > parseFloat(fromTokenBalance as string)) {
-                message.error(
-                    `From token balance is not enough. Need ${_amount} ${fromToken}`,
-                );
-                setToAmount(0);
-                return;
-            }
-            setToAmount(v);
-        }
-    }, 500);
+    const toAmountHandler = (v) => {
+        setToAmount(v);
+    };
 
     const settleTrade = async (entryId: number) => {
         const res = await exchangeSystem.settle(entryId);
@@ -109,6 +122,13 @@ export default () => {
         console.log(res);
     };
 
+    const canTrade = React.useMemo(() => {
+        return !(fromAmount > fromTokenBalance);
+    }, [fromAmount, fromTokenBalance]);
+
+    const [showTxConfirm, setShowTxConfirm] = useState(false);
+    const [tx, setTx] = useState<any | null>(null);
+
     const onSubmit = async () => {
         // await revertTrade(3);
         // await revertTrade(4);
@@ -119,6 +139,22 @@ export default () => {
         }
         try {
             setSubmitting(true);
+            setShowTxConfirm(true);
+            const fromTokenPrice = await getTokenPrice(fromToken);
+            const toTokenPrice = await getTokenPrice(toToken);
+            setTx({
+                from: {
+                    token: fromToken,
+                    amount: fromAmount,
+                    price: (fromTokenPrice * fromAmount).toFixed(2),
+                },
+                to: {
+                    token: toToken,
+                    amount: toAmount,
+                    price: (toTokenPrice * toAmount).toFixed(2),
+                },
+            });
+
             const tx = await exchangeSystem.exchange(
                 ethers.utils.formatBytes32String(fromToken), // sourceKey
                 expandTo18Decimals(fromAmount), // sourceAmount
@@ -138,9 +174,12 @@ export default () => {
         } catch (err) {
             setSubmitting(false);
             console.log(err);
+        } finally {
+            setShowTxConfirm(false);
         }
     };
 
+    //TODO to be removed
     const handleTxReceipt = (receipt) => {
         getTradeSettlementDelay();
         getRevertDelay();
@@ -181,54 +220,26 @@ export default () => {
         return fromAmount > 0 || toAmount > 0;
     }, [fromAmount, toAmount]);
 
-    const SelectFromTokensView = () => {
-        const [show, setShow] = useState(false);
-        const _closeHandler = useCallback(() => setShow(false), []);
-        const _showHandler = useCallback(() => setShow(true), []);
-
-        const DefaultView = () => {
-            return <span>Select token</span>;
-        };
-
-        return (
-            <SelectTokens
-                visable={show}
-                value={fromToken}
-                tokenList={FROM_TOKENS}
-                onSelect={(v) => setFromToken(v)}
-                onClose={_closeHandler}
-            >
-                <button className="btn-mint-form" onClick={_showHandler}>
-                    <span>{fromToken || <DefaultView />}</span>
-                    <i className="icon-down size-20"></i>
-                </button>
-            </SelectTokens>
-        );
+    const fromTokenHandler = (v) => {
+        if (toToken === v) {
+            setToToken(fromToken);
+            setToAmount(fromAmount);
+            setFromToken(v);
+            setFromAmount(toAmount);
+        } else {
+            setFromToken(v);
+        }
     };
 
-    const SelectToTokensView = () => {
-        const [show, setShow] = useState(false);
-        const _closeHandler = useCallback(() => setShow(false), []);
-        const _showHandler = useCallback(() => setShow(true), []);
-
-        const DefaultView = () => {
-            return <span>Select token</span>;
-        };
-
-        return (
-            <SelectTokens
-                visable={show}
-                value={toToken}
-                tokenList={TO_TOKENS}
-                onSelect={(v) => setToToken(v)}
-                onClose={_closeHandler}
-            >
-                <button className="btn-mint-form" onClick={_showHandler}>
-                    <span>{toToken || <DefaultView />}</span>
-                    <i className="icon-down size-20"></i>
-                </button>
-            </SelectTokens>
-        );
+    const toTokenHandler = (v) => {
+        if (fromToken === v) {
+            setFromToken(toToken);
+            setFromAmount(toAmount);
+            setToToken(v);
+            setToAmount(fromAmount);
+        } else {
+            setToToken(v);
+        }
     };
 
     return (
@@ -243,12 +254,16 @@ export default () => {
                 />
                 <div className="form">
                     <div className="input-item">
-                        <p className="label">From</p>
+                        <p className="label">
+                            {intl.formatMessage({ id: 'trade.from' })}
+                        </p>
                         <div className="input-item-content">
                             <div className="content-label">
                                 <p className="left"></p>
                                 <p className="right">
-                                    Balance:
+                                    {intl.formatMessage({
+                                        id: 'balance:',
+                                    })}
                                     <WhiteSpace />
                                     <span className="balance">
                                         {fromTokenBalance}
@@ -264,18 +279,45 @@ export default () => {
                                     min={0}
                                 />
                                 <div className="token">
-                                    <SelectFromTokensView />
+                                    <TokenIcon size={24} name={fromToken} />
+                                    <SelectTokens
+                                        value={fromToken}
+                                        tokenList={TOKEN_OPTIONS}
+                                        onSelect={fromTokenHandler}
+                                    >
+                                        <button
+                                            className="btn-mint-form"
+                                            onClick={() => {
+                                                setShowSelectFromToken(true);
+                                            }}
+                                        >
+                                            <span>
+                                                {fromToken || (
+                                                    <span>
+                                                        {intl.formatMessage({
+                                                            id: 'trade.selecttoken',
+                                                        })}
+                                                    </span>
+                                                )}
+                                            </span>
+                                            <i className="icon-down size-20"></i>
+                                        </button>
+                                    </SelectTokens>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div className="input-item">
-                        <p className="label">To</p>
+                        <p className="label">
+                            {intl.formatMessage({ id: 'trade.to' })}
+                        </p>
                         <div className="input-item-content">
                             <div className="content-label">
                                 <p className="left"></p>
                                 <p className="right">
-                                    Balance:{' '}
+                                    {intl.formatMessage({
+                                        id: 'balance:',
+                                    })}
                                     <span className="balance">
                                         {toTokenBalance}
                                     </span>
@@ -291,71 +333,73 @@ export default () => {
                                     min={0}
                                 />
                                 <div className="token">
-                                    <SelectToTokensView />
+                                    <TokenIcon size={24} name={toToken} />
+                                    <SelectTokens
+                                        value={toToken}
+                                        tokenList={TOKEN_OPTIONS}
+                                        onSelect={toTokenHandler}
+                                    ></SelectTokens>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <Button
-                        className="btn-trade common-btn common-btn-red"
-                        onClick={onSubmit}
-                        loading={submitting}
-                    >
-                        Trade
-                    </Button>
-                    <span className="fee-cost">Fee cost：0</span>
+                    {account && (
+                        <Button
+                            className="btn-trade common-btn common-btn-red"
+                            disabled={!canTrade}
+                            onClick={onSubmit}
+                            loading={submitting}
+                        >
+                            {intl.formatMessage({
+                                id: 'trade.button',
+                            })}
+                        </Button>
+                    )}
+                    {!account && (
+                        <Button
+                            className="btn-mint common-btn common-btn-yellow"
+                            onClick={() => {
+                                requestConnectWallet();
+                            }}
+                        >
+                            {intl.formatMessage({
+                                id: 'app.unlockWallet',
+                            })}
+                        </Button>
+                    )}
+                    <span className="fee-cost">
+                        {intl.formatMessage({ id: 'trade.feecost' })}
+                        {feeRate * 100 + '%'}
+                    </span>
                 </div>
             </div>
-            <div
-                className={classNames({
-                    'market-details': true,
-                    hide: toggle,
-                    show: !toggle,
-                })}
-            >
-                <button
-                    className="btn-skip"
-                    onClick={() => setToggle(!toggle)}
-                />
-                <p className="details">
-                    Market Details:
-                    <WhiteSpace />
-                    <span className="token-pair">fBTC/fETH</span>
-                </p>
-                <span className="token">fBTC</span>
-                <ul>
-                    <li>
-                        <span className="label">24H volume </span>
-                        <span className="value">2222</span>
-                    </li>
-                    <li>
-                        <span className="label">Market Cap </span>
-                        <span className="value">2222</span>
-                    </li>
-                    <li>
-                        <span className="label">24H High </span>
-                        <span className="value">2222</span>
-                    </li>
-                    <li>
-                        <span className="label">24H Low </span>
-                        <span className="value">2222</span>
-                    </li>
-                    <li>
-                        <span className="label">Price Feed </span>
-                        <span className="value">2222</span>
-                    </li>
-                    <li>
-                        <span className="label">fBTC Contract </span>
-                        <span className="value">2222</span>
-                    </li>
-                    {/* ))} */}
-                </ul>
-            </div>
-            {/* <EstimateData
-                feeRate={feeRate}
-                receivedAmount={parseFloat(estimateAmount)}
-                receivedToken={toToken}
-            /> */}
+            <MarketDetail token0={fromToken} token1={toToken} />
+            <TransitionConfirm
+                visable={showTxConfirm}
+                onClose={() => setShowTxConfirm(false)}
+                dataSource={
+                    tx && [
+                        {
+                            label: 'From',
+                            direct: 'from',
+                            value: {
+                                token: tx.from.token,
+                                amount: tx.from.amount,
+                                mappingPrice: tx.from.price,
+                            },
+                        },
+                        {
+                            label: 'To',
+                            direct: 'to',
+                            value: {
+                                token: tx.to.token,
+                                amount: tx.to.amount,
+                                mappingPrice: tx.to.price,
+                            },
+                        },
+                    ]
+                }
+            />
         </div>
     );
 };

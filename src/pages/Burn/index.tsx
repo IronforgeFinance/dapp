@@ -1,4 +1,10 @@
-import React, { useState, useEffect, useCallback, createContext } from 'react';
+import React, {
+    useState,
+    useEffect,
+    useCallback,
+    createContext,
+    Fragment,
+} from 'react';
 import DataView from '../Mint/DataView';
 import { useWeb3React } from '@web3-react/core';
 import { useDebtSystem, useCollateralSystem } from '@/hooks/useContract';
@@ -12,46 +18,26 @@ import BurnForm from './components/BurnForm';
 import { useMemo } from 'react';
 import IDebtItem from '@/components/DebtItem';
 import classNames from 'classnames';
-
+import { useModel, useIntl } from 'umi';
+import { useBep20Balance } from '@/hooks/useTokenBalance';
 export default () => {
+    const intl = useIntl();
     const { account } = useWeb3React();
     const collateralSystem = useCollateralSystem();
     const debtSystem = useDebtSystem();
     const [showForm, setShowForm] = useState(false);
     const [currentDebt, setCurrentDebt] = useState(0);
+    const { balance: fusdBalance } = useBep20Balance('FUSD');
 
-    const getDebtInUSD = async (account: string) => {
-        let res = await debtSystem.GetUserDebtBalanceInUsd(account);
-        res = res.map((item) => ethers.utils.formatUnits(item, 18));
-        console.log('getDebtInUSD: ', res);
-    };
-
-    const getCollateralData = async (account, token) => {
-        const res = await collateralSystem.getUserCollateral(
-            account,
-            ethers.utils.formatBytes32String(token),
-        );
-        console.log(
-            'getCollateralData: ',
-            token,
-            ethers.utils.formatUnits(res, 18),
-        );
-    };
-
-    useEffect(() => {
-        if (account) {
-            // getDebtInUSD(account)
-            // getCollateralData(account, 'BTC')
-            // getCollateralData(account, 'USDT')
-            // getCollateralData(account, 'ETH')
-        }
-    }, [account]);
+    const { requestConnectWallet } = useModel('app', (model) => ({
+        requestConnectWallet: model.requestConnectWallet,
+    }));
 
     const onSubmitSuccess = () => {
         setShowForm(false);
     };
 
-    const haveAssets = useMemo(() => true, []); // TODO 获取资产总计
+    const haveAssets = useMemo(() => /*fusdBalance > 0*/ true, []); // TODO 获取资产总计
 
     const BackBtn = () => {
         return (
@@ -73,95 +59,97 @@ export default () => {
 
         return (
             <div className="no-assets-view common-box">
-                <p className="tip">Don`t have any fAsset</p>
+                <p className="tip">
+                    {intl.formatMessage({ id: 'burn.noassets' })}
+                </p>
                 <Button
                     className="btn-mint common-btn common-btn-red"
                     onClick={toMintPageHandler}
                 >
-                    Lets Mint
+                    {intl.formatMessage({ id: 'burn.tomint' })}
                 </Button>
             </div>
         );
     };
 
-    const DebsView = () => {
-        const mockDebts = {
-            balance: 88888,
-            mintedToken: 'fUSD',
-            mintedTokenName: 'USD',
-            mintedTokenNum: 100,
-            debtRatios: [
-                {
-                    token: 'BTC',
-                    percent: '49%',
-                },
-                {
-                    token: 'USDT',
-                    percent: '31%',
-                },
-                {
-                    token: 'ETH',
-                    percent: '12%',
-                },
-                {
-                    token: 'TOKEN1',
-                    percent: '6%',
-                },
-                {
-                    token: 'TOKEN2',
-                    percent: '2%',
-                },
-            ],
-            fusdBalance: 10000,
-        };
-        return <IDebtItem {...mockDebts} />;
+    const SearchDebts = () => {
+        return (
+            <div className="search-debts">
+                <div className="search-input-wrapper">
+                    <input
+                        type="text"
+                        placeholder={intl.formatMessage({ id: 'burn.search' })}
+                    />
+                </div>
+                <button className="search-btn" />
+            </div>
+        );
     };
 
     return (
         <div className="burn-container">
             <DataView />
-            {!showForm ? (
-                <div className="burn-box">
-                    <CommentaryCard
-                        title="Your Debt"
-                        description="Buy and burn fAsset to clean your total debt and unstake all collateral"
-                    />
-                    {!haveAssets ? (
-                        <NoAssetsView />
-                    ) : (
-                        <div className="form-view common-box">
-                            <div className="my-debt">
-                                <button
-                                    className={classNames({
-                                        ratio: true,
-                                        active: currentDebt == 0,
-                                    })}
-                                    onClick={() => setCurrentDebt(0)}
-                                />
-                                <DebtItem
-                                    mintedToken="fUSDC"
-                                    mintedTokenName="USD"
-                                />
-                            </div>
-                            <Button
-                                className="btn-mint common-btn common-btn-red"
-                                onClick={() => setShowForm(!showForm)}
-                            >
-                                Burn
-                            </Button>
-                        </div>
+            <div className="burn-box">
+                <CommentaryCard
+                    title={intl.formatMessage({ id: 'burn.title' })}
+                    description={intl.formatMessage({ id: 'burn.desc' })}
+                />
+                <Fragment>
+                    {!showForm && (
+                        <Fragment>
+                            {!haveAssets && <NoAssetsView />}
+                            {haveAssets && (
+                                <div className="form-view common-box">
+                                    <SearchDebts />
+                                    <div className="my-debt">
+                                        <button
+                                            className={classNames({
+                                                ratio: true,
+                                                active: currentDebt == 0,
+                                            })}
+                                            onClick={() => setCurrentDebt(0)}
+                                        />
+                                        <DebtItem
+                                            mintedToken="FUSD"
+                                            mintedTokenName="USD"
+                                        />
+                                    </div>
+                                    {account && (
+                                        <Button
+                                            className="btn-mint common-btn common-btn-red"
+                                            onClick={() =>
+                                                setShowForm(!showForm)
+                                            }
+                                        >
+                                            {intl.formatMessage({
+                                                id: 'burn.burn',
+                                            })}
+                                        </Button>
+                                    )}
+                                    {!account && (
+                                        <Button
+                                            className="btn-mint common-btn common-btn-yellow"
+                                            onClick={() => {
+                                                requestConnectWallet();
+                                            }}
+                                        >
+                                            {intl.formatMessage({
+                                                id: 'app.unlockWallet',
+                                            })}
+                                        </Button>
+                                    )}
+                                </div>
+                            )}
+                        </Fragment>
                     )}
-                </div>
-            ) : (
-                <div className="burn-box">
-                    <CommentaryCard
-                        title="Your Debt"
-                        description="Buy and burn fAsset to clean your total debt and unstake all collateral"
-                    />
-                    <BurnForm onSubmitSuccess={onSubmitSuccess} />
-                    <BackBtn />
-                </div>
-            )}
+                    {showForm && (
+                        <Fragment>
+                            <BurnForm onSubmitSuccess={onSubmitSuccess} />
+                            <BackBtn />
+                        </Fragment>
+                    )}
+                </Fragment>
+            </div>
         </div>
     );
 };

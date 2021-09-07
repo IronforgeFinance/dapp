@@ -1,0 +1,14 @@
+@import '../../index.less';
+
+.mint-view {
+    &:extend(.modal-container);
+    padding: 114px 39px 60px 35px;
+
+    .ant-table-tbody {
+        .ant-table-cell {
+            &:nth-child(n + 4) {
+                vertical-align: baseline;
+            }
+        }
+    }
+}

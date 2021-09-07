@@ -6,6 +6,7 @@ import { ReactComponent as TabBackIcon03 } from '@/assets/images/big-board-svg-0
 import { ReactComponent as TabBackIcon04 } from '@/assets/images/big-board-svg-04.svg';
 import classNames from 'classnames';
 import { useCallback } from 'react';
+import { useIntl } from 'umi';
 
 const svgs = [
     <TabBackIcon01 fill="#89512D" />,
@@ -22,11 +23,14 @@ interface BigBoardTabOptions {
 interface BigBoardProps {
     tabItems: BigBoardTabOptions[];
     tabKey: string;
+    title: string;
     onChange: Function;
+    children: React.ReactNode;
 }
 
 export default (props: BigBoardProps) => {
-    const { tabItems, tabKey, onChange } = props;
+    const intl = useIntl();
+    const { tabItems, tabKey, onChange, title, children } = props;
 
     return (
         <div className="big-board">
@@ -43,14 +47,19 @@ export default (props: BigBoardProps) => {
                         >
                             {svgs[index]}
                             <div className="big-board-tab">
-                                <span>{tab.name}</span>
+                                <span>
+                                    {intl.formatMessage({ id: tab.name })}
+                                </span>
                             </div>
                         </li>
                     );
                 })}
             </ul>
             <div className="big-board-container">
-                <h3 className="title" />
+                <h3 className="common-title silver big-board-title">
+                    <span>{title}</span>
+                </h3>
+                {children}
             </div>
         </div>
     );

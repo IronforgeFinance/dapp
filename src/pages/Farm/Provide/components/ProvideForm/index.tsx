@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import './index.less';
-import { InputNumber, Select, Progress, message, Button } from 'antd';
+import { InputNumber, Select, Progress, Button } from 'antd';
+import * as message from '@/components/Notification';
 import IconAdd from '@/assets/images/icon-add.svg';
 import { useBep20Balance } from '@/hooks/useTokenBalance';
-import { useModel } from 'umi';
+import { useModel, useIntl } from 'umi';
 import { useWeb3React } from '@web3-react/core';
 import LpItem from '../LpItem';
 import Contracts from '@/config/constants/contracts';
@@ -12,20 +13,26 @@ import Tokens from '@/config/constants/tokens';
 import { ILpDataProps } from '@/models/lpData';
 import { ethers } from 'ethers';
 import { registerToken } from '@/utils/wallet';
-import {DEADLINE} from '@/config/constants/constant';
+import { DEADLINE } from '@/config/constants/constant';
+import SelectTokens from '@iron/SelectTokens';
+import TransitionConfirm from '@iron/TransitionConfirm';
+import { ITabKeyContext } from '../../index';
 import {
     useCheckERC20ApprovalStatus,
     useERC20Approve,
 } from '@/hooks/useApprove';
-export const LP_TOKENS = ['USDC-ETH', 'USDC-IFT']; //TODO 配置中读取官方预先添加的流动性lp
+import { TokenIcon } from '@/components/Icon';
+import Folder from '@/components/Folder';
+import { PROVIDED_LP_TOKENS } from '@/config';
+
 const TOKENS = Array.from(
     new Set(
-        LP_TOKENS.map((item) => item.split('-')).reduce(
+        PROVIDED_LP_TOKENS.map((item) => item.split('-')).reduce(
             (arr, item) => arr.concat(item),
             [],
         ),
     ),
-);
+).map((item) => ({ name: item }));
 
 const NO_LIQUIDITY_LP = {
     symbol: '',
@@ -45,6 +52,7 @@ const NO_LIQUIDITY_LP = {
 export default () => {
     // const [token1Balance, setToken1Balance] = useState();
     // const [token2Balance, setToken2Balance] = useState();
+    const intl = useIntl();
     const { account } = useWeb3React();
     const [token1, setToken1] = useState<string>();
     const [token2, setToken2] = useState<string>();
@@ -54,6 +62,8 @@ export default () => {
     const [token2Price, setToken2Price] = useState(1);
     const [share, setShare] = useState(1);
     const [submitting, setSubmitting] = useState(false);
+    const [showSelectFromToken, setShowSelectFromToken] = useState(false);
+    const [showSelectToToken, setShowSelectToToken] = useState(false);
     const {
         lpDataList,
         currentLpData,
@@ -62,6 +72,10 @@ export default () => {
         fetchLpDataInfo,
         fetchLpDataList,
     } = useModel('lpData', (model) => ({ ...model }));
+
+    const { requestConnectWallet } = useModel('app', (model) => ({
+        requestConnectWallet: model.requestConnectWallet,
+    }));
 
     const routerContract = useRouter();
 
@@ -107,14 +121,16 @@ export default () => {
         }
     };
 
-    const refresh = () => {
-        fetchLpDataList(LP_TOKENS, account);
+    const refresh = async () => {
+        try {
+            await fetchLpDataList(PROVIDED_LP_TOKENS, account);
+        } catch (error) {
+            console.error(error);
+        }
     };
 
     useEffect(() => {
-        if (account) {
-            refresh();
-        }
+        refresh();
     }, [account]);
 
     useEffect(() => {
@@ -137,8 +153,8 @@ export default () => {
 
     const isValidLp = (token1, token2) => {
         if (
-            LP_TOKENS.includes(`${token1}-${token2}`) ||
-            LP_TOKENS.includes(`${token2}-${token1}`)
+            PROVIDED_LP_TOKENS.includes(`${token1}-${token2}`) ||
+            PROVIDED_LP_TOKENS.includes(`${token2}-${token1}`)
         ) {
             return true;
         } else {
@@ -276,6 +292,9 @@ export default () => {
         registerToken(address, symbol, 18, '');
     };
 
+    const [showTxConfirm, setShowTxConfirm] = useState(false);
+    const [tx, setTx] = useState<any | null>(null);
+
     const handleProvide = async () => {
         if (!account) {
             message.warning('Pls connect wallet');
@@ -291,6 +310,21 @@ export default () => {
         }
         try {
             setSubmitting(true);
+            setShowTxConfirm(true);
+
+            setTx({
+                from: {
+                    token: token1,
+                    amount: token1Amount,
+                    price: '--',
+                },
+                to: {
+                    token: token2,
+                    amount: token2Amount,
+                    price: '--',
+                },
+            });
+
             const deadline = DEADLINE;
             const chainId = process.env.APP_CHAIN_ID;
             const token1Address = Tokens[token1].address[chainId];
@@ -321,32 +355,48 @@ export default () => {
         } catch (err) {
             setSubmitting(false);
             console.log(err);
+        } finally {
+            setShowTxConfirm(false);
         }
     };
 
+    const tabKey = React.useContext(ITabKeyContext);
+    const hasLpList = React.useMemo(() => !!lpDataList.length, [lpDataList]);
+    const isCurrentTab = React.useMemo(() => tabKey === '1', [tabKey]);
+
     return (
-        <div>
-            <div className="lp-list">
-                <div className="header">
-                    <p>Your Liquidity</p>
-                    <p>
-                        You can click Add Liquidity to add Lp quickly or remove
-                        liquidity to receive tokens back.
-                    </p>
+        <div className="provide-outer-container">
+            <Folder
+                placement="left"
+                foldingOffest={95}
+                value={!isCurrentTab || !hasLpList}
+            >
+                <div className="lp-list">
+                    <div className="header">
+                        <p>Your Liquidity</p>
+                        <p>
+                            You can click Add Liquidity to add Lp quickly or
+                            remove liquidity to receive tokens back.
+                        </p>
+                    </div>
+                    <div className="lp-list-content">
+                        {lpDataList.map((item) => (
+                            <LpItem data={item} key={item.symbol} />
+                        ))}
+                    </div>
                 </div>
-                <div className="lp-list-content">
-                    {lpDataList.map((item) => (
-                        <LpItem data={item} key={item.symbol} />
-                    ))}
-                </div>
-            </div>
+            </Folder>
             <div className="provide-form common-box">
                 <div className="input-item">
-                    <p className="label">Asset</p>
+                    <p className="label">
+                        {intl.formatMessage({ id: 'liquidity.provide.asset0' })}
+                    </p>
                     <div className="input-item-content">
                         <div className="content-label">
                             <p className="right">
-                                Balance:
+                                {intl.formatMessage({
+                                    id: 'balance:',
+                                })}
                                 <span className="balance">{token1Balance}</span>
                             </p>
                         </div>
@@ -358,17 +408,12 @@ export default () => {
                                 className="custom-input"
                             />
                             <div className="token">
-                                <Select
+                                <TokenIcon name={token1} size={24} />
+                                <SelectTokens
                                     value={token1}
+                                    tokenList={TOKENS}
                                     onSelect={token1SelectHandler}
-                                    placeholder={'Select token'}
-                                >
-                                    {TOKENS.map((item) => (
-                                        <Select.Option value={item} key={item}>
-                                            {item}
-                                        </Select.Option>
-                                    ))}
-                                </Select>
+                                ></SelectTokens>
                             </div>
                         </div>
                     </div>
@@ -377,12 +422,16 @@ export default () => {
                 <img src={IconAdd} alt="" className="icon-add" />
 
                 <div className="input-item">
-                    <p className="label">Asset</p>
+                    <p className="label">
+                        {intl.formatMessage({ id: 'liquidity.provide.asset1' })}
+                    </p>
                     <div className="input-item-content">
                         <div className="content-label">
                             <p className="left"></p>
                             <p className="right">
-                                Balance:
+                                {intl.formatMessage({
+                                    id: 'balance:',
+                                })}
                                 <span className="balance">{token2Balance}</span>
                             </p>
                         </div>
@@ -394,44 +443,54 @@ export default () => {
                                 className="custom-input"
                             />
                             <div className="token">
-                                <Select
+                                <TokenIcon name={token2} size={24} />
+                                <SelectTokens
                                     value={token2}
+                                    tokenList={TOKENS}
                                     onSelect={token2SelectHandler}
-                                    placeholder={'Select token'}
-                                >
-                                    {TOKENS.map((item) => (
-                                        <Select.Option value={item} key={item}>
-                                            {item}
-                                        </Select.Option>
-                                    ))}
-                                </Select>
+                                ></SelectTokens>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div className="provide-btn-footer">
+                    {!account && (
+                        <Button
+                            className="btn-mint common-btn common-btn-yellow"
+                            onClick={() => {
+                                requestConnectWallet();
+                            }}
+                        >
+                            {intl.formatMessage({
+                                id: 'app.unlockWallet',
+                            })}
+                        </Button>
+                    )}
                     {token1Approved && token2Approved && (
                         <Button
                             className="common-btn common-btn-red"
                             onClick={handleProvide}
                             loading={submitting}
                         >
-                            Provide
+                            {intl.formatMessage({ id: 'liquidity.provide' })}
                         </Button>
                     )}
-                    {((token1 && !token1Approved) ||
-                        (token2 && !token2Approved)) && (
-                        <Button
-                            className="btn-mint common-btn common-btn-red"
-                            onClick={handleAllApprove}
-                            loading={
-                                requestedToken1Approval ||
-                                requestedToken2Approval
-                            }
-                        >
-                            Approve To Provide
-                        </Button>
-                    )}
+                    {account &&
+                        ((token1 && !token1Approved) ||
+                            (token2 && !token2Approved)) && (
+                            <Button
+                                className="btn-mint common-btn common-btn-red"
+                                onClick={handleAllApprove}
+                                loading={
+                                    requestedToken1Approval ||
+                                    requestedToken2Approval
+                                }
+                            >
+                                {intl.formatMessage({
+                                    id: 'liquidity.provide.approve',
+                                })}
+                            </Button>
+                        )}
                 </div>
             </div>
             {token1 && token2 && (
@@ -465,6 +524,33 @@ export default () => {
                     </div>
                 </div>
             )}
+
+            {/* <TransitionConfirm
+                visable={showTxConfirm}
+                onClose={() => setShowTxConfirm(false)}
+                dataSource={
+                    tx && [
+                        {
+                            label: 'From',
+                            direct: 'from',
+                            value: {
+                                token: tx.from.token,
+                                amount: tx.from.amount,
+                                mappingPrice: tx.from.price,
+                            },
+                        },
+                        {
+                            label: 'To',
+                            direct: 'to',
+                            value: {
+                                token: tx.to.token,
+                                amount: tx.to.amount,
+                                mappingPrice: tx.to.price,
+                            },
+                        },
+                    ]
+                }
+            /> */}
         </div>
     );
 };

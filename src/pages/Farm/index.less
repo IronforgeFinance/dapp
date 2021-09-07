@@ -3,25 +3,27 @@
     flex-direction: column;
     align-items: center;
     .farm-header {
-        margin-top: 58px;
         width: 1288px;
         height: 168px;
-        background: url(../../assets/images/farm-header-bg.png) no-repeat;
+        background: url(../../assets/images/farm-header-bg.png) no-repeat center;
         background-size: contain;
+        flex-shrink: 0;
 
         display: flex;
         justify-content: space-between;
         align-items: center;
         padding-left: 150px;
         padding-right: 180px;
-
-        font-style: normal;
-        font-weight: bold;
-        font-size: 28px;
-        line-height: 42px;
-        text-align: center;
-        color: #ffffff;
+        box-sizing: border-box;
         .info-item {
+            .value {
+                font-style: normal;
+                font-weight: bold;
+                font-size: 28px;
+                line-height: 42px;
+                text-align: center;
+                color: #ffffff;
+            }
             .label {
                 font-weight: 300;
                 font-size: 16px;

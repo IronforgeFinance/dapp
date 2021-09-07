@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import TabGroup from '@/components/TabGroup';
 import ProvideForm from './components/ProvideForm';
 import WithdrawForm from './components/WithdrawForm';
@@ -7,25 +7,39 @@ import IconBack from '@/assets/images/icon-back.png';
 import { history } from 'umi';
 
 import { Tabs } from 'antd';
+import IsShow from '@/components/IsShow';
 const { TabPane } = Tabs;
+import { useIntl } from 'umi';
 
-const tabItems = [
-    {
-        name: 'Provide',
-        key: '1',
-    },
-    {
-        name: 'Widthdraw',
-        key: '2',
-    },
-];
+export const ITabKeyContext = React.createContext<string>('');
 
-export default () => {
-    const [tabKey, setTabKey] = useState('1');
+export default (props) => {
+    const intl = useIntl();
+    const { location } = props;
+    const { action } = location.query;
+    const [tabKey, setTabKey] = useState(action || '1');
     const onTabChange = (key) => {
         console.log(key);
         setTabKey(key);
     };
+
+    const provideTitle = intl.formatMessage({ id: 'liquidity.tab.provide' });
+    const withdrawTitle = intl.formatMessage({ id: 'liquidity.tab.withdraw' });
+
+    const tabItems = useMemo(
+        () => [
+            {
+                name: provideTitle,
+                key: '1',
+            },
+            {
+                name: withdrawTitle,
+                key: '2',
+            },
+        ],
+        [provideTitle, withdrawTitle],
+    );
+
     return (
         <div className="provide-container">
             <div className="custom-tabs">
@@ -45,8 +59,14 @@ export default () => {
                             history.goBack();
                         }}
                     />
-                    {tabKey === '1' && <ProvideForm />}
-                    {tabKey === '2' && <WithdrawForm />}
+                    <ITabKeyContext.Provider value={tabKey}>
+                        <IsShow condition={tabKey === '1'}>
+                            <ProvideForm />
+                        </IsShow>
+                        <IsShow condition={tabKey === '2'}>
+                            <WithdrawForm />
+                        </IsShow>
+                    </ITabKeyContext.Provider>
                 </div>
             </div>
         </div>

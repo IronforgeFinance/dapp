@@ -11,7 +11,7 @@ export default (props: ICommentaryCardProps) => {
 
     return (
         <div className="commentary-card">
-            <h3 className="title">
+            <h3 className="common-title gold title">
                 <span>{title}</span>
             </h3>
             <p className="description">{description}</p>

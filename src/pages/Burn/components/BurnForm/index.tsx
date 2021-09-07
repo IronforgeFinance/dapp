@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useWeb3React } from '@web3-react/core';
-import { InputNumber, Button, Select, Radio, message } from 'antd';
+import { InputNumber, Button, Select, Radio } from 'antd';
+import * as message from '@/components/Notification';
 import './index.less';
 import { useModel } from 'umi';
 import { useCollateralSystem, usePrices } from '@/hooks/useContract';
@@ -11,20 +12,25 @@ import {
     expandTo18Decimals,
 } from '@/utils/bigNumber';
 import { ethers } from 'ethers';
-import { COLLATERAL_TOKENS, MINT_TOKENS, TokenPrices } from '@/config';
+import { COLLATERAL_TOKENS, PLATFORM_TOKEN } from '@/config';
 import { useBep20Balance } from '@/hooks/useTokenBalance';
 import useDataView, { useSelectedDebtInUSD } from '@/hooks/useDataView';
 import { useInitialRatio } from '@/hooks/useConfig';
 import BigNumber from 'bignumber.js';
 import { debounce } from 'lodash';
-import ScaleGroup from '@/components/ScaleGroup';
+import { Group as ScaleGroup, Button as ScaleOption } from '@/components/Scale';
 import SelectTokens from '@/components/SelectTokens';
+import TransitionConfirm from '@iron/TransitionConfirm';
+import { TokenIcon } from '@/components/Icon';
+import { useIntl } from 'umi';
+import { getTokenPrice } from '@/utils';
 
 const TO_TOKENS = ['BTC'];
 interface IProps {
     onSubmitSuccess: () => void;
 }
 export default (props: IProps) => {
+    const intl = useIntl();
     const { onSubmitSuccess } = props;
     const [debtBalance, setDebtBalance] = useState(0.0);
     const [burnAmount, setBurnAmount] = useState<number>();
@@ -70,33 +76,38 @@ export default (props: IProps) => {
     const prices = usePrices();
     const { account } = useWeb3React();
 
-    const getTokenPrice = async (token: string) => {
-        const res = await prices.getPrice(
-            ethers.utils.formatBytes32String(token),
-        );
-        return parseFloat(ethers.utils.formatEther(res));
-    };
 
     const burnAmountHandler = debounce(async (v) => {
         setBurnAmount(v);
         setDebtData({
             ...debtData,
-            endValue: debtData.startValue - v,
+            endValue: parseFloat((debtData.startValue - v).toFixed(2)),
         });
         if (toToken) {
+            let _unstakeAmount;
             const toTokenPrice = await getTokenPrice(toToken);
-            const val = parseFloat(
-                toFixedWithoutRound((v * initialRatio) / toTokenPrice, 2),
-            );
-            setUnstakeAmount(val);
+            if (currencyRatio < initialRatio) {
+                _unstakeAmount = 0;
+            } else {
+                _unstakeAmount = toFixedWithoutRound(
+                    (v * initialRatio) / toTokenPrice,
+                    2,
+                );
+            }
+
+            setUnstakeAmount(_unstakeAmount);
             setStakedData({
                 ...stakedData,
-                endValue: stakedData.startValue - val * toTokenPrice,
+                endValue: toFixedWithoutRound(
+                    stakedData.startValue - _unstakeAmount * toTokenPrice,
+                    2,
+                ),
             });
             const ratio =
                 debtData.startValue - v > 0
                     ? toFixedWithoutRound(
-                          ((stakedData.startValue - val * toTokenPrice) /
+                          ((stakedData.startValue -
+                              _unstakeAmount * toTokenPrice) /
                               (debtData.startValue - v)) *
                               100,
                           2,
@@ -113,8 +124,9 @@ export default (props: IProps) => {
         setUnstakeAmount(v);
         if (toToken) {
             const toTokenPrice = await getTokenPrice(toToken);
-            const val = parseFloat(
-                toFixedWithoutRound((v * toTokenPrice) / initialRatio, 2),
+            const val = toFixedWithoutRound(
+                (v * toTokenPrice) / initialRatio,
+                2,
             );
             setBurnAmount(val);
             setDebtData({
@@ -185,7 +197,6 @@ export default (props: IProps) => {
     }, [toToken, currencyRatio, initialRatio]);
 
     // 计算burned 和unstaking amount
-    //TODO 替换 collateralSystem.getUserCollateralInUsd 方法。还没部署。
     const burnInitialHandler = async (v) => {
         setBurnType(v);
         setUnstakeAmount(0);
@@ -196,10 +207,16 @@ export default (props: IProps) => {
         const userCollateralInUsd = new BigNumber(
             ethers.utils.formatEther(res),
         );
-        const burnAmount =
-            toTokenDebtInUsd -
-            userCollateralInUsd.dividedBy(initialRatio).toNumber();
+        const burnAmount = parseFloat(
+            new BigNumber(
+                toTokenDebtInUsd -
+                    userCollateralInUsd.dividedBy(initialRatio).toNumber(),
+            ).toFixed(2),
+        );
         setBurnAmount(burnAmount);
+        setStakedData({
+            ...stakedData,
+        });
         setDebtData({
             ...debtData,
             endValue: debtData.startValue - burnAmount,
@@ -257,6 +274,9 @@ export default (props: IProps) => {
         }
     };
 
+    const [showTxConfirm, setShowTxConfirm] = useState(false);
+    const [tx, setTx] = useState<any | null>(null);
+
     const onSubmit = async () => {
         if (!burnAmount && !unstakeAmount) {
             message.warning('Burned amount and unstaking can not be both 0');
@@ -273,6 +293,16 @@ export default (props: IProps) => {
             );
             return;
         }
+        if (
+            currencyRatio < initialRatio &&
+            unstakeAmount > 0 &&
+            burnType !== 'max'
+        ) {
+            message.warning(
+                '当前抵押率低于初始抵押率。不能解锁抵押物。请燃烧多余的债务后解锁。',
+            );
+            return;
+        }
         const debtInfo = selectedDebtItemInfos.find(
             (item) => item.collateralToken === toToken,
         );
@@ -283,15 +313,36 @@ export default (props: IProps) => {
         }
         try {
             setSubmitting(true);
+            setShowTxConfirm(true);
+            const toTokenPrice = await getTokenPrice(toToken);
+            const lockedPrice = await getTokenPrice(PLATFORM_TOKEN);
+            const unlockedAmount = lockedData.startValue - lockedData.endValue;
+            setTx({
+                from: {
+                    token: 'fUSD',
+                    amount: burnAmount,
+                    price: burnAmount,
+                },
+                to: {
+                    token: toToken,
+                    amount: unstakeAmount,
+                    price: (toTokenPrice * unstakeAmount).toFixed(2),
+                },
+                locked: {
+                    token: 'BS',
+                    amount: lockedData.startValue - lockedData.endValue,
+                    price: (lockedPrice * unlockedAmount).toFixed(2),
+                },
+            });
             if (burnType === 'max') {
-                const tx = await collateralSystem.burnAndUnstakeMax(
+                const _tx = await collateralSystem.burnAndUnstakeMax(
                     expandTo18Decimals(burnAmount), // burnAmount
                     ethers.utils.formatBytes32String(toToken!), // unstakeCurrency
                 );
                 message.info(
-                    'Burn tx sent out successfully. Pls wait for a while......',
+                    'Burn _tx sent out successfully. Pls wait for a while......',
                 );
-                const receipt = await tx.wait();
+                const receipt = await _tx.wait();
                 console.log(receipt);
             } else {
                 const token: any = Tokens[toToken!];
@@ -301,15 +352,22 @@ export default (props: IProps) => {
                     expandToNDecimals(unstakeAmount, decimals).toString(),
                 );
                 console.log(expandTo18Decimals(burnAmount).toString());
-                const tx = await collateralSystem.burnAndUnstake(
+
+                console.log(
+                    "burnAndUnstake's params: burnAmount is %o, toToken is %s, unstakeAmount is %o",
+                    expandTo18Decimals(burnAmount),
+                    ethers.utils.formatBytes32String(toToken!),
+                    expandToNDecimals(unstakeAmount, decimals),
+                );
+                const _tx = await collateralSystem.burnAndUnstake(
                     expandTo18Decimals(burnAmount), // burnAmount
                     ethers.utils.formatBytes32String(toToken!), // unstakeCurrency
                     expandToNDecimals(unstakeAmount, decimals), // unstakeAmount
                 );
                 message.info(
-                    'Burn tx sent out successfully. Pls wait for a while......',
+                    'Burn _tx sent out successfully. Pls wait for a while......',
                 );
-                const receipt = await tx.wait();
+                const receipt = await _tx.wait();
                 console.log(receipt);
             }
 
@@ -321,63 +379,49 @@ export default (props: IProps) => {
         } catch (err) {
             setSubmitting(false);
             console.log(err);
+        } finally {
+            setShowTxConfirm(false);
         }
-    };
-
-    const SelectToTokensView = () => {
-        const [show, setShow] = useState(false);
-        const _closeHandler = useCallback(() => setShow(false), []);
-        const _showHandler = useCallback(() => setShow(true), []);
-
-        const DefaultView = () => {
-            return <span>Select token</span>;
-        };
-
-        return (
-            <SelectTokens
-                visable={show}
-                value={toToken}
-                tokenList={COLLATERAL_TOKENS}
-                onSelect={toTokenHandler}
-                onClose={_closeHandler}
-            >
-                <button className="btn-mint-form" onClick={_showHandler}>
-                    <span>{toToken || <DefaultView />}</span>
-                    <i className="icon-down size-20"></i>
-                </button>
-            </SelectTokens>
-        );
-    };
-
-    const SearchDebts = () => {
-        return (
-            <div className="search-debts">
-                <div className="search-input-wrapper">
-                    <input type="text" placeholder="Search name or your debt" />
-                </div>
-                <button className="search-btn" />
-            </div>
-        );
     };
 
     return (
         <div className="common-box form-view">
-            <SearchDebts />
-            <ScaleGroup
-                scaleRange={[
-                    { label: 'Burn to initial', value: 'initial' },
-                    { label: 'Burn Max', value: 'max' },
-                ]}
-                value={scale}
-                updateScale={(scale) => setScale(scale)}
-            />
-            <div className="input-item">
-                <p className="label">From</p>
+            <ScaleGroup value={scale} updateScale={(scale) => setScale(scale)}>
+                {[
+                    {
+                        label: intl.formatMessage({ id: 'burn.initial' }),
+                        value: 'initial',
+                        disabled: !burnInitialAvailable,
+                        onClick: (scale) => burnInitialHandler(scale),
+                    },
+                    {
+                        label: intl.formatMessage({ id: 'burn.max' }),
+                        value: 'max',
+                        disabled: !burnMaxAvailable,
+                        onClick: (scale) => burnMaxHandler(scale),
+                    },
+                ].map((option) => (
+                    <ScaleOption
+                        key={option.label}
+                        value={option.value}
+                        disabled={option.disabled}
+                        onClick={option.onClick}
+                    >
+                        <span>{option.label}</span>
+                    </ScaleOption>
+                ))}
+            </ScaleGroup>
+            <div className="input-item from-input">
+                <p className="label">
+                    {intl.formatMessage({ id: 'burn.from' })}
+                </p>
                 <div className="from-content input-item-content">
                     <div className="content-label">
-                        <p className="left">Burned</p>
+                        <p className="left">
+                            {intl.formatMessage({ id: 'burn.burned' })}
+                        </p>
                         <p className="right">
-                            Balance:{' '}
+                            {intl.formatMessage({ id: 'balance:' })}
                             <span className="balance">{fusdBalance}</span>
                         </p>
                     </div>
@@ -391,20 +435,40 @@ export default (props: IProps) => {
                             max={selectedDebtInUSD || 9999999}
                         />
                         <div className="ftoken">
-                            <button className="max">Max</button>
-                            <i className="icon-token usd">USD</i>
+                            <button
+                                className="max"
+                                onClick={() => setBurnAmount(selectedDebtInUSD)}
+                            >
+                                Max
+                            </button>
+                            <TokenIcon
+                                name="fusd"
+                                size={24}
+                                style={{
+                                    marginLeft: '4px',
+                                    marginRight: '4px',
+                                }}
+                            />
                             <span>fUSD</span>
                         </div>
                     </div>
                 </div>
-                <span className="debt">Debt : {'0.00'}</span>
+                <span className="debt">
+                    {intl.formatMessage({ id: 'burn.debt:' })}
+                    {toTokenDebtInUsd}
+                </span>
             </div>
             <div className="input-item" style={{ zIndex: 2 }}>
-                <p className="label">To</p>
+                <p className="label">{intl.formatMessage({ id: 'burn.to' })}</p>
                 <div className="to-content input-item-content">
                     <div className="content-label">
-                        <p className="left">Unstaking</p>
-                        <p className="right">-</p>
+                        <p className="left">
+                            {intl.formatMessage({ id: 'burn.unstaking' })}
+                        </p>
+                        <p className="right">
+                            {intl.formatMessage({ id: 'balance:' })}
+                            <span className="balance">{toTokenDebt}</span>
+                        </p>
                     </div>
                     <div className="input">
                         <InputNumber
@@ -417,45 +481,52 @@ export default (props: IProps) => {
                             max={toTokenDebt}
                         />
                         <div className="token">
-                            <SelectToTokensView />
+                            <TokenIcon name={toToken.toLowerCase()} size={24} />
+                            <SelectTokens
+                                value={toToken}
+                                tokenList={COLLATERAL_TOKENS}
+                                onSelect={toTokenHandler}
+                            ></SelectTokens>
                         </div>
                     </div>
                 </div>
             </div>
-            {/* <div className="burn-type">
-                <p className="tips">You can also choose</p>
-                <div className="btns">
-                    <Radio.Group
-                        value={burnType}
-                        onChange={(e) => setBurnType(e.target.value)}
-                        buttonStyle="solid"
-                    >
-                        <Radio.Button
-                            onClick={burnInitialHandler}
-                            value="initial"
-                            disabled={!burnInitialAvailable}
-                        >
-                            Burn to initial
-                        </Radio.Button>
-                        <Radio.Button
-                            value="max"
-                            onClick={burnMaxHandler}
-                            disabled={!burnMaxAvailable}
-                        >
-                            Burn Max
-                        </Radio.Button>
-                    </Radio.Group>
-                </div>
-            </div> */}
             <div className="btn-burn">
                 <Button
                     loading={submitting}
                     className="btn-mint common-btn common-btn-red"
                     onClick={onSubmit}
                 >
-                    Burn
+                    {intl.formatMessage({ id: 'burn.burn' })}
                 </Button>
             </div>
+
+            <TransitionConfirm
+                visable={showTxConfirm}
+                onClose={() => setShowTxConfirm(false)}
+                dataSource={
+                    tx && [
+                        {
+                            label: 'Burn',
+                            direct: 'from',
+                            value: {
+                                token: tx.from.token,
+                                amount: tx.from.amount,
+                                mappingPrice: tx.from.price,
+                            },
+                        },
+                        {
+                            label: 'Unstaking',
+                            direct: 'to',
+                            value: {
+                                token: tx.to.token,
+                                amount: tx.to.amount,
+                                mappingPrice: tx.to.price,
+                            },
+                        },
+                    ]
+                }
+            />
         </div>
     );
 };

@@ -1,4 +1,4 @@
-@import '~@/assets/styles/util.less';
+@import '~@/assets/styles/iron.less';
 
 .burn-type {
     margin: 20px 0;
@@ -30,6 +30,11 @@
 
 .form-view {
     position: relative;
+
+    > .from-input {
+        margin-top: 24px;
+    }
+
     .group-scale {
         width: 374px;
         margin: 0 auto;
@@ -40,6 +45,10 @@
                 margin-left: 27px;
             }
         }
+    }
+
+    .custom-input {
+        margin-right: 10px;
     }
 }
 
@@ -78,39 +87,9 @@
     box-sizing: border-box;
 }
 
-// .input-item {
-//     &:nth-child(n + 2) {
-//         margin-top: 24px;
-//     }
-// }
-
 .ftoken {
     display: flex;
     align-items: center;
-
-    > .icon-token {
-        width: 24px;
-        height: 24px;
-        border-radius: 50%;
-
-        &.usd {
-            margin: 0 6px 0 10px;
-            background: linear-gradient(
-                116.98deg,
-                #f6851b 31.39%,
-                #ffad33 83.13%
-            );
-            font-style: normal;
-            font-weight: 300;
-            font-size: 10px;
-            line-height: 15px;
-            display: flex;
-            align-items: center;
-            // text-align: center;
-            justify-content: center;
-            color: #ffffff;
-        }
-    }
 
     > span {
         font-style: normal;
@@ -121,52 +100,5 @@
         align-items: center;
         text-align: right;
         color: #e1ab3b;
-    }
-}
-
-.search-debts {
-    display: flex;
-    align-items: center;
-    width: 418.02px;
-    height: 36px;
-    position: absolute;
-    top: -7px;
-    right: -10px;
-
-    .search-input-wrapper {
-        width: 373px;
-        height: 36px;
-        background: #61191f;
-        box-shadow: 0px 2px 0.5px rgba(51, 6, 6, 0.77);
-        border-radius: 18px 2px 2px 18px;
-        padding: 0 10px 0 30px;
-        box-sizing: border-box;
-        display: flex;
-        align-items: center;
-
-        > input {
-            width: 100%;
-            font-style: normal;
-            font-weight: normal;
-            font-size: 16px;
-            line-height: 24px;
-            display: flex;
-            align-items: center;
-            background-color: transparent;
-            border: none;
-            outline: none;
-            color: #fff;
-
-            &::placeholder {
-                color: rgba(255, 255, 255, 0.8);
-            }
-        }
-    }
-
-    .search-btn {
-        width: 47.02px;
-        height: 36px;
-        // transform: matrix(-1, 0, 0, 1, 0, 0);
-        #image.button('~@/assets/images/icon-search.png');
     }
 }

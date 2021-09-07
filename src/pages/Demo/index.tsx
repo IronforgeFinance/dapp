@@ -2,11 +2,13 @@ import React, { useState, useCallback } from 'react';
 import './index.less';
 import { notification } from 'antd';
 import SelectTokens from '@/components/SelectTokens';
-import ConfirmTransaction from '@/components/ConfirmTransaction';
 import CommentaryCard from '@/components/CommentaryCard';
-import DebtItemRatio from '@/components/DebtItemRatio';
-import DebtItem from '@/components/DebtItem';
-import { success, fail } from '@/components/Notification';
+// import DebtItemRatio from '@/components/DebtItemRatio';
+// import DebtItem from '@/components/DebtItem';
+import message from '@iron/Notification';
+// import Popover from '@/components/Popover';
+import TransitionConfirm from '@/components/TransitionConfirm';
+import WalletModal from '@/layouts/components/WalletModal';
 
 export default () => {
     // * 选择token演示
@@ -15,8 +17,6 @@ export default () => {
 
         return (
             <SelectTokens
-                visable={showSetting}
-                onClose={() => setShowSetting(false)}
             >
                 <button
                     className="btn-select-tokens"
@@ -28,152 +28,74 @@ export default () => {
         );
     };
 
-    // * 交易确认演示
-    const ConfirmTransactionDemo = () => {
-        const [show, setShow] = useState(false);
-        const onCloseMemo = useCallback(() => setShow(false), []);
-        const onShowMemo = useCallback(() => setShow(true), []);
-
-        const mockData = [
-            {
-                prop: 'Burned',
-                value: 100,
-                token: 'fUSD',
-                extra: '$6,162.8',
-            },
-            {
-                prop: 'Burned',
-                value: 100,
-                token: 'fUSD',
-            },
-            {
-                prop: 'Burned',
-                value: 100,
-                token: 'fUSD',
-            },
-            {
-                prop: 'Burned',
-                value: 100,
-                token: 'fUSD',
-            },
-            {
-                prop: 'Burned',
-                value: 100,
-                token: 'fUSD',
-            },
-            {
-                prop: 'Burned',
-                value: 100,
-                token: 'fUSD',
-            },
-            {
-                prop: 'Burned',
-                value: 100,
-                token: 'fUSD',
-            },
-            {
-                prop: 'Burned',
-                value: 100,
-                token: 'fUSD',
-            },
-        ];
+    const TransitionConfirmDemo = () => {
+        const [visable, setVisable] = useState(false);
 
         return (
-            <ConfirmTransaction
-                visable={show}
-                onClose={onCloseMemo}
-                dataSource={mockData}
-            >
-                <button className="confirm-transaction" onClick={onShowMemo}>
-                    Click Confirm Transaction
+            <div className="transition-confirm-demo">
+                <TransitionConfirm
+                    visable={visable}
+                    onClose={() => setVisable(false)}
+                    dataSource={[
+                        {
+                            label: 'Collateral',
+                            direct: 'from',
+                            value: {
+                                token: 'BNB',
+                                amount: 20,
+                                mappingPrice: 6162.8,
+                            },
+                        },
+                        {
+                            label: 'Mint',
+                            direct: 'to',
+                            value: {
+                                token: 'fETH',
+                                amount: 5,
+                                mappingPrice: 6162.8,
+                            },
+                        },
+                        {
+                            label: 'Locked',
+                            value: {
+                                token: 'ftoken',
+                                amount: 0,
+                                mappingPrice: 6162.8,
+                            },
+                        },
+                        { label: 'Type', value: 'Delivery' },
+                    ]}
+                />
+                <button onClick={() => setVisable(true)}>
+                    Test TransitionConfirm
                 </button>
-            </ConfirmTransaction>
+            </div>
         );
     };
 
-    // * 债务比率显示
-    const DebtItemRatioDemo = () => {
-        // const mockDebtRatios = [
-        //     {
-        //         token: 'BTC',
-        //         percent: '49%',
-        //     },
-        //     {
-        //         token: 'USDT',
-        //         percent: '31%',
-        //     },
-        //     {
-        //         token: 'ETH',
-        //         percent: '12%',
-        //     },
-        //     {
-        //         token: 'TOKEN1',
-        //         percent: '6%',
-        //     },
-        //     {
-        //         token: 'TOKEN2',
-        //         percent: '2%',
-        //     },
-        // ];
-        const mockDebtRatios = [
-            {
-                token: 'BTC',
-                percent: '69%',
-            },
-            {
-                token: 'USDT',
-                percent: '31%',
-            },
-        ];
+    const WalletConnectDemo = () => {
+        const [visable, setVisable] = React.useState(false);
 
-        return <DebtItemRatio debtRatios={mockDebtRatios} />;
-    };
-
-    // * 每一项债务数据
-    const DebtItemDemo = () => {
-        const mockDebts = {
-            balance: 88888,
-            mintedToken: 'fUSD',
-            mintedTokenName: 'USD',
-            mintedTokenNum: 100,
-            debtRatios: [
-                {
-                    token: 'BTC',
-                    percent: '49%',
-                },
-                {
-                    token: 'USDT',
-                    percent: '31%',
-                },
-                {
-                    token: 'ETH',
-                    percent: '12%',
-                },
-                {
-                    token: 'TOKEN1',
-                    percent: '6%',
-                },
-                {
-                    token: 'TOKEN2',
-                    percent: '2%',
-                },
-            ],
-            fusdBalance: 10000,
-        };
-        return <DebtItem {...mockDebts} />;
+        return (
+            <div className="wallet-connect-demo">
+                <WalletModal
+                    visable={visable}
+                    closeOnIconClick={() => setVisable(false)}
+                />
+                <button onClick={() => setVisable(true)}>
+                    Test TransitionConfirm
+                </button>
+            </div>
+        );
     };
 
     return (
         <div className="demo-container">
             <ul>
-                <li>
+                {/* <li>
                     <h3>1. select token list</h3>
                     <SelectTokensDemo />
-                </li>
-                <li>
-                    <h3>2. confirm transaction</h3>
-                    <ConfirmTransactionDemo />
-                </li>
+                </li> */}
                 <li>
                     <h3>3. 解说牌</h3>
                     <CommentaryCard
@@ -184,36 +106,44 @@ export default () => {
                     />
                 </li>
                 <li>
-                    <h3>4. 债务项进度条</h3>
-                    <DebtItemRatioDemo />
-                </li>
-                <li>
-                    <h3>5. 债务项</h3>
-                    <DebtItemDemo />
-                </li>
-                <li>
                     <h3>5. 成功通知</h3>
                     <button
                         onClick={() =>
-                            success({
-                                message: 'Transaction receipt',
-                                description: 'Mint fUSD from USDC',
-                                showView: true,
-                            })
+                            // message.success({
+                            //     message: 'Transaction receipt',
+                            //     description: 'Mint fUSD from USDC',
+                            //     showView: true,
+                            // })
+                            message.success('Transaction success')
                         }
                     >
                         成功
                     </button>
                     <button
                         onClick={() =>
-                            fail({
-                                message: 'Transaction receipt',
-                                description: 'Mint fUSD from USDC',
-                            })
+                            // message.fail({
+                            //     message: 'Transaction receipt',
+                            //     description: 'Mint fUSD from USDC',
+                            // })
+                            message.fail('Transaction fail')
                         }
                     >
                         失败
                     </button>
+                </li>
+                {/* <li>
+                    <h3>6. Popover</h3>
+                    <Popover content="Fuck Qsk!!!!">
+                        <button>Open Popover</button>
+                    </Popover>
+                </li> */}
+                <li>
+                    <h3>7. Transition Confirm</h3>
+                    <TransitionConfirmDemo />
+                </li>
+                <li>
+                    <h3>8. 钱包连接</h3>
+                    <WalletConnectDemo />
                 </li>
             </ul>
         </div>

@@ -1,22 +1,163 @@
-import React, { useState } from 'react';
-import { InputNumber, Select, Progress, message, Button } from 'antd';
+import React, { useState, useEffect } from 'react';
+import { InputNumber, Select, Progress, Button } from 'antd';
+import * as message from '@/components/Notification';
 import './index.less';
-const LP_TOKENS = ['fUSD-FTSLA'];
-import { STAKE_TABS } from '../../index';
-export default (props: { tabKey: string }) => {
-    const { tabKey } = props;
-    const [lpBalance, setLpBalance] = useState();
-    const [lpAmount, setLpAmount] = useState();
-    const [lp, setLp] = useState();
+import { LP_TOKENS } from '@/config';
+
+import { useBep20Balance } from '@/hooks/useTokenBalance';
+import {
+    useCheckERC20ApprovalStatus,
+    useERC20Approve,
+} from '@/hooks/useApprove';
+import { useMinerReward } from '@/hooks/useContract';
+import Tokens from '@/config/constants/tokens';
+import Contracts from '@/config/constants/contracts';
+import { useWeb3React } from '@web3-react/core';
+import { expandTo18Decimals } from '@/utils/bigNumber';
+import { ethers } from 'ethers';
+import TabGroup from '@/components/TabGroup';
+import { useModel } from 'umi';
+
+enum STAKE_TABS {
+    stake = 'stake',
+    unstake = 'unstake',
+}
+
+const tabItems = [
+    {
+        name: 'Stake',
+        key: 'stake',
+    },
+    {
+        name: 'Unstake',
+        key: 'unstake',
+    },
+];
+
+export default (props: { lp: string; handleFlipper: () => void }) => {
+    const [submitting, setSubmitting] = useState(false);
+    const { lp: lpParam } = props;
+    const [tabKey, setTabKey] = useState(tabItems[0].key);
+    const [lpAmount, setLpAmount] = useState<number>();
+    const [staked, setStaked] = useState<number>();
+    const [lp, setLp] = useState<string>(lpParam || LP_TOKENS[0].poolName);
+
+    const { updateStakePoolItem } = useModel('stakeData', (model) => ({
+        ...model,
+    }));
+    const { account } = useWeb3React();
+
+    const MinerReward = useMinerReward();
+
+    const minerRewardContract = Contracts.MinerReward[process.env.APP_CHAIN_ID];
+    const { isApproved, setLastUpdated } = useCheckERC20ApprovalStatus(
+        lp ? Tokens[lp].address[process.env.APP_CHAIN_ID] : '',
+        minerRewardContract,
+    );
+    const { handleApprove, requestedApproval } = useERC20Approve(
+        lp ? Tokens[lp].address[process.env.APP_CHAIN_ID] : '',
+        minerRewardContract,
+        setLastUpdated,
+    );
+
+    const fetchStakedBalance = async () => {
+        const poolId = LP_TOKENS.find((item) => item.poolName === lp).poolId;
+        const userInfo = await MinerReward.userInfo(poolId, account);
+        const staked = parseFloat(ethers.utils.formatEther(userInfo.amount));
+        setStaked(staked);
+    };
+
+    useEffect(() => {
+        setLpAmount(0);
+        if (tabKey === STAKE_TABS.unstake && account) {
+            fetchStakedBalance();
+        }
+    }, [tabKey, account, lp]);
+    const { balance: lpBalance, refresh: refreshBalance } = useBep20Balance(lp);
+
+    const handleSubmit = async () => {
+        if (!lp || !lpAmount) {
+            return;
+        }
+        if (
+            (tabKey === STAKE_TABS.stake && Number(lpAmount) > lpBalance) ||
+            (tabKey === STAKE_TABS.unstake && Number(lpAmount) > staked)
+        ) {
+            return;
+        }
+
+        if (!account) {
+            return;
+        }
+        try {
+            setSubmitting(true);
+            const poolId = LP_TOKENS.find(
+                (item) => item.poolName === lp,
+            ).poolId;
+            if (tabKey === STAKE_TABS.stake) {
+                const tx = await MinerReward.deposit(
+                    account,
+                    poolId,
+                    expandTo18Decimals(lpAmount),
+                );
+                message.info(
+                    'Stake tx sent out successfully. Pls wait for a while......',
+                );
+                const receipt = await tx.wait();
+                console.log(receipt);
+                setSubmitting(false);
+                message.success('Stake successfully. Pls check your balance.');
+                refreshBalance();
+            } else {
+                const tx = await MinerReward.withdraw(
+                    account,
+                    poolId,
+                    expandTo18Decimals(lpAmount),
+                );
+                message.info(
+                    'Unstake tx sent out successfully. Pls wait for a while......',
+                );
+                const receipt = await tx.wait();
+                console.log(receipt);
+                setSubmitting(false);
+                message.success(
+                    'Unstake successfully. Pls check your balance.',
+                );
+                fetchStakedBalance();
+            }
+            updateStakePoolItem({ poolId, poolName: lp }, account);
+        } catch (err) {
+            console.log(err);
+            setSubmitting(false);
+        }
+    };
     return (
-        <div className="provide-form common-box">
-            <div className="input-item">
-                <p className="label">Asset</p>
+        <div className="stake-form common-box">
+            <TabGroup
+                items={tabItems}
+                value={tabKey}
+                onChange={(v) => {
+                    setTabKey(v);
+                }}
+                className="custom-tabs-group"
+            />
+            <button
+                className="common-btn-back custom-icon-back"
+                onClick={() => {
+                    props.handleFlipper();
+                }}
+            />
+            <div className="input-item custom-input-container">
+                <p className="label">Amount</p>
                 <div className="input-item-content">
                     <div className="content-label">
                         <p className="right">
                             Balance:
-                            <span className="balance">{lpBalance}</span>
+                            <span className="balance">
+                                {tabKey === STAKE_TABS.stake
+                                    ? lpBalance
+                                    : staked}
+                            </span>
                         </p>
                     </div>
                     <div className="input">
@@ -28,29 +169,44 @@ export default (props: { tabKey: string }) => {
                             placeholder="0.00"
                             className="custom-input"
                         />
-                        <div className="token">
-                            <Select
-                                value={lp}
-                                onSelect={(v) => {
-                                    setLp(v);
+                        <div className="custom-token">
+                            <span
+                                className="btn-max"
+                                onClick={() => {
+                                    setLpAmount(
+                                        tabKey === STAKE_TABS.stake
+                                            ? lpBalance
+                                            : staked,
+                                    );
                                 }}
-                                placeholder={'Select token'}
                             >
-                                {LP_TOKENS.map((item) => (
-                                    <Select.Option value={item} key={item}>
-                                        {item}
-                                    </Select.Option>
-                                ))}
-                            </Select>
+                                Max
+                            </span>
+                            <span className="token-name">{lp}</span>
                         </div>
                     </div>
                 </div>
             </div>
 
             <div className="btn-footer">
-                <button className="common-btn common-btn-red">
-                    {tabKey === STAKE_TABS.stake ? 'Stake' : 'Unstake'}
-                </button>
+                {isApproved && (
+                    <Button
+                        className="common-btn common-btn-red"
+                        onClick={handleSubmit}
+                        loading={submitting}
+                    >
+                        {tabKey === STAKE_TABS.stake ? 'Stake' : 'Unstake'}
+                    </Button>
+                )}
+                {lp && !isApproved && (
+                    <Button
+                        className="btn-mint common-btn common-btn-red"
+                        onClick={handleApprove}
+                        loading={requestedApproval}
+                    >
+                        Approve To Stake
+                    </Button>
+                )}
             </div>
             {lp && tabKey === STAKE_TABS.stake && (
                 <div className="info-footer">
