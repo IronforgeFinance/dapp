@@ -1,6 +1,7 @@
+import './less/index.less';
+
 import React from 'react';
 import { NavLink, useIntl } from 'umi';
-import './index.less';
 import WalletStatus from '../WalletStatus';
 import Logo from '@/assets/images/header-logo.png';
 import useEagerConnect from '@/hooks/useEagerConnect';

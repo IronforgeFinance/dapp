@@ -1,5 +1,6 @@
+import './less/index.less';
+
 import React from 'react';
-import './index.less';
 import Board from '@/components/Board';
 import config, {
     connectorLocalStorageKey,

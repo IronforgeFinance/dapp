@@ -1,4 +1,5 @@
-import './index.less';
+import './less/index.less';
+
 import { useQuery } from '@apollo/client';
 import { useState, useEffect, useMemo, useCallback } from 'react';
 import { Table } from 'antd';

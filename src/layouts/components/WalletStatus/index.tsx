@@ -1,3 +1,5 @@
+import './less/index.less';
+
 import React, { useMemo, useState, useEffect } from 'react';
 import { useWeb3React } from '@web3-react/core';
 import { useIntl, useModel } from 'umi';
@@ -11,7 +13,6 @@ import IconDown from '@/assets/images/down.svg';
 import HoverIconDown from '@/assets/images/down-hover.svg';
 import { Dropdown, Menu, Popover } from 'antd';
 import Clipboard from 'clipboard';
-import './index.less';
 import WalletModal from '../WalletModal';
 
 export default () => {
