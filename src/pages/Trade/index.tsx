@@ -23,13 +23,8 @@ import TransitionConfirm from '@/components/TransitionConfirm';
 import { TokenIcon } from '@/components/Icon';
 import { useIntl, useModel } from 'umi';
 import { getTokenPrice } from '@/utils';
-
 //TODO: for test.从配置中读取
-const TOKEN_OPTIONS = [
-    { name: 'lBTC-202112' },
-    { name: 'FUSD' },
-    { name: 'lBTC' },
-];
+const TOKEN_OPTIONS = MINT_TOKENS.map((token) => ({ name: token }));
 
 export default () => {
     const intl = useIntl();
@@ -54,7 +49,7 @@ export default () => {
     }));
 
     const { balance: fromTokenBalance } = useBep20Balance(fromToken);
-    const { balance: toTokenBalance } = useBep20Balance(toToken);
+    const { balance: toTokenBalance } = useBep20Balance(toToken, 6);
 
     const getFeeRate = async () => {
         if (toToken) {
@@ -89,7 +84,7 @@ export default () => {
         const fromTokenPrice = await getTokenPrice(fromToken);
         const toTokenPrice = await getTokenPrice(toToken);
         const val = (fromTokenPrice * fromAmount) / toTokenPrice;
-        const toAmount = toFixedWithoutRound(val, 2);
+        const toAmount = toFixedWithoutRound(val, 6);
         setToAmount(toAmount);
     }, 500);
     useEffect(() => {
@@ -101,7 +96,7 @@ export default () => {
         const toTokenPrice = await getTokenPrice(toToken);
         const val =
             (fromTokenPrice * fromAmount * (1 - feeRate)) / toTokenPrice;
-        const amount =toFixedWithoutRound(val, 6);
+        const amount = toFixedWithoutRound(val, 6);
         setEstimateAmount(amount);
     }, 500);
     useEffect(() => {

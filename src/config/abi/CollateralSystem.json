@@ -412,7 +412,7 @@
     "outputs": [
       {
         "internalType": "uint256",
-        "name": "buildRatio",
+        "name": "",
         "type": "uint256"
       }
     ],

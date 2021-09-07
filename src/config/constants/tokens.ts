@@ -1,15 +1,6 @@
 import { localOutput, testnetOutput } from './contracts';
 
 export default {
-    cake: {
-        symbol: 'CAKE',
-        address: {
-            56: '0x0E09FaBB73Bd3Ade0a17ECC321fD13a19e81cE82', // mainnet
-            97: '0xa35062141Fa33BCA92Ce69FeD37D0E8908868AAe', // testnet
-        },
-        decimals: 18,
-        projectLink: 'https://pancakeswap.finance/',
-    },
     USDT: {
         symbol: 'USDT',
         address: {
@@ -101,6 +92,24 @@ export default {
             56: '',
             97: testnetOutput['USDC-ETH'],
             1337: localOutput['USDC-ETH'],
+        },
+        decimals: 18,
+    },
+    'BTCUSD_210924': {
+        symbol: 'BTCUSD_210924',
+        address: {
+            56: '',
+            97: testnetOutput.quarterlyContracts.BTCUSD_210924,
+            1337: localOutput.lbtcToken202112,
+        },
+        decimals: 18,
+    },
+    'BTCUSD_211231': {
+        symbol: 'BTCUSD_211231',
+        address: {
+            56: '',
+            97: testnetOutput.quarterlyContracts.BTCUSD_211231,
+            1337: localOutput.lbtcToken202112,
         },
         decimals: 18,
     },

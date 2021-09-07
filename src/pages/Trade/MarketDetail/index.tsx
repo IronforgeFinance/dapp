@@ -14,6 +14,7 @@ import Tokens from '@/config/constants/tokens';
 import Contracts from '@/config/constants/contracts';
 import { useIntl } from 'umi';
 import { getTokenPrice } from '@/utils';
+import { toFixedWithoutRound } from '@/utils/bigNumber';
 
 interface Price {
     amount: string | number;
@@ -87,8 +88,14 @@ const MarketDetail = (props: MarketDetailProps) => {
         if (!data.id) {
             return { ...DEFAULT_TOKEN_DATA, token };
         }
-        data.priceHigh = ethers.utils.formatEther(data.priceHigh);
-        data.priceLow = ethers.utils.formatEther(data.priceLow);
+        data.priceHigh = toFixedWithoutRound(
+            ethers.utils.formatEther(data.priceHigh),
+            6,
+        );
+        data.priceLow = toFixedWithoutRound(
+            ethers.utils.formatEther(data.priceLow),
+            6,
+        );
         data.tradeVolumeUSD = ethers.utils.formatEther(data.tradeVolumeUSD);
         const tokenContract = index === 0 ? token0Contract : token1Contract;
         const totalSupply = parseFloat(

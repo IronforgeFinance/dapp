@@ -2,11 +2,6 @@ export const BASE_BSC_SCAN_URL = 'https://bscscan.com';
 //TODO 从配置或者合约中获取
 export const COLLATERAL_TOKENS = [
     {
-        name: 'BTC',
-        ratio: 5,
-    },
-    
-    {
         name: 'USDC',
         ratio: 5, // TODO get ratio from contract
     },
@@ -22,7 +17,7 @@ export const COLLATERAL_TOKENS = [
 ];
 
 //TODO 从配置或者合约中获取
-export const MINT_TOKENS = ['FUSD', 'lBTC-202112'];
+export const MINT_TOKENS = ['FUSD','lBTC', 'BTCUSD_210924', 'BTCUSD_211231'];
 
 // TODO 从后台接口或合约中获取
 export const LP_TOKENS = [

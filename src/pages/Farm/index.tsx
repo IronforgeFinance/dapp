@@ -3,7 +3,7 @@ import './index.less';
 import { history, useModel } from 'umi';
 import StakeItem from './Stake';
 import { useWeb3React } from '@web3-react/core';
-import { LP_TOKENS } from '@/config/';
+import { LP_TOKENS } from '@/config';
 import useRefresh from '@/hooks/useRefresh';
 import { useIntl } from 'umi';
 

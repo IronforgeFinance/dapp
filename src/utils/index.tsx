@@ -10,8 +10,9 @@ export const getRemainDaysOfQuarterAsset = (quarter: string) => {
 
     try {
         let date = dayjs([
-            Number(quarter.substr(0, 4)),
-            Number(quarter.substr(4)) - 1, // month starts from 0
+            Number('20' + quarter.substr(0, 2)),
+            Number(quarter.substr(2, 2)) - 1, // month starts from 0
+            Number(quarter.substr(4)),
         ]).endOf('month');
         while (date.day() !== 5) {
             date = date.subtract(1, 'days');
@@ -30,7 +31,7 @@ export const getRemainDaysOfQuarterAsset = (quarter: string) => {
 //TODO 判断是否是季度合约资产。目前判断方法比较简单
 export const isDeliveryAsset = (token: string) => {
     if (!token) return false;
-    return token.includes('-'); //quarter is like lBTC-202112
+    return /^.+((-|_)\d+)$/.test(token); //quarter is like lBTC-202112
 };
 
 /**
@@ -58,7 +59,7 @@ export const getTokenPrice = async (token: string) => {
         const res = await prices.getPrice(
             ethers.utils.formatBytes32String(token),
         );
-        console.log('getTokenPrice: ', token, res);
+        console.log('getTokenPrice: ', token, ethers.utils.formatEther(res));
         return parseFloat(ethers.utils.formatEther(res));
     } catch (err) {
         console.log(err);

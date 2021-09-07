@@ -58,7 +58,7 @@ const useTokenBalance = (tokenAddress: string) => {
     return balanceState;
 };
 
-export const useBep20Balance = (token: string) => {
+export const useBep20Balance = (token: string, fixed: number = 2) => {
     const { NOT_FETCHED, SUCCESS, FAILED } = FetchStatus;
     const [balanceState, setBalanceState] = useState<UseTokenBalanceState>({
         balance: 0,
@@ -87,7 +87,7 @@ export const useBep20Balance = (token: string) => {
                 const res = await contract.balanceOf(account);
                 const amount = toFixedWithoutRound(
                     ethers.utils.formatUnits(res, tokenObj.decimals),
-                    2,
+                    fixed,
                 );
                 setBalanceState({
                     balance: amount,

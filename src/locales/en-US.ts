@@ -147,6 +147,10 @@ export default {
     action: 'Action',
     from: 'From',
     to: 'To',
+    disconnect: 'Disconnect',
+    change: 'Change',
+    changeWallet: 'Change Wallet',
+    connectWallet: 'Connect Wallet',
     /** @description 动词 */
     'verb.from': 'From', //动词省略
     'verb.send': 'Send',
