@@ -1,5 +1,6 @@
+import './less/index.less';
+
 import React, { useState, useEffect } from 'react';
-import './index.less';
 import { FiatSymbol } from '@/config/constants/types';
 import classNames from 'classnames';
 import { copyTextToClipboard } from '@/utils/clipboard';

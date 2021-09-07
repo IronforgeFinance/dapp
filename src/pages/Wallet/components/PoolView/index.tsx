@@ -102,6 +102,7 @@ const PoolView = () => {
             const list = await fetchLpDataList(PROVIDED_LP_TOKENS, account);
             const data = list.map((item) => {
                 return {
+                    address: item.address,
                     token0: {
                         name: item.token1,
                         amount: item.token1Balance,
@@ -131,7 +132,7 @@ const PoolView = () => {
                     ...item,
                     title: intl.formatMessage({ id: item.title }),
                 }))}
-                rowKey={(record) => record.id}
+                rowKey={(record) => record.address}
                 dataSource={dataSource}
                 pagination={false}
             />

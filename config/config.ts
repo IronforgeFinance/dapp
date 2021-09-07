@@ -15,6 +15,7 @@ export default defineConfig({
             viewportWidth: 750,
             viewportUnit: 'vw',
             mediaQuery: false,
+            exclude: /node_modules|antd/i,
         }),
     ],
     chainWebpack(config, { webpack }) {
