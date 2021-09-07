@@ -1,6 +1,7 @@
 import { defineConfig } from 'umi';
-import routes from './routes';
 import path from 'path';
+import pxToViewPort from 'postcss-px-to-viewport';
+import routes from './routes';
 
 export default defineConfig({
     plugins: ['babel-plugin-styled-components'],
@@ -9,6 +10,13 @@ export default defineConfig({
     },
     routes,
     fastRefresh: {},
+    extraPostCSSPlugins: [
+        pxToViewPort({
+            viewportWidth: 750,
+            viewportUnit: 'vw',
+            mediaQuery: false,
+        }),
+    ],
     chainWebpack(config, { webpack }) {
         // Set alias
         config.resolve.alias.set(
@@ -28,8 +36,7 @@ export default defineConfig({
             crossorigin: true,
         },
         {
-            href:
-                'https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap',
+            href: 'https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap',
             rel: 'stylesheet',
         },
     ],
