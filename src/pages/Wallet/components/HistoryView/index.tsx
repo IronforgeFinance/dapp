@@ -1,4 +1,4 @@
-import './index.less';
+import './less/index.less';
 
 import { Tabs, Table } from 'antd';
 import { useState, useCallback, Fragment, useMemo, useEffect } from 'react';

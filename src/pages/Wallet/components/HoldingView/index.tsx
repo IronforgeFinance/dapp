@@ -1,5 +1,6 @@
+import './less/index.less';
+
 import { TokenIcon } from '@/components/Icon';
-import './index.less';
 
 const HoldingView = () => {
     return (

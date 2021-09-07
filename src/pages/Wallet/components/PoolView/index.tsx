@@ -1,5 +1,6 @@
+import './less/index.less';
+
 import React, { useState, useEffect } from 'react';
-import './index.less';
 import { Table } from 'antd';
 import { ethers } from 'ethers';
 import {

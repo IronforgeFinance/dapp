@@ -1,5 +1,6 @@
+import './less/index.less';
+
 import React from 'react';
-import './index.less';
 import { ReactComponent as TabBackIcon01 } from '@/assets/images/big-board-svg-01.svg';
 import { ReactComponent as TabBackIcon02 } from '@/assets/images/big-board-svg-02.svg';
 import { ReactComponent as TabBackIcon03 } from '@/assets/images/big-board-svg-03.svg';
