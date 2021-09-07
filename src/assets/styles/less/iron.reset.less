@@ -1,0 +1,166 @@
+@usdt: unset;
+@usdc: unset;
+@usd: unset;
+@btc: unset;
+@eth: unset;
+
+.token-color(@geometric) {
+    &.@{geometric}-usdc {
+        & when(@geometric=bar) {
+            background: unset;
+        }
+
+        & when(@geometric=dot) {
+            &:before {
+                background: unset;
+            }
+        }
+    }
+
+    &.@{geometric}-usdt {
+        & when(@geometric=bar) {
+            background: unset;
+        }
+
+        & when(@geometric=dot) {
+            &:before {
+                background: unset;
+            }
+        }
+    }
+
+    &.@{geometric}-usd {
+        & when(@geometric=bar) {
+            background: unset;
+        }
+
+        & when(@geometric=dot) {
+            &:before {
+                background: unset;
+            }
+        }
+    }
+
+    &.@{geometric}-btc {
+        & when(@geometric=bar) {
+            background: unset;
+        }
+
+        & when(@geometric=dot) {
+            &:before {
+                background: unset;
+            }
+        }
+    }
+
+    &.@{geometric}-eth {
+        & when(@geometric=bar) {
+            background: unset;
+        }
+
+        & when(@geometric=dot) {
+            &:before {
+                background: unset;
+            }
+        }
+    }
+}
+
+.image {
+    background-position: unset;
+    background-repeat: unset;
+    background-color: unset;
+    background-size: unset;
+    display: unset;
+    flex-shrink: unset;
+    flex-grow: unset;
+}
+
+.dot(@size: 16px, @marginRight: 0px, @bgColor: unset) {
+    display: unset;
+    align-items: unset;
+
+    &:before {
+        content: unset;
+        width: unset;
+        height: unset;
+        border-radius: unset;
+        display: unset;
+        background-color: unset;
+        flex-shrink: unset;
+        margin-right: unset;
+    }
+
+    & when (@bgColor=transparent) {
+        .token-color(dot);
+    }
+}
+
+#image {
+    .background(@bgImage, @bgColor: unset) {
+        background-position: unset;
+        background-repeat: unset;
+        background-image: unset;
+        background-color: unset;
+        background-size: unset;
+        flex-shrink: unset;
+    }
+
+    .icon(@size, @bgImage, @bgColor: transparent, @pure: unset) {
+        .background(@bgImage, @bgColor);
+
+        width: unset;
+        height: unset;
+        display: unset;
+
+        & when (@pure =true) {
+            border: unset;
+            outline: unset;
+            margin: unset;
+            padding: unset;
+        }
+    }
+
+    .button(@bgImage, @bgColor: unset) {
+        .background(@bgImage, @bgColor);
+
+        border: unset;
+        outline: unset;
+        margin: unset;
+        padding: unset;
+    }
+}
+
+#position {
+    .parent() {
+        position: unset;
+    }
+
+    .absHorizCenter(@moveTop: -20%, @top: unset) {
+        position: unset;
+        left: unset;
+        top: unset;
+        transform: unset;
+    }
+
+    .absLtCorner(@move: unset) {
+        position: unset;
+        left: unset;
+        top: unset;
+        transform: unset;
+    }
+
+    .absRtCorner(@move: unset) {
+        position: unset;
+        right: unset;
+        top: unset;
+        transform: unset;
+    }
+
+    .absRbCorner(@move: unset) {
+        position: unset;
+        right: unset;
+        bottom: unset;
+        transform: unset;
+    }
+}

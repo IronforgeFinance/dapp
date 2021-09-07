@@ -1,7 +1,7 @@
+import './less/Button/index.less';
+
 import React from 'react';
-import './Button.less';
 import classNames from 'classnames';
-// import { MouseEventHandler } from 'react';
 import { ScaleGroupContext } from './Group';
 import { useContext } from 'react';
 

@@ -1,3 +1,5 @@
+import './less/index.less';
+
 import React, { useState, useEffect, useMemo } from 'react';
 import { InputNumber, Select, Progress, Button, Popover } from 'antd';
 import * as message from '@/components/Notification';
@@ -19,7 +21,7 @@ import Tokens from '@/config/constants/tokens';
 import Contracts from '@/config/constants/contracts';
 import { ethers } from 'ethers';
 import BigNumber from 'bignumber.js';
-import DataView from './DataView';
+import DataView from './components/DataView';
 import { debounce } from 'lodash';
 import {
     useCheckERC20ApprovalStatus,
@@ -32,7 +34,6 @@ import {
     expandToNDecimals,
     expandTo18Decimals,
 } from '@/utils/bigNumber';
-import './index.less';
 import useDataView from '@/hooks/useDataView';
 import { useTokenPrice } from '@/hooks/useTokenPrice';
 import Scale from '@/components/Scale';
