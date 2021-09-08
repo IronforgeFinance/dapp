@@ -5,7 +5,6 @@ import { useRef } from 'react';
 import { useEffect } from 'react';
 import { Fragment } from 'react';
 import { useImage } from 'react-image';
-import './index.less';
 
 interface PreloadImagesProps {
     imageList: string[];

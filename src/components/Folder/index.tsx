@@ -1,7 +1,8 @@
+import './less/index.less';
+
 import classNames from 'classnames';
 import React from 'react';
 import { keyframes } from 'styled-components';
-import './index.less';
 
 type PlacementType = 'right' | 'left';
 

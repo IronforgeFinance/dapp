@@ -1,5 +1,6 @@
+import './less/index.less';
+
 import React from 'react';
-import './index.less';
 import SelectBoard from '@/components/SelectBoard';
 import { FiatSymbol } from '@/config/constants/types';
 import { TokenIcon } from '../Icon';

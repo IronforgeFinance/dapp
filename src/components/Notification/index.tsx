@@ -1,5 +1,6 @@
+import './less/index.less';
+
 import React from 'react';
-import './index.less';
 import { notification } from 'antd';
 import LinkSvg from '@/assets/images/link.svg';
 import NotifySuccessSvg from '@/assets/images/notify-success.svg';

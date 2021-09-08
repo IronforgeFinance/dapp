@@ -1,5 +1,6 @@
+import './less/WalletIcon/index.less';
+
 import React from 'react';
-import './WalletIcon.less';
 import { IconProps } from './index';
 
 interface WalletIconProps extends IconProps {

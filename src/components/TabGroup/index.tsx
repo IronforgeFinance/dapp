@@ -1,6 +1,7 @@
+import './less/index.less';
+
 import classNames from 'classnames';
 import React, { useCallback, useState } from 'react';
-import './index.less';
 
 interface TabOption {
     name: string;

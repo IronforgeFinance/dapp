@@ -1,5 +1,6 @@
+import './less/index.less';
+
 import React from 'react';
-import './index.less';
 import { CSSTransition } from 'react-transition-group';
 import { useCallback } from 'react';
 
