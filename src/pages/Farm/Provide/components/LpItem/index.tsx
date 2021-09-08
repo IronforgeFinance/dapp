@@ -1,6 +1,7 @@
+import './less/index.less';
+
 import { ILpDataProps } from '@/models/lpData';
 import React, { useState } from 'react';
-import './index.less';
 import IconDown from '@/assets/images/down.svg';
 import { useModel } from 'umi';
 import { TokenIcon } from '@/components/Icon';

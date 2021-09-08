@@ -1,10 +1,11 @@
+import './less/index.less';
+
 import React from 'react';
-import './index.less';
 import IconTwitter from '@/assets/images/twitter.svg';
 import IconGithub from '@/assets/images/github.svg';
 import IconMedium from '@/assets/images/medium.svg';
 import { useFtokenPrice, useGetBnbBalance } from '@/hooks/useTokenBalance';
-import DataBoard from './DataBoard';
+import DataBoard from './components/DataBoard';
 import { history } from 'umi';
 import MintView from './components/MintView';
 import BurnView from './components/BurnView';

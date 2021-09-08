@@ -1,6 +1,7 @@
+import './less/index.less';
+
 import React from 'react';
-import './index.less';
-import Board from '@/components/Board';
+import SelectBoard from '@/components/SelectBoard';
 import { FiatSymbol } from '@/config/constants/types';
 import { TokenIcon } from '../Icon';
 import classNames from 'classnames';
@@ -56,7 +57,11 @@ function TransitionConfirm(props: TransitionConfirmProps) {
     }, [visable]);
 
     return (
-        <Board visable={visable} onClose={_onClose} title="Confirm Transaction">
+        <SelectBoard
+            visable={visable}
+            onClose={_onClose}
+            title="Confirm Transaction"
+        >
             <ul className="confirm-infos">
                 {(dataSource ?? []).map((prop) => {
                     return (
@@ -105,7 +110,7 @@ function TransitionConfirm(props: TransitionConfirmProps) {
                     );
                 })}
             </ul>
-        </Board>
+        </SelectBoard>
     );
 }
 

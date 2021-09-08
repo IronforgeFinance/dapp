@@ -1,8 +1,9 @@
+import './less/index.less';
+
 import React, { useState, useEffect, useCallback } from 'react';
 import { useWeb3React } from '@web3-react/core';
 import { InputNumber, Button, Select, Radio } from 'antd';
 import * as message from '@/components/Notification';
-import './index.less';
 import { useModel } from 'umi';
 import { useCollateralSystem, usePrices } from '@/hooks/useContract';
 import Tokens from '@/config/constants/tokens';
@@ -75,7 +76,6 @@ export default (props: IProps) => {
     const collateralSystem = useCollateralSystem();
     const prices = usePrices();
     const { account } = useWeb3React();
-
 
     const burnAmountHandler = debounce(async (v) => {
         setBurnAmount(v);

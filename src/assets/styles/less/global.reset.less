@@ -1,0 +1,565 @@
+@import '~@/assets/styles/button.less';
+@import '~@/assets/styles/icon.less';
+
+@max-phone-width: unset; //phone最大宽度
+@min-ipad-width: unset; //ipad最小宽度
+@max-ipad-width: unset; //ipad最大宽度
+@size1080p-width: unset; //1080p宽度
+@size1080p1-width: unset; //1080p宽度
+@size2k-width: unset; //2k宽度
+@size2kp1-width: unset; //2k宽度
+@size4k-width: unset; //4k宽度
+
+*,
+*:before,
+*:after {
+    box-sizing: unset;
+    margin: unset;
+    padding: unset;
+}
+
+// * 消除滚动条
+*::-webkit-scrollbar {
+    display: unset;
+}
+
+* {
+    -ms-overflow-style: unset;
+    /* IE 10+ */
+    scrollbar-width: unset;
+    /* Firefox */
+}
+
+body {
+    font-family: unset;
+}
+
+img {
+    vertical-align: unset;
+}
+
+@mainColor: unset;
+@mainTextColor: unset;
+@secondaryTextColor: unset;
+@lightBlue: unset;
+@yellow: unset;
+
+p,
+ul {
+    margin: unset;
+}
+
+ol,
+ul,
+dl {
+    margin-top: unset;
+    margin-bottom: unset;
+}
+
+#root {
+    position: unset;
+    z-index: unset;
+}
+
+#root ~ div {
+    position: unset;
+    z-index: unset;
+}
+
+.input-item {
+    margin-bottom: unset;
+
+    .label {
+        font-style: unset;
+        font-weight: unset;
+        font-size: unset;
+        line-height: unset;
+        align-items: unset;
+        color: unset;
+    }
+
+    .input-item-content {
+        background: unset;
+        border: unset;
+        box-sizing: unset;
+        // backdrop-filter: unset;
+        /* Note: backdrop-filter has minimal browser support */
+        border-radius: unset;
+        border-radius: unset;
+        padding: unset;
+
+        .content-label {
+            display: unset;
+            height: unset;
+            margin-bottom: unset;
+
+            font-style: unset;
+            font-weight: unset;
+            font-size: unset;
+            line-height: unset;
+
+            .left {
+                float: unset;
+                color: unset;
+            }
+
+            .right {
+                float: unset;
+                color: unset;
+
+                .price {
+                    font-weight: unset;
+                }
+            }
+        }
+
+        .input {
+            display: unset;
+            justify-content: unset;
+            align-items: unset;
+
+            .ant-input-number-focused {
+                border: unset;
+                box-shadow: unset;
+            }
+
+            .token {
+                display: unset;
+                justify-content: unset;
+                align-items: unset;
+
+                font-style: unset;
+                font-weight: unset;
+                font-size: unset;
+                line-height: unset;
+                color: unset;
+            }
+        }
+    }
+}
+
+.token {
+    .ant-select,
+    .ant-select-arrow,
+    .ant-select-selection-placeholder {
+        color: unset;
+    }
+
+    .ant-select-selector {
+        background: unset;
+        border: unset;
+    }
+
+    .ant-select-arrow {
+        top: unset;
+    }
+
+    .ant-select-selection-placeholder {
+    }
+}
+
+.custom-input {
+    flex: unset;
+
+    &.disabled {
+        .ant-input-number-input-wrap {
+            color: unset;
+        }
+    }
+
+    .ant-input-number-handler-wrap {
+        display: unset;
+    }
+
+    .ant-input-number-input-wrap {
+        font-style: unset;
+        font-weight: unset;
+        font-size: unset;
+        line-height: unset;
+        color: unset;
+    }
+
+    .ant-input-number-input {
+        padding: unset;
+    }
+}
+
+.icon-add {
+    margin: unset;
+    margin-bottom: unset;
+    display: unset;
+}
+
+.custom-input,
+.ant-input-number {
+    font-style: unset;
+    font-weight: unset;
+    font-size: unset;
+    line-height: unset;
+    color: unset;
+    border: unset;
+    background: unset;
+    width: unset;
+    // min-width: unset;
+}
+
+// .common-btn:hover {
+//     color: unset;
+// }
+
+.common-btn-s {
+    height: unset;
+    min-width: unset;
+
+    font-style: unset;
+    font-weight: unset;
+    font-size: unset;
+    line-height: unset;
+    color: unset;
+    background-size: unset;
+}
+
+.common-box {
+    background-image: unset;
+    background-repeat: unset;
+    background-position: unset;
+    background-size: unset;
+    position: unset;
+    filter: unset;
+
+    > * {
+        position: unset;
+    }
+
+    &:before {
+        content: unset;
+        position: unset;
+        width: unset;
+        height: unset;
+        left: unset;
+        top: unset;
+        transform: unset;
+        background: unset;
+        background-size: unset;
+        background-position: unset;
+        pointer-events: unset;
+    }
+
+    &:after {
+        content: unset;
+        position: unset;
+        width: unset;
+        height: unset;
+        left: unset;
+        bottom: unset;
+        transform: unset;
+        background: unset;
+        background-size: unset;
+        background-position: unset;
+        pointer-events: unset;
+    }
+}
+
+.common-btn-back {
+    background: unset;
+    background-size: unset;
+    width: unset;
+    height: unset;
+    display: unset;
+    border: unset;
+    cursor: unset;
+}
+
+.common-btn-back:hover {
+    background: unset;
+    background-size: unset;
+}
+
+.common-span {
+    font-style: unset;
+    font-weight: unset;
+    font-size: unset;
+    line-height: unset;
+    display: unset;
+    align-items: unset;
+
+    &-disabled {
+        color: unset;
+    }
+
+    &-active {
+        color: unset;
+    }
+}
+
+.iron-progress {
+    font-style: unset;
+    font-weight: unset;
+    font-size: unset;
+    line-height: unset;
+    color: unset;
+    height: unset;
+    display: unset;
+    flex-direction: unset;
+    justify-content: unset;
+
+    .ant-progress-outer {
+        width: unset;
+        height: unset;
+        background: unset;
+        box-shadow: 0px 0px 1px 3px #654609,
+            inset 0px -2px 1px rgba(0, 0, 0, 0.25),
+            inset -1px 1px 1px rgba(255, 247, 236, 0.38);
+        border-radius: unset;
+        display: unset;
+        align-items: unset;
+        padding: unset;
+        box-sizing: unset;
+
+        .ant-progress-inner {
+            background-color: unset;
+
+            .ant-progress-bg {
+                height: unset;
+                background: linear-gradient(
+                    90deg,
+                    #fcd144 62.3%,
+                    #ffad33 92.56%
+                );
+            }
+        }
+    }
+
+    .ant-progress-text {
+        width: unset;
+        text-align: unset;
+        display: unset;
+        margin-top: unset;
+        margin-left: unset;
+        font-style: unset;
+        font-weight: unset;
+        font-size: unset;
+        line-height: unset;
+        color: unset;
+    }
+}
+
+.max {
+    font-style: unset;
+    font-weight: unset;
+    font-size: unset;
+    line-height: unset;
+    display: unset;
+    align-items: unset;
+    color: unset;
+    display: unset;
+}
+
+.common-title {
+    width: unset;
+    height: unset;
+    display: unset;
+    align-items: unset;
+    justify-content: unset;
+    position: unset;
+    left: unset;
+    transform: unset;
+    position: unset;
+
+    &.silver {
+        &:after {
+            background-image: unset;
+        }
+
+        &:before {
+            background-image: unset;
+        }
+    }
+
+    &.gold {
+        &:after {
+            background-image: unset;
+        }
+
+        &:before {
+            background-image: unset;
+        }
+    }
+
+    span {
+        position: unset;
+        z-index: unset;
+        font-style: unset;
+        font-weight: unset;
+        font-size: unset;
+        line-height: unset;
+        text-align: unset;
+        color: unset;
+    }
+
+    &:before {
+        flex: unset;
+        content: unset;
+        position: unset;
+        width: unset;
+        height: unset;
+        top: unset;
+        transform: unset;
+        left: unset;
+        background-size: unset;
+        background-repeat: unset;
+        background-position: unset;
+    }
+
+    &:after {
+        flex: unset;
+        content: unset;
+        position: unset;
+        width: unset;
+        height: unset;
+        top: unset;
+        transform: unset;
+        right: unset;
+        background-size: unset;
+        background-repeat: unset;
+        background-position: unset;
+    }
+}
+
+.common-select.ant-select {
+    *,
+    .ant-select-focused,
+    .ant-select-selector {
+        background-color: unset;
+        color: unset;
+        border: unset;
+        border-color: unset;
+
+        &:active,
+        &:focus {
+            border-color: unset;
+            border: unset;
+        }
+    }
+}
+
+.ant-btn.ant-btn-loading::before {
+    display: unset;
+}
+
+.ant-popover {
+    .ant-popover-arrow-content {
+        background-color: unset;
+    }
+
+    .ant-popover-inner {
+        background-color: unset;
+        box-shadow: unset;
+    }
+
+    .ant-popover-inner-content {
+        font-style: unset;
+        font-weight: unset;
+        font-size: unset;
+        line-height: unset;
+        display: unset;
+        align-items: unset;
+        text-align: unset;
+        color: unset;
+        border-radius: unset;
+    }
+}
+
+.custom-table.ant-table-wrapper {
+    width: unset;
+
+    .ant-pagination {
+        * {
+            background-color: unset;
+            border: unset;
+        }
+    }
+
+    .ant-table {
+        background: unset;
+        border: unset;
+    }
+
+    .ant-table-thead {
+        * {
+            font-style: unset;
+            font-weight: unset;
+            font-size: unset;
+            line-height: unset;
+            color: unset;
+
+            &:before {
+                display: unset;
+            }
+        }
+    }
+
+    .ant-table-placeholder {
+        display: unset;
+    }
+
+    .ant-table-cell {
+        background: unset;
+        border: unset;
+        position: unset;
+        z-index: unset;
+    }
+
+    .ant-table-tbody > tr.ant-table-row:hover > td {
+        background: unset;
+    }
+}
+
+.custom-tabs.ant-tabs {
+    width: unset;
+
+    .ant-table-thead {
+        display: unset;
+    }
+
+    .ant-tabs-nav {
+        &:before {
+            display: unset;
+        }
+    }
+
+    .ant-tabs-top > .ant-tabs-nav,
+    .ant-tabs-bottom > .ant-tabs-nav,
+    .ant-tabs-top > div > .ant-tabs-nav,
+    .ant-tabs-bottom > div > .ant-tabs-nav {
+        margin: unset;
+    }
+
+    .ant-tabs-tab-btn {
+        font-style: unset;
+        font-weight: unset;
+        font-size: unset;
+        line-height: unset;
+        color: unset;
+    }
+
+    .ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn {
+        color: unset;
+    }
+
+    .ant-tabs-tab:hover {
+        color: unset;
+    }
+
+    .ant-tabs-ink-bar {
+        background: unset;
+    }
+}
+
+// 填充块
+.fill {
+    flex: unset;
+    height: unset;
+    width: unset;
+    display: unset;
+}

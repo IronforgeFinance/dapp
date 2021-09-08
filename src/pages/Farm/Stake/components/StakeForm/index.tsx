@@ -1,7 +1,8 @@
+import './less/index.less';
+
 import React, { useState, useEffect } from 'react';
 import { InputNumber, Select, Progress, Button } from 'antd';
 import * as message from '@/components/Notification';
-import './index.less';
 import { LP_TOKENS } from '@/config';
 
 import { useBep20Balance } from '@/hooks/useTokenBalance';

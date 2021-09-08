@@ -1,3 +1,5 @@
+import './less/index.less';
+
 import React, { useState, useEffect, useMemo } from 'react';
 import { useWeb3React } from '@web3-react/core';
 import {
@@ -7,10 +9,9 @@ import {
 } from '@/hooks/useContract';
 import { ethers } from 'ethers';
 import { toFixedWithoutRound } from '@/utils/bigNumber';
-import './index.less';
 import IconDown from '@/assets/images/down.svg';
-import DebtInfoDetail from './DebtInfoDetail';
-import DebtInfoSimple from './SimpleDebtInfo';
+import DebtInfoDetail from './components/DebtInfoDetail';
+import DebtInfoSimple from './components/SimpleDebtInfo';
 import useWeb3Provider from '@/hooks/useWeb3Provider';
 import { useBep20Balance } from '@/hooks/useTokenBalance';
 import { useModel } from 'umi';

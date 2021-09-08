@@ -1,0 +1,100 @@
+@import '~@/assets/styles/iron.less';
+
+@commentary-card-title-h: 22px - 10px;
+
+.mint-container {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    // align-items: center;
+}
+
+.mint-box {
+    // background: #87737e;
+    padding: 40px 30px;
+    border-radius: 25px;
+    width: 450px;
+    // margin: 30px 40px;
+    background-size: 450px 100%, 450px 100%, 450px 100%;
+    position: relative;
+}
+
+.input-locked-amount {
+    flex: 1;
+    width: 100%;
+    min-width: auto !important;
+}
+
+.btn-mint {
+    cursor: pointer;
+    display: block;
+    font-size: 18px;
+    border: none;
+    margin: 10px auto 0 auto;
+    width: 236px;
+    height: 70px;
+
+    span {
+        color: white;
+    }
+}
+
+.commentary-card {
+    margin-bottom: 14.89px;
+}
+
+.right-box {
+    display: flex;
+    flex-direction: column;
+    margin: 46.21px + @commentary-card-title-h 178px 0 178px;
+
+    .ratio {
+        margin-top: 22px;
+    }
+}
+
+.btn-setting {
+    width: 48px;
+    height: 36px;
+    #image.button('~@/assets/images/mint-setting.png');
+
+    position: absolute;
+    right: 0;
+    top: 0;
+
+    transform: translate(33.3%, -20%);
+}
+
+.btn-mint-form {
+    font-style: normal;
+    font-weight: normal;
+    font-size: 15px;
+    line-height: 22px;
+    display: flex;
+    align-items: center;
+    text-align: right;
+    color: #e1ab3b;
+
+    > span {
+        padding-right: 4px;
+        padding-left: 6px;
+    }
+}
+
+.label {
+    display: flex;
+    align-items: center;
+
+    .icon-question {
+        margin-left: 6px;
+        cursor: pointer;
+    }
+}
+
+.iron-progress {
+    width: 382px;
+}
+
+.balance {
+    font-weight: bold;
+}

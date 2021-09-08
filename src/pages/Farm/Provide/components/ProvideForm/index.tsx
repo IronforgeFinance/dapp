@@ -1,5 +1,6 @@
+import './less/index.less';
+
 import React, { useState, useEffect } from 'react';
-import './index.less';
 import { InputNumber, Select, Progress, Button } from 'antd';
 import * as message from '@/components/Notification';
 import IconAdd from '@/assets/images/icon-add.svg';

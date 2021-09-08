@@ -1,5 +1,6 @@
+import './less/index.less';
+
 import { ReactNode, Suspense } from 'react';
-import './index.less';
 
 interface PreloadAssetsSuspenseProps {
     children: ReactNode;

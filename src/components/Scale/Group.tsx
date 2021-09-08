@@ -1,5 +1,6 @@
+import './less/Group/index.less';
+
 import React from 'react';
-import './Group.less';
 import { useCallback } from 'react';
 import { IScaleOption } from './Button';
 
@@ -8,9 +9,8 @@ export interface IScaleGroupContextProps {
     currentValue?: string;
 }
 
-export const ScaleGroupContext = React.createContext<IScaleGroupContextProps | null>(
-    null,
-);
+export const ScaleGroupContext =
+    React.createContext<IScaleGroupContextProps | null>(null);
 
 export interface IScaleGroupProps {
     value?: any;

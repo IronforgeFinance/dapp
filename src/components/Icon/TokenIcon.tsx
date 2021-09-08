@@ -1,5 +1,6 @@
+import './less/TokenIcon/index.less';
+
 import React from 'react';
-import './TokenIcon.less';
 import { IconProps } from './index';
 
 interface TokenIconProps extends IconProps {

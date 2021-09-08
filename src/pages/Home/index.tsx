@@ -1,5 +1,6 @@
+import './less/index.less';
+
 import React, { useState, useMemo } from 'react';
-import './index.less';
 import useEagerConnect from '@/hooks/useEagerConnect';
 import Blacksmith from '@/assets/images/blacksmith.png';
 import Merchant from '@/assets/images/merchant.png';

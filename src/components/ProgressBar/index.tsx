@@ -1,5 +1,6 @@
+import './less/index.less';
+
 import React, { useMemo, useState } from 'react';
-import './index.less';
 import { ProgressBarType } from '@/config/constants/types';
 import { Popover } from 'antd';
 import classnames from 'classnames';

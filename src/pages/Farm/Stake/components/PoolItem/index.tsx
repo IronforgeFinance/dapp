@@ -1,5 +1,6 @@
+import './less/index.less';
+
 import React, { useState } from 'react';
-import './index.less';
 import { history, useIntl } from 'umi';
 import { IStakePool } from '@/models/stakeData';
 import { useMinerReward } from '@/hooks/useContract';

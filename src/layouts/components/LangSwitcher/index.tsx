@@ -1,5 +1,6 @@
+import './less/index.less';
+
 import React from 'react';
-import './index.less';
 import classNames from 'classnames';
 import { useState } from 'react';
 import { useEffect } from 'react';

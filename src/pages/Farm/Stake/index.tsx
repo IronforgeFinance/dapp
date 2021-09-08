@@ -1,7 +1,8 @@
+import './less/index.less';
+
 import React, { useState } from 'react';
 import StakeForm from './components/StakeForm';
 import PoolItem from './components/PoolItem';
-import './index.less';
 import classnames from 'classnames';
 import { IStakePool } from '@/models/stakeData';
 import { TokenIcon } from '@/components/Icon';

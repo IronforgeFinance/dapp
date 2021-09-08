@@ -1,3 +1,5 @@
+import './less/index.less';
+
 import React, {
     useState,
     useEffect,
@@ -5,18 +7,16 @@ import React, {
     createContext,
     Fragment,
 } from 'react';
-import DataView from '../Mint/DataView';
+import DataView from '../Mint/components/DataView';
 import { useWeb3React } from '@web3-react/core';
 import { useDebtSystem, useCollateralSystem } from '@/hooks/useContract';
 import { ethers } from 'ethers';
-import './index.less';
 import DebtItem from './components/DebtItem';
 import { Button } from 'antd';
 import IconBack from '@/assets/images/icon-back.png';
 import CommentaryCard from '@/components/CommentaryCard';
 import BurnForm from './components/BurnForm';
 import { useMemo } from 'react';
-import IDebtItem from '@/components/DebtItem';
 import classNames from 'classnames';
 import { useModel, useIntl } from 'umi';
 import { useBep20Balance } from '@/hooks/useTokenBalance';

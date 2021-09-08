@@ -1,10 +1,9 @@
+import './less/index.less';
+
 import React, { useCallback, useEffect, useState, useRef } from 'react';
-import Board from '@/components/Board';
+import SelectBoard from '@/components/SelectBoard';
 import classNames from 'classnames';
-import './index.less';
 import { getRemainDaysOfQuarterAsset, isDeliveryAsset } from '@/utils';
-import { usePrices } from '@/hooks/useContract';
-import { ethers } from 'ethers';
 import { TokenIcon } from '@/components/Icon';
 import { useIntl } from 'umi';
 import { getTokenPrice } from '@/utils/index';
@@ -115,7 +114,7 @@ export default (props: ISelectTokensProps) => {
 
     return (
         <div className="select-tokens">
-            <Board
+            <SelectBoard
                 visable={visible}
                 onClose={_onClose}
                 title={intl.formatMessage({ id: 'selecttoken' })}
@@ -152,7 +151,7 @@ export default (props: ISelectTokensProps) => {
                         </li>
                     ))}
                 </ul>
-            </Board>
+            </SelectBoard>
             <button className="btn-mint-form" onClick={() => setVisible(true)}>
                 <span>
                     {value || (

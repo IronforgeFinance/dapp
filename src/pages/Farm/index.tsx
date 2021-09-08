@@ -1,5 +1,6 @@
+import './less/index.less';
+
 import React, { useState, useEffect } from 'react';
-import './index.less';
 import { history, useModel } from 'umi';
 import StakeItem from './Stake';
 import { useWeb3React } from '@web3-react/core';
@@ -25,7 +26,7 @@ export default () => {
 
     useEffect(() => {
         (async () => {
-            if(account) {
+            if (account) {
                 await fetchStakePoolList(LP_TOKENS, account);
             }
         })();

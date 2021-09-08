@@ -1,3 +1,5 @@
+import './less/index.less';
+
 import React, { useEffect, useState, useMemo, useCallback } from 'react';
 import { useConfig, useExchangeSystem, usePrices } from '@/hooks/useContract';
 import Tokens from '@/config/constants/tokens';
@@ -12,11 +14,10 @@ import { InputNumber, Button, Select, Radio } from 'antd';
 import * as message from '@/components/Notification';
 import { COLLATERAL_TOKENS, MINT_TOKENS } from '@/config';
 import { useBep20Balance } from '@/hooks/useTokenBalance';
-import './index.less';
 import EstimateData from './components/EstimateData';
 import Contracts from '@/config/constants/contracts';
 import SelectTokens from '@/components/SelectTokens';
-import MarketDetail from './MarketDetail';
+import MarketDetail from './components/MarketDetail';
 import { debounce } from 'lodash';
 import classNames from 'classnames';
 import TransitionConfirm from '@/components/TransitionConfirm';

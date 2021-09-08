@@ -1,6 +1,7 @@
+import './less/index.less';
+
 import React from 'react';
-import './index.less';
-import Board from '@/components/Board';
+import SelectBoard from '@/components/SelectBoard';
 import config, {
     connectorLocalStorageKey,
     walletLocalStorageKey,
@@ -94,7 +95,7 @@ const WalletModal = (props: WalletModalProps) => {
     }, [status, visable, isChanging]);
 
     return (
-        <Board
+        <SelectBoard
             className="custom-board"
             visable={visable}
             onClose={closeOnIconClick}
@@ -171,7 +172,7 @@ const WalletModal = (props: WalletModalProps) => {
                     </div>
                 )}
             </div>
-        </Board>
+        </SelectBoard>
     );
 };
 

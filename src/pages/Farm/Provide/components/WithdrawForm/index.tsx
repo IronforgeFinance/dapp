@@ -1,8 +1,9 @@
+import './less/index.less';
+
 import React, { useState, useEffect } from 'react';
 import { InputNumber, Select, Button } from 'antd';
 import * as message from '@/components/Notification';
 import IconDown from '@/assets/images/icon-down.svg';
-import './index.less';
 import { debounce } from 'lodash';
 import { useModel, useIntl } from 'umi';
 import { useBep20Balance } from '@/hooks/useTokenBalance';
@@ -13,7 +14,6 @@ import Tokens from '@/config/constants/tokens';
 import Contracts from '@/config/constants/contracts';
 import { ethers } from 'ethers';
 import SelectTokens from '@/components/SelectTokens';
-import TransitionConfirm from '@iron/TransitionConfirm';
 import {
     useCheckERC20ApprovalStatus,
     useERC20Approve,
