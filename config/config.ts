@@ -1,6 +1,7 @@
 import { defineConfig } from 'umi';
 import routes from './routes';
 import path from 'path';
+import pxToViewPort from 'postcss-px-to-viewport';
 
 export default defineConfig({
     plugins: ['babel-plugin-styled-components'],
