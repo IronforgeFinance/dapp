@@ -259,13 +259,17 @@ export default () => {
         debounce(async (v) => {
             setCollateralAmount(v);
             const price = await getTokenPrice(collateralToken);
+
+            /**@type {number} 质押价值 */
             const currentStakeValue = Number(v) * price + stakedData.startValue;
             setStakedData({
                 ...stakedData,
                 endValue: currentStakeValue,
             });
+
+            scaleHandler(lockedScale);
         }, 500),
-        [stakedData],
+        [stakedData, lockedScale],
     );
 
     const lockedAmountHandler = React.useCallback(
@@ -277,7 +281,7 @@ export default () => {
             //     return;
             // }
             setLockedAmount(v);
-            setLockedScale(Number(v) / fTokenBalance);
+            // setLockedScale(Number(v) / fTokenBalance);
             const bsPrice = await getTokenPrice(PLATFORM_TOKEN);
             const val = toFixedWithoutRound(bsPrice * v, 2);
             setLockedData({
@@ -288,17 +292,28 @@ export default () => {
         [fTokenBalance, lockedData],
     );
 
-    const scaleHandler = async (v) => {
-        setLockedScale(v);
-        const amount = fTokenBalance * Number(v);
-        setLockedAmount(amount);
-        const bsPrice = await getTokenPrice(PLATFORM_TOKEN);
-        const val = toFixedWithoutRound(bsPrice * amount, 2);
-        setLockedData({
-            ...lockedData,
-            endValue: val || 0,
-        });
-    };
+    const scaleHandler = useCallback(
+        async (v) => {
+            setLockedScale(+v);
+            const bsPrice = await getTokenPrice(PLATFORM_TOKEN);
+            console.log('>> bsp: %s', bsPrice);
+
+            /**@description 计算公式：(锁定比例 * 质押价值) / BSP */
+            let amount = (stakedData.endValue * Number(v)) / bsPrice;
+            console.log('>> stake total value: %s', amount);
+
+            /**@description 超过余额的计算 */
+            amount = amount < fTokenBalance ? amount : fTokenBalance;
+            setLockedAmount(amount);
+
+            const val = toFixedWithoutRound(bsPrice * amount, 2);
+            setLockedData({
+                ...lockedData,
+                endValue: val || 0,
+            });
+        },
+        [stakedData, fTokenBalance],
+    );
 
     const toAmountHandler = (v) => {
         setToAmount(v);
