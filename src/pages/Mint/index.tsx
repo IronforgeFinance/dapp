@@ -527,7 +527,11 @@ export default () => {
                                 trigger="hover"
                                 placement="topLeft"
                             >
-                                <i className="icon-question size-24"></i>
+                                <i
+                                    className={`icon-question size-${
+                                        isMobile ? 24 : 16
+                                    }`}
+                                />
                             </Popover>
                         </div>
                         <div className="input-item-content">
