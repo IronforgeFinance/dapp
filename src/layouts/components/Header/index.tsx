@@ -58,7 +58,7 @@ export default () => {
             <div className="lang-box">
                 <LangSwitcher />
             </div>
-            <MobileNavigation />
+            {isMobile && <MobileNavigation />}
         </div>
     );
 };
