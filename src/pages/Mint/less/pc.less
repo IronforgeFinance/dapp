@@ -46,10 +46,6 @@ div.mint-container {
         display: flex;
         flex-direction: column;
         margin: 46.21px + @commentary-card-title-h 178px 0 178px;
-
-        .ratio {
-            margin-top: 22px;
-        }
     }
 
     .btn-setting {
@@ -90,11 +86,43 @@ div.mint-container {
         }
     }
 
-    .iron-progress {
-        width: 382px;
-    }
-
     .balance {
         font-weight: bold;
+    }
+}
+
+.stake-ratio {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+
+    .final {
+        font-family: Poppins;
+        font-style: normal;
+        font-weight: 300;
+        font-size: 15px;
+        line-height: 22px;
+        display: flex;
+        align-items: center;
+        text-align: right;
+
+        color: #ffffff;
+    }
+
+    .initial {
+        font-family: Poppins;
+        font-style: normal;
+        font-weight: 300;
+        font-size: 15px;
+        line-height: 22px;
+        display: flex;
+        align-items: center;
+        text-align: center;
+
+        color: rgba(255, 255, 255, 0.3);
+    }
+
+    .icon-arrow-white {
+        margin: 0 10px;
     }
 }

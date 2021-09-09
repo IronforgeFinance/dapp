@@ -1,7 +1,7 @@
 import './less/index.less';
 
 import React, { useState, useEffect, useMemo } from 'react';
-import { InputNumber, Select, Progress, Button, Popover } from 'antd';
+import { InputNumber, Select, Progress, Button, Popover, Slider } from 'antd';
 import * as message from '@/components/Notification';
 import { request, useIntl, useModel } from 'umi';
 import IconDown from '@/assets/images/down.svg';
@@ -49,6 +49,8 @@ import TransitionConfirm from '@iron/TransitionConfirm';
 import { StatusType } from '@/components/ProgressBar';
 import { getTokenPrice } from '@/utils';
 import useEnv from '@/hooks/useEnv';
+
+const RATIO_MAX_MINT = 1000;
 
 export default () => {
     const intl = useIntl();
@@ -206,7 +208,7 @@ export default () => {
 
     // 计算toAmount
     useEffect(() => {
-        (async () => {
+        debounce(async () => {
             if (computedRatio >= 2 && toToken && collateralAmount) {
                 const price = await getTokenPrice(collateralToken);
                 const fusdAmount = toFixedWithoutRound(
@@ -223,7 +225,7 @@ export default () => {
             } else {
                 setToAmount(0);
             }
-        })();
+        }, 500)();
     }, [
         collateralToken,
         collateralAmount,
@@ -476,6 +478,23 @@ export default () => {
         }
     };
 
+    /**@type 质押率进度百分比 */
+    const sliderRatio = useMemo(() => {
+        const ratio = ((computedRatio * 100) / RATIO_MAX_MINT) * 100;
+        console.log('>> slider ratio is %s', ratio);
+
+        return ratio;
+    }, [computedRatio]);
+
+    /**
+     * @description 调整质押率
+     * @type {number} 0-100
+     */
+    const changeStakeRatio = useCallback((v) => {
+        const adjustmentRatio = ((v / 100) * RATIO_MAX_MINT) / 100;
+        setComputedRatio(adjustmentRatio);
+    }, []);
+
     // *****TODO to be removed ends *********
 
     return (
@@ -640,39 +659,30 @@ export default () => {
                         </div>
                     </div>
 
-                    {isApproved && isIFTApproved && isMobile && (
+                    {isApproved && isIFTApproved && (
                         <div className="ratio">
-                            <Progress
+                            <Slider
                                 className="iron-progress"
-                                percent={computedRatio * 10}
-                                format={() => (
-                                    <div className="stake-ratio">
-                                        <span className="final">
-                                            {toFixedWithoutRound(
-                                                computedRatio * 100,
-                                                2,
-                                            )}
-                                            %
-                                        </span>
-                                        <i className="icon-arrow-white size-22" />
-                                        <span className="initial">500%</span>
-                                    </div>
-                                )}
+                                tooltipVisible={false}
+                                step={0.000001}
+                                value={sliderRatio}
+                                min={0}
+                                max={100}
+                                onChange={changeStakeRatio}
                             />
-                        </div>
-                    )}
-                    {isApproved && isIFTApproved && !isMobile && (
-                        <div className="ratio">
-                            <Progress
-                                className="iron-progress"
-                                percent={computedRatio * 10}
-                                format={() =>
-                                    `${toFixedWithoutRound(
-                                        computedRatio * 100,
-                                        2,
-                                    )}%`
-                                }
-                            />
+                            <div className="stake-ratio">
+                                <span className="final">
+                                    {fRatioData.endValue}%
+                                </span>
+                                <i
+                                    className={`icon-arrow-white ${
+                                        isMobile ? 'size-24' : 'size-16'
+                                    }`}
+                                />
+                                <span className="initial">
+                                    {fRatioData.startValue}%
+                                </span>
+                            </div>
                         </div>
                     )}
                     {!account && (
