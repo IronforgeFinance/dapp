@@ -26,21 +26,23 @@ button {
     }
 }
 
-.common-btn {
-    min-width: 236px;
-    height: 68px;
+.common-btn,
+.common-btn.ant-btn {
+    min-width: 340px;
+    height: 90px;
 
-    font-style: normal;
-    font-weight: bold;
-    font-size: 18px;
     display: flex;
     align-items: center;
-    text-align: center;
-    color: #fffefe;
-    text-align: center;
-    display: block;
-    cursor: pointer;
-    border: none;
+    justify-content: center;
+
+    > span {
+        font-family: Poppins;
+        font-style: normal;
+        font-weight: bold;
+        font-size: 32px;
+        line-height: 48px;
+        color: #fffefe;
+    }
 }
 
 .common-btn-red,

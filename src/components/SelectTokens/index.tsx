@@ -161,7 +161,7 @@ export default (props: ISelectTokensProps) => {
                         </span>
                     )}
                 </span>
-                <i className="icon-down size-20" />
+                <i className="icon-down size-24" />
             </button>
         </div>
     );

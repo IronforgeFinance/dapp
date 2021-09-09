@@ -301,7 +301,7 @@ export default () => {
                                                     </span>
                                                 )}
                                             </span>
-                                            <i className="icon-down size-20"></i>
+                                            <i className="icon-down size-24"></i>
                                         </button>
                                     </SelectTokens>
                                 </div>

@@ -48,9 +48,11 @@ import { TokenIcon } from '@/components/Icon';
 import TransitionConfirm from '@iron/TransitionConfirm';
 import { StatusType } from '@/components/ProgressBar';
 import { getTokenPrice } from '@/utils';
+import useEnv from '@/hooks/useEnv';
 
 export default () => {
     const intl = useIntl();
+    const isMobile = useEnv();
     const { account } = useWeb3React();
     const provider = useProvider();
     const [collateralAmount, setCollateralAmount] = useState(0);
@@ -463,13 +465,15 @@ export default () => {
 
     return (
         <div className="mint-container">
-            <DataView />
+            {!isMobile && <DataView />}
             <div className="right-box">
-                <CommentaryCard
-                    title={intl.formatMessage({ id: 'mint.title' })}
-                    description={intl.formatMessage({ id: 'mint.desc' })}
-                />
-                <div className="mint-box common-box">
+                {!isMobile && (
+                    <CommentaryCard
+                        title={intl.formatMessage({ id: 'mint.title' })}
+                        description={intl.formatMessage({ id: 'mint.desc' })}
+                    />
+                )}
+                <div className="mint-form-box common-box">
                     <div className="input-item">
                         <p className="label">
                             {intl.formatMessage({ id: 'mint.from' })}
@@ -523,12 +527,16 @@ export default () => {
                                 trigger="hover"
                                 placement="topLeft"
                             >
-                                <i className="icon-question size-16"></i>
+                                <i className="icon-question size-24"></i>
                             </Popover>
                         </div>
                         <div className="input-item-content">
                             <div className="content-label">
                                 <p className="left">
+                                    <TokenIcon
+                                        name="bs"
+                                        style={{ marginRight: 6 }}
+                                    />
                                     {intl.formatMessage({ id: 'mint.ftoken' })}
                                 </p>
                                 <p className="right">
@@ -613,7 +621,28 @@ export default () => {
                         </div>
                     </div>
 
-                    {isApproved && isIFTApproved && (
+                    {isApproved && isIFTApproved && isMobile && (
+                        <div className="ratio">
+                            <Progress
+                                className="iron-progress"
+                                percent={computedRatio * 10}
+                                format={() => (
+                                    <div className="stake-ratio">
+                                        <span className="final">
+                                            {toFixedWithoutRound(
+                                                computedRatio * 100,
+                                                2,
+                                            )}
+                                            %
+                                        </span>
+                                        <i className="icon-arrow-white size-22" />
+                                        <span className="initial">500%</span>
+                                    </div>
+                                )}
+                            />
+                        </div>
+                    )}
+                    {isApproved && isIFTApproved && !isMobile && (
                         <div className="ratio">
                             <Progress
                                 className="iron-progress"
@@ -659,8 +688,10 @@ export default () => {
                                 {intl.formatMessage({ id: 'mint.approve' })}
                             </Button>
                         )}
+                    {isMobile && <span className="fee-cost">Fee cost: 0</span>}
                 </div>
             </div>
+            {isMobile && <DataView />}
             <TransitionConfirm
                 visable={showTxConfirm}
                 onClose={() => setShowTxConfirm(false)}

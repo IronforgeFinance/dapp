@@ -190,6 +190,10 @@ dl {
     display: block;
 }
 
+.icon-arrow {
+    display: block;
+}
+
 .custom-input,
 .ant-input-number {
     font-style: normal;
@@ -207,7 +211,8 @@ dl {
 //     color: #fffefe !important;
 // }
 
-.common-btn-s {
+.common-btn-s,
+.common-btn-s.ant-btn {
     height: 38px;
     min-width: 96px;
 
@@ -230,6 +235,11 @@ dl {
     > * {
         position: relative;
     }
+
+    // > .input-item {
+    //     position: relative;
+    //     z-index: 2;
+    // }
 
     &:before {
         content: '';
@@ -292,7 +302,7 @@ dl {
     }
 }
 
-.iron-progress {
+.iron-progress.ant-progress {
     font-style: normal;
     font-weight: normal;
     font-size: 15px;

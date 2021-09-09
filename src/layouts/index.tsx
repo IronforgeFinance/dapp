@@ -72,7 +72,7 @@ export default function Layout({
             )}
             <CommonHeader />
             {children}
-            <CommonFooter />
+            {!isMobile && <CommonFooter />}
         </div>
     );
 }

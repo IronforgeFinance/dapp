@@ -44,7 +44,7 @@ export default {
     'mint.selectCasting': '选择铸造',
     'mint.locked': '锁定',
     'mint.collateral': '质押物',
-    'mint.ftoken': 'FToken',
+    'mint.ftoken': 'BS',
     'mint.approve': '授权铸币',
     'mint.cast': '铸造',
     'mint.fassets': 'F资产',

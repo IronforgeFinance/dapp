@@ -1,0 +1,68 @@
+@import '~@/assets/styles/iron.less';
+
+.board-box {
+    min-height: unset;
+    width: unset;
+    // height: unset;
+    filter: unset;
+    padding: unset;
+    box-sizing: unset;
+
+    &:before {
+        content: unset;
+        position: unset;
+        width: unset;
+        height: unset;
+        left: unset;
+        top: unset;
+        transform: unset;
+        background-image: unset;
+        background-size: unset;
+        background-position: unset;
+        background-repeat: unset;
+        pointer-events: unset;
+        z-index: unset;
+    }
+
+    &:after {
+        content: unset;
+        position: unset;
+        width: unset;
+        height: unset;
+        left: unset;
+        bottom: unset;
+        transform: unset;
+        background-image: unset;
+        background-size: unset;
+        background-position: unset;
+        background-repeat: unset;
+        pointer-events: unset;
+        z-index: unset;
+    }
+
+    #position.parent();
+
+    .title-wrapper {
+        #position.absHorizCenter();
+    }
+
+    .titile.common-titile {
+        width: unset;
+        height: unset;
+    }
+
+    .btn-close {
+        #image.icon(64px, '~@/assets/images/mint-select-token-dialog-close.png');
+        #position.absRtCorner(translate(5%, 0%));
+    }
+
+    .content {
+        margin: unset;
+        width: unset;
+        max-height: unset;
+        display: unset;
+        flex-direction: unset;
+        align-items: unset;
+        overflow-y: unset;
+    }
+}

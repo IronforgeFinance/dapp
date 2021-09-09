@@ -70,12 +70,15 @@ dl {
     margin-bottom: unset;
 
     .label {
+        font-family: unset;
         font-style: unset;
         font-weight: unset;
         font-size: unset;
         line-height: unset;
+        display: unset;
         align-items: unset;
         color: unset;
+        margin-bottom: unset;
     }
 
     .input-item-content {
@@ -89,22 +92,25 @@ dl {
         padding: unset;
 
         .content-label {
-            display: unset;
-            height: unset;
-            margin-bottom: unset;
-
+            font-family: unset;
             font-style: unset;
             font-weight: unset;
             font-size: unset;
             line-height: unset;
+            display: unset;
+            align-items: unset;
+            color: unset;
+            display: unset;
+            align-items: unset;
 
             .left {
-                float: unset;
                 color: unset;
+                flex: unset;
+                display: unset;
+                align-items: unset;
             }
 
             .right {
-                float: unset;
                 color: unset;
 
                 .price {
@@ -117,6 +123,19 @@ dl {
             display: unset;
             justify-content: unset;
             align-items: unset;
+            margin-top: unset;
+
+            input[role='spinbutton'] {
+                height: unset;
+                font-family: unset;
+                font-style: unset;
+                font-weight: unset;
+                font-size: unset;
+                line-height: unset;
+                display: unset;
+                align-items: unset;
+                color: unset;
+            }
 
             .ant-input-number-focused {
                 border: unset;
@@ -186,7 +205,6 @@ dl {
 
 .icon-add {
     margin: unset;
-    margin-bottom: unset;
     display: unset;
 }
 
@@ -207,7 +225,8 @@ dl {
 //     color: unset;
 // }
 
-.common-btn-s {
+.common-btn-s,
+.common-btn-s.ant-btn {
     height: unset;
     min-width: unset;
 
@@ -292,27 +311,26 @@ dl {
     }
 }
 
-.iron-progress {
+.iron-progress.ant-progress {
     font-style: unset;
     font-weight: unset;
     font-size: unset;
     line-height: unset;
     color: unset;
-    height: unset;
+    // height: unset;
     display: unset;
     flex-direction: unset;
     justify-content: unset;
 
     .ant-progress-outer {
-        width: unset;
+        margin-top: unset;
         height: unset;
+        width: unset;
+        border-radius: unset;
         background: unset;
         box-shadow: 0px 0px 1px 3px #654609,
             inset 0px -2px 1px rgba(0, 0, 0, 0.25),
             inset -1px 1px 1px rgba(255, 247, 236, 0.38);
-        border-radius: unset;
-        display: unset;
-        align-items: unset;
         padding: unset;
         box-sizing: unset;
 
@@ -332,16 +350,30 @@ dl {
 
     .ant-progress-text {
         width: unset;
-        text-align: unset;
-        display: unset;
-        margin-top: unset;
-        margin-left: unset;
+        font-family: unset;
         font-style: unset;
         font-weight: unset;
         font-size: unset;
         line-height: unset;
+        display: unset;
+        align-items: unset;
+        justify-content: unset;
         color: unset;
+        margin: unset;
+        margin-top: unset;
+        // margin-bottom: unset;
     }
+}
+
+.fee-cost {
+    font-family: unset;
+    font-style: unset;
+    font-weight: unset;
+    font-size: unset;
+    line-height: unset;
+    display: unset;
+    align-items: unset;
+    color: unset;
 }
 
 .max {

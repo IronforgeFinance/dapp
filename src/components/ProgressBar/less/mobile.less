@@ -1,0 +1,280 @@
+@import '~@/assets/styles/iron.less';
+
+.progress-bar-container {
+    display: flex;
+
+    &:nth-child(n + 2) {
+        margin-top: 20px;
+    }
+
+    > div {
+        flex-shrink: 0;
+    }
+
+    .left-bg {
+        width: 90px;
+        height: 86px;
+        // margin-right: -10px;
+        z-index: 100;
+        position: relative;
+        transform: translateX(30px);
+    }
+
+    .bg-icon-axe {
+        background: url(~@/assets/images/icon-axe.png) center right no-repeat;
+        background-size: contain;
+    }
+
+    .bg-icon-lock {
+        background: url(~@/assets/images/icon-lock.png) center right no-repeat;
+        background-size: contain;
+    }
+
+    .bg-icon-coin {
+        background: url(~@/assets/images/icon-coin.png) center right no-repeat;
+        background-size: contain;
+    }
+
+    .bg-icon-magic-bottle {
+        background: url(~@/assets/images/icon-magic-bottle.png) center right
+            no-repeat;
+        background-size: contain;
+    }
+
+    .progress-content {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+
+        .progress-name {
+            margin-bottom: 7px;
+            margin-left: 40px;
+            font-family: Poppins;
+            font-style: normal;
+            font-weight: normal;
+            font-size: 22px;
+            line-height: 33px;
+            display: flex;
+            align-items: center;
+            color: #ffffff;
+        }
+    }
+
+    .progress-bar {
+        flex-shrink: 0;
+        position: relative;
+        width: 100%;
+        height: 24px;
+        background: url(~@/assets/images/progress-mobile-bg.svg) center left
+            no-repeat;
+        background-size: cover;
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        padding-right: 9px;
+
+        .progress-bar-bg {
+            width: 100%;
+            height: 8px;
+            position: relative;
+            display: flex;
+            align-items: center;
+            transition: width 0.5s linear;
+
+            .initial-progress {
+                position: relative;
+                z-index: 2;
+
+                &.is-not-raised {
+                    .move-bar {
+                        &:after {
+                            display: none;
+                        }
+                    }
+                }
+
+                .move-bar {
+                    margin: 0;
+                    padding: 0;
+                    height: 8px;
+                    background: rgba(253, 195, 3, 0.9);
+                    box-shadow: 0px 1px 0.1px rgba(97, 25, 31, 0.3);
+                    border-radius: 0px 6px 6px 0px;
+                    transition: width 0.5s linear;
+                    width: 100%;
+                    position: relative;
+                    transition: width 0.5s linear;
+
+                    &:after {
+                        content: '';
+                        height: 16px;
+                        right: 0;
+                        top: 50%;
+                        transform: translate(50%, -50%);
+                        width: 8.39573860168457px;
+                        position: absolute;
+                        filter: brightness(2);
+                        #image.background('~@/assets/images/progress-bar-critical.svg');
+                    }
+                }
+            }
+
+            .current-progress {
+                max-width: 100%;
+                position: absolute;
+                left: 0;
+                top: 50%;
+                transform: translateY(-50%);
+                z-index: 3;
+                display: flex;
+                align-items: center;
+                transition: width 0.5s linear;
+
+                &.is-raised {
+                    z-index: 1;
+
+                    .move-bar {
+                        background: rgba(68, 252, 244, 0.8);
+
+                        &:after {
+                            display: none;
+                        }
+                    }
+                }
+
+                .move-bar {
+                    margin: 0;
+                    padding: 0;
+                    height: 8px;
+                    width: 100%;
+                    box-shadow: 0px 1px 0.1px rgba(97, 25, 31, 0.3);
+                    border-radius: 0px 6px 6px 0px;
+                    transition: width 0.5s linear;
+                    background: rgba(167, 98, 255, 0.8);
+                    position: relative;
+
+                    &:after {
+                        content: '';
+                        height: 16px;
+                        right: 0;
+                        top: 50%;
+                        transform: translate(50%, -50%);
+                        width: 8.39573860168457px;
+                        position: absolute;
+                        filter: brightness(2);
+                        #image.background('~@/assets/images/progress-bar-critical.svg');
+                    }
+                }
+            }
+
+            // .current-progress-revert {
+            //     transform: rotate(180deg);
+            //     float: right;
+            //     border-radius: 6px;
+            // }
+        }
+    }
+
+    .info {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        padding: 0 10px 0 30px;
+        margin-top: 6px;
+
+        > * {
+            // flex-basis: 20%;
+            flex-shrink: 0;
+            flex-grow: 0;
+            text-align: center;
+            justify-content: center;
+        }
+
+        .start-value {
+            font-family: Poppins;
+            font-style: normal;
+            font-weight: bold;
+            font-size: 22px;
+            line-height: 33px;
+            display: flex;
+            align-items: center;
+            text-align: center;
+            color: #e1ab3b;
+
+            &.is-raised {
+                font-weight: normal;
+
+                &.is-ratio {
+                    margin-left: percentage(1/3);
+                }
+            }
+        }
+
+        .end-value {
+            font-style: normal;
+            font-weight: normal;
+            font-size: 22px;
+            line-height: 33px;
+            display: flex;
+            align-items: center;
+            color: #e1ab3b;
+
+            &.is-raised {
+                font-weight: bold;
+            }
+        }
+
+        .icon-arrow {
+            background: url('~@/assets/images/bar-arrow.svg') center center
+                no-repeat;
+            background-size: contain;
+            width: 14px;
+            height: 14px;
+            margin: 0 4px;
+
+            &.reverse {
+                transform: rotate(180deg);
+            }
+        }
+    }
+}
+
+ul.popover-ratios {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    li {
+        font-style: normal;
+        font-weight: 300;
+        font-size: 15px;
+        line-height: 22px;
+        display: flex;
+        align-items: center;
+        color: #ffffff;
+    }
+
+    li.current {
+        &:before {
+            content: '';
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            background: #44fcf4;
+            margin-right: 3px;
+        }
+    }
+
+    li.initial {
+        &:before {
+            content: '';
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            background: #eab103;
+            margin-right: 3px;
+        }
+    }
+}

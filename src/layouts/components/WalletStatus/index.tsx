@@ -1,6 +1,6 @@
 import './less/index.less';
 
-import React, { useMemo, useState, useEffect } from 'react';
+import React, { useMemo, useState, useEffect, Fragment } from 'react';
 import { useWeb3React } from '@web3-react/core';
 import { useIntl, useModel } from 'umi';
 import useAuth from '@/hooks/useAuth';
@@ -14,9 +14,11 @@ import HoverIconDown from '@/assets/images/down-hover.svg';
 import { Dropdown, Menu, Popover } from 'antd';
 import Clipboard from 'clipboard';
 import WalletModal from '../WalletModal';
+import useEnv from '@/hooks/useEnv';
 
 export default () => {
     const intl = useIntl();
+    const isMobile = useEnv();
     const { account } = useWeb3React();
     const { login, logout } = useAuth();
     const [showDropdown, setShowDropdown] = useState(false);
@@ -54,7 +56,7 @@ export default () => {
     const dropdownItem = (
         <div className="dropdown">
             <p className="item header">
-                <img src={IconMetamask} alt="" />
+                <img src={IconMetamask} />
                 <button
                     className="btn-change btn-common"
                     onClick={() => setVisable(true)}
@@ -117,9 +119,19 @@ export default () => {
                     onVisibleChange={(v) => setShowDropdown(v)}
                 >
                     <div className="wallet-connected">
-                        <img src={IconBinance} alt="" />
-                        <span> {addressDisplay}</span>
-                        <i className="arrow-down" />
+                        {!isMobile && (
+                            <Fragment>
+                                <img src={IconBinance} />
+                                <span> {addressDisplay}</span>
+                                <i className="arrow-down" />
+                            </Fragment>
+                        )}
+                        {isMobile && (
+                            <button className="mobile-wallet-btn">
+                                <img src={IconMetamask} />
+                                <i className="arrow-down" />
+                            </button>
+                        )}
                     </div>
                 </Dropdown>
             )}

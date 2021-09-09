@@ -59,7 +59,7 @@ export default (props: DataViewProps) => {
                             })}
                             trigger="hover"
                         >
-                            <i className="icon-question size-16 ml-8" />
+                            <i className="icon-question size-24 ml-8" />
                         </Popover>
                     </React.Fragment>
                 }
