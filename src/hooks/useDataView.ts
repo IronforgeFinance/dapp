@@ -139,6 +139,17 @@ const useDataView = (currency: string) => {
                     account,
                     ethers.utils.formatBytes32String(currency),
                 );
+                /**
+                 * >> get ratio from collateral system: (2) [BigNumber, BigNumber]. parse big number, get: 0.199988058529550446 0.2
+                 * @todo res[0]=实时计算的质押率，存在计算问题
+                 */
+                console.log(
+                    '>> get ratio from collateral system: %o. parse big number, get: %s',
+                    res,
+                    ethers.utils.formatEther(res[0]),
+                    ethers.utils.formatEther(res[1]),
+                );
+
                 const resVal = res.map((item) =>
                     ethers.utils.formatEther(item),
                 );
