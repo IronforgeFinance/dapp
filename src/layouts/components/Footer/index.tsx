@@ -1,6 +1,6 @@
 import './less/index.less';
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import IconTwitter from '@/assets/images/twitter.svg';
 import IconGithub from '@/assets/images/github.svg';
 import IconMedium from '@/assets/images/medium.svg';
@@ -12,7 +12,9 @@ import BurnView from './components/BurnView';
 import DeliveryView from './components/DeliveryView';
 import { useIntl } from 'umi';
 import { Button } from 'antd';
+import useRefresh from '@/hooks/useRefresh';
 import { MDEX_SWAP_EXPLORER } from '@/config/constants/constant';
+import { getTokenPrice } from '@/utils/index';
 
 const tabItems = [
     {
@@ -31,13 +33,18 @@ const tabItems = [
 
 const filterList = ['/', '/farm'];
 
+const platformToken = 'IFT';
+
 export default () => {
     const intl = useIntl();
-    const { price, rate } = useFtokenPrice();
+    // const { price, rate } = useFtokenPrice();
+    const [price, setPrice] = useState(0);
+    const [rate, setRate] = useState('0.00%');
     const { balance } = useGetBnbBalance();
     const [tabKey, setTabKey] = React.useState(tabItems[0].key);
     const [visable, setVisable] = React.useState(false);
     const [showWholeView, setShowWholeView] = React.useState(false);
+    const { fastRefresh } = useRefresh();
 
     const CurrentView = React.useMemo(() => {
         switch (tabKey) {
@@ -76,6 +83,26 @@ export default () => {
         setVisable(true);
         setTabKey(tabItems[0].key);
     }, []);
+
+    useEffect(() => {
+        let unmounted = false;
+        const fetchBalance = async () => {
+            try {
+                const dexPrice = await getTokenPrice(platformToken);
+                setPrice(+dexPrice);
+            } catch (e) {
+                console.error(e);
+            }
+        };
+
+        if (!unmounted) {
+            fetchBalance();
+        }
+
+        return () => {
+            unmounted = true;
+        };
+    }, [fastRefresh]);
 
     return (
         <React.Fragment>
