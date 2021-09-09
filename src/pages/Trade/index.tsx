@@ -280,7 +280,11 @@ export default () => {
                                     min={0}
                                 />
                                 <div className="token">
-                                    <TokenIcon size={24} name={fromToken} />
+                                    <TokenIcon
+                                        size={24}
+                                        name={fromToken}
+                                        style={{ marginRight: 8 }}
+                                    />
                                     <SelectTokens
                                         value={fromToken}
                                         tokenList={TOKEN_OPTIONS}
@@ -334,7 +338,11 @@ export default () => {
                                     min={0}
                                 />
                                 <div className="token">
-                                    <TokenIcon size={24} name={toToken} />
+                                    <TokenIcon
+                                        size={24}
+                                        name={toToken}
+                                        style={{ marginRight: 8 }}
+                                    />
                                     <SelectTokens
                                         value={toToken}
                                         tokenList={TOKEN_OPTIONS}

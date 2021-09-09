@@ -1,8 +1,9 @@
 import './less/index.less';
 
-import React from 'react';
+import 'react';
 import { NavLink, useIntl } from 'umi';
 import WalletStatus from '../WalletStatus';
+import MobileNavigation from './components/Navigation';
 import Logo from '@/assets/images/header-logo.png';
 import useEagerConnect from '@/hooks/useEagerConnect';
 import LangSwitcher from '../LangSwitcher';
@@ -57,6 +58,7 @@ export default () => {
             <div className="lang-box">
                 <LangSwitcher />
             </div>
+            <MobileNavigation />
         </div>
     );
 };
