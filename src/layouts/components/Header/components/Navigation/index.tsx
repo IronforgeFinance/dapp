@@ -3,6 +3,7 @@ import './less/index.less';
 import { useState, Fragment, useEffect } from 'react';
 import { Drawer } from 'antd';
 import { history } from 'umi';
+import { useCallback } from 'react';
 
 const menuItems = [
     { name: 'HOME', path: '/' },
@@ -17,12 +18,13 @@ const menuItems = [
 const MobileHeader = () => {
     const [visible, setVisible] = useState(false);
     const [pathname, setPathname] = useState('/');
-    const showDrawer = () => {
-        setVisible(true);
-    };
-    const onClose = () => {
-        setVisible(false);
-    };
+
+    const showDrawer = () => setVisible(true);
+    const onClose = () => setVisible(false);
+    const changeLink = useCallback((path) => {
+        onClose();
+        setTimeout(() => (location.href = path), 100);
+    }, []);
 
     useEffect(() => {
         setPathname(location.pathname);
@@ -44,7 +46,7 @@ const MobileHeader = () => {
                 <ul className="menu-group">
                     {menuItems.map((item) => (
                         <li
-                            onClick={() => (location.href = item.path)}
+                            onClick={changeLink.bind(this, item.path)}
                             key={item.path}
                             className={`menu-item ${
                                 pathname === item.path ? 'active' : ''

@@ -2,6 +2,7 @@
 
 .lang-switcher {
     position: relative;
+    margin-left: 20px;
 
     .display {
         display: flex;
@@ -14,7 +15,6 @@
             border-radius: 50%;
             background-color: #fff;
             &:extend(.image);
-            margin-left: 20px;
 
             &.en {
                 background-image: url('~@/assets/images/icon-lang-en.png');
@@ -26,15 +26,15 @@
         }
 
         .name {
-            font-family: Poppins;
             font-style: normal;
             font-weight: 500;
-            font-size: 20px;
-            line-height: 30px;
+            font-size: 22px;
+            line-height: 33px;
             display: flex;
             align-items: center;
             color: #fcd144;
-            margin-left: 10px;
+            display: inline-block;
+            margin-left: 6px;
         }
     }
 
@@ -59,14 +59,14 @@
             align-items: center;
             list-style: none;
             position: relative;
-            padding: 20px 0 24px 0;
+            padding: 0 82px 59px 75px;
 
             &:before {
                 flex: 1;
                 content: '';
                 position: absolute;
                 width: 100%;
-                height: 50%;
+                height: calc(50% + 1vw);
                 top: 0;
                 left: 50%;
                 transform: translateX(-50%);
@@ -81,7 +81,7 @@
                 content: '';
                 position: absolute;
                 width: 100%;
-                height: 50%;
+                height: calc(50% + 1vw);
                 bottom: 0;
                 left: 50%;
                 transform: translateX(-50%);
@@ -92,16 +92,14 @@
             }
 
             .lang-item {
+                padding-top: 20px;
                 position: relative;
                 z-index: 1;
-                width: 150px;
-                height: 18px;
-                display: flex;
                 justify-content: center;
                 font-style: normal;
                 font-weight: normal;
-                font-size: 12px;
-                line-height: 18px;
+                font-size: 22px;
+                line-height: 33px;
                 color: #e1ab3b;
                 opacity: 0.7;
                 cursor: pointer;

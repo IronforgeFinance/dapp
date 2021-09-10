@@ -311,57 +311,66 @@ dl {
     }
 }
 
-.iron-progress.ant-progress {
+.iron-progress.ant-slider {
     font-style: normal;
     font-weight: normal;
     font-size: 15px;
     line-height: 22px;
     color: #ffffff;
-    // height: 44px;
+    height: 44px;
     display: flex;
     flex-direction: column;
     justify-content: center;
+    margin: 0;
+    // padding: 4px 3px;
 
-    .ant-progress-outer {
-        margin-top: 38px;
-        height: 16px;
-        width: 100%;
-        border-radius: 10px;
+    .ant-slider-step,
+    .ant-slider-rail {
+        // width: 364px;
+        height: 12px;
         background: #585448;
         box-shadow: 0px 0px 1px 3px #654609,
             inset 0px -2px 1px rgba(0, 0, 0, 0.25),
             inset -1px 1px 1px rgba(255, 247, 236, 0.38);
-        padding: 0 4px;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
         box-sizing: border-box;
+    }
 
-        .ant-progress-inner {
-            background-color: transparent;
+    .ant-slider-handle,
+    .ant-slider-handle.ant-tooltip-open,
+    .ant-slider-handle:hover,
+    .ant-slider-handle:focus {
+        border: 6px solid #e1ab3b;
+        z-index: 10;
+        margin-top: 1px;
+    }
 
-            .ant-progress-bg {
-                height: 8px !important;
-                background: linear-gradient(
-                    90deg,
-                    #fcd144 62.3%,
-                    #ffad33 92.56%
-                );
-            }
+    &:hover {
+        .ant-slider-handle:not(.ant-tooltip-open) {
+            border-color: #e1ab3b;
         }
     }
 
+    .ant-slider-track {
+        height: 4px;
+        background: linear-gradient(90deg, #fcd144 62.3%, #ffad33 92.56%);
+        position: relative;
+        z-index: 1;
+    }
+
     .ant-progress-text {
-        width: 100%;
-        font-family: Poppins;
+        width: 364px;
+        text-align: right;
+        display: inline-block;
+        margin-top: 6px;
+        margin-left: 0;
         font-style: normal;
-        font-weight: 500;
-        font-size: 24px;
-        line-height: 36px;
-        display: flex;
-        align-items: center;
-        justify-content: flex-end;
+        font-weight: 300;
+        font-size: 15px;
+        line-height: 22px;
         color: #ffffff;
-        margin: 0;
-        margin-top: 13px;
-        // margin-bottom: 17px;
     }
 }
 
