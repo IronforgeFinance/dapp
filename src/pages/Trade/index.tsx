@@ -368,7 +368,7 @@ export default () => {
                     )}
                     {!account && (
                         <Button
-                            className="btn-mint common-btn common-btn-yellow"
+                            className="disaconnect-btn common-btn common-btn-yellow"
                             onClick={() => {
                                 requestConnectWallet();
                             }}
