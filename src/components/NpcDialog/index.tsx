@@ -6,9 +6,12 @@ import {
     useState,
     useEffect,
     ReactNode,
+    useMemo,
 } from 'react';
 import MintNpcPng from '@/assets/images/npc-dialog-mint-person.png';
+import HomeNpcPng from '@/assets/images/npc-dialog-home-person.png';
 import classNames from 'classnames';
+import { history } from 'umi';
 
 interface NpcDialogContextProps {
     words: string;
@@ -28,7 +31,8 @@ const NpcDialog = (props: NpcDialog) => {
     const { children } = props;
     const [visable, setVisable] = useState(false);
     const [words, setWords] = useState('');
-    const [slowWords, setSlowWords] = useState('1232131231232');
+    const [slowWords, setSlowWords] = useState('');
+    const [pathname, setPathname] = useState('/mint');
     /**
      * @function appearSlowly
      * @description 逐渐输出文字的效果
@@ -62,6 +66,14 @@ const NpcDialog = (props: NpcDialog) => {
     /**@description 若关闭，清空文字；反之打开窗口 */
     useEffect(() => (words?.length > 0 ? open() : close()), [words]);
 
+    const isHome = useMemo(() => pathname === '/', [pathname]);
+
+    useEffect(() => {
+        setPathname(location!.pathname);
+
+        return history.listen((location) => setPathname(location.pathname));
+    }, []);
+
     return (
         <NpcDialogContext.Provider
             value={{
@@ -76,8 +88,16 @@ const NpcDialog = (props: NpcDialog) => {
                     hide: !visable,
                 })}
             >
-                <div className="dialog-box">
-                    <img className="npc" src={MintNpcPng} />
+                <div
+                    className={classNames({
+                        'dialog-box': true,
+                        home: isHome,
+                    })}
+                >
+                    <img
+                        className={classNames({ npc: true, home: isHome })}
+                        src={isHome ? HomeNpcPng : MintNpcPng}
+                    />
                     <p className="words">
                         <span>{slowWords}</span>
                     </p>

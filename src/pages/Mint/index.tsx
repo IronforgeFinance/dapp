@@ -246,6 +246,11 @@ export default () => {
         [collateralToken],
     );
     useEffect(() => setWords(toToken ? 'toToken' : ''), [toToken]);
+    useEffect(() => {
+        return () => {
+            setWords('');
+        };
+    }, []);
 
     // 计算新的债务
     useEffect(() => {
