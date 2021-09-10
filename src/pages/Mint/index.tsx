@@ -1,6 +1,6 @@
 import './less/index.less';
 
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useContext } from 'react';
 import { InputNumber, Select, Progress, Button, Popover, Slider } from 'antd';
 import * as message from '@/components/Notification';
 import { request, useIntl, useModel } from 'umi';
@@ -47,6 +47,7 @@ import { isDeliveryAsset } from '@/utils';
 import { TokenIcon } from '@/components/Icon';
 import TransitionConfirm from '@iron/TransitionConfirm';
 import { StatusType } from '@/components/ProgressBar';
+import { NpcDialogContext } from '@/components/NpcDialog';
 import { getTokenPrice } from '@/utils';
 import useEnv from '@/hooks/useEnv';
 
@@ -55,6 +56,7 @@ const RATIO_MAX_MINT = 1000;
 export default () => {
     const intl = useIntl();
     const isMobile = useEnv();
+    const { setWords } = useContext(NpcDialogContext);
     const { account } = useWeb3React();
     const provider = useProvider();
     const [collateralAmount, setCollateralAmount] = useState(0);
@@ -233,6 +235,17 @@ export default () => {
         computedRatio,
         toToken,
     ]);
+
+    /**@description 弹出npc */
+    useEffect(
+        () => setWords(lockedAmount > 0 ? 'lockedAmount' : ''),
+        [lockedAmount],
+    );
+    useEffect(
+        () => setWords(collateralToken ? 'collateralToken' : ''),
+        [collateralToken],
+    );
+    useEffect(() => setWords(toToken ? 'toToken' : ''), [toToken]);
 
     // 计算新的债务
     useEffect(() => {

@@ -106,6 +106,62 @@
         flex-shrink: unset;
     }
 
+    .dinamicBg(@image, @ratio: 50%, @direct: 'hortizontal') {
+        position: unset;
+
+        &:before {
+            flex: unset;
+            content: unset;
+            position: unset;
+            background-size: unset;
+            background-repeat: unset;
+            background-position: unset;
+            background-image: unset;
+
+            & when (@direct ='hortizontal') {
+                width: unset;
+                height: unset;
+                top: unset;
+                transform: unset;
+                left: unset;
+            }
+
+            & when (@direct ='vertical') {
+                width: unset;
+                height: unset;
+                left: unset;
+                transform: unset;
+                top: unset;
+            }
+        }
+
+        &:after {
+            flex: unset;
+            content: unset;
+            position: unset;
+            background-size: unset;
+            background-repeat: unset;
+            background-position: unset;
+            background-image: unset;
+
+            & when (@direct ='hortizontal') {
+                width: unset;
+                height: unset;
+                top: unset;
+                transform: unset;
+                right: unset;
+            }
+
+            & when (@direct ='vertical') {
+                width: unset;
+                height: unset;
+                left: unset;
+                transform: unset;
+                bottom: unset;
+            }
+        }
+    }
+
     .icon(@size, @bgImage, @bgColor: transparent, @pure: true) {
         .background(@bgImage, @bgColor);
 

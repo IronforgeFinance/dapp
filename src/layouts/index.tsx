@@ -7,6 +7,8 @@ import CommonFooter from './components/Footer';
 import classNames from 'classnames';
 import { useModel } from 'umi';
 import useEnv from '@/hooks/useEnv';
+import NpcDialog from '@/components/NpcDialog';
+
 export default function Layout({
     children,
     location,
@@ -71,7 +73,7 @@ export default function Layout({
                 </video>
             )}
             <CommonHeader />
-            {children}
+            <NpcDialog>{children}</NpcDialog>
             {!isMobile && <CommonFooter />}
         </div>
     );

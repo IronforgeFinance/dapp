@@ -29,10 +29,9 @@ export default {
     'entry.mint.desc':
         '可通过质押您的Token铸造fUSD。质押Token的一方通过交换可每周赚取质押奖励来管理质押率和债务。',
     'entry.trade': '货币交易',
-    'entry.trade.desc': '赚取质押fToken的奖励，您将需要一个币安钱包进行交易。',
+    'entry.trade.desc': '赚取质押BS的奖励，您将需要一个币安钱包进行交易。',
     'entry.buyToken': '挖矿',
-    'entry.buyToken.desc':
-        '赚取质押fToken的奖励，您将需要一个币安钱包进行交易。',
+    'entry.buyToken.desc': '赚取质押BS的奖励，您将需要一个币安钱包进行交易。',
     'data.pledgrate': '当前质押率',
     'data.activedebt': '活动债务',
 
@@ -126,14 +125,14 @@ export default {
      * @description 公共组件
      */
     'assetsbar.staked': '质押物',
-    'assetsbar.lockedtoken': '锁定FToken',
+    'assetsbar.lockedtoken': '锁定BS',
     'assetsbar.acitvedebt': '活动债务',
     'assetsbar.fratio': 'F质押率',
     'assetsbar.fratio.desc': '这是一段解释f-ratio变化规则的文字',
     'assetsbar.fratio.current': '当前质押率：',
     'assetsbar.fratio.initial': '初始质押率：',
-    'footer.ftoken.price': 'FToken价格',
-    'footer.ftoken.button': '购买FToken',
+    'footer.ftoken.price': 'BS价格',
+    'footer.ftoken.button': '购买BS',
     selecttoken: '选择Token',
     'selecttoken.search': '搜索',
     'history.mint': '铸造',

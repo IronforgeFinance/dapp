@@ -106,6 +106,64 @@
         flex-shrink: 0;
     }
 
+    .dinamicBg(@image, @ratio: 50%, @direct: 'hortizontal') {
+        position: relative;
+
+        &:before {
+            flex: 1;
+            content: '';
+            position: absolute;
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-image: url(@image);
+
+            & when (@direct ='hortizontal') {
+                width: @ratio;
+                height: 100%;
+                top: 50%;
+                transform: translateY(-50%);
+                left: 0;
+                background-position: left top;
+            }
+
+            & when (@direct ='vertical') {
+                width: 100%;
+                height: @ratio;
+                left: 50%;
+                transform: translateX(-50%);
+                top: 0;
+                background-position: left top;
+            }
+        }
+
+        &:after {
+            flex: 1;
+            content: '';
+            position: absolute;
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-image: url(@image);
+
+            & when (@direct ='hortizontal') {
+                width: @ratio;
+                height: 100%;
+                top: 50%;
+                transform: translateY(-50%);
+                right: 0;
+                background-position: left bottom;
+            }
+
+            & when (@direct ='vertical') {
+                width: 100%;
+                height: @ratio;
+                left: 50%;
+                transform: translateX(-50%);
+                bottom: 0;
+                background-position: left bottom;
+            }
+        }
+    }
+
     .icon(@size, @bgImage, @bgColor: transparent, @pure: true) {
         .background(@bgImage, @bgColor);
 

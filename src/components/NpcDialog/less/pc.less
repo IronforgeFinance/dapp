@@ -1,0 +1,56 @@
+@import '~@/assets/styles/iron.less';
+
+.npc-dilaog {
+    // background: chocolate;
+    position: fixed;
+    left: 0;
+    bottom: 0;
+
+    display: flex;
+    align-items: flex-end;
+    justify-content: flex-start;
+    transition: all 0.37s;
+
+    &.show {
+        transform: translateX(0);
+    }
+
+    &.hide {
+        transform: translateX(-100%);
+    }
+
+    .dialog-box {
+        height: 628px;
+        width: 1047px;
+        display: flex;
+        align-items: flex-start;
+        justify-content: flex-start;
+        position: relative;
+        padding-top: 230px;
+        padding-left: 430px;
+
+        .npc {
+            width: 626px;
+            object-fit: contain;
+            flex-shrink: 0;
+            position: absolute;
+            bottom: 0;
+            left: 0;
+        }
+
+        .words {
+            #image.dinamicBg('~@/assets/images/npc-dialog-words-bg.png', 50%, 'vertical');
+            min-height: 144px;
+            width: 492px;
+            padding: 14px 18px;
+            box-sizing: border-box;
+
+            > span {
+                position: relative;
+                z-index: 1;
+                word-break: break-all;
+                white-space: normal;
+            }
+        }
+    }
+}
