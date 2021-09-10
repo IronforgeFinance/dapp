@@ -431,6 +431,7 @@ export default (props: IProps) => {
                             onChange={burnAmountHandler}
                             placeholder="0.00"
                             className="custom-input"
+                            type="number"
                             min={0}
                             max={selectedDebtInUSD || 9999999}
                         />
@@ -476,6 +477,7 @@ export default (props: IProps) => {
                             onChange={unstakeAmountHandler}
                             placeholder="0.00"
                             className="custom-input"
+                            type="number"
                             disabled={!toToken}
                             min={0}
                             max={toTokenDebt}

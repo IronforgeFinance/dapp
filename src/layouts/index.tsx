@@ -7,6 +7,7 @@ import CommonFooter from './components/Footer';
 import classNames from 'classnames';
 import { useModel } from 'umi';
 import useEnv from '@/hooks/useEnv';
+import { useWeb3React } from '@web3-react/core';
 import NpcDialog from '@/components/NpcDialog';
 
 export default function Layout({
@@ -17,6 +18,7 @@ export default function Layout({
     match,
 }: IRouteComponentProps) {
     const isMobile = useEnv();
+    const { account } = useWeb3React();
     const { clearDataView } = useModel('dataView', (model) => ({
         clearDataView: model.clearDataView,
     }));
@@ -42,7 +44,7 @@ export default function Layout({
             player.current.pause();
         }
         clearDataView();
-    }, [location]);
+    }, [location, account]);
     return (
         <div className="container">
             {!isMobile && (

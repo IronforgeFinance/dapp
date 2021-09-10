@@ -194,6 +194,7 @@ export default () => {
                                 onChange={lpAmountHandler}
                                 placeholder="0.00"
                                 className="custom-input"
+                                type="number"
                             />
                             <div className="token">
                                 <TokenIcon name={lp} size={24} />

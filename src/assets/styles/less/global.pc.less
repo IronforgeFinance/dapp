@@ -123,6 +123,18 @@ dl {
                 box-shadow: none !important;
             }
 
+            input[role='spinbutton'] {
+                height: unset;
+                font-family: Poppins;
+                font-style: normal;
+                font-weight: normal;
+                font-size: 15px;
+                line-height: 22px;
+                display: flex;
+                align-items: center;
+                color: rgba(255, 255, 255, 0.5);
+            }
+
             .token {
                 display: flex;
                 justify-content: space-between;
@@ -351,6 +363,7 @@ dl {
         background: linear-gradient(90deg, #fcd144 62.3%, #ffad33 92.56%);
         position: relative;
         z-index: 1;
+        margin-left: 4px;
     }
 
     .ant-progress-text {

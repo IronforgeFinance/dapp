@@ -407,6 +407,7 @@ export default () => {
                                 onChange={token1AmountHandler}
                                 placeholder="0.00"
                                 className="custom-input"
+                                type="number"
                             />
                             <div className="token">
                                 <TokenIcon name={token1} size={24} />
@@ -442,6 +443,7 @@ export default () => {
                                 onChange={token2AmountHandler}
                                 placeholder="0.00"
                                 className="custom-input"
+                                type="number"
                             />
                             <div className="token">
                                 <TokenIcon name={token2} size={24} />

@@ -59,8 +59,10 @@ export default () => {
     const { setWords } = useContext(NpcDialogContext);
     const { account } = useWeb3React();
     const provider = useProvider();
-    const [collateralAmount, setCollateralAmount] = useState(0);
-    const [lockedAmount, setLockedAmount] = useState<undefined | number>(0);
+    const [collateralAmount, setCollateralAmount] = useState<
+        undefined | number
+    >();
+    const [lockedAmount, setLockedAmount] = useState<undefined | number>();
     const [toAmount, setToAmount] = useState<undefined | number>();
     // const [collateralBalance, setCollateralBalance] = useState('0.00');
     const [collateralToken, setCollateralToken] = useState(
@@ -225,7 +227,7 @@ export default () => {
                 );
                 setToAmount(amount);
             } else {
-                setToAmount(0);
+                setToAmount(undefined);
             }
         }, 500)();
     }, [
@@ -324,7 +326,7 @@ export default () => {
 
             /**@description 超过余额的计算 */
             amount = amount < fTokenBalance ? amount : fTokenBalance;
-            setLockedAmount(amount);
+            setLockedAmount(toFixedWithoutRound(amount, 6));
 
             const val = toFixedWithoutRound(bsPrice * amount, 2);
             setLockedData({
@@ -540,7 +542,7 @@ export default () => {
                                 <p className="right">
                                     {intl.formatMessage({ id: 'balance:' })}{' '}
                                     <span className="balance">
-                                        {collateralBalance}
+                                        {account ? collateralBalance : '-'}
                                     </span>
                                 </p>
                             </div>
@@ -549,6 +551,7 @@ export default () => {
                                     value={collateralAmount}
                                     onChange={collateralAmountHandler}
                                     placeholder="0.00"
+                                    type="number"
                                     className={classNames({
                                         'custom-input': true,
                                         disabled: !isApproved,
@@ -598,7 +601,7 @@ export default () => {
                                 <p className="right">
                                     {intl.formatMessage({ id: 'balance:' })}
                                     <span className="balance">
-                                        {fTokenBalance}
+                                        {account ? fTokenBalance : '-'}
                                     </span>
                                 </p>
                             </div>
@@ -608,6 +611,7 @@ export default () => {
                                     onChange={lockedAmountHandler}
                                     placeholder="0.00"
                                     className="custom-input"
+                                    type="number"
                                 />
                                 <Scale.Group
                                     value={lockedScale}
@@ -643,12 +647,13 @@ export default () => {
                                 <p className="right">
                                     {intl.formatMessage({ id: 'balance:' })}
                                     <span className="balance">
-                                        {mintBalance}
+                                        {account ? mintBalance : '-'}
                                     </span>
                                 </p>
                             </div>
                             <div className="input">
                                 <InputNumber
+                                    type="number"
                                     value={toAmount}
                                     placeholder="0.00"
                                     className={classNames({
@@ -677,32 +682,30 @@ export default () => {
                         </div>
                     </div>
 
-                    {isApproved && isIFTApproved && (
-                        <div className="ratio">
-                            <Slider
-                                className="iron-progress"
-                                tooltipVisible={false}
-                                step={0.000001}
-                                value={sliderRatio}
-                                min={0}
-                                max={100}
-                                onChange={changeStakeRatio}
+                    <div className="ratio">
+                        <Slider
+                            className="iron-progress"
+                            tooltipVisible={false}
+                            step={0.000001}
+                            value={sliderRatio}
+                            min={0}
+                            max={100}
+                            onChange={changeStakeRatio}
+                        />
+                        <div className="stake-ratio">
+                            <span className="final">
+                                {fRatioData.endValue}%
+                            </span>
+                            <i
+                                className={`icon-arrow-white ${
+                                    isMobile ? 'size-24' : 'size-16'
+                                }`}
                             />
-                            <div className="stake-ratio">
-                                <span className="final">
-                                    {fRatioData.endValue}%
-                                </span>
-                                <i
-                                    className={`icon-arrow-white ${
-                                        isMobile ? 'size-24' : 'size-16'
-                                    }`}
-                                />
-                                <span className="initial">
-                                    {fRatioData.startValue}%
-                                </span>
-                            </div>
+                            <span className="initial">
+                                {fRatioData.startValue}%
+                            </span>
                         </div>
-                    )}
+                    </div>
                     {!account && (
                         <Button
                             className="btn-mint common-btn common-btn-yellow"
@@ -713,7 +716,7 @@ export default () => {
                             {intl.formatMessage({ id: 'app.unlockWallet' })}
                         </Button>
                     )}
-                    {isApproved && isIFTApproved && (
+                    {account && isApproved && isIFTApproved && (
                         <Button
                             className="btn-mint common-btn common-btn-red"
                             onClick={onSubmit}

@@ -278,6 +278,7 @@ export default () => {
                                     placeholder="0.00"
                                     className="custom-input"
                                     min={0}
+                                    type="number"
                                 />
                                 <div className="token">
                                     <TokenIcon
@@ -336,6 +337,7 @@ export default () => {
                                     className="custom-input"
                                     disabled={!toToken}
                                     min={0}
+                                    type="number"
                                 />
                                 <div className="token">
                                     <TokenIcon

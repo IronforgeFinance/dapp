@@ -169,6 +169,7 @@ export default (props: { lp: string; handleFlipper: () => void }) => {
                             }}
                             placeholder="0.00"
                             className="custom-input"
+                            type="number"
                         />
                         <div className="custom-token">
                             <span
