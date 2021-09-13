@@ -60,7 +60,7 @@ const ClaimRewards = (props: ClaimRewardsProps) => {
                         <li className="ratio card">
                             <div className="before" />
                             <div className="content">
-                                <span className="value">$130330</span>
+                                <span className="value">90%</span>
                                 <span className="label">
                                     Earning ratio{' '}
                                     <i className="icon-question size-20" />
