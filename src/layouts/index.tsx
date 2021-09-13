@@ -10,6 +10,7 @@ import useEnv from '@/hooks/useEnv';
 import { useWeb3React } from '@web3-react/core';
 import NpcDialog from '@/components/NpcDialog';
 import ClaimRewards from '@/components/ClaimRewards';
+import SelectTokensV2 from '@/components/SelectTokensV2';
 
 export default function Layout({
     children,
@@ -76,9 +77,11 @@ export default function Layout({
                 </video>
             )}
             <CommonHeader />
-            <ClaimRewards>
-                <NpcDialog>{children}</NpcDialog>
-            </ClaimRewards>
+            <SelectTokensV2>
+                <ClaimRewards>
+                    <NpcDialog>{children}</NpcDialog>
+                </ClaimRewards>
+            </SelectTokensV2>
             {!isMobile && <CommonFooter />}
         </div>
     );

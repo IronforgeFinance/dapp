@@ -40,6 +40,7 @@ import Scale from '@/components/Scale';
 // import SettingView from './SettingView';
 import classNames from 'classnames';
 import SelectTokens from '@/components/SelectTokens';
+import { TokenSelectorContext } from '@/components/SelectTokensV2';
 import CommentaryCard from '@/components/CommentaryCard';
 import { useCallback } from 'react';
 import { isDeliveryAsset } from '@/utils';
@@ -62,6 +63,7 @@ export default () => {
     const [collateralAmount, setCollateralAmount] = useState<
         undefined | number
     >();
+    const { open } = useContext(TokenSelectorContext);
     const [lockedAmount, setLockedAmount] = useState<undefined | number>();
     const [toAmount, setToAmount] = useState<undefined | number>();
     // const [collateralBalance, setCollateralBalance] = useState('0.00');
@@ -133,6 +135,19 @@ export default () => {
     };
 
     // const { stakedData, setStakedData } = useStakedData();
+
+    const openCollateralTokenList = useCallback(
+        () => open(COLLATERAL_TOKENS, { callback: collateralTokenHandler }),
+        [],
+    );
+    const openToTokenList = useCallback(
+        () =>
+            open(
+                MINT_TOKENS.map((name) => ({ name })),
+                { callback: toTokenHandler },
+            ),
+        [],
+    );
 
     const {
         stakedData,
@@ -559,14 +574,16 @@ export default () => {
                                 />
                                 <div className="token">
                                     <TokenIcon
-                                        name={collateralToken.toLowerCase()}
+                                        name={collateralToken}
                                         size={24}
                                     />
-                                    <SelectTokens
-                                        value={collateralToken}
-                                        tokenList={COLLATERAL_TOKENS}
-                                        onSelect={collateralTokenHandler}
-                                    ></SelectTokens>
+                                    <Button
+                                        className="select-token-btn"
+                                        onClick={openCollateralTokenList}
+                                    >
+                                        {collateralToken}
+                                        <i className="icon-down size-24" />
+                                    </Button>
                                 </div>
                             </div>
                         </div>
@@ -667,16 +684,13 @@ export default () => {
                                         name={String(toToken).toLowerCase()}
                                         size={24}
                                     />
-                                    <SelectTokens
-                                        value={toToken}
-                                        tokenList={MINT_TOKENS.map((name) => ({
-                                            name,
-                                        }))}
-                                        onSelect={toTokenHandler}
-                                        placeholder={intl.formatMessage({
-                                            id: 'mint.selectCasting',
-                                        })}
-                                    ></SelectTokens>
+                                    <Button
+                                        className="select-token-btn"
+                                        onClick={openToTokenList}
+                                    >
+                                        {toToken}
+                                        <i className="icon-down size-24" />
+                                    </Button>
                                 </div>
                             </div>
                         </div>
