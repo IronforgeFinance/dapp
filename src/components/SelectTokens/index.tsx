@@ -42,6 +42,7 @@ export default (props: ISelectTokensProps) => {
      *
      * 主要是common-box的after和before两个伪元素用完了，
      * 才想到这个方法来解决该问题
+     * @todo 改成全局注入的方式，通过上下文修改内部数据，避免滑动块问题
      */
     React.useEffect(() => {
         const wrapperBox: HTMLElement = document.querySelector('.common-box');

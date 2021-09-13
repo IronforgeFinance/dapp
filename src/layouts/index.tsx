@@ -9,6 +9,7 @@ import { useModel } from 'umi';
 import useEnv from '@/hooks/useEnv';
 import { useWeb3React } from '@web3-react/core';
 import NpcDialog from '@/components/NpcDialog';
+import ClaimRewards from '@/components/ClaimRewards';
 
 export default function Layout({
     children,
@@ -75,7 +76,9 @@ export default function Layout({
                 </video>
             )}
             <CommonHeader />
-            <NpcDialog>{children}</NpcDialog>
+            <ClaimRewards>
+                <NpcDialog>{children}</NpcDialog>
+            </ClaimRewards>
             {!isMobile && <CommonFooter />}
         </div>
     );

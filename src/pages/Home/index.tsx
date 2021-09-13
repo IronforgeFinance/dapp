@@ -1,6 +1,6 @@
 import './less/index.less';
 
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useContext } from 'react';
 import useEagerConnect from '@/hooks/useEagerConnect';
 import Blacksmith from '@/assets/images/blacksmith.png';
 import Merchant from '@/assets/images/merchant.png';
@@ -10,7 +10,21 @@ import { COLLATERAL_TOKENS } from '@/config';
 import SelectTokens from '@/components/SelectTokens';
 import { useBep20Balance } from '@/hooks/useTokenBalance';
 import PreloadAssetsSuspense from '@/components/PreloadAssetsSuspense';
+import TabGroup from '@/components/TabGroup';
+import { ClaimRewardsContext } from '@/components/ClaimRewards';
 import { useIntl } from 'umi';
+import { Button } from 'antd';
+
+const tabItems = [
+    {
+        name: 'Total Staked',
+        key: 'total-staked',
+    },
+    {
+        name: 'Collateral',
+        key: 'collateral',
+    },
+];
 
 export default () => {
     useEagerConnect();
@@ -18,6 +32,8 @@ export default () => {
         return process.env.NODE_ENV === 'development';
     };
     const intl = useIntl();
+    const { open } = useContext(ClaimRewardsContext);
+    const [tabKey, setTabKey] = useState(tabItems[0].key);
     const [showSelectFromToken, setShowSelectFromToken] = useState(false);
     const [collateralToken, setCollateralToken] = useState(
         COLLATERAL_TOKENS[0].name,
@@ -71,7 +87,7 @@ export default () => {
                         type="video/webm"
                     />
                 </video>
-                <div className="sheepskin-box">
+                {/* <div className="sheepskin-box">
                     <div className="sheepskin-book mint">
                         <h3>{intl.formatMessage({ id: 'entry.mint' })}</h3>
                         <p className="summary">
@@ -102,23 +118,50 @@ export default () => {
                             </Link>
                         </p>
                     </div>
-                </div>
-                <div className="pledge-ratio-box">
-                    <SelectTokens
-                        value={collateralToken}
-                        tokenList={COLLATERAL_TOKENS}
-                        onSelect={(v) => setCollateralToken(v)}
-                    />
-                    <span className="ratio">{computedRatio}%</span>
-                    <p className="desc">
-                        {intl.formatMessage({ id: 'data.pledgrate' })}
+                </div> */}
+
+                <section className="slogan-box">
+                    <p>
+                        <b>Forging</b> the Future of Crypto Finance.
                     </p>
-                </div>
-                <div className="amount-box">
-                    <span className="amount">{fusdBalance} fUSD</span>
-                    <span className="desc">
-                        {intl.formatMessage({ id: 'data.activedebt' })}
-                    </span>
+                </section>
+                <div className="data-box">
+                    <div className="staked-and-collateral-box">
+                        <TabGroup
+                            items={tabItems}
+                            value={tabKey}
+                            onChange={(v) => setTabKey(v)}
+                            className="custom-tabs-group"
+                        />
+                        <div className="pannel-content">4000 USD</div>
+                    </div>
+                    {/* <div className="pledge-ratio-box">
+                        <SelectTokens
+                            value={collateralToken}
+                            tokenList={COLLATERAL_TOKENS}
+                            onSelect={(v) => setCollateralToken(v)}
+                        />
+                        <span className="ratio">{computedRatio}%</span>
+                        <p className="desc">
+                            {intl.formatMessage({ id: 'data.pledgrate' })}
+                        </p>
+                    </div> */}
+                    <div className="rewards-box">
+                        <span className="amount">--</span>
+                        <span className="label">Reward</span>
+                        <Button
+                            className="see-rewards-btn common-btn common-btn-red"
+                            onClick={open}
+                        >
+                            Detail
+                        </Button>
+                    </div>
+                    <div className="amount-box">
+                        <span className="amount">{fusdBalance} fUSD</span>
+                        <span className="desc">
+                            {intl.formatMessage({ id: 'data.activedebt' })}
+                        </span>
+                    </div>
                 </div>
             </div>
         </PreloadAssetsSuspense>
