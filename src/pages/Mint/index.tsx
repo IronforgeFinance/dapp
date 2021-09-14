@@ -670,7 +670,7 @@ export default () => {
                             </div>
                         </div>
                     </div>
-
+                    <i className="icon-arrow-down" />
                     <div className="input-item">
                         <p className="label">
                             {intl.formatMessage({ id: 'mint.to' })}

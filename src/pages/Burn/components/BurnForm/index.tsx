@@ -25,7 +25,8 @@ import { TokenIcon } from '@/components/Icon';
 import { useIntl } from 'umi';
 import { getTokenPrice } from '@/utils';
 import { TokenSelectorContext } from '@/components/SelectTokensV2';
-import { TransitionConfirmContext } from '@/components/TransitionConfirmV2';
+import { TransitionConfirmContext as TransactionConfirmContext } from '@/components/TransitionConfirmV2';
+import { MyDebtsContext } from '@/components/MyDebts';
 
 const TO_TOKENS = ['BTC'];
 interface IProps {
@@ -45,7 +46,8 @@ export default (props: IProps) => {
     const [burnInitialAvailable, setBurnInitialAvailable] = useState(false);
     const [burnMaxAvailable, setBurnMaxAvailable] = useState(false);
     const { open } = useContext(TokenSelectorContext);
-    const { open: openConfirmModal } = useContext(TransitionConfirmContext);
+    const { open: openConfirmModal } = useContext(TransactionConfirmContext);
+    const { open: checkoutMyDebts } = useContext(MyDebtsContext);
 
     const { requestConnectWallet } = useModel('app', (model) => ({
         requestConnectWallet: model.requestConnectWallet,
@@ -404,7 +406,7 @@ export default (props: IProps) => {
 
     return (
         <div className="common-box form-view">
-            <button className="checkout-debt-btn" />
+            <button className="checkout-debt-btn" onClick={checkoutMyDebts} />
             <ScaleGroup value={scale} updateScale={(scale) => setScale(scale)}>
                 {[
                     {
@@ -478,6 +480,7 @@ export default (props: IProps) => {
                     {toTokenDebtInUsd}
                 </span>
             </div>
+            <i className="icon-arrow-down" />
             <div className="input-item" style={{ zIndex: 2 }}>
                 <p className="label">{intl.formatMessage({ id: 'burn.to' })}</p>
                 <div className="to-content input-item-content">

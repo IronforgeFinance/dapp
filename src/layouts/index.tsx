@@ -10,8 +10,9 @@ import useEnv from '@/hooks/useEnv';
 import { useWeb3React } from '@web3-react/core';
 import NpcDialog from '@/components/NpcDialog';
 import ClaimRewards from '@/components/ClaimRewards';
-import SelectTokensV2 from '@/components/SelectTokensV2';
-import TransitionConfirmV2 from '@/components/TransitionConfirmV2';
+import TokenSelector from '@/components/SelectTokensV2';
+import TransactionConfirm from '@/components/TransitionConfirmV2';
+import MyDebts from '@/components/MyDebts';
 
 export default function Layout({
     children,
@@ -78,13 +79,15 @@ export default function Layout({
                 </video>
             )}
             <CommonHeader />
-            <TransitionConfirmV2>
-                <SelectTokensV2>
-                    <ClaimRewards>
-                        <NpcDialog>{children}</NpcDialog>
-                    </ClaimRewards>
-                </SelectTokensV2>
-            </TransitionConfirmV2>
+            <MyDebts>
+                <TransactionConfirm>
+                    <TokenSelector>
+                        <ClaimRewards>
+                            <NpcDialog>{children}</NpcDialog>
+                        </ClaimRewards>
+                    </TokenSelector>
+                </TransactionConfirm>
+            </MyDebts>
             {!isMobile && <CommonFooter />}
         </div>
     );
