@@ -11,6 +11,10 @@
     display: flex;
     padding: 0;
 
+    .ant-notification-notice-message {
+        max-width: 260px;
+    }
+
     // .timer-bar {
     //     position: absolute;
     //     left: 0;
@@ -82,6 +86,21 @@
         #image.background('~@/assets/images/notify-fail-bg.png');
     }
 
+    &.loading {
+        #image.dinamicBg('~@/assets/images/notify-loading-bg.svg', 50%, 'vertical');
+        background-color: transparent;
+
+        .ant-notification-notice-close {
+            position: absolute;
+        }
+
+        > div,
+        > a {
+            position: relative;
+            z-index: 1;
+        }
+    }
+
     h3 {
         font-style: normal;
         font-weight: bold;
@@ -92,9 +111,31 @@
         color: #292725;
     }
 
+    .scale-btn {
+        #image.icon(18px, '~@/assets/images/notify-scale.svg');
+        position: absolute;
+        right: 14px;
+        bottom: 15px;
+        margin-right: 14px;
+    }
+
+    .revert-btn {
+        font-family: Poppins;
+        font-style: normal;
+        font-weight: bold;
+        font-size: 16px;
+        line-height: 24px;
+        display: flex;
+        align-items: center;
+        text-decoration-line: underline;
+        color: #ac4c06;
+        margin-top: 12px;
+    }
+
     .description {
         display: flex;
         flex-direction: column;
+        justify-content: space-between;
         padding-bottom: 10px;
 
         p {
@@ -131,8 +172,39 @@
         color: #fff;
     }
 
+    .status {
+        height: 20px;
+        width: 76px;
+        font-family: Poppins;
+        font-style: normal;
+        font-weight: 500;
+        font-size: 14px;
+        line-height: 21px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #ffffff;
+        margin-top: 8px;
+        background: #6f4123;
+        border-radius: 1px;
+    }
+
     .icon-status {
         object-fit: contain;
+
+        &.loading {
+            @keyframes rotate {
+                from {
+                    transform: rotate(0deg);
+                }
+
+                to {
+                    transform: rotate(360deg);
+                }
+            }
+
+            animation: rotate 3s linear infinite;
+        }
     }
 
     .icon-close {

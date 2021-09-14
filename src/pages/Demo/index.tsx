@@ -9,6 +9,7 @@ import message from '@iron/Notification';
 // import Popover from '@/components/Popover';
 import TransitionConfirm from '@/components/TransitionConfirm';
 import WalletModal from '@/layouts/components/WalletModal';
+import { BSCSCAN_EXPLORER } from '@/config/constants/constant';
 
 export default () => {
     // * 选择token演示
@@ -16,8 +17,7 @@ export default () => {
         const [showSetting, setShowSetting] = useState(false);
 
         return (
-            <SelectTokens
-            >
+            <SelectTokens>
                 <button
                     className="btn-select-tokens"
                     onClick={() => setShowSetting(true)}
@@ -108,13 +108,14 @@ export default () => {
                 <li>
                     <h3>5. 成功通知</h3>
                     <button
-                        onClick={() =>
-                            // message.success({
-                            //     message: 'Transaction receipt',
-                            //     description: 'Mint fUSD from USDC',
-                            //     showView: true,
-                            // })
-                            message.success('Transaction success')
+                        onClick={
+                            () =>
+                                message.success({
+                                    message: 'Transaction receipt',
+                                    description: 'Mint fUSD from USDC',
+                                    scanHref: BSCSCAN_EXPLORER,
+                                })
+                            // message.success('Transaction success')
                         }
                     >
                         成功
@@ -129,6 +130,22 @@ export default () => {
                         }
                     >
                         失败
+                    </button>
+                    <button
+                        onClick={() =>
+                            // message.fail({
+                            //     message: 'Transaction receipt',
+                            //     description: 'Mint fUSD from USDC',
+                            // })
+                            message.loading({
+                                message: '123',
+                                description: '123',
+                                scale: () => {},
+                                revert: () => {},
+                            })
+                        }
+                    >
+                        Loading
                     </button>
                 </li>
                 {/* <li>
