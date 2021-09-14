@@ -97,11 +97,17 @@
     }
 }
 
-.i-mint-view {
+.i-mint-view,
+.i-burn-view {
     display: flex;
     flex-direction: column;
     align-items: center;
     padding: 20px 10px;
+
+    .icon-arrow-down {
+        #image.icon(18px, '~@/assets/images/icon-arrow-red.svg');
+        align-self: flex-start;
+    }
 
     .token {
         width: 100%;
@@ -109,6 +115,10 @@
         justify-content: space-between;
         align-items: center;
         padding: 10px 0 12px 0;
+
+        &.bs {
+            border-top: 1px dashed rgba(157, 113, 71, 0.33);
+        }
 
         .left {
             display: flex;

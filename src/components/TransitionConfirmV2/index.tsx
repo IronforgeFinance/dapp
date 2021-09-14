@@ -56,6 +56,7 @@ export default (props: TransitionConfirmProps) => {
     const [approved, setApproved] = useState(false);
     const openOption = useRef<OpenOptions>(null);
     const [view, setView] = useState<OpenOptions>(null);
+    const [isBurn, setIsBurn] = useState(false);
 
     const open = useCallback((options: OpenOptions) => {
         openOption.current = options;
@@ -121,6 +122,7 @@ export default (props: TransitionConfirmProps) => {
     const CurrentView = useMemo(() => {
         switch (view?.view) {
             case 'mint': {
+                setIsBurn(false);
                 return (
                     <section className="i-mint-view">
                         <div className="token from">
@@ -226,7 +228,75 @@ export default (props: TransitionConfirmProps) => {
                 );
             }
             case 'burn': {
-                // return <BurnView />;
+                setIsBurn(true);
+                return (
+                    <section className="i-burn-view">
+                        <div className="token from">
+                            <div className="left">
+                                <span>
+                                    <TokenIcon
+                                        name={view.fromToken.name}
+                                        size={24}
+                                    />
+                                    {view.fromToken.name}
+                                </span>
+                                <span>Burn</span>
+                            </div>
+                            <div className="right">
+                                <span>{view.fromToken.amount}</span>
+                                <span>${view.fromToken.price}</span>
+                            </div>
+                        </div>
+                        <i className="icon-arrow-down" />
+                        <div className="token to">
+                            <div className="left">
+                                <span>
+                                    <TokenIcon
+                                        name={view.toToken.name}
+                                        size={24}
+                                    />
+                                    {view.toToken.name}
+                                </span>
+                                <span>Unstaking</span>
+                            </div>
+                            <div className="right">
+                                <span>{view.toToken.amount}</span>
+                                <span>${view.toToken.price}</span>
+                            </div>
+                        </div>
+                        <div className="token bs">
+                            <div className="left">
+                                <span>
+                                    <TokenIcon
+                                        name={view.bsToken.name}
+                                        size={24}
+                                    />
+                                    {view.bsToken.name}
+                                </span>
+                                <span>Unlocked</span>
+                            </div>
+                            <div className="right">
+                                <span>{view.bsToken.amount}</span>
+                                <span>${view.bsToken.price}</span>
+                            </div>
+                        </div>
+                        <div className="type">
+                            <div className="left">
+                                <span>Type</span>
+                            </div>
+                            <div className="right">
+                                <span>Delivery</span>
+                            </div>
+                        </div>
+                        <Button
+                            className="confirm-btn common-btn common-btn-red"
+                            loading={isConfirming}
+                            onClick={submit}
+                        >
+                            Confirm Transaction
+                        </Button>
+                    </section>
+                );
             }
             case 'loading': {
                 return (
@@ -237,8 +307,10 @@ export default (props: TransitionConfirmProps) => {
                                 Waiting for Transaction Submitted...
                             </p>
                             <p>
-                                Staking <span>{view.fromToken.amount}</span>{' '}
-                                {view.fromToken.name} and Mint{' '}
+                                {isBurn ? 'Unstaking' : 'Staking'}{' '}
+                                <span>{view.fromToken.amount}</span>{' '}
+                                {view.fromToken.name} and{' '}
+                                {isBurn ? 'Burn' : 'Mint'}{' '}
                                 <span>{view.toToken.amount}</span>{' '}
                                 {view.toToken.name}
                             </p>
@@ -257,7 +329,7 @@ export default (props: TransitionConfirmProps) => {
                 );
             }
         }
-    }, [view, approved]);
+    }, [view, approved, isBurn]);
 
     return (
         <TransitionConfirmContext.Provider

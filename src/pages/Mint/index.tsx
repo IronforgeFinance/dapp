@@ -421,7 +421,6 @@ export default () => {
                     refreshBalance();
                 }
             } catch (err) {
-                setSubmitting(false);
                 console.log(err);
             }
         }

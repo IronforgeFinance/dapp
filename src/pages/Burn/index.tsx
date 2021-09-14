@@ -39,17 +39,17 @@ export default () => {
 
     const haveAssets = useMemo(() => /*fusdBalance > 0*/ true, []); // TODO 获取资产总计
 
-    const BackBtn = () => {
-        return (
-            <img
-                className="btn-back"
-                src={IconBack}
-                onClick={() => {
-                    setShowForm(!showForm);
-                }}
-            />
-        );
-    };
+    // const BackBtn = () => {
+    //     return (
+    //         <img
+    //             className="btn-back"
+    //             src={IconBack}
+    //             onClick={() => {
+    //                 setShowForm(!showForm);
+    //             }}
+    //         />
+    //     );
+    // };
 
     const NoAssetsView = () => {
         const toMintPageHandler = useCallback(
@@ -95,7 +95,7 @@ export default () => {
                     description={intl.formatMessage({ id: 'burn.desc' })}
                 />
                 <Fragment>
-                    {!showForm && (
+                    {/* {!showForm && (
                         <Fragment>
                             {!haveAssets && <NoAssetsView />}
                             {haveAssets && (
@@ -141,13 +141,11 @@ export default () => {
                                 </div>
                             )}
                         </Fragment>
-                    )}
-                    {showForm && (
-                        <Fragment>
-                            <BurnForm onSubmitSuccess={onSubmitSuccess} />
-                            <BackBtn />
-                        </Fragment>
-                    )}
+                    )} */}
+                    <Fragment>
+                        <BurnForm onSubmitSuccess={onSubmitSuccess} />
+                        {/* <BackBtn /> */}
+                    </Fragment>
                 </Fragment>
             </div>
         </div>
