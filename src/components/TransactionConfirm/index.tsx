@@ -348,7 +348,7 @@ export default (props: TransitionConfirmProps) => {
             case 'loading': {
                 return (
                     <section className="i-loading-view">
-                        <i className="loading" />
+                        <i className="transaction-confirm-loading" />
                         <div className="details">
                             <p className="summary">
                                 Waiting for Transaction Submitted...

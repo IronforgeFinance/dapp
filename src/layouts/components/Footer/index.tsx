@@ -4,8 +4,8 @@ import React, { useEffect, useState } from 'react';
 import IconTwitter from '@/assets/images/twitter.svg';
 import IconGithub from '@/assets/images/github.svg';
 import IconMedium from '@/assets/images/medium.svg';
-import { useFtokenPrice, useGetBnbBalance } from '@/hooks/useTokenBalance';
-import DataBoard from './components/DataBoard';
+import { useGetBnbBalance } from '@/hooks/useTokenBalance';
+import TabRecordBoard from '@/components/TabRecordBoard';
 import { history } from 'umi';
 import MintView from './components/MintView';
 import BurnView from './components/BurnView';
@@ -15,19 +15,25 @@ import { Button } from 'antd';
 import useRefresh from '@/hooks/useRefresh';
 import { MDEX_SWAP_EXPLORER } from '@/config/constants/constant';
 import { getTokenPrice } from '@/utils/index';
+import { ReactComponent as TabBackIcon01 } from '@/assets/images/big-board-svg-01.svg';
+import { ReactComponent as TabBackIcon02 } from '@/assets/images/big-board-svg-02.svg';
+import { ReactComponent as TabBackIcon03 } from '@/assets/images/big-board-svg-03.svg';
 
 const tabItems = [
     {
         name: 'history.mint',
         key: 'mint',
+        icon: <TabBackIcon01 fill="#89512D" />,
     },
     {
         name: 'history.burn',
         key: 'burn',
+        icon: <TabBackIcon02 fill="#89512D" />,
     },
     {
         name: 'history.delivery',
         key: 'delivery',
+        icon: <TabBackIcon03 fill="#89512D" />,
     },
 ];
 
@@ -127,17 +133,13 @@ export default () => {
                             {intl.formatMessage({ id: 'footer.ftoken.button' })}
                         </a>
                     </Button>
-                    {/* <p className="balance">Balance: {balance}</p> */}
                     <div className="medias">
                         <img key={1} src={IconTwitter} />
                         <img key={2} src={IconGithub} />
                         <img key={3} src={IconMedium} />
                     </div>
 
-                    <DataBoard
-                        // title={tabKey.replace(/^([\w]{1})/, (v) =>
-                        //     v.toUpperCase(),
-                        // )}
+                    <TabRecordBoard
                         title={intl.formatMessage({ id: 'history' })}
                         tabItems={tabItems.map((item) => ({
                             ...item,
@@ -145,11 +147,12 @@ export default () => {
                         }))}
                         tabKey={tabKey}
                         onChange={(key) => setTabKey(key)}
-                        onClose={() => setVisable(false)}
-                        visable={visable}
+                        close={() => setVisable(false)}
+                        visible={visable}
+                        mode="modal"
                     >
                         {CurrentView}
-                    </DataBoard>
+                    </TabRecordBoard>
                 </div>
             )}
         </React.Fragment>

@@ -1,6 +1,6 @@
 import './less/index.less';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { Table } from 'antd';
 import { ethers } from 'ethers';
 import {
@@ -15,6 +15,7 @@ import { history, useModel } from 'umi';
 import { useWeb3React } from '@web3-react/core';
 import useRefresh from '@/hooks/useRefresh';
 import { useIntl } from 'umi';
+import NoneView from '@/components/NoneView';
 
 const columns = [
     {
@@ -127,18 +128,30 @@ const PoolView = () => {
         }
     }, [account, slowRefresh]);
 
+    const noneStatus = useMemo(() => {
+        if (!account) {
+            return 'noConnection';
+        }
+        if (!dataSource?.length) {
+            return 'noAssets';
+        }
+    }, [account, dataSource]);
+
     return (
-        <div className="burn-view">
-            <Table
-                className="custom-table"
-                columns={columns.map((item) => ({
-                    ...item,
-                    title: intl.formatMessage({ id: item.title }),
-                }))}
-                rowKey={(record) => record.address}
-                dataSource={dataSource}
-                pagination={false}
-            />
+        <div className="pool-view">
+            {!noneStatus && (
+                <Table
+                    className="custom-table"
+                    columns={columns.map((item) => ({
+                        ...item,
+                        title: intl.formatMessage({ id: item.title }),
+                    }))}
+                    rowKey={(record) => record.address}
+                    dataSource={dataSource}
+                    pagination={false}
+                />
+            )}
+            <NoneView type={noneStatus} />
         </div>
     );
 };
