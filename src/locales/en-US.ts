@@ -51,8 +51,9 @@ export default {
     'burn.search': 'Search name or your debt',
     'burn.unstaking': 'Unstaking',
     'burn.collateral': 'Collateral',
+    'burn.amount': 'Amount',
     'burn.ratio': 'Ratio',
-    'burn.debt:': 'Debt',
+    'burn.debt:': 'Debt: ',
     'burn.locked': 'Locked',
     'burn.burn': 'Burn',
     'burn.burned': 'Burned',
@@ -60,6 +61,7 @@ export default {
     'burn.tomint': 'Lets Mint',
     'burn.initial': 'Burn to initial',
     'burn.max': 'Burn max',
+    'burn.approve': 'Approve to burn',
 
     /**
      * @description 交易商店

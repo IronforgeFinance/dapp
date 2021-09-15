@@ -61,6 +61,7 @@ export default {
     'burn.search': '搜索债务',
     'burn.unstaking': '分解',
     'burn.collateral': '质押物',
+    'burn.amount': '数量',
     'burn.ratio': '质押率',
     'burn.debt': '债务',
     'burn.debt:': '债务：',
@@ -71,6 +72,7 @@ export default {
     'burn.tomint': '去铸造',
     'burn.initial': '初始化',
     'burn.max': '最大化',
+    'burn.approve': '授权燃烧',
 
     /**
      * @description 交易商店

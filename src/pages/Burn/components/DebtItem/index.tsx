@@ -28,7 +28,7 @@ export interface IDebtItemInfo {
     collateralToken: string;
     ratio: string;
     ratioValue: number | string;
-    debt: number;
+    collateral: number;
     locked: number;
 }
 
@@ -145,7 +145,7 @@ export default (props: IDebtItemProps) => {
                 collateralToken: tokens[index],
                 ratio: ratioValue + '%',
                 ratioValue,
-                debt: item.collateral,
+                collateral: item.collateral,
                 locked: item.locked,
             } as IDebtItemInfo;
         });

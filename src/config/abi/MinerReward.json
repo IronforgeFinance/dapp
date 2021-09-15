@@ -4,25 +4,6 @@
     "inputs": [
       {
         "indexed": false,
-        "internalType": "address",
-        "name": "oldAdmin",
-        "type": "address"
-      },
-      {
-        "indexed": false,
-        "internalType": "address",
-        "name": "newAdmin",
-        "type": "address"
-      }
-    ],
-    "name": "AdminChanged",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": false,
         "internalType": "bytes32",
         "name": "name",
         "type": "bytes32"
@@ -35,25 +16,6 @@
       }
     ],
     "name": "CachedAddressUpdated",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": false,
-        "internalType": "address",
-        "name": "oldCandidate",
-        "type": "address"
-      },
-      {
-        "indexed": false,
-        "internalType": "address",
-        "name": "newCandidate",
-        "type": "address"
-      }
-    ],
-    "name": "CandidateChanged",
     "type": "event"
   },
   {
@@ -271,6 +233,25 @@
     "anonymous": false,
     "inputs": [
       {
+        "indexed": true,
+        "internalType": "address",
+        "name": "previousOwner",
+        "type": "address"
+      },
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "newOwner",
+        "type": "address"
+      }
+    ],
+    "name": "OwnershipTransferred",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
         "indexed": false,
         "internalType": "uint256",
         "name": "periodId",
@@ -365,19 +346,6 @@
   {
     "inputs": [
       {
-        "internalType": "address",
-        "name": "_admin",
-        "type": "address"
-      }
-    ],
-    "name": "__AdminUpgradeable_init",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
         "internalType": "uint256",
         "name": "allocPoint",
         "type": "uint256"
@@ -401,39 +369,6 @@
     "name": "addPool",
     "outputs": [],
     "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "admin",
-    "outputs": [
-      {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "becomeAdmin",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "candidate",
-    "outputs": [
-      {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
-      }
-    ],
-    "stateMutability": "view",
     "type": "function"
   },
   {
@@ -540,6 +475,25 @@
         "type": "uint256"
       }
     ],
+    "name": "getStakeToken",
+    "outputs": [
+      {
+        "internalType": "contract IERC20",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_pid",
+        "type": "uint256"
+      }
+    ],
     "name": "harvest",
     "outputs": [],
     "stateMutability": "nonpayable",
@@ -556,35 +510,11 @@
         "internalType": "uint256",
         "name": "_rewardPerBlock",
         "type": "uint256"
-      },
-      {
-        "internalType": "address",
-        "name": "_admin",
-        "type": "address"
       }
     ],
     "name": "initialize",
     "outputs": [],
     "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "contract IERC20",
-        "name": "_stakeToken",
-        "type": "address"
-      }
-    ],
-    "name": "isDuplicatedPool",
-    "outputs": [
-      {
-        "internalType": "bool",
-        "name": "",
-        "type": "bool"
-      }
-    ],
-    "stateMutability": "view",
     "type": "function"
   },
   {
@@ -617,6 +547,19 @@
     "name": "massUpdatePools",
     "outputs": [],
     "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "owner",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
     "type": "function"
   },
   {
@@ -666,6 +609,16 @@
     ],
     "name": "poolInfo",
     "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "amount",
+        "type": "uint256"
+      },
+      {
+        "internalType": "contract IERC20",
+        "name": "stakeToken",
+        "type": "address"
+      },
       {
         "internalType": "uint256",
         "name": "allocPoint",
@@ -724,6 +677,13 @@
   },
   {
     "inputs": [],
+    "name": "renounceOwnership",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
     "name": "rewardPerBlock",
     "outputs": [
       {
@@ -749,19 +709,6 @@
       }
     ],
     "name": "sendExchangeReward",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "_candidate",
-        "type": "address"
-      }
-    ],
-    "name": "setCandidate",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -818,25 +765,6 @@
     "type": "function"
   },
   {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "name": "stakeTokens",
-    "outputs": [
-      {
-        "internalType": "contract IERC20",
-        "name": "",
-        "type": "address"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
     "inputs": [],
     "name": "totalAllocPoint",
     "outputs": [
@@ -876,6 +804,19 @@
   {
     "inputs": [
       {
+        "internalType": "address",
+        "name": "newOwner",
+        "type": "address"
+      }
+    ],
+    "name": "transferOwnership",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
         "internalType": "contract IAddressStorage",
         "name": "_addressStorage",
         "type": "address"
@@ -898,6 +839,16 @@
     "outputs": [
       {
         "components": [
+          {
+            "internalType": "uint256",
+            "name": "amount",
+            "type": "uint256"
+          },
+          {
+            "internalType": "contract IERC20",
+            "name": "stakeToken",
+            "type": "address"
+          },
           {
             "internalType": "uint256",
             "name": "allocPoint",

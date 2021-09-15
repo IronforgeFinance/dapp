@@ -192,6 +192,11 @@
         "internalType": "bytes32",
         "name": "currency",
         "type": "bytes32"
+      },
+      {
+        "internalType": "address",
+        "name": "receiver",
+        "type": "address"
       }
     ],
     "name": "buildFromCollateralSys",
