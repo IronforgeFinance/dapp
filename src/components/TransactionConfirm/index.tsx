@@ -7,13 +7,13 @@ import {
     ReactNode,
     useMemo,
 } from 'react';
-import SelectBoard from '@/components/SelectBoard';
+import ScrollBoard from '@/components/ScrollBoard';
 import { Button } from 'antd';
 import { TokenIcon } from '../Icon';
 import { useRef } from 'react';
 import { loading } from '../Notification';
 
-export type ViewType = 'mint' | 'burn' | 'loading';
+export type ViewType = 'mint' | 'burn' | 'loading' | 'trade';
 
 interface TokenProps {
     name: string;
@@ -26,7 +26,7 @@ interface ViewOptions {
     view: ViewType;
     fromToken: TokenProps;
     toToken: TokenProps;
-    bsToken: TokenProps;
+    bsToken?: TokenProps;
     type: 'Delivery' | 'Perpetuation';
 }
 
@@ -227,6 +227,53 @@ export default (props: TransitionConfirmProps) => {
                     </section>
                 );
             }
+            case 'trade': {
+                setIsBurn(true);
+                return (
+                    <section className="i-trade-view">
+                        <div className="token from">
+                            <div className="left">
+                                <span>
+                                    <TokenIcon
+                                        name={view.fromToken.name}
+                                        size={24}
+                                    />
+                                    {view.fromToken.name}
+                                </span>
+                                <span>From</span>
+                            </div>
+                            <div className="right">
+                                <span>{view.fromToken.amount}</span>
+                                <span>${view.fromToken.price}</span>
+                            </div>
+                        </div>
+                        <i className="icon-arrow-down" />
+                        <div className="token to">
+                            <div className="left">
+                                <span>
+                                    <TokenIcon
+                                        name={view.toToken.name}
+                                        size={24}
+                                    />
+                                    {view.toToken.name}
+                                </span>
+                                <span>To</span>
+                            </div>
+                            <div className="right">
+                                <span>{view.toToken.amount}</span>
+                                <span>${view.toToken.price}</span>
+                            </div>
+                        </div>
+                        <Button
+                            className="confirm-btn common-btn common-btn-red"
+                            loading={isConfirming}
+                            onClick={submit}
+                        >
+                            Confirm Transaction
+                        </Button>
+                    </section>
+                );
+            }
             case 'burn': {
                 setIsBurn(true);
                 return (
@@ -340,13 +387,13 @@ export default (props: TransitionConfirmProps) => {
                 setVisible,
             }}
         >
-            <SelectBoard
+            <ScrollBoard
                 visable={visible}
                 onClose={() => close()}
                 title="Confirm Transaction"
             >
                 {CurrentView}
-            </SelectBoard>
+            </ScrollBoard>
             {children}
         </TransitionConfirmContext.Provider>
     );

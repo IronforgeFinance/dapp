@@ -21,11 +21,13 @@ const columns = [
         title: 'wallet.pool',
         dataIndex: 'lpToken',
         render: (value, row) => <LpTokenView {...row} />,
+        width: '25%',
     },
     {
         title: 'balance',
         dataIndex: 'balance',
         render: (value, row) => <BalanceView {...row} />,
+        width: '25%',
     },
     // {
     //     title: 'Earned',
@@ -50,6 +52,7 @@ const columns = [
     {
         title: 'action',
         dataIndex: 'actions',
+        width: '50%',
         render: (value, row) => (
             <ActionView
                 actions={[

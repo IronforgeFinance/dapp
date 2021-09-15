@@ -29,8 +29,8 @@ import {
     useERC20Approve,
 } from '@/hooks/useApprove';
 import Contracts from '@/config/constants/contracts';
-import { TokenSelectorContext } from '@/components/SelectTokensV2';
-import { TransitionConfirmContext as TransactionConfirmContext } from '@/components/TransitionConfirmV2';
+import { TokenSelectorContext } from '@/components/TokenSelector';
+import { TransitionConfirmContext as TransactionConfirmContext } from '@/components/TransactionConfirm';
 import { MyDebtsContext } from '@/components/MyDebts';
 
 const TO_TOKENS = ['BTC'];

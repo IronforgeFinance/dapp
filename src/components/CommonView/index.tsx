@@ -4,7 +4,7 @@ import { Fragment, ReactNode, useMemo } from 'react';
 import { getRemainDaysOfQuarterAsset, isDeliveryAsset } from '@/utils';
 import { TokenIcon } from '@/components/Icon';
 import { ethers } from 'ethers';
-import { Popover } from 'antd';
+import { Popover, Button } from 'antd';
 import { DefiActType } from '@/config/constants/types';
 import { useIntl } from 'umi';
 import dayjs from 'dayjs';
@@ -121,15 +121,15 @@ export const ActionView = (props: { actions: ActionProps[] }) => {
     return (
         <div className="action-view">
             {actions.map((action) => (
-                <button
+                <Button
                     onClick={action.onClick}
                     key={action.title}
                     className={`common-btn common-btn-${
                         action.color || ('red' as ActionBtnColors)
-                    }`}
+                    } action-btn`}
                 >
                     {action.title}
-                </button>
+                </Button>
             ))}
         </div>
     );

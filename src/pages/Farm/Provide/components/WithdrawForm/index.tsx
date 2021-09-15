@@ -1,9 +1,8 @@
 import './less/index.less';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext, useCallback } from 'react';
 import { InputNumber, Select, Button } from 'antd';
 import * as message from '@/components/Notification';
-import IconDown from '@/assets/images/icon-down.svg';
 import { debounce } from 'lodash';
 import { useModel, useIntl } from 'umi';
 import { useBep20Balance } from '@/hooks/useTokenBalance';
@@ -13,13 +12,13 @@ import { DEADLINE } from '@/config/constants/constant';
 import Tokens from '@/config/constants/tokens';
 import Contracts from '@/config/constants/contracts';
 import { ethers } from 'ethers';
-import SelectTokens from '@/components/SelectTokens';
 import {
     useCheckERC20ApprovalStatus,
     useERC20Approve,
 } from '@/hooks/useApprove';
 import { TokenIcon } from '@/components/Icon';
 import { toFixedWithoutRound } from '@/utils/bigNumber';
+import { TokenSelectorContext } from '@/components/TokenSelector';
 
 export default () => {
     const intl = useIntl();
@@ -32,6 +31,7 @@ export default () => {
     const [showSelectFromToken, setShowSelectFromToken] = useState(false);
     const routerContract = useRouter();
     const { account } = useWeb3React();
+    const { open } = useContext(TokenSelectorContext);
 
     const { lpDataList } = useModel('lpData', (model) => ({
         ...model,
@@ -172,6 +172,11 @@ export default () => {
         }
     };
 
+    const openLpTokenList = useCallback(
+        () => open(selectOptions, { callback: (v) => setLp(v) }),
+        [selectOptions],
+    );
+
     return (
         <div>
             <div className="provide-form common-box">
@@ -198,19 +203,18 @@ export default () => {
                             />
                             <div className="token">
                                 <TokenIcon name={lp} size={24} />
-                                <SelectTokens
-                                    value={lp}
-                                    tokenList={selectOptions}
-                                    onSelect={(v) => setLp(v)}
-                                    placeholder={'Select LP'}
-                                ></SelectTokens>
+                                <Button
+                                    className="select-token-btn"
+                                    onClick={openLpTokenList}
+                                >
+                                    {lp || 'Select LP'}
+                                    <i className="icon-down size-24" />
+                                </Button>
                             </div>
                         </div>
                     </div>
                 </div>
-
-                <img src={IconDown} alt="" className="icon-add" />
-
+                <i className="icon-arrow-down size-18" />
                 <div className="input-item">
                     <p className="label">
                         {intl.formatMessage({

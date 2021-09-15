@@ -1,6 +1,12 @@
 import './less/index.less';
 
-import React, { useEffect, useState, useMemo, useCallback } from 'react';
+import React, {
+    useEffect,
+    useState,
+    useMemo,
+    useCallback,
+    useContext,
+} from 'react';
 import { useConfig, useExchangeSystem, usePrices } from '@/hooks/useContract';
 import Tokens from '@/config/constants/tokens';
 import { useWeb3React } from '@web3-react/core';
@@ -16,14 +22,14 @@ import { COLLATERAL_TOKENS, MINT_TOKENS } from '@/config';
 import { useBep20Balance } from '@/hooks/useTokenBalance';
 import EstimateData from './components/EstimateData';
 import Contracts from '@/config/constants/contracts';
-import SelectTokens from '@/components/SelectTokens';
 import MarketDetail from './components/MarketDetail';
 import { debounce } from 'lodash';
 import classNames from 'classnames';
-import TransitionConfirm from '@/components/TransitionConfirm';
 import { TokenIcon } from '@/components/Icon';
 import { useIntl, useModel } from 'umi';
 import { getTokenPrice } from '@/utils';
+import { TokenSelectorContext } from '@/components/TokenSelector';
+import { TransitionConfirmContext } from '@/components/TransactionConfirm';
 //TODO: for test.从配置中读取
 const TOKEN_OPTIONS = MINT_TOKENS.map((token) => ({ name: token }));
 
@@ -31,11 +37,13 @@ export default () => {
     const intl = useIntl();
     const configContract = useConfig();
     const exchangeSystem = useExchangeSystem();
+    const { open } = useContext(TokenSelectorContext);
+    const { open: openConfirmModal } = useContext(TransitionConfirmContext);
     const { account } = useWeb3React();
     const [fromToken, setFromToken] = useState(TOKEN_OPTIONS[0].name);
-    const [fromAmount, setFromAmount] = useState(0.0);
+    const [fromAmount, setFromAmount] = useState<number | undefined>();
     const [toToken, setToToken] = useState(TOKEN_OPTIONS[1].name);
-    const [toAmount, setToAmount] = useState(0.0);
+    const [toAmount, setToAmount] = useState<number | undefined>();
     const [fromBalance, setFromBalance] = useState(0.0);
     const [submitting, setSubmitting] = useState(false);
     const [feeRate, setFeeRate] = useState(0);
@@ -86,7 +94,7 @@ export default () => {
         const toTokenPrice = await getTokenPrice(toToken);
         const val = (fromTokenPrice * fromAmount) / toTokenPrice;
         const toAmount = toFixedWithoutRound(val, 6);
-        setToAmount(toAmount);
+        setToAmount(toAmount || undefined);
     }, 500);
     useEffect(() => {
         computeToAmount();
@@ -127,9 +135,6 @@ export default () => {
         return !(fromAmount > fromTokenBalance);
     }, [fromAmount, fromTokenBalance]);
 
-    const [showTxConfirm, setShowTxConfirm] = useState(false);
-    const [tx, setTx] = useState<any | null>(null);
-
     const onSubmit = async () => {
         // await revertTrade(3);
         // await revertTrade(4);
@@ -140,21 +145,6 @@ export default () => {
         }
         try {
             setSubmitting(true);
-            setShowTxConfirm(true);
-            const fromTokenPrice = await getTokenPrice(fromToken);
-            const toTokenPrice = await getTokenPrice(toToken);
-            setTx({
-                from: {
-                    token: fromToken,
-                    amount: fromAmount,
-                    price: (fromTokenPrice * fromAmount).toFixed(2),
-                },
-                to: {
-                    token: toToken,
-                    amount: toAmount,
-                    price: (toTokenPrice * toAmount).toFixed(2),
-                },
-            });
 
             const tx = await exchangeSystem.exchange(
                 ethers.utils.formatBytes32String(fromToken), // sourceKey
@@ -175,8 +165,6 @@ export default () => {
         } catch (err) {
             setSubmitting(false);
             console.log(err);
-        } finally {
-            setShowTxConfirm(false);
         }
     };
 
@@ -209,13 +197,30 @@ export default () => {
             }
         }
     };
-    const WhiteSpace = () => (
-        <span
-            dangerouslySetInnerHTML={{
-                __html: '&nbsp;',
-            }}
-        />
-    );
+
+    /**@description 交易前的确认 */
+    const openMintConfirm = useCallback(async () => {
+        setSubmitting(true);
+
+        const fromTokenPrice = await getTokenPrice(fromToken);
+        const toTokenPrice = await getTokenPrice(toToken);
+
+        openConfirmModal({
+            view: 'trade',
+            fromToken: {
+                name: fromToken,
+                price: Number((fromTokenPrice * fromAmount).toFixed(2)),
+                amount: fromAmount,
+            },
+            toToken: {
+                name: toToken,
+                price: Number((toTokenPrice * toAmount).toFixed(2)),
+                amount: toAmount,
+            },
+            confirm: onSubmit,
+            final: () => setSubmitting(false),
+        });
+    }, [toToken, toAmount, fromToken, fromAmount]);
 
     const hasInputtedAmount = useMemo(() => {
         return fromAmount > 0 || toAmount > 0;
@@ -243,6 +248,16 @@ export default () => {
         }
     };
 
+    const openFromTokenList = useCallback(
+        () => open(TOKEN_OPTIONS, { callback: fromTokenHandler }),
+        [],
+    );
+
+    const openToTokenList = useCallback(
+        () => open(TOKEN_OPTIONS, { callback: toTokenHandler }),
+        [],
+    );
+
     return (
         <div className="trade-container">
             <div className="shop common-box">
@@ -264,8 +279,7 @@ export default () => {
                                 <p className="right">
                                     {intl.formatMessage({
                                         id: 'balance:',
-                                    })}
-                                    <WhiteSpace />
+                                    })}{' '}
                                     <span className="balance">
                                         {fromTokenBalance}
                                     </span>
@@ -286,33 +300,18 @@ export default () => {
                                         name={fromToken}
                                         style={{ marginRight: 8 }}
                                     />
-                                    <SelectTokens
-                                        value={fromToken}
-                                        tokenList={TOKEN_OPTIONS}
-                                        onSelect={fromTokenHandler}
+                                    <Button
+                                        className="select-token-btn"
+                                        onClick={openFromTokenList}
                                     >
-                                        <button
-                                            className="btn-mint-form"
-                                            onClick={() => {
-                                                setShowSelectFromToken(true);
-                                            }}
-                                        >
-                                            <span>
-                                                {fromToken || (
-                                                    <span>
-                                                        {intl.formatMessage({
-                                                            id: 'trade.selecttoken',
-                                                        })}
-                                                    </span>
-                                                )}
-                                            </span>
-                                            <i className="icon-down size-24"></i>
-                                        </button>
-                                    </SelectTokens>
+                                        {fromToken}
+                                        <i className="icon-down size-24" />
+                                    </Button>
                                 </div>
                             </div>
                         </div>
                     </div>
+                    <i className="icon-arrow-down size-18" />
                     <div className="input-item">
                         <p className="label">
                             {intl.formatMessage({ id: 'trade.to' })}
@@ -345,11 +344,13 @@ export default () => {
                                         name={toToken}
                                         style={{ marginRight: 8 }}
                                     />
-                                    <SelectTokens
-                                        value={toToken}
-                                        tokenList={TOKEN_OPTIONS}
-                                        onSelect={toTokenHandler}
-                                    ></SelectTokens>
+                                    <Button
+                                        className="select-token-btn"
+                                        onClick={openToTokenList}
+                                    >
+                                        {toToken}
+                                        <i className="icon-down size-24" />
+                                    </Button>
                                 </div>
                             </div>
                         </div>
@@ -358,7 +359,7 @@ export default () => {
                         <Button
                             className="btn-trade common-btn common-btn-red"
                             disabled={!canTrade}
-                            onClick={onSubmit}
+                            onClick={openMintConfirm}
                             loading={submitting}
                         >
                             {intl.formatMessage({
@@ -385,32 +386,6 @@ export default () => {
                 </div>
             </div>
             <MarketDetail token0={fromToken} token1={toToken} />
-            <TransitionConfirm
-                visable={showTxConfirm}
-                onClose={() => setShowTxConfirm(false)}
-                dataSource={
-                    tx && [
-                        {
-                            label: 'From',
-                            direct: 'from',
-                            value: {
-                                token: tx.from.token,
-                                amount: tx.from.amount,
-                                mappingPrice: tx.from.price,
-                            },
-                        },
-                        {
-                            label: 'To',
-                            direct: 'to',
-                            value: {
-                                token: tx.to.token,
-                                amount: tx.to.amount,
-                                mappingPrice: tx.to.price,
-                            },
-                        },
-                    ]
-                }
-            />
         </div>
     );
 };
