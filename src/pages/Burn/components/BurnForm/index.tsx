@@ -65,13 +65,9 @@ export default (props: IProps) => {
 
     const initialRatio = useInitialRatio(toToken);
 
-    const { selectedDebtItemInfos, selectedDebtInUSD } = useModel(
-        'burnData',
-        (model) => ({
-            selectedDebtItemInfos: model.selectedDebtInfos,
-            selectedDebtInUSD: model.selectedDebtInUSD,
-        }),
-    );
+    const { debtItemInfos, totalDebtInUSD } = useModel('burnData', (model) => ({
+        ...model,
+    }));
     const {
         debtData,
         setDebtData,
@@ -213,13 +209,13 @@ export default (props: IProps) => {
     };
 
     useEffect(() => {
-        const debt = selectedDebtItemInfos.find(
+        const debt = debtItemInfos.find(
             (item) => item.collateralToken === toToken,
         );
         if (debt) {
             setToTokenDebt(debt.collateral);
         }
-    }, [toToken]);
+    }, [toToken, debtItemInfos]);
 
     useEffect(() => {
         //
@@ -240,7 +236,7 @@ export default (props: IProps) => {
                 setBurnInitialAvailable(false);
             }
             setBurnMaxAvailable(true);
-            if (fromTokenBalance > selectedDebtInUSD) {
+            if (fromTokenBalance > totalDebtInUSD) {
                 // 不能直接burn max。
             } else {
                 // 可以直接burn max
@@ -378,7 +374,7 @@ export default (props: IProps) => {
             setSubmitting(false);
             onSubmitSuccess();
             //更新dataView
-            clearDataView();
+            // clearDataView();
         } catch (err) {
             console.log(err);
         }
@@ -386,12 +382,11 @@ export default (props: IProps) => {
 
     /**@description 交易前的确认 */
     const openBurnConfirm = useCallback(async () => {
-        setSubmitting(true);
         if (!burnAmount && !unstakeAmount) {
             message.warning('Burned amount and unstaking can not be both 0');
             return;
         }
-        if (Number(burnAmount) > Number(selectedDebtInUSD)) {
+        if (Number(burnAmount) > Number(totalDebtInUSD)) {
             message.error('Burned amount is greater than debt.');
             return;
         }
@@ -419,7 +414,7 @@ export default (props: IProps) => {
             );
             return;
         }
-        const debtInfo = selectedDebtItemInfos.find(
+        const debtInfo = debtItemInfos.find(
             (item) => item.collateralToken === toToken,
         );
 
@@ -505,7 +500,7 @@ export default (props: IProps) => {
                             className="custom-input"
                             type="number"
                             min={0}
-                            max={selectedDebtInUSD || 9999999}
+                            max={totalDebtInUSD || 9999999}
                         />
                         <div className="ftoken">
                             <button

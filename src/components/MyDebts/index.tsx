@@ -36,15 +36,7 @@ export default (props: MyDebtsProps) => {
             }}
         >
             <RecordBoard visible={visible} title="Your Debt" close={close}>
-                <section className="your-debts">
-                    <div className="summary">
-                        <div className="data">
-                            <span className="label">Your Debt Value</span>
-                            <span className="value">6,493 fUSD</span>
-                        </div>
-                    </div>
-                    <DebtItem mintedToken="FUSD" mintedTokenName="USD" />
-                </section>
+                <DebtItem />
             </RecordBoard>
             {children}
         </MyDebtsContext.Provider>
