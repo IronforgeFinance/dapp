@@ -10,8 +10,8 @@ import useEnv from '@/hooks/useEnv';
 import { useWeb3React } from '@web3-react/core';
 import NpcDialog from '@/components/NpcDialog';
 import ClaimRewards from '@/components/ClaimRewards';
-import TokenSelector from '@/components/SelectTokensV2';
-import TransactionConfirm from '@/components/TransitionConfirmV2';
+import TokenSelector from '@/components/TokenSelector';
+import TransactionConfirm from '@/components/TransactionConfirm';
 import MyDebts from '@/components/MyDebts';
 
 export default function Layout({

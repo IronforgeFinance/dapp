@@ -8,7 +8,7 @@ import {
     createContext,
     ReactNode,
 } from 'react';
-import SelectBoard from '@/components/SelectBoard';
+import ScrollBoard from '@/components/ScrollBoard';
 import classNames from 'classnames';
 import { getRemainDaysOfQuarterAsset, isDeliveryAsset } from '@/utils';
 import { TokenIcon } from '@/components/Icon';
@@ -99,7 +99,7 @@ export default (props: TokenSelectorProps) => {
                 visible,
             }}
         >
-            <SelectBoard
+            <ScrollBoard
                 visable={visible}
                 onClose={close}
                 title={intl.formatMessage({ id: 'selecttoken' })}
@@ -145,7 +145,7 @@ export default (props: TokenSelectorProps) => {
                         </li>
                     ))}
                 </ul>
-            </SelectBoard>
+            </ScrollBoard>
             {children}
         </TokenSelectorContext.Provider>
     );

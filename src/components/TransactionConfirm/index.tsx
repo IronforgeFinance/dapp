@@ -7,7 +7,7 @@ import {
     ReactNode,
     useMemo,
 } from 'react';
-import SelectBoard from '@/components/SelectBoard';
+import ScrollBoard from '@/components/ScrollBoard';
 import { Button } from 'antd';
 import { TokenIcon } from '../Icon';
 import { useRef } from 'react';
@@ -387,13 +387,13 @@ export default (props: TransitionConfirmProps) => {
                 setVisible,
             }}
         >
-            <SelectBoard
+            <ScrollBoard
                 visable={visible}
                 onClose={() => close()}
                 title="Confirm Transaction"
             >
                 {CurrentView}
-            </SelectBoard>
+            </ScrollBoard>
             {children}
         </TransitionConfirmContext.Provider>
     );

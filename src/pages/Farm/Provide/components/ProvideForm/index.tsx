@@ -15,9 +15,7 @@ import { ILpDataProps } from '@/models/lpData';
 import { ethers } from 'ethers';
 import { registerToken } from '@/utils/wallet';
 import { DEADLINE } from '@/config/constants/constant';
-import SelectTokens from '@iron/SelectTokens';
-import TransitionConfirm from '@iron/TransitionConfirm';
-import { TokenSelectorContext } from '@/components/SelectTokensV2';
+import { TokenSelectorContext } from '@/components/TokenSelector';
 import { ITabKeyContext } from '../../index';
 import {
     useCheckERC20ApprovalStatus,
@@ -434,9 +432,7 @@ export default () => {
                         </div>
                     </div>
                 </div>
-
-                <img src={IconAdd} alt="" className="icon-add" />
-
+                <i className="icon-arrow-down size-18" />
                 <div className="input-item">
                     <p className="label">
                         {intl.formatMessage({ id: 'liquidity.provide.asset1' })}

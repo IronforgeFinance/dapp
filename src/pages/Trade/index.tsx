@@ -22,16 +22,14 @@ import { COLLATERAL_TOKENS, MINT_TOKENS } from '@/config';
 import { useBep20Balance } from '@/hooks/useTokenBalance';
 import EstimateData from './components/EstimateData';
 import Contracts from '@/config/constants/contracts';
-import SelectTokens from '@/components/SelectTokens';
 import MarketDetail from './components/MarketDetail';
 import { debounce } from 'lodash';
 import classNames from 'classnames';
-import TransitionConfirm from '@/components/TransitionConfirm';
 import { TokenIcon } from '@/components/Icon';
 import { useIntl, useModel } from 'umi';
 import { getTokenPrice } from '@/utils';
-import { TokenSelectorContext } from '@/components/SelectTokensV2';
-import { TransitionConfirmContext } from '@/components/TransitionConfirmV2';
+import { TokenSelectorContext } from '@/components/TokenSelector';
+import { TransitionConfirmContext } from '@/components/TransactionConfirm';
 //TODO: for test.从配置中读取
 const TOKEN_OPTIONS = MINT_TOKENS.map((token) => ({ name: token }));
 
@@ -313,6 +311,7 @@ export default () => {
                             </div>
                         </div>
                     </div>
+                    <i className="icon-arrow-down size-18" />
                     <div className="input-item">
                         <p className="label">
                             {intl.formatMessage({ id: 'trade.to' })}

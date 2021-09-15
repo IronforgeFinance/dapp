@@ -24,8 +24,8 @@ import { isDeliveryAsset } from '@/utils';
 import { TokenIcon } from '@/components/Icon';
 import { useIntl } from 'umi';
 import { getTokenPrice } from '@/utils';
-import { TokenSelectorContext } from '@/components/SelectTokensV2';
-import { TransitionConfirmContext as TransactionConfirmContext } from '@/components/TransitionConfirmV2';
+import { TokenSelectorContext } from '@/components/TokenSelector';
+import { TransitionConfirmContext as TransactionConfirmContext } from '@/components/TransactionConfirm';
 import { MyDebtsContext } from '@/components/MyDebts';
 
 const TO_TOKENS = ['BTC'];
