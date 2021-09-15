@@ -16,49 +16,51 @@ export default () => {
 
     return (
         <div className="header-nav">
-            <img className="logo" src={Logo} />
+            <div className="left-box">
+                <img className="logo" src={Logo} />
+            </div>
             {!isMobile && (
-                <ul>
-                    <li>
-                        <NavLink exact to="/">
-                            {intl.formatMessage({ id: 'nav.home' })}
-                        </NavLink>
-                    </li>
-                    <li>
-                        <NavLink to="/mint">
-                            {intl.formatMessage({ id: 'nav.mint' })}
-                        </NavLink>
-                    </li>
-                    <li>
-                        <NavLink to="/burn">
-                            {intl.formatMessage({ id: 'nav.burn' })}
-                        </NavLink>
-                    </li>
-                    <li>
-                        <NavLink to="/trade">
-                            {intl.formatMessage({ id: 'nav.trade' })}
-                        </NavLink>
-                    </li>
-                    <li>
-                        <NavLink to="/farm">
-                            {intl.formatMessage({ id: 'nav.farm' })}
-                        </NavLink>
-                    </li>
-                    <li>
-                        <NavLink to="/wallet">
-                            {intl.formatMessage({ id: 'nav.wallet' })}
-                        </NavLink>
-                    </li>
-                </ul>
+                <div className="mid-box">
+                    <ul>
+                        <li>
+                            <NavLink exact to="/">
+                                {intl.formatMessage({ id: 'nav.home' })}
+                            </NavLink>
+                        </li>
+                        <li>
+                            <NavLink to="/mint">
+                                {intl.formatMessage({ id: 'nav.mint' })}
+                            </NavLink>
+                        </li>
+                        <li>
+                            <NavLink to="/burn">
+                                {intl.formatMessage({ id: 'nav.burn' })}
+                            </NavLink>
+                        </li>
+                        <li>
+                            <NavLink to="/trade">
+                                {intl.formatMessage({ id: 'nav.trade' })}
+                            </NavLink>
+                        </li>
+                        <li>
+                            <NavLink to="/farm">
+                                {intl.formatMessage({ id: 'nav.farm' })}
+                            </NavLink>
+                        </li>
+                        <li>
+                            <NavLink to="/wallet">
+                                {intl.formatMessage({ id: 'nav.wallet' })}
+                            </NavLink>
+                        </li>
+                    </ul>
+                </div>
             )}
             {isMobile && <div className="fill" />}
-            <div className="wallet-status">
+            <div className="right-box">
                 <WalletStatus />
-            </div>
-            <div className="lang-box">
                 <LangSwitcher />
+                {isMobile && <MobileNavigation />}
             </div>
-            {isMobile && <MobileNavigation />}
         </div>
     );
 };
