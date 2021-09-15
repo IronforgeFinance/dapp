@@ -13,7 +13,7 @@ import {
     expandTo18Decimals,
 } from '@/utils/bigNumber';
 import { ethers } from 'ethers';
-import { COLLATERAL_TOKENS, PLATFORM_TOKEN } from '@/config';
+import { COLLATERAL_TOKENS, PLATFORM_TOKEN, MINT_TOKENS } from '@/config';
 import { useBep20Balance } from '@/hooks/useTokenBalance';
 import useDataView, { useSelectedDebtInUSD } from '@/hooks/useDataView';
 import { useInitialRatio } from '@/hooks/useConfig';
@@ -24,6 +24,11 @@ import { isDeliveryAsset } from '@/utils';
 import { TokenIcon } from '@/components/Icon';
 import { useIntl } from 'umi';
 import { getTokenPrice } from '@/utils';
+import {
+    useCheckERC20ApprovalStatus,
+    useERC20Approve,
+} from '@/hooks/useApprove';
+import Contracts from '@/config/constants/contracts';
 import { TokenSelectorContext } from '@/components/TokenSelector';
 import { TransitionConfirmContext as TransactionConfirmContext } from '@/components/TransactionConfirm';
 import { MyDebtsContext } from '@/components/MyDebts';
@@ -38,6 +43,7 @@ export default (props: IProps) => {
     const [debtBalance, setDebtBalance] = useState(0.0);
     const [burnAmount, setBurnAmount] = useState<number>();
     const [unstakeAmount, setUnstakeAmount] = useState<number>();
+    const [fromToken, setFromToken] = useState<string>(MINT_TOKENS[0]);
     const [toToken, setToToken] = useState<string>(COLLATERAL_TOKENS[0].name);
     const [toTokenDebt, setToTokenDebt] = useState(0.0);
     const [burnType, setBurnType] = useState('');
@@ -80,16 +86,35 @@ export default (props: IProps) => {
         ...model,
     }));
 
-    /**@description 指定分解产物 */
-    const openCollateralTokenList = useCallback(
+    const { balance: fromTokenBalance } = useBep20Balance(fromToken, 6);
+    const collateralSytemContract =
+        Contracts.CollateralSystem[process.env.APP_CHAIN_ID!];
+    const { isApproved, setLastUpdated } = useCheckERC20ApprovalStatus(
+        fromToken,
+        collateralSytemContract,
+    );
+    const { handleApprove, requestedApproval } = useERC20Approve(
+        fromToken,
+        collateralSytemContract,
+        setLastUpdated,
+    );
+
+    const openFromTokenList = useCallback(
+        () =>
+            open(
+                MINT_TOKENS.map((item) => ({
+                    name: item,
+                })),
+                { callback: fromTokenHandler },
+            ),
+        [],
+    );
+    const openToTokenList = useCallback(
         () => open(COLLATERAL_TOKENS, { callback: toTokenHandler }),
         [],
     );
 
-    const { balance: fusdBalance } = useBep20Balance('FUSD');
-
     const collateralSystem = useCollateralSystem();
-    const prices = usePrices();
     const { account } = useWeb3React();
 
     const burnAmountHandler = debounce(async (v) => {
@@ -100,17 +125,21 @@ export default (props: IProps) => {
         });
         if (toToken) {
             let _unstakeAmount;
+            const fromTokenPrice = await getTokenPrice(fromToken);
             const toTokenPrice = await getTokenPrice(toToken);
             if (currencyRatio < initialRatio) {
                 _unstakeAmount = 0;
             } else {
                 _unstakeAmount = toFixedWithoutRound(
-                    (v * initialRatio) / toTokenPrice,
+                    (v * fromTokenPrice * initialRatio) / toTokenPrice,
                     2,
                 );
             }
-
-            setUnstakeAmount(_unstakeAmount);
+            if (fromToken !== 'FUSD') {
+                setUnstakeAmount(_unstakeAmount * (1 - 0.01)); // 考虑exchange手续费
+            } else {
+                setUnstakeAmount(_unstakeAmount);
+            }
             setStakedData({
                 ...stakedData,
                 endValue: toFixedWithoutRound(
@@ -139,8 +168,9 @@ export default (props: IProps) => {
         setUnstakeAmount(v);
         if (toToken) {
             const toTokenPrice = await getTokenPrice(toToken);
+            const fromTokenPrice = await getTokenPrice(fromToken);
             const val = toFixedWithoutRound(
-                (v * toTokenPrice) / initialRatio,
+                (v * toTokenPrice) / (initialRatio * fromTokenPrice),
                 2,
             );
             setBurnAmount(val);
@@ -175,12 +205,19 @@ export default (props: IProps) => {
         setBurnType('');
     };
 
+    const fromTokenHandler = (v) => {
+        setFromToken(v);
+        setBurnType('');
+        setUnstakeAmount(0);
+        setBurnAmount(0);
+    };
+
     useEffect(() => {
         const debt = selectedDebtItemInfos.find(
             (item) => item.collateralToken === toToken,
         );
         if (debt) {
-            setToTokenDebt(debt.debt);
+            setToTokenDebt(debt.collateral);
         }
     }, [toToken]);
 
@@ -203,7 +240,7 @@ export default (props: IProps) => {
                 setBurnInitialAvailable(false);
             }
             setBurnMaxAvailable(true);
-            if (fusdBalance > selectedDebtInUSD) {
+            if (fromTokenBalance > selectedDebtInUSD) {
                 // 不能直接burn max。
             } else {
                 // 可以直接burn max
@@ -222,19 +259,26 @@ export default (props: IProps) => {
         const userCollateralInUsd = new BigNumber(
             ethers.utils.formatEther(res),
         );
-        const burnAmount = parseFloat(
+        const burnFUSDAmount = parseFloat(
             new BigNumber(
                 toTokenDebtInUsd -
                     userCollateralInUsd.dividedBy(initialRatio).toNumber(),
             ).toFixed(2),
         );
+        let burnAmount = burnFUSDAmount;
+        if (toToken !== 'FUSD') {
+            const tokenPrice = await getTokenPrice(toToken);
+            burnAmount = parseFloat(
+                new BigNumber(burnFUSDAmount).dividedBy(tokenPrice).toFixed(6),
+            );
+        }
         setBurnAmount(burnAmount);
         setStakedData({
             ...stakedData,
         });
         setDebtData({
             ...debtData,
-            endValue: debtData.startValue - burnAmount,
+            endValue: debtData.startValue - burnFUSDAmount,
         });
         setfRatioData({
             ...fRatioData,
@@ -251,23 +295,25 @@ export default (props: IProps) => {
     */
     const burnMaxHandler = async (v) => {
         setBurnType(v);
-        if (fusdBalance < toTokenDebtInUsd) {
+        const fromTokenPrice = await getTokenPrice(fromToken);
+        if (fromTokenBalance * fromTokenPrice < toTokenDebtInUsd) {
             message.warning(
-                '钱包余额不足。请到dex购买fUSD，保证余额大于您的债务',
+                '钱包余额不足。请到dex购买相应的fAsset，保证金额大于您的债务',
                 5,
             );
             return;
         } else {
             setUnstakeAmount(toTokenDebt);
-            const price = await prices.getPrice(
-                ethers.utils.formatBytes32String(toToken),
-            );
+            const price = await getTokenPrice(toToken);
             const userCollateralInUsd = new BigNumber(toTokenDebt).multipliedBy(
-                ethers.utils.formatEther(price),
+                price,
             );
-            const burnAmount = parseFloat(
-                userCollateralInUsd.dividedBy(currencyRatio).toFixed(2),
-            );
+            let burnAmount = toTokenDebtInUsd;
+            if (toToken !== 'FUSD') {
+                burnAmount = parseFloat(
+                    new BigNumber(toTokenDebtInUsd).dividedBy(price).toFixed(6),
+                );
+            }
             setBurnAmount(burnAmount);
             setDebtData({
                 ...debtData,
@@ -291,7 +337,8 @@ export default (props: IProps) => {
 
     const onSubmit = async () => {
         try {
-            if (burnType === 'max') {
+            setSubmitting(true);
+            if (burnType === 'max' && fromToken === 'FUSD') {
                 const _tx = await collateralSystem.burnAndUnstakeMax(
                     expandTo18Decimals(burnAmount), // burnAmount
                     ethers.utils.formatBytes32String(toToken!), // unstakeCurrency
@@ -302,33 +349,33 @@ export default (props: IProps) => {
                 const receipt = await _tx.wait();
                 console.log(receipt);
             } else {
-                const token: any = Tokens[toToken!];
-                const decimals = token.decimals;
-                console.log('decimals: ', decimals);
-                console.log(
-                    expandToNDecimals(unstakeAmount, decimals).toString(),
-                );
-                console.log(expandTo18Decimals(burnAmount).toString());
-
-                console.log(
-                    "burnAndUnstake's params: burnAmount is %o, toToken is %s, unstakeAmount is %o",
-                    expandTo18Decimals(burnAmount),
-                    ethers.utils.formatBytes32String(toToken!),
-                    expandToNDecimals(unstakeAmount, decimals),
-                );
-                const _tx = await collateralSystem.burnAndUnstake(
-                    expandTo18Decimals(burnAmount), // burnAmount
-                    ethers.utils.formatBytes32String(toToken!), // unstakeCurrency
-                    expandToNDecimals(unstakeAmount, decimals), // unstakeAmount
-                );
-                message.info(
-                    'Burn _tx sent out successfully. Pls wait for a while......',
-                );
-                const receipt = await _tx.wait();
-                console.log(receipt);
+                if (fromToken === 'FUSD') {
+                    const _tx = await collateralSystem.burnAndUnstake(
+                        expandTo18Decimals(burnAmount), // burnAmount
+                        ethers.utils.formatBytes32String(toToken!), // unstakeCurrency
+                        expandTo18Decimals(unstakeAmount), // unstakeAmount
+                    );
+                    message.info(
+                        'Burn tx sent out successfully. Pls wait for a while......',
+                    );
+                    const receipt = await _tx.wait();
+                    console.log(receipt);
+                } else {
+                    const tx = await collateralSystem.burnNonFUSDAndUnstake(
+                        ethers.utils.formatBytes32String(fromToken), // burnCurrency
+                        expandTo18Decimals(burnAmount), // burnAmount
+                        ethers.utils.formatBytes32String(toToken), // unstakeCurrency
+                        expandTo18Decimals(unstakeAmount), // unstakeAmount.
+                    );
+                    message.info(
+                        'Burn tx sent out successfully. Pls wait for the settle.....',
+                    );
+                    const receipt = await tx.wait();
+                    console.log(receipt);
+                }
             }
 
-            message.success('Burn successfully. Pls check your balance.');
+            setSubmitting(false);
             onSubmitSuccess();
             //更新dataView
             clearDataView();
@@ -340,23 +387,28 @@ export default (props: IProps) => {
     /**@description 交易前的确认 */
     const openBurnConfirm = useCallback(async () => {
         setSubmitting(true);
-
         if (!burnAmount && !unstakeAmount) {
             message.warning('Burned amount and unstaking can not be both 0');
-            return setSubmitting(false);
+            return;
         }
-
         if (Number(burnAmount) > Number(selectedDebtInUSD)) {
             message.error('Burned amount is greater than debt.');
-            return setSubmitting(false);
+            return;
         }
-        if (fusdBalance < toTokenDebtInUsd) {
+        if (toTokenDebtInUsd === 0) {
             message.warning(
-                '钱包余额不足。请到dex购买fUSD，保证余额大于您的债务',
-                5,
+                'No debt for selected unstaking token. No need to burn.',
             );
-            return setSubmitting(false);
+            return;
         }
+        const fromTokenPrice = await getTokenPrice(fromToken);
+        // if (fromTokenBalance * fromTokenPrice < toTokenDebtInUsd) {
+        //     message.warning(
+        //         '钱包余额不足。请到dex购买fUSD，保证余额大于您的债务',
+        //         5,
+        //     );
+        //     return;
+        // }
         if (
             currencyRatio < initialRatio &&
             unstakeAmount > 0 &&
@@ -365,18 +417,17 @@ export default (props: IProps) => {
             message.warning(
                 '当前抵押率低于初始抵押率。不能解锁抵押物。请燃烧多余的债务后解锁。',
             );
-            return setSubmitting(false);
+            return;
         }
         const debtInfo = selectedDebtItemInfos.find(
             (item) => item.collateralToken === toToken,
         );
 
-        if (debtInfo && unstakeAmount > Number(debtInfo.debt)) {
+        if (debtInfo && unstakeAmount > Number(debtInfo.collateral)) {
             message.error('Unstaking amount is greater than collateral amount');
-            return setSubmitting(false);
+            return;
         }
 
-        const fromTokenPrice = await getTokenPrice('FUSD');
         const toTokenPrice = await getTokenPrice(toToken);
         const lockedPrice = await getTokenPrice(PLATFORM_TOKEN);
         const unlockedAmount = lockedData.startValue - lockedData.endValue;
@@ -384,7 +435,7 @@ export default (props: IProps) => {
         openConfirmModal({
             view: 'burn',
             fromToken: {
-                name: 'fUSD',
+                name: fromToken,
                 price: Number((fromTokenPrice * burnAmount).toFixed(2)),
                 amount: burnAmount,
             },
@@ -443,7 +494,7 @@ export default (props: IProps) => {
                         </p>
                         <p className="right">
                             {intl.formatMessage({ id: 'balance:' })}
-                            <span className="balance">{fusdBalance}</span>
+                            <span className="balance">{fromTokenBalance}</span>
                         </p>
                     </div>
                     <div className="input">
@@ -459,24 +510,30 @@ export default (props: IProps) => {
                         <div className="ftoken">
                             <button
                                 className="max"
-                                onClick={() => setBurnAmount(selectedDebtInUSD)}
+                                onClick={() =>
+                                    burnAmountHandler(fromTokenBalance)
+                                }
                             >
                                 Max
                             </button>
-                            <TokenIcon
-                                name="fusd"
-                                size={24}
-                                style={{
-                                    marginLeft: '4px',
-                                    marginRight: '4px',
-                                }}
-                            />
-                            <span>fUSD</span>
+                            <div className="token">
+                                <TokenIcon
+                                    name={fromToken.toLowerCase()}
+                                    size={24}
+                                />
+                                <Button
+                                    className="select-token-btn"
+                                    onClick={openFromTokenList}
+                                >
+                                    {fromToken}
+                                    <i className="icon-down size-24" />
+                                </Button>
+                            </div>
                         </div>
                     </div>
                 </div>
                 <span className="debt">
-                    {intl.formatMessage({ id: 'burn.debt:' })}
+                    {intl.formatMessage({ id: 'burn.debt:' })}{' '}
                     {toTokenDebtInUsd}
                 </span>
             </div>
@@ -508,7 +565,7 @@ export default (props: IProps) => {
                             <TokenIcon name={toToken.toLowerCase()} size={24} />
                             <Button
                                 className="select-token-btn"
-                                onClick={openCollateralTokenList}
+                                onClick={openToTokenList}
                             >
                                 {toToken}
                                 <i className="icon-down size-24" />
@@ -518,6 +575,15 @@ export default (props: IProps) => {
                 </div>
             </div>
             <div className="btn-burn">
+                {account && fromToken !== 'FUSD' && !isApproved && (
+                    <Button
+                        className="btn-mint common-btn common-btn-red"
+                        onClick={handleApprove}
+                        loading={requestedApproval}
+                    >
+                        {intl.formatMessage({ id: 'burn.approve' })}
+                    </Button>
+                )}
                 {!account && (
                     <Button
                         className="btn-mint common-btn common-btn-yellow"
@@ -526,7 +592,7 @@ export default (props: IProps) => {
                         {intl.formatMessage({ id: 'app.unlockWallet' })}
                     </Button>
                 )}
-                {account && (
+                {account && (fromToken == 'FUSD' || isApproved) && (
                     <Button
                         loading={submitting}
                         className="btn-mint common-btn common-btn-red"

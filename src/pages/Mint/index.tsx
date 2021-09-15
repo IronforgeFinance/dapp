@@ -76,9 +76,6 @@ export default () => {
     const [computedRatio, setComputedRatio] = useState(0);
     const [lockedScale, setLockedScale] = useState<string | number>('0');
 
-    const [showSelectFromToken, setShowSelectFromToken] = useState(false);
-    const [showSelectToToken, setShowSelectToToken] = useState(false);
-
     const collateralSystem = useCollateralSystem();
     const exchangeSystem = useExchangeSystem();
     const configContract = useConfig();
@@ -170,10 +167,10 @@ export default () => {
     const fTokenBalance = balance as number;
 
     const { balance: collateralBalance, refresh: refreshCollateralBalance } =
-        useBep20Balance(collateralToken);
+        useBep20Balance(collateralToken, 6);
 
     const { balance: mintBalance, refresh: refreshMintBalance } =
-        useBep20Balance(toToken);
+        useBep20Balance(toToken, 6);
 
     const refreshBalance = () => {
         refreshIFTBalance();
@@ -228,19 +225,19 @@ export default () => {
     // 计算toAmount
     useEffect(() => {
         debounce(async () => {
-            if (computedRatio >= 2 && toToken && collateralAmount) {
-                const price = await getTokenPrice(collateralToken);
-                const fusdAmount = toFixedWithoutRound(
-                    (Number(collateralAmount) * price) / computedRatio,
-                    2,
+            if (computedRatio && toToken && collateralAmount) {
+                const maxCanBuild = await collateralSystem.getMaxBuildAmount(
+                    ethers.utils.formatBytes32String(collateralToken),
+                    expandTo18Decimals(collateralAmount),
+                    ethers.utils.formatBytes32String(toToken),
+                    expandTo18Decimals(lockedAmount || 0),
                 );
-                // TODO 铸造物的价格，FUSD是1，其它的从合约获取
-                const toTokenPrice = await getTokenPrice(toToken);
-                const amount = toFixedWithoutRound(
-                    fusdAmount / toTokenPrice,
-                    2,
+                setToAmount(
+                    toFixedWithoutRound(
+                        ethers.utils.formatEther(maxCanBuild),
+                        6,
+                    ),
                 );
-                setToAmount(amount);
             } else {
                 setToAmount(undefined);
             }
@@ -368,38 +365,51 @@ export default () => {
     };
 
     const onSubmit = async () => {
+        if (!account) {
+            message.warning('Pls connect wallet first');
+            return;
+        }
+        if (!collateralAmount || !toAmount) {
+            message.warning('Collateral amount and to amount are required');
+            return;
+        }
+        const maxCanBuild = await collateralSystem.getMaxBuildAmount(
+            ethers.utils.formatBytes32String(collateralToken),
+            expandTo18Decimals(collateralAmount),
+            ethers.utils.formatBytes32String(toToken),
+            expandTo18Decimals(lockedAmount || 0),
+        );
+        const maxAmount = toFixedWithoutRound(
+            ethers.utils.formatEther(maxCanBuild),
+            6,
+        );
+        if (toAmount > maxAmount) {
+            message.warning(
+                'Build amount is too big. You need more collateral',
+            );
+            return;
+        }
         if (isApproved && isIFTApproved) {
             try {
                 setSubmitting(true);
-                //TODO 目前仅支持mint fusd。其它合成资产需要调用mint和trade两步操作。后续优化成一步操作。
-                if (isDeliveryAsset(toToken)) {
+                if (toToken !== 'FUSD') {
                     const tokenPrice = await getTokenPrice(toToken);
-                    const fusdAmount = toAmount * tokenPrice; // fusd price is 1
-                    const tx1 = await collateralSystem.stakeAndBuild(
+                    const tx1 = await collateralSystem.stakeAndBuildNonFUSD(
                         ethers.utils.formatBytes32String(collateralToken), // stakeCurrency
                         expandTo18Decimals(collateralAmount), // stakeAmount
-                        expandTo18Decimals(fusdAmount), // buildAmount
+                        ethers.utils.formatBytes32String(toToken), // buildToken
+                        expandTo18Decimals(toAmount), // buildAmount
                         expandTo18Decimals(lockedAmount || 0),
                     );
                     const receipt1 = await tx1.wait();
                     console.log(receipt1);
-                    const tx2 = await exchangeSystem.exchange(
-                        ethers.utils.formatBytes32String('FUSD'), // sourceKey
-                        expandTo18Decimals(fusdAmount), // sourceAmount
-                        account, // destAddr
-                        ethers.utils.formatBytes32String(toToken), // destKey
-                    );
-                    const receipt2 = await tx2.wait();
-                    console.log(receipt2);
-                    await handleTxReceipt(receipt2);
                     refreshBalance();
                     setSubmitting(false);
                     // fetchCollateralBalance();
                     message.success(
-                        'Mint successfully. Pls check your balance.',
+                        'Mint tx sent out successfully. Pls wait for settle.',
                     );
                 } else {
-                    const token = Tokens[collateralToken];
                     const tx0 = await collateralSystem.stakeAndBuild(
                         ethers.utils.formatBytes32String(collateralToken), // stakeCurrency
                         expandTo18Decimals(collateralAmount!), // stakeAmount
@@ -407,7 +417,7 @@ export default () => {
                         expandTo18Decimals(lockedAmount || 0),
                     );
                     message.info(
-                        'Mint tx0 sent out successfully. Pls wait for a while......',
+                        'Mint tx sent out successfully. Pls wait for a while......',
                     );
                     const receipt = await tx0.wait();
                     console.log(receipt);
@@ -478,57 +488,6 @@ export default () => {
         });
     }, [collateralToken, collateralAmount, toToken, toAmount, lockedAmount]);
 
-    // *****TODO to be removed starts *********
-    const getTradeSettlementDelay = async () => {
-        const res = await configContract.getUint(
-            ethers.utils.formatBytes32String('TradeSettlementDelay'),
-        );
-        console.log('getTradeSettlementDelay', res.toNumber());
-    };
-    const getRevertDelay = async () => {
-        const res = await configContract.getUint(
-            ethers.utils.formatBytes32String('TradeRevertDelay'),
-        );
-        console.log('getRevertDelay', res.toNumber());
-    };
-    const settleTrade = async (entryId: number) => {
-        const res = await exchangeSystem.settle(entryId);
-        console.log(res);
-    };
-
-    // 超时的只能revert
-    const revertTrade = async (entryId: number) => {
-        const res = await exchangeSystem.revertPendingExchange(entryId);
-        console.log(res);
-    };
-    const handleTxReceipt = (receipt) => {
-        getTradeSettlementDelay();
-        getRevertDelay();
-        const exchangeContract =
-            Contracts.ExchangeSystem[process.env.APP_CHAIN_ID];
-        for (const event of receipt.events) {
-            if (event.address === exchangeContract) {
-                const lastEntryId = event.args[0].toNumber();
-                console.log('>>> lastEntryId <<<', lastEntryId);
-                setTimeout(async () => {
-                    try {
-                        await settleTrade(lastEntryId);
-                        message.success(
-                            'Trade has been settled.Pls check your balance',
-                        );
-                    } catch (err) {
-                        setTimeout(async () => {
-                            await revertTrade(lastEntryId);
-                            message.error(
-                                'Trade has been reverted. Pls try again.',
-                            );
-                        }, 60000);
-                        console.log(err);
-                    }
-                }, 6000); // 合约目前设置的delay是6秒,revert delay 是1min。
-            }
-        }
-    };
 
     /**@type 质押率进度百分比 */
     const sliderRatio = useMemo(() => {
@@ -546,8 +505,6 @@ export default () => {
         const adjustmentRatio = ((v / 100) * RATIO_MAX_MINT) / 100;
         setComputedRatio(adjustmentRatio);
     }, []);
-
-    // *****TODO to be removed ends *********
 
     return (
         <div className="mint-container">

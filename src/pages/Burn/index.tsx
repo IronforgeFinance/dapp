@@ -100,7 +100,6 @@ export default () => {
                             {!haveAssets && <NoAssetsView />}
                             {haveAssets && (
                                 <div className="form-view common-box">
-                                    <SearchDebts />
                                     <div className="my-debt">
                                         <button
                                             className={classNames({

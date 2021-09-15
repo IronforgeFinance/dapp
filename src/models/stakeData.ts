@@ -102,14 +102,15 @@ const useStakeDataModel = () => {
         const chainId = process.env.APP_CHAIN_ID;
         const minerRewardAddress = Addresses.MinerReward[chainId];
         const minerReward = getMinerRewardContract(provider);
-        const lpAddress = await minerReward.stakeTokens(poolId);
+        const poolInfo = await minerReward.poolInfo(poolId);
+        const lpAddress = poolInfo.stakeToken;
         const lpContract = getBep20Contract(lpAddress, provider);
         const totalStakedVal = parseFloat(
             ethers.utils.formatEther(
                 await lpContract.balanceOf(minerRewardAddress),
             ),
         );
-        const poolInfo = await minerReward.poolInfo(poolId);
+
         const allocPoint = parseFloat(
             ethers.utils.formatEther(poolInfo.allocPoint),
         );

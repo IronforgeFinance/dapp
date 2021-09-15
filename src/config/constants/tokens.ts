@@ -16,7 +16,7 @@ export default {
         address: {
             56: '',
             97: testnetOutput.buildTokens.usdcToken,
-            1337: localOutput.usdcToken,
+            1337: localOutput.buildTokens.usdcToken,
         },
         decimals: 18,
         projectLink: 'https://tether.to/',
@@ -26,7 +26,7 @@ export default {
         address: {
             56: '0x7130d2A12B9BCbFAe4f2634d864A1Ee1Ce3Ead9c',
             97: testnetOutput.buildTokens.btcToken,
-            1337: localOutput.btcToken,
+            1337: localOutput.buildTokens.btcToken,
         },
         decimals: 18,
         projectLink: 'https://bitcoin.org/',
@@ -36,7 +36,7 @@ export default {
         address: {
             56: '0x2170Ed0880ac9A755fd29B2688956BD959F933F8',
             97: testnetOutput.buildTokens.ethToken,
-            1337: localOutput.ethToken,
+            1337: localOutput.buildTokens.ethToken,
         },
         decimals: 18,
         projectLink: 'https://ethereum.org/en/',
@@ -46,7 +46,7 @@ export default {
         address: {
             56: '0x55d398326f99059fF775485246999027B3197955', //TODO usdt for test
             97: testnetOutput.buildTokens.platformToken, //TODO usdt for test
-            1337: localOutput.PlatformToken,
+            1337: localOutput.buildTokens.platformToken,
         },
         decimals: 18,
     },

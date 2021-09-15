@@ -190,12 +190,6 @@
       },
       {
         "indexed": false,
-        "internalType": "bytes32",
-        "name": "mintedCurrency",
-        "type": "bytes32"
-      },
-      {
-        "indexed": false,
         "internalType": "uint256",
         "name": "mintedAmount",
         "type": "uint256"
@@ -299,6 +293,19 @@
     "type": "event"
   },
   {
+    "inputs": [],
+    "name": "MAX_UINT256",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
     "inputs": [
       {
         "internalType": "address",
@@ -317,6 +324,19 @@
     "outputs": [
       {
         "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "assetsStorage",
+    "outputs": [
+      {
+        "internalType": "contract IAddressStorage",
         "name": "",
         "type": "address"
       }
@@ -370,6 +390,34 @@
   {
     "inputs": [
       {
+        "internalType": "address",
+        "name": "user",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "burnAmount",
+        "type": "uint256"
+      },
+      {
+        "internalType": "bytes32",
+        "name": "unStakeCurrency",
+        "type": "bytes32"
+      },
+      {
+        "internalType": "uint256",
+        "name": "unStakeAmount",
+        "type": "uint256"
+      }
+    ],
+    "name": "burnAndUnstakeFromExchange",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
         "internalType": "uint256",
         "name": "burnAmount",
         "type": "uint256"
@@ -381,6 +429,34 @@
       }
     ],
     "name": "burnAndUnstakeMax",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "burnCurrency",
+        "type": "bytes32"
+      },
+      {
+        "internalType": "uint256",
+        "name": "burnAmount",
+        "type": "uint256"
+      },
+      {
+        "internalType": "bytes32",
+        "name": "unStakeCurrency",
+        "type": "bytes32"
+      },
+      {
+        "internalType": "uint256",
+        "name": "unStakeAmount",
+        "type": "uint256"
+      }
+    ],
+    "name": "burnNonFUSDAndUnstake",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -446,6 +522,19 @@
     "type": "function"
   },
   {
+    "inputs": [],
+    "name": "exchangeSystem",
+    "outputs": [
+      {
+        "internalType": "contract IExchangeSystem",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
     "inputs": [
       {
         "internalType": "bytes32",
@@ -498,6 +587,40 @@
       }
     ],
     "name": "getFreeCollateralInUsd",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "stakeCurrency",
+        "type": "bytes32"
+      },
+      {
+        "internalType": "uint256",
+        "name": "stakeAmount",
+        "type": "uint256"
+      },
+      {
+        "internalType": "bytes32",
+        "name": "buildCurrency",
+        "type": "bytes32"
+      },
+      {
+        "internalType": "uint256",
+        "name": "lockedAmount",
+        "type": "uint256"
+      }
+    ],
+    "name": "getMaxBuildAmount",
     "outputs": [
       {
         "internalType": "uint256",
@@ -650,7 +773,7 @@
       },
       {
         "internalType": "address",
-        "name": "_router",
+        "name": "_FUSDTokenAddr",
         "type": "address"
       }
     ],
@@ -741,6 +864,19 @@
         "internalType": "uint256",
         "name": "",
         "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "minerReward",
+    "outputs": [
+      {
+        "internalType": "contract IMinerReward",
+        "name": "",
+        "type": "address"
       }
     ],
     "stateMutability": "view",
@@ -913,6 +1049,39 @@
       }
     ],
     "name": "stakeAndBuild",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "stakeCurrency",
+        "type": "bytes32"
+      },
+      {
+        "internalType": "uint256",
+        "name": "stakeAmount",
+        "type": "uint256"
+      },
+      {
+        "internalType": "bytes32",
+        "name": "buildCurrency",
+        "type": "bytes32"
+      },
+      {
+        "internalType": "uint256",
+        "name": "buildAmount",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "lockedAmount",
+        "type": "uint256"
+      }
+    ],
+    "name": "stakeAndBuildNonFUSD",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"

@@ -31,6 +31,34 @@
         "type": "address"
       },
       {
+        "internalType": "uint256",
+        "name": "burnAmount",
+        "type": "uint256"
+      },
+      {
+        "internalType": "bytes32",
+        "name": "unStakeCurrency",
+        "type": "bytes32"
+      },
+      {
+        "internalType": "uint256",
+        "name": "unStakeAmount",
+        "type": "uint256"
+      }
+    ],
+    "name": "burnAndUnstakeFromExchange",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "user",
+        "type": "address"
+      },
+      {
         "internalType": "bytes32",
         "name": "stakeCurrency",
         "type": "bytes32"

@@ -26,6 +26,8 @@ import {
 import { pancakeswapClient, ourClient } from '@/subgraph/clientManager';
 import { ethers } from 'ethers';
 import { useIntl } from 'umi';
+import { useExchangeSystem } from '@/hooks/useContract';
+import * as message from '@/components/Notification';
 
 const { TabPane } = Tabs;
 
@@ -245,6 +247,39 @@ const HistoryView = () => {
         pageSize: DEFAULT_PAGE_SIZE,
         total: 0,
     });
+    const [txLoading, setTxLoading] = useState(false);
+
+    const exchangeSystem = useExchangeSystem();
+
+    /**
+     * 查询是否可以revert。只查询status 为pending的，type为Exchange 的数据。
+     * status 有：pending, settled, reverted.
+     * @param entryId Operation的type为Exchange的数据的id
+     */
+    const fetchIfCanRevert = useCallback(async (entryId: string) => {
+        const canRevert = await exchangeSystem.canOnlyBeReverted(entryId);
+        return canRevert;
+    }, []);
+
+    /**
+     * 执行revert交易
+     * @param entryId Operation的type为Exchange的数据的id
+     */
+    const doRevert = async (entryId) => {
+        if (account) {
+            try {
+                setTxLoading(true);
+                const tx = await exchangeSystem.rollback(entryId);
+                const receipt = await tx.wait();
+                message.success('Revert successfully.');
+                // revert之后需要更新这一条数据。
+                setTxLoading(false);
+            } catch (err) {
+                console.log(err);
+                setTxLoading(false);
+            }
+        }
+    };
 
     /**
      * @description Fetch pool of mints from pancake site.

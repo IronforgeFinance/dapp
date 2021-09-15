@@ -17,12 +17,12 @@ export const COLLATERAL_TOKENS = [
 ];
 
 //TODO 从配置或者合约中获取
-export const MINT_TOKENS = ['FUSD','lBTC', 'BTCUSD_210924', 'BTCUSD_211231'];
+export const MINT_TOKENS = ['FUSD', 'lBTC', 'BTCUSD_210924', 'BTCUSD_211231'];
 
-// TODO 从后台接口或合约中获取
+// TODO 从后台接口或合约中获取.
 export const LP_TOKENS = [
-    { poolName: 'USDC-IFT', poolId: 0 },
-    { poolName: 'USDC-ETH', poolId: 1 },
+    { poolName: 'USDC-IFT', poolId: 2 }, // 前两个池子是BS的池子
+    { poolName: 'USDC-ETH', poolId: 3 },
 ];
 
 //TODO 配置中读取官方预先添加的流动性lp
