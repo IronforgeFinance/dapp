@@ -101,6 +101,8 @@ dl {
             .left {
                 float: left;
                 color: rgba(255, 255, 255, 0.7);
+                display: flex;
+                align-self: center;
             }
 
             .right {
@@ -601,4 +603,19 @@ dl {
     height: 100%;
     width: 100%;
     display: inline-block;
+}
+
+.loading {
+    @keyframes rotate {
+        from {
+            transform: rotate(0deg);
+        }
+
+        to {
+            transform: rotate(360deg);
+        }
+    }
+    animation: rotate 3s linear infinite;
+
+    #image.icon(22px, '~@/assets/images/notify-loading.svg');
 }

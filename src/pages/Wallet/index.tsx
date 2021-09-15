@@ -2,7 +2,7 @@ import './less/index.less';
 
 import React from 'react';
 import BigBoard from './components/BigBoard';
-import HoldingView from './components/HoldingView';
+// import HoldingView from './components/HoldingView';
 import PoolView from './components/PoolView';
 import HistoryView from './components/HistoryView';
 import FarmView from './components/FarmView';

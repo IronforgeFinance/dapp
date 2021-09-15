@@ -5,6 +5,7 @@ import { notification } from 'antd';
 import LinkSvg from '@/assets/images/link.svg';
 import NotifySuccessSvg from '@/assets/images/notify-success.svg';
 import NotifyFailSvg from '@/assets/images/notify-fail.svg';
+import NotifyLoadingSvg from '@/assets/images/notify-loading.svg';
 import styled, { keyframes } from 'styled-components';
 
 const DEFAULT_DURATION = 5;
@@ -13,19 +14,26 @@ const DEFAULT_SUCCESS_MESSAGE = '提示';
 
 const DEFAULT_FAIL_MESSAGE = '错误';
 
+const DEFAULT_LOADING_MESSAGE = 'Waiting for Transaction Submitted...';
+
 interface Notification {
     message?: string;
     description: string;
     duration?: number;
+    hide?(): void;
 }
 
 interface SuccessProps extends Notification {
-    showView?: boolean;
-    view?: React.ReactNode;
-    viewLink?: string;
+    scan?(): void;
+    scanHref?: string;
 }
 
 interface FailProps extends Notification {}
+
+interface LoadingProps extends Notification {
+    scale?(): void;
+    revert?(): void;
+}
 
 function instanceOfSuccessProps(object: any): object is SuccessProps {
     if (typeof object !== 'object') return false;
@@ -33,6 +41,11 @@ function instanceOfSuccessProps(object: any): object is SuccessProps {
 }
 
 function instanceOfFailProps(object: any): object is FailProps {
+    if (typeof object !== 'object') return false;
+    return 'description' in object;
+}
+
+function instanceOfLoadingProps(object: any): object is LoadingProps {
     if (typeof object !== 'object') return false;
     return 'description' in object;
 }
@@ -78,14 +91,7 @@ export const success = (props: string | SuccessProps, duration?: number) => {
     }
 
     if (instanceOfSuccessProps(props)) {
-        const {
-            message,
-            description,
-            view: ViewNode,
-            showView,
-            viewLink,
-            duration,
-        } = props;
+        const { message, description, scan, duration, scanHref } = props;
 
         notification.success({
             duration: duration || DEFAULT_DURATION,
@@ -95,17 +101,12 @@ export const success = (props: string | SuccessProps, duration?: number) => {
                 <React.Fragment>
                     <div className="description">
                         <p>{description}</p>
-                        {showView &&
-                            (ViewNode || (
-                                <a
-                                    onClick={() =>
-                                        (window.location.href = viewLink)
-                                    }
-                                >
-                                    View on Bscscan
-                                    <img src={LinkSvg} />
-                                </a>
-                            ))}
+                        {(scan || scanHref) && (
+                            <a onClick={scan} href={scanHref} target="_blank">
+                                View on Bscscan
+                                <img src={LinkSvg} />
+                            </a>
+                        )}
                     </div>
                     <TimerBar duration={duration || DEFAULT_DURATION} />
                 </React.Fragment>
@@ -156,6 +157,43 @@ export const fail = (props: string | FailProps, duration?: number) => {
     }
 };
 
+export let loading = (props: string | LoadingProps) => {
+    const key = String(Date.now());
+
+    if (instanceOfLoadingProps(props)) {
+        const { message, description, scale, revert } = props;
+
+        notification.error({
+            key,
+            duration: 0,
+            className: 'iron-notification loading',
+            message: <h3>{message || DEFAULT_LOADING_MESSAGE}</h3>,
+            description: (
+                <React.Fragment>
+                    <div className="description">
+                        <p>{description}</p>
+                        {scale && (
+                            <button className="scale-btn" onClick={scale} />
+                        )}
+                        <span className="status">Pending</span>
+                        {revert && (
+                            <a className="revert-btn" onClick={revert}>
+                                Revert
+                            </a>
+                        )}
+                    </div>
+                </React.Fragment>
+            ),
+            icon: (
+                <img className="icon-status loading" src={NotifyLoadingSvg} />
+            ),
+            closeIcon: <i className="icon-close" />,
+        });
+    }
+
+    return () => notification.close(key);
+};
+
 export const info = success;
 
 export const error = fail;
@@ -168,4 +206,5 @@ export default {
     warning,
     fail,
     success,
+    loading,
 };

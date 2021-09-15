@@ -9,6 +9,10 @@ import { useModel } from 'umi';
 import useEnv from '@/hooks/useEnv';
 import { useWeb3React } from '@web3-react/core';
 import NpcDialog from '@/components/NpcDialog';
+import ClaimRewards from '@/components/ClaimRewards';
+import TokenSelector from '@/components/SelectTokensV2';
+import TransactionConfirm from '@/components/TransitionConfirmV2';
+import MyDebts from '@/components/MyDebts';
 
 export default function Layout({
     children,
@@ -75,7 +79,15 @@ export default function Layout({
                 </video>
             )}
             <CommonHeader />
-            <NpcDialog>{children}</NpcDialog>
+            <MyDebts>
+                <TransactionConfirm>
+                    <TokenSelector>
+                        <ClaimRewards>
+                            <NpcDialog>{children}</NpcDialog>
+                        </ClaimRewards>
+                    </TokenSelector>
+                </TransactionConfirm>
+            </MyDebts>
             {!isMobile && <CommonFooter />}
         </div>
     );

@@ -40,6 +40,8 @@ import Scale from '@/components/Scale';
 // import SettingView from './SettingView';
 import classNames from 'classnames';
 import SelectTokens from '@/components/SelectTokens';
+import { TokenSelectorContext } from '@/components/SelectTokensV2';
+import { TransitionConfirmContext } from '@/components/TransitionConfirmV2';
 import CommentaryCard from '@/components/CommentaryCard';
 import { useCallback } from 'react';
 import { isDeliveryAsset } from '@/utils';
@@ -62,6 +64,8 @@ export default () => {
     const [collateralAmount, setCollateralAmount] = useState<
         undefined | number
     >();
+    const { open } = useContext(TokenSelectorContext);
+    const { open: openConfirmModal } = useContext(TransitionConfirmContext);
     const [lockedAmount, setLockedAmount] = useState<undefined | number>();
     const [toAmount, setToAmount] = useState<undefined | number>();
     // const [collateralBalance, setCollateralBalance] = useState('0.00');
@@ -130,6 +134,19 @@ export default () => {
     };
 
     // const { stakedData, setStakedData } = useStakedData();
+
+    const openCollateralTokenList = useCallback(
+        () => open(COLLATERAL_TOKENS, { callback: collateralTokenHandler }),
+        [],
+    );
+    const openToTokenList = useCallback(
+        () =>
+            open(
+                MINT_TOKENS.map((name) => ({ name })),
+                { callback: toTokenHandler },
+            ),
+        [],
+    );
 
     const {
         stakedData,
@@ -349,9 +366,6 @@ export default () => {
         setToAmount(0);
     };
 
-    const [showTxConfirm, setShowTxConfirm] = useState(false);
-    const [tx, setTx] = useState<any | null>(null);
-
     const onSubmit = async () => {
         if (!account) {
             message.warning('Pls connect wallet first');
@@ -378,29 +392,6 @@ export default () => {
             return;
         }
         if (isApproved && isIFTApproved) {
-            setShowTxConfirm(true);
-            const collateralTokenPrice = await getTokenPrice(collateralToken);
-            const toTokenPrice = await getTokenPrice(toToken);
-            const lockedPrice = await getTokenPrice(PLATFORM_TOKEN); // TODO change name
-            setTx({
-                collateral: {
-                    token: collateralToken,
-                    amount: collateralAmount,
-                    price: (collateralAmount * collateralTokenPrice).toFixed(2),
-                },
-                minted: {
-                    token: toToken,
-                    amount: toAmount,
-                    price: (toTokenPrice * toAmount).toFixed(2),
-                },
-                locked: {
-                    token: 'BS',
-                    amount: lockedAmount,
-                    price: (lockedPrice * lockedAmount).toFixed(2),
-                },
-                type: isDeliveryAsset(toToken) ? 'Delivery' : 'Perpetuation',
-            });
-
             try {
                 setSubmitting(true);
                 if (toToken !== 'FUSD') {
@@ -440,13 +431,66 @@ export default () => {
                     refreshBalance();
                 }
             } catch (err) {
-                setSubmitting(false);
                 console.log(err);
-            } finally {
-                setShowTxConfirm(false);
             }
         }
     };
+
+    /**@description 交易前的确认 */
+    const openMintConfirm = useCallback(async () => {
+        setSubmitting(true);
+        const collateralTokenPrice = await getTokenPrice(collateralToken);
+        const toTokenPrice = await getTokenPrice(toToken);
+        const lockedPrice = await getTokenPrice(PLATFORM_TOKEN); // TODO change name
+
+        if (!account) {
+            message.warning('Pls connect wallet first');
+            return setSubmitting(false);
+        }
+        if (!collateralAmount || !toAmount) {
+            message.warning('Collateral amount and to amount are required');
+            return setSubmitting(false);
+        }
+
+        console.log(
+            '>> collateral price: ',
+            (collateralAmount * collateralTokenPrice).toFixed(2),
+        );
+        console.log(
+            '>> locked price: ',
+            (lockedPrice * lockedAmount).toFixed(2),
+        );
+        console.log(
+            '>> fassets price: ',
+            Number((toTokenPrice * toAmount).toFixed(2)),
+        );
+
+        openConfirmModal({
+            view: 'mint',
+            fromToken: {
+                name: collateralToken,
+                price: Number(
+                    (collateralAmount * collateralTokenPrice).toFixed(2),
+                ),
+                amount: collateralAmount,
+            },
+            toToken: {
+                name: toToken,
+                price: Number((toTokenPrice * toAmount).toFixed(2)),
+                amount: toAmount,
+            },
+            bsToken: {
+                name: 'BS',
+                price: Number((lockedPrice * lockedAmount).toFixed(2)),
+                amount: lockedAmount,
+            },
+            type: isDeliveryAsset(toToken) ? 'Delivery' : 'Perpetuation',
+            confirm: onSubmit,
+            final: () => setSubmitting(false),
+        });
+    }, [collateralToken, collateralAmount, toToken, toAmount, lockedAmount]);
+
+
     /**@type 质押率进度百分比 */
     const sliderRatio = useMemo(() => {
         const ratio = ((computedRatio * 100) / RATIO_MAX_MINT) * 100;
@@ -506,14 +550,16 @@ export default () => {
                                 />
                                 <div className="token">
                                     <TokenIcon
-                                        name={collateralToken.toLowerCase()}
+                                        name={collateralToken}
                                         size={24}
                                     />
-                                    <SelectTokens
-                                        value={collateralToken}
-                                        tokenList={COLLATERAL_TOKENS}
-                                        onSelect={collateralTokenHandler}
-                                    ></SelectTokens>
+                                    <Button
+                                        className="select-token-btn"
+                                        onClick={openCollateralTokenList}
+                                    >
+                                        {collateralToken}
+                                        <i className="icon-down size-24" />
+                                    </Button>
                                 </div>
                             </div>
                         </div>
@@ -581,7 +627,7 @@ export default () => {
                             </div>
                         </div>
                     </div>
-
+                    <i className="icon-arrow-down" />
                     <div className="input-item">
                         <p className="label">
                             {intl.formatMessage({ id: 'mint.to' })}
@@ -614,16 +660,13 @@ export default () => {
                                         name={String(toToken).toLowerCase()}
                                         size={24}
                                     />
-                                    <SelectTokens
-                                        value={toToken}
-                                        tokenList={MINT_TOKENS.map((name) => ({
-                                            name,
-                                        }))}
-                                        onSelect={toTokenHandler}
-                                        placeholder={intl.formatMessage({
-                                            id: 'mint.selectCasting',
-                                        })}
-                                    ></SelectTokens>
+                                    <Button
+                                        className="select-token-btn"
+                                        onClick={openToTokenList}
+                                    >
+                                        {toToken}
+                                        <i className="icon-down size-24" />
+                                    </Button>
                                 </div>
                             </div>
                         </div>
@@ -666,7 +709,7 @@ export default () => {
                     {account && isApproved && isIFTApproved && (
                         <Button
                             className="btn-mint common-btn common-btn-red"
-                            onClick={onSubmit}
+                            onClick={openMintConfirm}
                             loading={submitting}
                         >
                             {intl.formatMessage({ id: 'mint.cast' })}
@@ -689,41 +732,6 @@ export default () => {
                 </div>
             </div>
             {isMobile && <DataView />}
-            <TransitionConfirm
-                visable={showTxConfirm}
-                onClose={() => setShowTxConfirm(false)}
-                dataSource={
-                    tx && [
-                        {
-                            label: 'Collateral',
-                            direct: 'from',
-                            value: {
-                                token: tx.collateral.token,
-                                amount: tx.collateral.amount,
-                                mappingPrice: tx.collateral.price,
-                            },
-                        },
-                        {
-                            label: 'Minted',
-                            direct: 'to',
-                            value: {
-                                token: tx.minted.token,
-                                amount: tx.minted.amount,
-                                mappingPrice: tx.minted.price,
-                            },
-                        },
-                        {
-                            label: 'Locked',
-                            value: {
-                                token: tx.locked.token,
-                                amount: tx.locked.amount,
-                                mappingPrice: tx.locked.price,
-                            },
-                        },
-                        { label: 'Type', value: tx.type },
-                    ]
-                }
-            />
         </div>
     );
 };

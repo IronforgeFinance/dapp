@@ -31,7 +31,7 @@ const tabItems = [
     },
 ];
 
-const filterList = ['/', '/farm'];
+const filterList = ['/farm'];
 
 const platformToken = 'IFT';
 
