@@ -603,3 +603,18 @@ dl {
     width: 100%;
     display: inline-block;
 }
+
+.loading {
+    @keyframes rotate {
+        from {
+            transform: rotate(0deg);
+        }
+
+        to {
+            transform: rotate(360deg);
+        }
+    }
+    animation: rotate 3s linear infinite;
+
+    #image.icon(22px, '~@/assets/images/notify-loading.svg');
+}

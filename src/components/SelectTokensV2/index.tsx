@@ -135,7 +135,13 @@ export default (props: TokenSelectorProps) => {
                                     </span>
                                 )}
                             </span>
-                            <span className="price">${token.price}</span>
+                            <span className="price">
+                                {token.price ? (
+                                    `$${token.price}`
+                                ) : (
+                                    <i className="loading" />
+                                )}
+                            </span>
                         </li>
                     ))}
                 </ul>
