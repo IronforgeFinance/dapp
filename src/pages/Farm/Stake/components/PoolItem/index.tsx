@@ -107,7 +107,7 @@ export default (props: { pool: IStakePool; handleFlipper: () => void }) => {
                                 </Popover>
                             </p>
                             <Button
-                                className="common-btn common-btn-yellow common-btn-s"
+                                className="harvest-btn common-btn common-btn-yellow common-btn-s"
                                 onClick={handleHarvest}
                                 loading={submitting}
                                 disabled={redeemableReward === 0 || !account}
@@ -128,15 +128,15 @@ export default (props: { pool: IStakePool; handleFlipper: () => void }) => {
                                     >
                                         {staked}
                                     </p>
-                                    <button
-                                        className="common-btn common-btn-red common-btn-s"
+                                    <Button
+                                        className="stake-lp-btn common-btn common-btn-red common-btn-s"
                                         onClick={() => {
                                             props.handleFlipper();
                                             // history.push('/farm/stake?lp=' + name);
                                         }}
                                     >
                                         Stake LP
-                                    </button>
+                                    </Button>
                                 </>
                             )}
                             {!account && (

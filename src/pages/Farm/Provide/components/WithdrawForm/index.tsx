@@ -1,6 +1,6 @@
 import './less/index.less';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext, useCallback } from 'react';
 import { InputNumber, Select, Button } from 'antd';
 import * as message from '@/components/Notification';
 import IconDown from '@/assets/images/icon-down.svg';
@@ -20,6 +20,7 @@ import {
 } from '@/hooks/useApprove';
 import { TokenIcon } from '@/components/Icon';
 import { toFixedWithoutRound } from '@/utils/bigNumber';
+import { TokenSelectorContext } from '@/components/SelectTokensV2';
 
 export default () => {
     const intl = useIntl();
@@ -32,6 +33,7 @@ export default () => {
     const [showSelectFromToken, setShowSelectFromToken] = useState(false);
     const routerContract = useRouter();
     const { account } = useWeb3React();
+    const { open } = useContext(TokenSelectorContext);
 
     const { lpDataList } = useModel('lpData', (model) => ({
         ...model,
@@ -172,6 +174,11 @@ export default () => {
         }
     };
 
+    const openLpTokenList = useCallback(
+        () => open(selectOptions, { callback: (v) => setLp(v) }),
+        [selectOptions],
+    );
+
     return (
         <div>
             <div className="provide-form common-box">
@@ -198,12 +205,13 @@ export default () => {
                             />
                             <div className="token">
                                 <TokenIcon name={lp} size={24} />
-                                <SelectTokens
-                                    value={lp}
-                                    tokenList={selectOptions}
-                                    onSelect={(v) => setLp(v)}
-                                    placeholder={'Select LP'}
-                                ></SelectTokens>
+                                <Button
+                                    className="select-token-btn"
+                                    onClick={openLpTokenList}
+                                >
+                                    {lp || 'Select LP'}
+                                    <i className="icon-down size-24" />
+                                </Button>
                             </div>
                         </div>
                     </div>

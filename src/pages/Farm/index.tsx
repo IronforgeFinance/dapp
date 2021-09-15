@@ -2,6 +2,7 @@ import './less/index.less';
 
 import React, { useState, useEffect } from 'react';
 import { history, useModel } from 'umi';
+import { Button } from 'antd';
 import StakeItem from './Stake';
 import { useWeb3React } from '@web3-react/core';
 import { LP_TOKENS } from '@/config';
@@ -55,8 +56,8 @@ export default () => {
                         })}
                     </p>
                 </div>
-                <button
-                    className="common-btn common-btn-red"
+                <Button
+                    className="add-liquidity-btn common-btn common-btn-red"
                     onClick={() => {
                         history.push('/farm/provide');
                     }}
@@ -66,7 +67,7 @@ export default () => {
                             id: 'liquidity.toprovide',
                         })}
                     </span>
-                </button>
+                </Button>
             </div>
             <div className="farm-pool">
                 {stakeDataList.map((item, index) => (

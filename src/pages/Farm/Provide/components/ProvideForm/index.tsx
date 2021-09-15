@@ -1,6 +1,6 @@
 import './less/index.less';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext, useCallback } from 'react';
 import { InputNumber, Select, Progress, Button } from 'antd';
 import * as message from '@/components/Notification';
 import IconAdd from '@/assets/images/icon-add.svg';
@@ -17,6 +17,7 @@ import { registerToken } from '@/utils/wallet';
 import { DEADLINE } from '@/config/constants/constant';
 import SelectTokens from '@iron/SelectTokens';
 import TransitionConfirm from '@iron/TransitionConfirm';
+import { TokenSelectorContext } from '@/components/SelectTokensV2';
 import { ITabKeyContext } from '../../index';
 import {
     useCheckERC20ApprovalStatus,
@@ -77,6 +78,7 @@ export default () => {
     const { requestConnectWallet } = useModel('app', (model) => ({
         requestConnectWallet: model.requestConnectWallet,
     }));
+    const { open } = useContext(TokenSelectorContext);
 
     const routerContract = useRouter();
 
@@ -365,6 +367,16 @@ export default () => {
     const hasLpList = React.useMemo(() => !!lpDataList.length, [lpDataList]);
     const isCurrentTab = React.useMemo(() => tabKey === '1', [tabKey]);
 
+    const openFromTokenList = useCallback(
+        () => open(TOKENS, { callback: token1SelectHandler }),
+        [],
+    );
+
+    const openToTokenList = useCallback(
+        () => open(TOKENS, { callback: token2SelectHandler }),
+        [],
+    );
+
     return (
         <div className="provide-outer-container">
             <Folder
@@ -411,11 +423,13 @@ export default () => {
                             />
                             <div className="token">
                                 <TokenIcon name={token1} size={24} />
-                                <SelectTokens
-                                    value={token1}
-                                    tokenList={TOKENS}
-                                    onSelect={token1SelectHandler}
-                                ></SelectTokens>
+                                <Button
+                                    className="select-token-btn"
+                                    onClick={openFromTokenList}
+                                >
+                                    {token1 || 'Select a Token'}
+                                    <i className="icon-down size-24" />
+                                </Button>
                             </div>
                         </div>
                     </div>
@@ -447,11 +461,13 @@ export default () => {
                             />
                             <div className="token">
                                 <TokenIcon name={token2} size={24} />
-                                <SelectTokens
-                                    value={token2}
-                                    tokenList={TOKENS}
-                                    onSelect={token2SelectHandler}
-                                ></SelectTokens>
+                                <Button
+                                    className="select-token-btn"
+                                    onClick={openToTokenList}
+                                >
+                                    {token2 || 'Select a Token'}
+                                    <i className="icon-down size-24" />
+                                </Button>
                             </div>
                         </div>
                     </div>
