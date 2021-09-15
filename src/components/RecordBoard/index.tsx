@@ -2,7 +2,6 @@ import './less/index.less';
 
 import 'react';
 import Overlay from '@/components/Overlay';
-import { useState } from 'react';
 
 interface RecordBoardProps {
     children: Object;

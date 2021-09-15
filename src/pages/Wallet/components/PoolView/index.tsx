@@ -128,7 +128,7 @@ const PoolView = () => {
     }, [account, slowRefresh]);
 
     return (
-        <div className="burn-view">
+        <div className="pool-view">
             <Table
                 className="custom-table"
                 columns={columns.map((item) => ({

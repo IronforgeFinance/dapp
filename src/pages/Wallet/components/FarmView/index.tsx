@@ -1,8 +1,7 @@
 import './less/index.less';
 
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Table } from 'antd';
-import { ethers } from 'ethers';
 import {
     PureView,
     LpTokenView,
@@ -129,7 +128,7 @@ const FarmView = () => {
         })();
     }, [account, slowRefresh]);
     return (
-        <div className="burn-view">
+        <div className="farm-view">
             <Table
                 className="custom-table"
                 columns={columns.map((item) => ({
