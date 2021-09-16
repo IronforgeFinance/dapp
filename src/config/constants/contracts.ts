@@ -1,34 +1,38 @@
-import { ChainIds } from '@/pages/Wallet/type';
-
 /**
- * @description 合并自定义contracts配置
- * @property {Object} mergedOutput
+ * @description 在本地缓存设置innerLocalContracts/innerTestContracts来扩展或覆盖对应的合约配置
  */
 
-let mergedOutput;
-try {
-    switch (process.env.APP_CHAIN_ID as ChainIds) {
-        case '1337': {
-            mergedOutput = require('../../../contracts.local.json') ?? {};
-            break;
-        }
-        // case '97': {
-        //     mergedOutput = require('../../../contracts.test.json') ?? {};
-        //     break;
-        // }
-        // case '56': {
-        //     mergedOutput = require('../../../contracts.prod.json') ?? {};
-        //     break;
-        // }
-    }
-} catch (error) {
-    console.warn(
-        "⚠️ There's no mreged config of contracts. It will use default config.",
-    );
-}
-
 export const localOutput = {
-    ...mergedOutput,
+    buildTokens: {
+        platformToken: '0x2279B7A0a67DB372996a5FaB50D91eAA73d2eBe6',
+        usdcToken: '0x8A791620dd6260079BF849Dc5567aDC3F2FdC318',
+        btcToken: '0x610178dA211FEF7D417bC0e6FeD39F05609AD788',
+        ethToken: '0x9A676e781A523b5d0C0e43731313A708CB607508',
+        usdtToken: '0x959922bE3CAee4b8Cd9a407cc3ac1C251C2007B1',
+    },
+    platformToken: '0x2279B7A0a67DB372996a5FaB50D91eAA73d2eBe6',
+    pancakeFactory: '0x68B1D87F95878fE05B998F19b66F4baba5De1aed',
+    pancakeRouter: '0xc6e7DF5E7b4f2A278906862b61205850344D4e7d',
+    'USDC-IFT': '0x1b259Fa95393265A785335e3C3b2a3555fCE473d',
+    AssetSystem: '0x09635F643e140090A9A8Dcd712eD6285858ceBef',
+    BuildBurnSystem: '0x67d269191c92Caf3cD7723F116c85e6E9bf55933',
+    Config: '0xc3e53F4d16Ae77Db1c982e75a937B9f60FE63690',
+    AccessControl: '0x9E545E3C0baAB3E08CdfD552C960A1050f373042',
+    Prices: '0xa82fF9aFd8f496c3d6ac40E2a0F282E47488CFc9',
+    DebtSystem: '0x851356ae760d987E095750cCeb3bC6014560891C',
+    'lBTC-202112': '0x95401dc811bb5740090279Ba06cfA8fcF6113778',
+    lBTC: '0x70e0bA845a1A0F2DA3359C97E0285013525FFC49',
+    lETH: '0x99bbA657f2BbC93c02D617f8bA121cB8Fc104Acf',
+    FUSD: '0x8f86403A4DE0BB5791fa46B8e795C547942fE4Cf',
+    CollateralSystem: '0x809d550fca64d94Bd9F66E60752A544199cfAC3D',
+    ExchangeSystem: '0x5f3f1dBD7B74C6B46e8c44f98792A1dAf8d69154',
+    Liquidation: '0xCD8a1C3ba11CF5ECfa6267617243239504a98d90',
+    RewardSystem: '0x86A2EE8FAf9A840F7a2c64CA3d51209F9A02081D',
+    MinerReward: '0xf953b3A269d80e3eB0F2947630Da976B896A8C5b',
+    LinearRelease: '0x720472c8ce72c2A2D711333e064ABD3E6BbEAdd3',
+    Timelock: '0xCace1b78160AE76398F486c8a18044da0d66d86D',
+    'USDC-ETH': '0xB9e5A1FC6Fe261720C0e92Bed2669E50Ed2daf6b',
+    ...JSON.parse(localStorage.getItem('innerLocalContracts') ?? '{}'),
 };
 export const testnetOutput = {
     buildTokens: {
@@ -63,6 +67,7 @@ export const testnetOutput = {
     MinerReward: '0xfD6e515734c2D4A81c37495ED13ca73bFFA796ec',
     LinearRelease: '0x2B7C66d658E8C023Bd66F96F09693D4C4F84C490',
     'USDC-ETH': '0x5Ed6E11CA01039E4AEA297D058251248E334C4b3',
+    ...JSON.parse(localStorage.getItem('innerTestContracts') ?? '{}'),
 };
 export default {
     masterChef: {
