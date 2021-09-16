@@ -32,11 +32,13 @@
     .history {
         display: flex;
         align-items: center;
-        width: 90%;
+        // width: 90%;
 
         .operation {
             display: flex;
             align-items: center;
+            width: 272px;
+            max-width: 272px;
 
             .icon {
                 @size: 28px;
@@ -127,13 +129,33 @@
             }
         }
 
-        .skip-wraper {
+        .last-wraper {
             flex: 1;
-            text-align: right;
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
 
             .skip {
                 #image.icon(18px, '~@/assets/images/wallet-history-skip.svg');
-                margin-left: 137px;
+            }
+
+            .loading {
+                margin-left: 57px;
+            }
+
+            .revert-btn {
+                height: 38px;
+                width: 96px;
+                font-family: Poppins;
+                font-style: normal;
+                font-weight: bold;
+                font-size: 15px;
+                line-height: 22px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                color: #ffffff;
+                margin-left: 26px;
             }
         }
     }

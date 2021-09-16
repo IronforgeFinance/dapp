@@ -17,6 +17,7 @@ import { DEFAULT_PAGE_SIZE } from '@/config/constants/constant';
 import { useIntl } from 'umi';
 import { toFixedWithoutRound } from '@/utils/bigNumber';
 import dayjs from 'dayjs';
+import NoneView from '@/components/NoneView';
 
 const columns = [
     {
@@ -106,29 +107,39 @@ const MintView = () => {
         fetchMints();
     }, []);
 
-    const noData = useMemo(() => !mints?.length, [mints]);
-
     const position = useMemo(
         () => (pagination.total > pagination.pageSize ? 'bottomRight' : 'none'),
         [pagination],
     );
 
+    const noneStatus = useMemo(() => {
+        if (!account) {
+            return 'noConnection';
+        }
+        if (!mints?.length) {
+            return 'noAssets';
+        }
+    }, [account, mints]);
+
     return (
         <div className="mint-view">
-            <Table
-                className="custom-table"
-                columns={columns.map((col) => ({
-                    ...col,
-                    title: intl.formatMessage({
-                        id: `history.mint.col.${(
-                            col.title as string
-                        ).toLocaleLowerCase()}`,
-                    }),
-                }))}
-                rowKey={(record) => record.id}
-                dataSource={mints}
-                pagination={{ ...pagination, position: [position] }}
-            />
+            {!noneStatus && (
+                <Table
+                    className="custom-table"
+                    columns={columns.map((col) => ({
+                        ...col,
+                        title: intl.formatMessage({
+                            id: `history.mint.col.${(
+                                col.title as string
+                            ).toLocaleLowerCase()}`,
+                        }),
+                    }))}
+                    rowKey={(record) => record.id}
+                    dataSource={mints}
+                    pagination={{ ...pagination, position: [position] }}
+                />
+            )}
+            {noneStatus && <NoneView type={noneStatus} />}
         </div>
     );
 };

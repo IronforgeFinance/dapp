@@ -65,7 +65,7 @@ export default (props: TransitionConfirmProps) => {
     }, []);
 
     const close = useCallback(() => {
-        openOption.current?.final();
+        openOption?.current?.final(false);
         setVisible(false);
     }, []);
 
@@ -115,6 +115,7 @@ export default (props: TransitionConfirmProps) => {
             openOption?.current?.final(true);
         } catch (error) {
             console.error(error);
+            setIsConfirming(false);
             openOption.current?.final(false);
         }
     }, [view]);
@@ -244,7 +245,9 @@ export default (props: TransitionConfirmProps) => {
                             </div>
                             <div className="right">
                                 <span>{view.fromToken.amount}</span>
-                                <span>${view.fromToken.price}</span>
+                                {view.toToken.price && (
+                                    <span>${view.fromToken.price}</span>
+                                )}
                             </div>
                         </div>
                         <i className="icon-arrow-down" />
@@ -261,7 +264,9 @@ export default (props: TransitionConfirmProps) => {
                             </div>
                             <div className="right">
                                 <span>{view.toToken.amount}</span>
-                                <span>${view.toToken.price}</span>
+                                {view.toToken.price && (
+                                    <span>${view.toToken.price}</span>
+                                )}
                             </div>
                         </div>
                         <Button

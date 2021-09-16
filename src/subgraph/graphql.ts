@@ -109,6 +109,7 @@ export const GET_OPERATIONS = gql`
             toAmount
             txhash
             timestamp
+            status
         }
     }
 `;
@@ -132,6 +133,7 @@ export const GET_OPERATIONS_FUZZY = gql`
             toAmount
             txhash
             timestamp
+            status
         }
     }
 `;

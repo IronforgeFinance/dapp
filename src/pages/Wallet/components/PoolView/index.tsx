@@ -151,7 +151,7 @@ const PoolView = () => {
                     pagination={false}
                 />
             )}
-            <NoneView type={noneStatus} />
+            {noneStatus && <NoneView type={noneStatus} />}
         </div>
     );
 };

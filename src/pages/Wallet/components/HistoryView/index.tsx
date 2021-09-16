@@ -1,7 +1,14 @@
 import './less/index.less';
 
-import { Tabs, Table } from 'antd';
-import { useState, useCallback, Fragment, useMemo, useEffect } from 'react';
+import { Tabs, Table, Button, Popover } from 'antd';
+import {
+    useState,
+    useCallback,
+    Fragment,
+    useMemo,
+    useEffect,
+    useContext,
+} from 'react';
 import { parseEnumToArray } from '@/utils';
 import {
     ConjType,
@@ -24,10 +31,13 @@ import {
     GET_OPERATIONS_FUZZY,
 } from '@/subgraph/graphql';
 import { pancakeswapClient, ourClient } from '@/subgraph/clientManager';
+import { TransitionConfirmContext } from '@/components/TransactionConfirm';
 import { ethers } from 'ethers';
 import { useIntl } from 'umi';
 import { useExchangeSystem } from '@/hooks/useContract';
+import { isDeliveryAsset } from '@/utils';
 import * as message from '@/components/Notification';
+import NoneView from '@/components/NoneView';
 
 const { TabPane } = Tabs;
 
@@ -99,7 +109,74 @@ const columns = [
         title: 'history',
         dataIndex: 'id',
         render: (value, row: HistoryViewProps) => {
+            const [txLoading, setTxLoading] = useState(false);
             const intl = useIntl();
+            const exchangeSystem = useExchangeSystem();
+            const { account } = useWeb3React();
+            const { open: openConfirmModal } = useContext(
+                TransitionConfirmContext,
+            );
+
+            /**
+             * 查询是否可以revert。只查询status 为pending的，type为Exchange 的数据。
+             * status 有：pending, settled, reverted.
+             * @param entryId Operation的type为Exchange的数据的id
+             */
+            const fetchIfCanRevert = useCallback(async (entryId: number) => {
+                const canRevert = await exchangeSystem.canOnlyBeReverted(
+                    entryId,
+                );
+                return canRevert;
+            }, []);
+
+            /**
+             * 执行revert交易
+             * @param entryId Operation的type为Exchange的数据的id
+             */
+            const doRevert = async (entryId) => {
+                if (account) {
+                    const tx = await exchangeSystem.rollback(entryId);
+                    const receipt = await tx.wait();
+                    message.success('Revert successfully.');
+                    // revert之后需要更新这一条数据。
+                }
+            };
+
+            /**@type 是否可以revert */
+            const canRevert = useMemo(async () => {
+                try {
+                    if (row.type === 'Trade') {
+                        const result = await fetchIfCanRevert(Number(row.id));
+                        console.log('>> fetchIfCanRevert is %s', result);
+                        return result;
+                    }
+                    return false;
+                } catch (error) {
+                    console.error(error);
+                }
+            }, []);
+
+            /**@description 交易前的确认 */
+            const openRevertConfirm = useCallback(async () => {
+                setTxLoading(true);
+
+                openConfirmModal({
+                    view: 'trade',
+                    fromToken: {
+                        name: row.token0.name,
+                        amount: row.token0.amount,
+                    },
+                    toToken: {
+                        name: row.token1.name,
+                        amount: row.token1.amount,
+                    },
+                    type: isDeliveryAsset(row.token0.name)
+                        ? 'Delivery'
+                        : 'Perpetuation',
+                    confirm: doRevert,
+                    final: () => setTxLoading(false),
+                });
+            }, [row]);
 
             return (
                 <div className="history">
@@ -155,15 +232,53 @@ const columns = [
                             )}
                         </div>
                     )}
-                    {row.link && (
-                        <div className="skip-wraper">
+                    <div className="last-wraper">
+                        {row.link && (
                             <a
                                 className="skip"
                                 target="_blank"
                                 href={row.link}
                             />
-                        </div>
-                    )}
+                        )}
+                        <i
+                            className="loading size-18"
+                            style={{
+                                visibility:
+                                    row?.status === 'pending'
+                                        ? 'visible'
+                                        : 'hidden',
+                            }}
+                        />
+                        <Button
+                            style={{
+                                visibility:
+                                    row?.status === 'pending' && canRevert
+                                        ? 'visible'
+                                        : 'hidden',
+                            }}
+                            className="revert-btn common-btn common-btn-red"
+                            onClick={openRevertConfirm}
+                            loading={txLoading}
+                        >
+                            Revert
+                        </Button>
+                        <Popover
+                            placement="leftBottom"
+                            trigger="hover"
+                            content="xxxxxxx"
+                        >
+                            <i
+                                style={{
+                                    visibility:
+                                        row?.status === 'pending' && canRevert
+                                            ? 'visible'
+                                            : 'hidden',
+                                    marginLeft: 6,
+                                }}
+                                className="icon-question size-18"
+                            />
+                        </Popover>
+                    </div>
                 </div>
             );
         },
@@ -227,6 +342,7 @@ const parseDataOfOur = (item): HistoryViewProps => {
                 6,
             ),
         },
+        status: item.status,
         link: BSCSCAN_EXPLORER,
         dealtime: item.timestamp,
     };
@@ -431,32 +547,44 @@ const HistoryView = () => {
         );
     }, [mintsPool, burnsPool, operations]);
 
+    const noneStatus = useMemo(() => {
+        if (!account) {
+            return 'noConnection';
+        }
+        if (!records?.length) {
+            return 'noAssets';
+        }
+    }, [account, records]);
+
     return (
         <div className="history-view">
-            <Tabs
-                className="custom-tabs"
-                defaultActiveKey={tabKey}
-                onChange={changeTab}
-            >
-                {tabItems.map((tabKey) => (
-                    <TabPane
-                        tab={intl.formatMessage({
-                            id: `wallet.tab.${(
-                                tabKey as string
-                            ).toLowerCase()}`,
-                        })}
-                        key={tabKey}
-                    >
-                        <Table
-                            className="custom-table"
-                            columns={columns}
-                            rowKey={(record) => record.id}
-                            dataSource={records}
-                            pagination={false}
-                        />
-                    </TabPane>
-                ))}
-            </Tabs>
+            {!noneStatus && (
+                <Tabs
+                    className="custom-tabs"
+                    defaultActiveKey={tabKey}
+                    onChange={changeTab}
+                >
+                    {tabItems.map((tabKey) => (
+                        <TabPane
+                            tab={intl.formatMessage({
+                                id: `wallet.tab.${(
+                                    tabKey as string
+                                ).toLowerCase()}`,
+                            })}
+                            key={tabKey}
+                        >
+                            <Table
+                                className="custom-table"
+                                columns={columns}
+                                rowKey={(record) => record.id}
+                                dataSource={records}
+                                pagination={false}
+                            />
+                        </TabPane>
+                    ))}
+                </Tabs>
+            )}
+            {noneStatus && <NoneView type={noneStatus} />}
         </div>
     );
 };
