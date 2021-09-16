@@ -8,6 +8,7 @@ export default {
     'nav.burn': 'Burn',
     'nav.trade': 'Trade',
     'nav.farm': 'Farm',
+    'nav.pool': 'Pool',
     'nav.wallet': 'Wallet',
     'nav.connectWallet': 'Connect Wallet',
     'entry.learnmore': 'Learn more',
@@ -97,6 +98,8 @@ export default {
     'liquidity.withdraw.willreceive': "You'll receive",
     'liquidity.withdraw.approve': 'Approve to withdraw',
 
+    'pool.totalStaked': 'Total staked value',
+    'pool.totalEarned': 'Total users earned',
     /**
      * @description 我的资产
      */

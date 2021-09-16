@@ -73,6 +73,7 @@ export interface HistoryViewProps {
     link?: string;
     status?: string;
     dealtime?: string | number;
+    canRevert?: boolean;
 }
 
 interface MintViewProps {

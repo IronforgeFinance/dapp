@@ -7,10 +7,11 @@ import classnames from 'classnames';
 import { IStakePool } from '@/models/stakeData';
 import { TokenIcon } from '@/components/Icon';
 export default (props: IStakePool) => {
+    console.log('props: ', props);
     const [showStakeForm, setShowStakeForm] = useState(false);
     const handleFlipper = () => {
         setShowStakeForm(!showStakeForm);
-    };
+    };  
     const [token1, token2] = props.name.split('-');
     return (
         <div

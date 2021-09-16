@@ -12,7 +12,7 @@ import Tokens from '@/config/constants/tokens';
 import PancakePair from '@/config/abi/PancakePair.json';
 import { usePrices } from '@/hooks/useContract';
 import { getTokenPrice } from '@/utils/index';
-import { LP_TOKENS } from '@/config';
+import { LP_TOKENS, PLATFORM_TOKEN } from '@/config';
 
 // apy = ap/totalAp * rewardPerBlock
 export interface IStakePool {
@@ -27,7 +27,7 @@ export interface IStakePool {
     redeemableReward: number;
 }
 
-const DEFAULT_POOL = {
+export const DEFAULT_POOL = {
     name: '',
     lpAddress: '',
     lpPrice: 0,
@@ -48,6 +48,10 @@ const useStakeDataModel = () => {
         })),
     );
     const [currentStakePool, setCurrentStakePool] = useState<IStakePool>();
+    const [singleTokenPoolTotalEarned, setSingleTokenPoolTotalEarned] =
+        useState(0);
+    const [singleTokenPoolTotalStaked, setSingleTokenPoolTotalStaked] =
+        useState(0);
     const provider = useWeb3Provider();
     const prices = usePrices();
 
@@ -63,6 +67,10 @@ const useStakeDataModel = () => {
         const chainId = process.env.APP_CHAIN_ID;
         const lpObj = Tokens[lpToken];
         const [token0, token1] = lpToken.split('-');
+        if (token0 && !token1) {
+            // 单币池子
+            return getTokenPrice(lpToken);
+        }
         const token0Obj = Tokens[token0];
         const token1Obj = Tokens[token1];
         if (!lpObj || !token0Obj || !token1Obj) {
@@ -106,9 +114,7 @@ const useStakeDataModel = () => {
         const lpAddress = poolInfo.stakeToken;
         const lpContract = getBep20Contract(lpAddress, provider);
         const totalStakedVal = parseFloat(
-            ethers.utils.formatEther(
-                await lpContract.balanceOf(minerRewardAddress),
-            ),
+            ethers.utils.formatEther(poolInfo.amount),
         );
 
         const allocPoint = parseFloat(
@@ -181,7 +187,7 @@ const useStakeDataModel = () => {
 
     const fetchStakePoolList = async (
         tokens: { poolName: string; poolId: number }[],
-        account: string,
+        account?: string,
     ) => {
         const list = await Promise.all(
             tokens.map((token) =>
@@ -215,29 +221,33 @@ const useStakeDataModel = () => {
     ) => {
         let total = 0;
         const minerReward = getMinerRewardContract(provider);
-        const block = await provider.getBlockNumber();
+        // const block = await provider.getBlockNumber();
+        // const totalAllocPoint = parseFloat(
+        //     ethers.utils.formatEther(await minerReward.totalAllocPoint()),
+        // );
+        // const rewardPerBlock = parseFloat(
+        //     ethers.utils.formatEther(await minerReward.rewardPerBlock()),
+        // );
+        // console.log('current block: ', block);
 
-        const totalAllocPoint = parseFloat(
-            ethers.utils.formatEther(await minerReward.totalAllocPoint()),
-        );
-        const rewardPerBlock = parseFloat(
-            ethers.utils.formatEther(await minerReward.rewardPerBlock()),
-        );
-        console.log('current block: ', block);
         for (let i = 0; i < tokens.length; i++) {
             const poolInfo = await minerReward.poolInfo(tokens[i].poolId);
-            const lastRewardBlock = parseFloat(
-                ethers.utils.formatEther(poolInfo.lastRewardBlock),
-            );
-            const allocPoint = parseFloat(
-                ethers.utils.formatEther(poolInfo.allocPoint),
-            );
-            const reward =
-                ((block - lastRewardBlock) * rewardPerBlock * allocPoint) /
-                totalAllocPoint;
-            total += reward;
+            // const lastRewardBlock = parseFloat(poolInfo.lastRewardBlock);
+            // const allocPoint = parseFloat(
+            //     ethers.utils.formatEther(poolInfo.allocPoint),
+            // );
+            // const reward =
+            //     ((block - lastRewardBlock) * rewardPerBlock * allocPoint) /
+            //     totalAllocPoint;
+            const poolReward = poolInfo.amount
+                .mul(poolInfo.accRewardPerShare)
+                .div(1e12);
+            total += parseFloat(ethers.utils.formatEther(poolReward));
         }
-        return total;
+        const price = await getTokenPrice(PLATFORM_TOKEN);
+        const val = toFixedWithoutRound(total * price, 6);
+        setSingleTokenPoolTotalEarned(val);
+        return val;
     };
 
     return {
@@ -248,6 +258,8 @@ const useStakeDataModel = () => {
         fetchStakePoolData,
         fetchStakePoolList,
         updateStakePoolItem,
+        singleTokenPoolTotalEarned,
+        fetchSingleTokenPoolTotalEarned,
     };
 };
 

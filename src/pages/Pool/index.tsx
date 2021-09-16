@@ -12,18 +12,27 @@ import { useIntl } from 'umi';
 export default () => {
     const intl = useIntl();
     const { account } = useWeb3React();
-    const { fetchStakePoolList, stakeDataList } = useModel(
-        'stakeData',
-        (model) => ({
-            ...model,
-        }),
-    );
+    const [totalStaked, setTotalStaked] = useState(0);
+    const {
+        fetchStakePoolList,
+        stakeDataList,
+        singleTokenPoolTotalEarned,
+        fetchSingleTokenPoolTotalEarned,
+    } = useModel('stakeData', (model) => ({
+        ...model,
+    }));
     const { slowRefresh } = useRefresh();
 
     useEffect(() => {
         (async () => {
             if (account) {
-                await fetchStakePoolList(POOL_TOKENS, account);
+                fetchStakePoolList(POOL_TOKENS, account).then((list) => {
+                    const total = list.reduce((prev, item) => {
+                        return prev + item.totalStaked;
+                    }, 0);
+                    setTotalStaked(total);
+                });
+                fetchSingleTokenPoolTotalEarned(POOL_TOKENS);
             }
         })();
     }, [account, slowRefresh]);
@@ -32,37 +41,17 @@ export default () => {
         <div className="farm-container">
             <div className="farm-header">
                 <div className="info-item">
-                    <p className="value">${ftokenInfo.price}</p>
+                    <p className="value">${totalStaked}</p>
                     <p className="label">
-                        {intl.formatMessage({ id: 'liquidity.bs.price' })}
+                        {intl.formatMessage({ id: 'pool.totalStaked' })}
                     </p>
                 </div>
                 <div className="info-item">
-                    <p className="value">${ftokenInfo.vol}</p>
+                    <p className="value">${singleTokenPoolTotalEarned}</p>
                     <p className="label">
-                        {intl.formatMessage({ id: 'liquidity.bs.vol' })}
+                        {intl.formatMessage({ id: 'pool.totalEarned' })}
                     </p>
                 </div>
-                <div className="info-item">
-                    <p className="value">${ftokenInfo.supply}</p>
-                    <p className="label">
-                        {intl.formatMessage({
-                            id: 'liquidity.bs.circulatingsupply',
-                        })}
-                    </p>
-                </div>
-                <Button
-                    className="add-liquidity-btn common-btn common-btn-red"
-                    onClick={() => {
-                        history.push('/farm/provide');
-                    }}
-                >
-                    <span>
-                        {intl.formatMessage({
-                            id: 'liquidity.toprovide',
-                        })}
-                    </span>
-                </Button>
             </div>
             <div className="farm-pool">
                 {stakeDataList.map((item, index) => (

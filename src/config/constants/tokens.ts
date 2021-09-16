@@ -50,6 +50,15 @@ export default {
         },
         decimals: 18,
     },
+    BS: {
+        symbol: 'BS',
+        address: {
+            56: '0x55d398326f99059fF775485246999027B3197955', //TODO usdt for test
+            97: testnetOutput.buildTokens.platformToken, //TODO usdt for test
+            1337: localOutput.buildTokens.platformToken,
+        },
+        decimals: 18,
+    },
     FUSD: {
         symbol: 'FUSD',
         address: {

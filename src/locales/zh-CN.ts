@@ -21,6 +21,7 @@ export default {
     'nav.burn': '销毁',
     'nav.trade': '商店',
     'nav.farm': '挖矿',
+    'nav.pool': '质押',
     'nav.wallet': '资产',
     'nav.connectWallet': '连接钱包',
     'entry.learnmore': '了解更多',
@@ -107,6 +108,9 @@ export default {
     'liquidity.withdraw.lp': '货币对',
     'liquidity.withdraw.willreceive': '将会获得',
     'liquidity.withdraw.approve': '授权提现',
+
+    'pool.totalStaked': '质押总额',
+    'pool.totalEarned': '收益总额',
 
     /**
      * @description 我的资产

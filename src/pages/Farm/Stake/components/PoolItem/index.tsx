@@ -135,7 +135,7 @@ export default (props: { pool: IStakePool; handleFlipper: () => void }) => {
                                             // history.push('/farm/stake?lp=' + name);
                                         }}
                                     >
-                                        Stake LP
+                                        Stake
                                     </Button>
                                 </>
                             )}

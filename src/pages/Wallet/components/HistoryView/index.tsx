@@ -104,187 +104,6 @@ function isOverflow(origins, len = 12): boolean {
     return origins.some((item) => String(item)?.length > len);
 }
 
-const columns = [
-    {
-        title: 'history',
-        dataIndex: 'id',
-        render: (value, row: HistoryViewProps) => {
-            const [txLoading, setTxLoading] = useState(false);
-            const intl = useIntl();
-            const exchangeSystem = useExchangeSystem();
-            const { account } = useWeb3React();
-            const { open: openConfirmModal } = useContext(
-                TransitionConfirmContext,
-            );
-
-            /**
-             * 查询是否可以revert。只查询status 为pending的，type为Exchange 的数据。
-             * status 有：pending, settled, reverted.
-             * @param entryId Operation的type为Exchange的数据的id
-             */
-            const fetchIfCanRevert = useCallback(async (entryId: number) => {
-                const canRevert = await exchangeSystem.canOnlyBeReverted(
-                    entryId,
-                );
-                return canRevert;
-            }, []);
-
-            /**
-             * 执行revert交易
-             * @param entryId Operation的type为Exchange的数据的id
-             */
-            const doRevert = async (entryId) => {
-                if (account) {
-                    const tx = await exchangeSystem.rollback(entryId);
-                    const receipt = await tx.wait();
-                    message.success('Revert successfully.');
-                    // revert之后需要更新这一条数据。
-                }
-            };
-
-            /**@type 是否可以revert */
-            const canRevert = useMemo(async () => {
-                try {
-                    if (row.type === 'Trade') {
-                        const result = await fetchIfCanRevert(Number(row.id));
-                        console.log('>> fetchIfCanRevert is %s', result);
-                        return result;
-                    }
-                    return false;
-                } catch (error) {
-                    console.error(error);
-                }
-            }, []);
-
-            /**@description 交易前的确认 */
-            const openRevertConfirm = useCallback(async () => {
-                setTxLoading(true);
-
-                openConfirmModal({
-                    view: 'trade',
-                    fromToken: {
-                        name: row.token0.name,
-                        amount: row.token0.amount,
-                    },
-                    toToken: {
-                        name: row.token1.name,
-                        amount: row.token1.amount,
-                    },
-                    type: isDeliveryAsset(row.token0.name)
-                        ? 'Delivery'
-                        : 'Perpetuation',
-                    confirm: doRevert,
-                    final: () => setTxLoading(false),
-                });
-            }, [row]);
-
-            return (
-                <div className="history">
-                    <div className="operation">
-                        <i className={`icon ${row.icon}`} />
-                        <div className="info">
-                            <span>{row.type}</span>
-                            <TimeView timestamp={row.dealtime} />
-                        </div>
-                    </div>
-                    {row.token0 && (
-                        <div className="form">
-                            {row.token0 && (
-                                <Fragment>
-                                    {intl
-                                        .formatMessage({
-                                            id: `verb.${
-                                                (row.verb as string)
-                                                    .toLocaleLowerCase()
-                                                    .replace(' ', '.') || 'x'
-                                            }`,
-                                        })
-                                        .trimEnd()}{' '}
-                                    <b>{row.token0.amount}</b>{' '}
-                                    {isOverflow([row.token0.name], 8) ? (
-                                        <Fragment>
-                                            <br />
-                                            {row.token0.name}
-                                        </Fragment>
-                                    ) : (
-                                        row.token0.name
-                                    )}
-                                </Fragment>
-                            )}
-                            {row.token1 && row.conj && (
-                                <Fragment>
-                                    {' '}
-                                    {isOverflow(
-                                        [row.token0.name, row.token0.amount],
-                                        8,
-                                    ) && <br />}
-                                    {intl
-                                        .formatMessage({
-                                            id: `conj.${
-                                                (row.conj as string)
-                                                    .toLocaleLowerCase()
-                                                    .replace(' ', '.') || 'x'
-                                            }`,
-                                        })
-                                        .trimEnd()}{' '}
-                                    <b>{row.token1.amount}</b> {row.token1.name}
-                                </Fragment>
-                            )}
-                        </div>
-                    )}
-                    <div className="last-wraper">
-                        {row.link && (
-                            <a
-                                className="skip"
-                                target="_blank"
-                                href={row.link}
-                            />
-                        )}
-                        <i
-                            className="loading size-18"
-                            style={{
-                                visibility:
-                                    row?.status === 'pending'
-                                        ? 'visible'
-                                        : 'hidden',
-                            }}
-                        />
-                        <Button
-                            style={{
-                                visibility:
-                                    row?.status === 'pending' && canRevert
-                                        ? 'visible'
-                                        : 'hidden',
-                            }}
-                            className="revert-btn common-btn common-btn-red"
-                            onClick={openRevertConfirm}
-                            loading={txLoading}
-                        >
-                            Revert
-                        </Button>
-                        <Popover
-                            placement="leftBottom"
-                            trigger="hover"
-                            content="xxxxxxx"
-                        >
-                            <i
-                                style={{
-                                    visibility:
-                                        row?.status === 'pending' && canRevert
-                                            ? 'visible'
-                                            : 'hidden',
-                                    marginLeft: 6,
-                                }}
-                                className="icon-question size-18"
-                            />
-                        </Popover>
-                    </div>
-                </div>
-            );
-        },
-    },
-];
-
 /**
  * @description Parse data of pool which is from pancake site.
  * @param {HistoryViewProps} item
@@ -345,6 +164,7 @@ const parseDataOfOur = (item): HistoryViewProps => {
         status: item.status,
         link: BSCSCAN_EXPLORER,
         dealtime: item.timestamp,
+        canRevert: item.canRevert,
     };
 };
 
@@ -364,8 +184,122 @@ const HistoryView = () => {
         total: 0,
     });
     const [txLoading, setTxLoading] = useState(false);
-
+    const { open: openConfirmModal } = useContext(TransitionConfirmContext);
     const exchangeSystem = useExchangeSystem();
+
+    const columns = [
+        {
+            title: 'history',
+            dataIndex: 'id',
+            render: (value, row: HistoryViewProps) => {
+                const [txLoading, setTxLoading] = useState(false);
+                const intl = useIntl();
+                return (
+                    <div className="history">
+                        <div className="operation">
+                            <i className={`icon ${row.icon}`} />
+                            <div className="info">
+                                <span>{row.type}</span>
+                                <TimeView timestamp={row.dealtime} />
+                            </div>
+                        </div>
+                        {row.token0 && (
+                            <div className="form">
+                                {row.token0 && (
+                                    <Fragment>
+                                        {intl
+                                            .formatMessage({
+                                                id: `verb.${
+                                                    (row.verb as string)
+                                                        .toLocaleLowerCase()
+                                                        .replace(' ', '.') ||
+                                                    'x'
+                                                }`,
+                                            })
+                                            .trimEnd()}{' '}
+                                        <b>{row.token0.amount}</b>{' '}
+                                        {isOverflow([row.token0.name], 8) ? (
+                                            <Fragment>
+                                                <br />
+                                                {row.token0.name}
+                                            </Fragment>
+                                        ) : (
+                                            row.token0.name
+                                        )}
+                                    </Fragment>
+                                )}
+                                {row.token1 && row.conj && (
+                                    <Fragment>
+                                        {' '}
+                                        {isOverflow(
+                                            [
+                                                row.token0.name,
+                                                row.token0.amount,
+                                            ],
+                                            8,
+                                        ) && <br />}
+                                        {intl
+                                            .formatMessage({
+                                                id: `conj.${
+                                                    (row.conj as string)
+                                                        .toLocaleLowerCase()
+                                                        .replace(' ', '.') ||
+                                                    'x'
+                                                }`,
+                                            })
+                                            .trimEnd()}{' '}
+                                        <b>{row.token1.amount}</b>{' '}
+                                        {row.token1.name}
+                                    </Fragment>
+                                )}
+                            </div>
+                        )}
+                        <div className="last-wraper">
+                            {row.link && (
+                                <a
+                                    className="skip"
+                                    target="_blank"
+                                    href={row.link}
+                                />
+                            )}
+                            <i
+                                className="loading size-18"
+                                style={{
+                                    visibility:
+                                        row?.status === 'pending'
+                                            ? 'visible'
+                                            : 'hidden',
+                                }}
+                            />
+                            {row?.status === 'pending' && row.canRevert && (
+                                <Button
+                                    className="revert-btn common-btn common-btn-red"
+                                    onClick={() => doRevert(row.id)}
+                                    loading={txLoading}
+                                >
+                                    Revert
+                                </Button>
+                            )}
+                            {row?.status === 'pending' && row.canRevert && (
+                                <Popover
+                                    placement="leftBottom"
+                                    trigger="hover"
+                                    content="xxxxxxx"
+                                >
+                                    <i
+                                        style={{
+                                            marginLeft: 6,
+                                        }}
+                                        className="icon-question size-18"
+                                    />
+                                </Popover>
+                            )}
+                        </div>
+                    </div>
+                );
+            },
+        },
+    ];
 
     /**
      * 查询是否可以revert。只查询status 为pending的，type为Exchange 的数据。
@@ -374,12 +308,7 @@ const HistoryView = () => {
      */
     const fetchIfCanRevert = useCallback(async (entryId: number) => {
         const canRevert = await exchangeSystem.canOnlyBeReverted(entryId);
-        console.log('canRevert: ', canRevert);
         return canRevert;
-    }, []);
-
-    useEffect(() => {
-        fetchIfCanRevert(1);
     }, []);
 
     /**
@@ -389,19 +318,25 @@ const HistoryView = () => {
     const doRevert = async (entryId) => {
         if (account) {
             try {
-                setTxLoading(true);
                 const tx = await exchangeSystem.rollback(entryId);
                 const receipt = await tx.wait();
                 message.success('Revert successfully.');
                 // revert之后需要更新这一条数据。
-                setTxLoading(false);
+                const _operations = operations.slice();
+                const index = _operations.findIndex(
+                    (item) => item.id === entryId,
+                );
+                if (index > -1) {
+                    _operations[index].status = 'reverted';
+                    _operations[index].canRevert = false;
+                    setOperations(_operations);
+                }
             } catch (err) {
                 console.log(err);
-                setTxLoading(false);
+                message.error('Revert failed.');
             }
         }
     };
-
     /**
      * @description Fetch pool of mints from pancake site.
      * @returns {void}
@@ -475,6 +410,13 @@ const HistoryView = () => {
                     type: requestType,
                 },
             });
+            for (let i = 0; i < data.operations.length; i++) {
+                const item = data.operations[i];
+                if (item.type === 'Exchange' && item.status === 'pending') {
+                    const res = await fetchIfCanRevert(item.id);
+                    item.canRevert = res;
+                }
+            }
             setOperations(data.operations);
         } catch (error) {
             console.error(error);

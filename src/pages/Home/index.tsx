@@ -1,6 +1,6 @@
 import './less/index.less';
 
-import React, { useState, useMemo, useContext } from 'react';
+import React, { useState, useEffect, useMemo, useContext } from 'react';
 import useEagerConnect from '@/hooks/useEagerConnect';
 import Blacksmith from '@/assets/images/blacksmith.png';
 import Merchant from '@/assets/images/merchant.png';
@@ -11,8 +11,9 @@ import { useBep20Balance } from '@/hooks/useTokenBalance';
 import PreloadAssetsSuspense from '@/components/PreloadAssetsSuspense';
 import TabGroup from '@/components/TabGroup';
 import { ClaimRewardsContext } from '@/components/ClaimRewards';
-import { useIntl } from 'umi';
+import { useIntl, useModel } from 'umi';
 import { Button } from 'antd';
+import { useWeb3React } from '@web3-react/core';
 
 const tabItems = [
     {
@@ -24,7 +25,7 @@ const tabItems = [
         key: 'collateral',
     },
 ];
-
+const POOL_ID = 0;
 export default () => {
     useEagerConnect();
     const isDev = () => {
@@ -38,6 +39,21 @@ export default () => {
         COLLATERAL_TOKENS[0].name,
     );
     const initialRatio = useInitialRatio(collateralToken);
+
+    const { account } = useWeb3React();
+
+    const { fetchStakePoolList, stakeDataList } = useModel(
+        'stakeData',
+        (model) => {
+            return { ...model };
+        },
+    );
+
+    useEffect(() => {
+        if (account) {
+            fetchStakePoolList([{ poolName: 'BS', poolId: POOL_ID }], account);
+        }
+    }, [account]);
 
     const computedRatio = useMemo(
         () => initialRatio * 100,
@@ -146,8 +162,12 @@ export default () => {
                         </p>
                     </div> */}
                     <div className="rewards-box">
-                        <span className="amount">--</span>
-                        <span className="label">Reward</span>
+                        <span className="amount">
+                            {account
+                                ? stakeDataList[0].totalPendingReward + ' BS'
+                                : '--'}
+                        </span>
+                        <span className="label"></span>
                         <Button
                             className="see-rewards-btn common-btn common-btn-red"
                             onClick={open}

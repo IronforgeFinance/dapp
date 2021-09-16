@@ -3,7 +3,7 @@ import './less/index.less';
 import React, { useState, useEffect } from 'react';
 import { InputNumber, Select, Progress, Button } from 'antd';
 import * as message from '@/components/Notification';
-import { LP_TOKENS } from '@/config';
+import { LP_TOKENS, POOL_TOKENS } from '@/config';
 
 import { useBep20Balance } from '@/hooks/useTokenBalance';
 import {
@@ -18,7 +18,7 @@ import { expandTo18Decimals } from '@/utils/bigNumber';
 import { ethers } from 'ethers';
 import TabGroup from '@/components/TabGroup';
 import { useModel } from 'umi';
-
+const STAKE_TOKENS = [...LP_TOKENS, ...POOL_TOKENS];
 enum STAKE_TABS {
     stake = 'stake',
     unstake = 'unstake',
@@ -37,11 +37,11 @@ const tabItems = [
 
 export default (props: { lp: string; handleFlipper: () => void }) => {
     const [submitting, setSubmitting] = useState(false);
-    const { lp: lpParam } = props;
+    const { lp } = props;
     const [tabKey, setTabKey] = useState(tabItems[0].key);
     const [lpAmount, setLpAmount] = useState<number>();
     const [staked, setStaked] = useState<number>();
-    const [lp, setLp] = useState<string>(lpParam || LP_TOKENS[0].poolName);
+    console.log('props2: ', props, lp);
 
     const { updateStakePoolItem } = useModel('stakeData', (model) => ({
         ...model,
@@ -62,7 +62,7 @@ export default (props: { lp: string; handleFlipper: () => void }) => {
     );
 
     const fetchStakedBalance = async () => {
-        const poolId = LP_TOKENS.find((item) => item.poolName === lp).poolId;
+        const poolId = STAKE_TOKENS.find((item) => item.poolName === lp).poolId;
         const userInfo = await MinerReward.userInfo(poolId, account);
         const staked = parseFloat(ethers.utils.formatEther(userInfo.amount));
         setStaked(staked);
@@ -92,7 +92,7 @@ export default (props: { lp: string; handleFlipper: () => void }) => {
         }
         try {
             setSubmitting(true);
-            const poolId = LP_TOKENS.find(
+            const poolId = STAKE_TOKENS.find(
                 (item) => item.poolName === lp,
             ).poolId;
             if (tabKey === STAKE_TABS.stake) {

@@ -1,11 +1,14 @@
 import './less/index.less';
-
+import { useEffect } from 'react';
 import { createContext, useCallback, useState, ReactNode } from 'react';
 import { Button } from 'antd';
 import classNames from 'classnames';
-import { history } from 'umi';
+import { history, useModel } from 'umi';
 import Overlay from '@/components/Overlay';
-
+import { useWeb3React } from '@web3-react/core';
+import { useMinerReward } from '@/hooks/useContract';
+import * as message from '@/components/Notification';
+import { DEFAULT_POOL } from '@/models/stakeData';
 interface ClaimRewardsContextProps {
     visable: boolean;
     open(): void;
@@ -20,12 +23,44 @@ export const ClaimRewardsContext =
     createContext<ClaimRewardsContextProps | null>(null);
 export const ClaimRewardsContextProvier = ClaimRewardsContext.Provider;
 
+const POOL_ID = 0;
 const ClaimRewards = (props: ClaimRewardsProps) => {
     const { children } = props;
     const [visable, setVisable] = useState(false);
+    const [stakeData, setStakeData] = useState(DEFAULT_POOL);
+    const [submitting, setSubmitting] = useState(false);
 
     const close = useCallback(() => setVisable(false), []);
     const open = useCallback(() => setVisable(true), []);
+
+    const { fetchStakePoolList, stakeDataList } = useModel(
+        'stakeData',
+        (model) => {
+            return { ...model };
+        },
+    );
+
+    const { account } = useWeb3React();
+    const MinerReward = useMinerReward();
+
+    const fetchRewardInfo = async () => {
+        fetchStakePoolList([{ poolName: 'BS', poolId: POOL_ID }], account);
+    };
+
+    const handleRedeem = async () => {
+        try {
+            setSubmitting(true);
+            const tx = await MinerReward.harvest(POOL_ID);
+            const receipt = await tx.wait();
+            console.log(receipt);
+            setSubmitting(false);
+            fetchRewardInfo();
+            message.success('Harvest successfully. Pls check your balance.');
+        } catch (err) {
+            console.log(err);
+            setSubmitting(false);
+        }
+    };
 
     return (
         <ClaimRewardsContext.Provider
@@ -43,14 +78,24 @@ const ClaimRewards = (props: ClaimRewardsProps) => {
                             <div className="before" />
                             <div className="content">
                                 <i className="icon-rewards" />
-                                <span className="value">$130330</span>
-                                <span className="label">rewards</span>
+                                <span className="value">
+                                    {stakeDataList[0].totalPendingReward} BS
+                                </span>
+                                <span className="label">Rewards</span>
                                 <div className="bottom">
                                     <p className="price">
-                                        $130003
+                                        {stakeDataList[0].redeemableReward} BS
                                         <i className="icon-question size-20" />
                                     </p>
-                                    <Button className="claim-btn common-btn common-btn-red">
+                                    <Button
+                                        className="claim-btn common-btn common-btn-red"
+                                        onClick={handleRedeem}
+                                        disabled={
+                                            stakeDataList[0].redeemableReward <=
+                                            0
+                                        }
+                                        loading={submitting}
+                                    >
                                         Claim
                                     </Button>
                                 </div>
@@ -60,7 +105,10 @@ const ClaimRewards = (props: ClaimRewardsProps) => {
                         <li className="ratio card">
                             <div className="before" />
                             <div className="content">
-                                <span className="value">90%</span>
+                                <span className="value">
+                                    {(stakeDataList[0].apy * 100).toFixed(4) +
+                                        '%'}
+                                </span>
                                 <span className="label">
                                     Earning ratio{' '}
                                     <i className="icon-question size-20" />
