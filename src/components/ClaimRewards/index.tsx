@@ -92,7 +92,6 @@ const ClaimRewards = (props: ClaimRewardsProps) => {
                                         >
                                             <i className="icon-question size-20" />
                                         </Popover>
-                                        
                                     </p>
                                     <Button
                                         className="claim-btn common-btn common-btn-red"
@@ -121,7 +120,7 @@ const ClaimRewards = (props: ClaimRewardsProps) => {
                                     <Popover
                                         trigger="hover"
                                         placement="topRight"
-                                        content="收益/锁仓"
+                                        content="APR"
                                     >
                                         <i className="icon-question size-20" />
                                     </Popover>

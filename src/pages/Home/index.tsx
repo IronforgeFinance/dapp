@@ -1,12 +1,18 @@
 import './less/index.less';
 
-import React, { useState, useEffect, useMemo, useContext,Fragment } from 'react';
+import React, {
+    useState,
+    useEffect,
+    useMemo,
+    useContext,
+    Fragment,
+} from 'react';
 import useEagerConnect from '@/hooks/useEagerConnect';
 import Blacksmith from '@/assets/images/blacksmith.png';
 import Merchant from '@/assets/images/merchant.png';
 import { Link } from 'umi';
 import { useInitialRatio } from '@/hooks/useConfig';
-import { COLLATERAL_TOKENS } from '@/config';
+import { COLLATERAL_TOKENS, PLATFORM_TOKEN } from '@/config';
 import { useBep20Balance } from '@/hooks/useTokenBalance';
 import PreloadAssetsSuspense from '@/components/PreloadAssetsSuspense';
 import TabGroup from '@/components/TabGroup';
@@ -15,6 +21,10 @@ import { useIntl, useModel } from 'umi';
 import { Button, Popover } from 'antd';
 import { useWeb3React } from '@web3-react/core';
 import { TokenIcon } from '@/components/Icon';
+import { useCollateralSystem, useDebtSystem } from '@/hooks/useContract';
+import { ethers } from 'ethers';
+import { getTokenPrice } from '@/utils';
+import { toFixedWithoutRound } from '@/utils/bigNumber';
 
 const tabItems = [
     {
@@ -30,6 +40,12 @@ const POOL_ID = 0;
 
 const mockCollaterals = ['BTC'];
 
+interface ICollateralData {
+    token: string;
+    amount: number;
+    valueInUSD: number;
+}
+
 export default () => {
     useEagerConnect();
     const isDev = () => {
@@ -43,8 +59,13 @@ export default () => {
     const [collateralToken, setCollateralToken] = useState(
         COLLATERAL_TOKENS[0].name,
     );
-    const initialRatio = useInitialRatio(collateralToken);
+    const [collaterals, setCollaterals] = useState<ICollateralData[]>([]);
+    const [totalStaked, setTotalStaked] = useState(0);
+    const [totalDebtInUSD, setTotalDebtInUSD] = useState(0);
 
+    const initialRatio = useInitialRatio(collateralToken);
+    const collateralSystem = useCollateralSystem();
+    const debtSystem = useDebtSystem();
 
     const { fetchStakePoolList, stakeDataList } = useModel(
         'stakeData',
@@ -54,9 +75,7 @@ export default () => {
     );
 
     useEffect(() => {
-        if (account) {
-            fetchStakePoolList([{ poolName: 'BS', poolId: POOL_ID }], account);
-        }
+        fetchStakePoolList([{ poolName: 'BS', poolId: POOL_ID }], account);
     }, [account]);
 
     const computedRatio = useMemo(
@@ -69,6 +88,76 @@ export default () => {
     const { debtData } = useModel('dataView', (model) => ({
         debtData: model.stakedData,
     }));
+    const getCollateralDataByToken = async (
+        token: string,
+        account?: string,
+    ) => {
+        if (!account) {
+            return {
+                token,
+                amount: 0,
+                valueInUSD: 0,
+            };
+        }
+        const res = await collateralSystem.getUserCollateral(
+            account,
+            ethers.utils.formatBytes32String(token),
+        );
+        const data = parseFloat(ethers.utils.formatUnits(res, 18));
+        const price = await getTokenPrice(token);
+        const collateralInUSD = data * price;
+        console.log('getCollateralData: ', token, data);
+        const lockRes = await collateralSystem.userLockedData(
+            account,
+            ethers.utils.formatBytes32String(token),
+        );
+        const lockData = parseFloat(ethers.utils.formatEther(lockRes));
+        const lockedPrice = await getTokenPrice(PLATFORM_TOKEN);
+        const valueInUSD = lockedPrice * lockData + collateralInUSD;
+        return {
+            token,
+            amount: data,
+            valueInUSD,
+        };
+    };
+    const fetchCollateralInfo = async () => {
+        const tokens = COLLATERAL_TOKENS.map((token) => token.name);
+        const infos = await Promise.all(
+            tokens.map((token) => getCollateralDataByToken(token, account)),
+        );
+        const total = infos.reduce((total, item) => {
+            return (total += item.valueInUSD);
+        }, 0);
+        setCollaterals(infos);
+        setTotalStaked(total);
+    };
+
+    const getDebtInUSD = async () => {
+        if (!account) {
+            return 0;
+        }
+        const res = await Promise.all(
+            COLLATERAL_TOKENS.map((token) =>
+                debtSystem.GetUserDebtBalanceInUsd(
+                    account,
+                    ethers.utils.formatBytes32String(token.name),
+                ),
+            ),
+        );
+
+        const totalDebtInUsd = res.reduce((total, item) => {
+            const val = parseFloat(ethers.utils.formatUnits(item[0], 18));
+            total += val;
+            return total;
+        }, 0);
+        const val = toFixedWithoutRound(totalDebtInUsd, 2);
+        setTotalDebtInUSD(val);
+    };
+
+    useEffect(() => {
+        fetchCollateralInfo();
+        getDebtInUSD();
+    }, [account]);
 
     return (
         <PreloadAssetsSuspense>
@@ -110,38 +199,6 @@ export default () => {
                         type="video/webm"
                     />
                 </video>
-                {/* <div className="sheepskin-box">
-                    <div className="sheepskin-book mint">
-                        <h3>{intl.formatMessage({ id: 'entry.mint' })}</h3>
-                        <p className="summary">
-                            {intl.formatMessage({ id: 'entry.mint.summary' })}
-                        </p>
-                        <p className="words">
-                            {intl.formatMessage({ id: 'entry.mint.desc' })}{' '}
-                            <Link to="/mint">
-                                {intl.formatMessage({ id: 'entry.learnmore' })}
-                            </Link>
-                        </p>
-                    </div>
-                    <div className="sheepskin-book trade">
-                        <h3>{intl.formatMessage({ id: 'entry.trade' })}</h3>
-                        <p className="words">
-                            {intl.formatMessage({ id: 'entry.trade.desc' })}{' '}
-                            <Link to="/trade">
-                                {intl.formatMessage({ id: 'entry.learnmore' })}
-                            </Link>
-                        </p>
-                    </div>
-                    <div className="sheepskin-book buy-ftoken">
-                        <h3>{intl.formatMessage({ id: 'entry.buyToken' })}</h3>
-                        <p className="words">
-                            {intl.formatMessage({ id: 'entry.buyToken.desc' })}{' '}
-                            <Link to="/farm">
-                                {intl.formatMessage({ id: 'entry.learnmore' })}
-                            </Link>
-                        </p>
-                    </div>
-                </div> */}
 
                 <section className="slogan-box">
                     <p>
@@ -160,31 +217,28 @@ export default () => {
                         <div className="pannel-content">
                             {tabKey === 'total-staked' && (
                                 <Fragment>
-                                    {account ? `${fusdBalance} FUSD` : '--'}
+                                    {account ? `${totalStaked} FUSD` : '--'}
                                 </Fragment>
                             )}
-                            {tabKey === 'collateral' &&
-                                (account && mockCollaterals.length ? (
-                                    <div className="callterals">
-                                        {mockCollaterals.map((item) => (
-                                            <Popover
-                                                content={item}
-                                                trigger="hover"
-                                                placement="topRight"
-                                                key={item}
-                                            >
-                                                <button>
-                                                    <TokenIcon
-                                                        name={item}
-                                                        size={36}
-                                                    />
-                                                </button>
-                                            </Popover>
-                                        ))}
-                                    </div>
-                                ) : (
-                                    <Fragment>暂无抵押</Fragment>
-                                ))}
+                            {tabKey === 'collateral' && (
+                                <div className="callterals">
+                                    {collaterals.map((item) => (
+                                        <Popover
+                                            content={item.valueInUSD}
+                                            trigger="hover"
+                                            placement="topRight"
+                                            key={item.token}
+                                        >
+                                            <button>
+                                                <TokenIcon
+                                                    name={item.token}
+                                                    size={36}
+                                                />
+                                            </button>
+                                        </Popover>
+                                    ))}
+                                </div>
+                            )}
                         </div>
                     </div>
                     <div className="rewards-box">
@@ -203,7 +257,7 @@ export default () => {
                     </div>
                     <div className="amount-box">
                         <span className="amount">
-                            {account ? `$${0}` : '--'}
+                            {account ? `$${totalDebtInUSD}` : '--'}
                         </span>
                         <span className="desc">
                             {intl.formatMessage({ id: 'data.activedebt' })}
