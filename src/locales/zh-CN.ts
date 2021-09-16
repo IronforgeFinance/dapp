@@ -147,9 +147,11 @@ export default {
     'history.burn': '燃烧',
     'history.delivery': '交割',
 
-    /**
-     * @description 通用词
-     */
+    /**@description 空 */
+    noAssets: '暂无资产',
+    noTrades: '暂无交易记录',
+    noConnection: '点击“连接钱包”后查看',
+    /**@description 通用词 */
     perpetual: '永续合约',
     delivery: '交割合约',
     days: '天',
@@ -164,6 +166,9 @@ export default {
     change: '修改',
     changeWallet: '更换钱包',
     connectWallet: '连接钱包',
+    apyDesc: 'APY是包含复投的收益',
+    bsDesc: 'BS是Iron Forge的平台代币',
+    bsTotalDesc: '奖励50%可即刻提取,50%将于30天内线性释放',
     /** @description 动词 */
     'verb.from': '从', //就当动词省略
     'verb.send': '发送',

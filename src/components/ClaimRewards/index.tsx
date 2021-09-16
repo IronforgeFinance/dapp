@@ -3,6 +3,7 @@ import './less/index.less';
 import { createContext, useCallback, useState, ReactNode } from 'react';
 import { Button, Popover } from 'antd';
 import Overlay from '@/components/Overlay';
+import { useWeb3React } from '@web3-react/core';
 
 interface ClaimRewardsContextProps {
     visable: boolean;
@@ -21,6 +22,7 @@ export const ClaimRewardsContextProvier = ClaimRewardsContext.Provider;
 const ClaimRewards = (props: ClaimRewardsProps) => {
     const { children } = props;
     const [visable, setVisable] = useState(false);
+    const { account } = useWeb3React();
 
     const close = useCallback(() => setVisable(false), []);
     const open = useCallback(() => setVisable(true), []);
@@ -41,15 +43,17 @@ const ClaimRewards = (props: ClaimRewardsProps) => {
                             <div className="before" />
                             <div className="content">
                                 <i className="icon-rewards" />
-                                <span className="value">$130330</span>
+                                <span className="value">
+                                    {account ? `$${0}` : '--'}
+                                </span>
                                 <span className="label">rewards</span>
                                 <div className="bottom">
                                     <p className="price">
-                                        $130003
+                                        {account ? `$${0}` : '--'}
                                         <Popover
                                             trigger="hover"
-                                            placement="rightTop"
-                                            content="something"
+                                            placement="topLeft"
+                                            content="收益来自于铸造中锁仓的BS，50%可即刻提取，50%将于30天内线性释放。"
                                         >
                                             <i className="icon-question size-20" />
                                         </Popover>
@@ -64,13 +68,15 @@ const ClaimRewards = (props: ClaimRewardsProps) => {
                         <li className="ratio card">
                             <div className="before" />
                             <div className="content">
-                                <span className="value">90%</span>
+                                <span className="value">
+                                    {account ? `${0}%` : '--'}
+                                </span>
                                 <span className="label">
                                     Earning ratio{' '}
                                     <Popover
                                         trigger="hover"
-                                        placement="rightTop"
-                                        content="something"
+                                        placement="topRight"
+                                        content="收益/锁仓"
                                     >
                                         <i className="icon-question size-20" />
                                     </Popover>
