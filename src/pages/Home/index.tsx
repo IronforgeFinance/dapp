@@ -1,6 +1,6 @@
 import './less/index.less';
 
-import React, { useState, useMemo, useContext } from 'react';
+import React, { useState, useMemo, useContext, Fragment } from 'react';
 import useEagerConnect from '@/hooks/useEagerConnect';
 import Blacksmith from '@/assets/images/blacksmith.png';
 import Merchant from '@/assets/images/merchant.png';
@@ -11,8 +11,10 @@ import { useBep20Balance } from '@/hooks/useTokenBalance';
 import PreloadAssetsSuspense from '@/components/PreloadAssetsSuspense';
 import TabGroup from '@/components/TabGroup';
 import { ClaimRewardsContext } from '@/components/ClaimRewards';
-import { useIntl } from 'umi';
-import { Button } from 'antd';
+import { useIntl, useModel } from 'umi';
+import { Button, Popover } from 'antd';
+import { useWeb3React } from '@web3-react/core';
+import { TokenIcon } from '@/components/Icon';
 
 const tabItems = [
     {
@@ -25,6 +27,8 @@ const tabItems = [
     },
 ];
 
+const mockCollaterals = ['BTC'];
+
 export default () => {
     useEagerConnect();
     const isDev = () => {
@@ -34,6 +38,7 @@ export default () => {
     const { open } = useContext(ClaimRewardsContext);
     const [tabKey, setTabKey] = useState(tabItems[0].key);
     const [showSelectFromToken, setShowSelectFromToken] = useState(false);
+    const { account } = useWeb3React();
     const [collateralToken, setCollateralToken] = useState(
         COLLATERAL_TOKENS[0].name,
     );
@@ -45,6 +50,10 @@ export default () => {
     );
 
     const { balance: fusdBalance } = useBep20Balance('FUSD');
+
+    const { debtData } = useModel('dataView', (model) => ({
+        debtData: model.stakedData,
+    }));
 
     return (
         <PreloadAssetsSuspense>
@@ -132,21 +141,41 @@ export default () => {
                             onChange={(v) => setTabKey(v)}
                             className="custom-tabs-group"
                         />
-                        <div className="pannel-content">4000 USD</div>
+
+                        <div className="pannel-content">
+                            {tabKey === 'total-staked' && (
+                                <Fragment>
+                                    {account ? `${fusdBalance} FUSD` : '--'}
+                                </Fragment>
+                            )}
+                            {tabKey === 'collateral' &&
+                                (account && mockCollaterals.length ? (
+                                    <div className="callterals">
+                                        {mockCollaterals.map((item) => (
+                                            <Popover
+                                                content={item}
+                                                trigger="hover"
+                                                placement="topRight"
+                                                key={item}
+                                            >
+                                                <button>
+                                                    <TokenIcon
+                                                        name={item}
+                                                        size={36}
+                                                    />
+                                                </button>
+                                            </Popover>
+                                        ))}
+                                    </div>
+                                ) : (
+                                    <Fragment>暂无抵押</Fragment>
+                                ))}
+                        </div>
                     </div>
-                    {/* <div className="pledge-ratio-box">
-                        <SelectTokens
-                            value={collateralToken}
-                            tokenList={COLLATERAL_TOKENS}
-                            onSelect={(v) => setCollateralToken(v)}
-                        />
-                        <span className="ratio">{computedRatio}%</span>
-                        <p className="desc">
-                            {intl.formatMessage({ id: 'data.pledgrate' })}
-                        </p>
-                    </div> */}
                     <div className="rewards-box">
-                        <span className="amount">--</span>
+                        <span className="amount">
+                            {account ? `${0} BS` : '--'}
+                        </span>
                         <span className="label">Reward</span>
                         <Button
                             className="see-rewards-btn common-btn common-btn-red"
@@ -156,7 +185,9 @@ export default () => {
                         </Button>
                     </div>
                     <div className="amount-box">
-                        <span className="amount">{fusdBalance} fUSD</span>
+                        <span className="amount">
+                            {account ? `$${0}` : '--'}
+                        </span>
                         <span className="desc">
                             {intl.formatMessage({ id: 'data.activedebt' })}
                         </span>

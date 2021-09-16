@@ -178,15 +178,15 @@
 
     .data-box {
         display: flex;
-        justify-content: flex-end;
+        justify-content: space-between;
         align-items: flex-end;
         position: fixed;
+        flex-wrap: wrap;
         right: 0;
         bottom: 0;
-        padding-bottom: 37px;
         width: 100%;
-        margin-left: 175px;
         z-index: 3;
+        padding: 0 15vw 37px 15vw;
 
         .staked-and-collateral-box {
             background: linear-gradient(
@@ -200,6 +200,7 @@
             flex-direction: column;
             align-items: center;
             width: 330px;
+            min-height: 184px;
 
             .tab-group {
                 padding: 18px 18px 0 18px;
@@ -221,6 +222,24 @@
                 line-height: 66px;
                 text-align: center;
                 color: #e1ab3b;
+                width: 100%;
+                word-break: break-all;
+            }
+
+            .callterals {
+                display: flex;
+                align-items: center;
+                flex-wrap: wrap;
+
+                button {
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+
+                    &:nth-child(n + 2) {
+                        margin-left: 10px;
+                    }
+                }
             }
         }
 
@@ -235,8 +254,7 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            margin-left: 175px;
-            width: 330px;
+            min-width: 330px;
             padding: 22px 47px 14px 47px;
             box-sizing: border-box;
 
@@ -264,6 +282,7 @@
                 align-items: center;
                 text-align: center;
                 color: #e1ab3b;
+                word-break: break-all;
             }
 
             .label {
@@ -291,8 +310,7 @@
             flex-direction: column;
             align-items: center;
             #image.background('~@/assets/images/home-middata-bg-corner.png');
-            width: 282px;
-            margin-left: 175px;
+            min-width: 282px;
 
             // position: fixed;
             // bottom: 37px;
@@ -339,10 +357,8 @@
             );
             backdrop-filter: blur(20px);
             border-radius: 8px;
-            width: 282px;
+            min-width: 282px;
             height: 184px;
-            margin-left: 156px;
-            margin-right: 233px;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -358,6 +374,7 @@
                 line-height: 66px;
                 text-align: center;
                 color: #e1ab3b;
+                word-break: break-all;
             }
 
             .desc {

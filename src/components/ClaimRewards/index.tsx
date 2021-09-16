@@ -1,9 +1,7 @@
 import './less/index.less';
 
 import { createContext, useCallback, useState, ReactNode } from 'react';
-import { Button } from 'antd';
-import classNames from 'classnames';
-import { history } from 'umi';
+import { Button, Popover } from 'antd';
 import Overlay from '@/components/Overlay';
 
 interface ClaimRewardsContextProps {
@@ -48,7 +46,13 @@ const ClaimRewards = (props: ClaimRewardsProps) => {
                                 <div className="bottom">
                                     <p className="price">
                                         $130003
-                                        <i className="icon-question size-20" />
+                                        <Popover
+                                            trigger="hover"
+                                            placement="rightTop"
+                                            content="something"
+                                        >
+                                            <i className="icon-question size-20" />
+                                        </Popover>
                                     </p>
                                     <Button className="claim-btn common-btn common-btn-red">
                                         Claim
@@ -63,7 +67,13 @@ const ClaimRewards = (props: ClaimRewardsProps) => {
                                 <span className="value">90%</span>
                                 <span className="label">
                                     Earning ratio{' '}
-                                    <i className="icon-question size-20" />
+                                    <Popover
+                                        trigger="hover"
+                                        placement="rightTop"
+                                        content="something"
+                                    >
+                                        <i className="icon-question size-20" />
+                                    </Popover>
                                 </span>
                             </div>
                             <div className="after" />
