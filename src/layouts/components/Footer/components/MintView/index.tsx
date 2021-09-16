@@ -1,10 +1,7 @@
 import './less/index.less';
 
-import { gql, useQuery } from '@apollo/client';
-import { useState, useEffect, useMemo, useCallback } from 'react';
-import { Table, TablePaginationConfig } from 'antd';
+import { Table } from 'antd';
 import { ethers } from 'ethers';
-import { useWeb3React } from '@web3-react/core';
 import {
     TokenView,
     PureView,
@@ -12,13 +9,9 @@ import {
     TimeView,
 } from '@/components/CommonView';
 import { GET_MINTS, GET_MINTS_TOTAL } from '@/subgraph/graphql';
-import { ourClient } from '@/subgraph/clientManager';
-import { DEFAULT_PAGE_SIZE } from '@/config/constants/constant';
 import { useIntl } from 'umi';
-import { toFixedWithoutRound } from '@/utils/bigNumber';
-import dayjs from 'dayjs';
-import useRefresh from '@/hooks/useRefresh';
 import NoneView from '@/components/NoneView';
+import usePagination from '@/hooks/usePagination';
 
 const columns = [
     {
@@ -84,56 +77,17 @@ const columns = [
 
 const MintView = () => {
     const intl = useIntl();
-    const { account } = useWeb3React();
-    const [mints, setMints] = useState([]);
-    const { fastRefresh } = useRefresh();
-    const [pagination, setPagination] = useState<TablePaginationConfig>({
-        current: 1,
-        pageSize: 5,
-        total: 0,
+    const {
+        list: mints,
+        setPagination,
+        pagination,
+        position,
+        noneStatus,
+    } = usePagination({
+        listGql: GET_MINTS,
+        totalGql: GET_MINTS_TOTAL,
+        key: 'mints',
     });
-
-    const fetchMints = useCallback(async () => {
-        const { data } = await ourClient.query({
-            query: GET_MINTS,
-            variables: {
-                offset: pagination.current - 1,
-                limit: pagination.pageSize,
-                user: account,
-            },
-        });
-        setMints(data?.mints ?? []);
-    }, [account, pagination]);
-
-    const fetchMintsTotal = useCallback(async () => {
-        const { data } = await ourClient.query({
-            query: GET_MINTS_TOTAL,
-            variables: { user: account },
-        });
-        setPagination({ ...pagination, total: data.mints?.length ?? 0 });
-    }, [account]);
-
-    useEffect(() => {
-        fetchMints();
-    }, [fastRefresh, pagination]);
-
-    useEffect(() => {
-        fetchMintsTotal();
-    }, []);
-
-    const position = useMemo(
-        () => (pagination.total > pagination.pageSize ? 'bottomRight' : 'none'),
-        [pagination],
-    );
-
-    const noneStatus = useMemo(() => {
-        if (!account) {
-            return 'noConnection';
-        }
-        if (!mints?.length) {
-            return 'noAssets';
-        }
-    }, [account, mints]);
 
     return (
         <div className="mint-view">

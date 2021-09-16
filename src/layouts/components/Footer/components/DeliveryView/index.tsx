@@ -1,10 +1,7 @@
 import './less/index.less';
 
-import { useQuery } from '@apollo/client';
-import { useState, useEffect, useMemo, useCallback } from 'react';
 import { Table } from 'antd';
 import { ethers } from 'ethers';
-import { useWeb3React } from '@web3-react/core';
 import {
     TokenView,
     PureView,
@@ -12,10 +9,12 @@ import {
     TimeView,
     DebtView,
 } from '@/components/CommonView';
-import { GET_MINTS_BY_COLLATERAL } from '@/subgraph/graphql';
-import { ourClient } from '@/subgraph/clientManager';
-import { DEFAULT_PAGE_SIZE } from '@/config/constants/constant';
+import {
+    GET_MINTS_BY_COLLATERAL,
+    GET_MINTS_BY_COLLATERAL_TOTAL,
+} from '@/subgraph/graphql';
 import NoneView from '@/components/NoneView';
+import usePagination from '@/hooks/usePagination';
 
 const columns = [
     {
@@ -89,55 +88,28 @@ const columns = [
 ];
 
 const DeliveryView = () => {
-    const { account } = useWeb3React();
-    const [mints, setMints] = useState([]);
-    const [pagination, setPagination] = useState({
-        current: 1,
-        pageSize: DEFAULT_PAGE_SIZE,
-        total: 0,
+    const {
+        list: mints,
+        setPagination,
+        pagination,
+        position,
+        noneStatus,
+    } = usePagination({
+        listGql: GET_MINTS_BY_COLLATERAL,
+        totalGql: GET_MINTS_BY_COLLATERAL_TOTAL,
+        key: 'mints',
     });
-
-    const fetchMints = useCallback(async () => {
-        const { data } = await ourClient.query({
-            query: GET_MINTS_BY_COLLATERAL,
-            variables: {
-                offset: pagination.current - 1,
-                limit: pagination.pageSize,
-                user: account,
-            },
-        });
-        setMints(data?.mints ?? []);
-    }, [account]);
-
-    useEffect(() => {
-        fetchMints();
-    }, []);
-
-    const noData = useMemo(() => !mints?.length, [mints]);
-
-    const position = useMemo(
-        () => (pagination.total > pagination.pageSize ? 'bottomRight' : 'none'),
-        [pagination],
-    );
-
-    const noneStatus = useMemo(() => {
-        if (!account) {
-            return 'noConnection';
-        }
-        if (!mints?.length) {
-            return 'noAssets';
-        }
-    }, [account, mints]);
 
     return (
         <div className="mint-view">
             {!noneStatus && (
                 <Table
                     className="custom-table"
-                    columns={noData ? [] : columns}
+                    columns={columns}
                     rowKey={(record) => record.id}
                     dataSource={mints}
                     pagination={{ ...pagination, position: [position] }}
+                    onChange={(pagination) => setPagination(pagination)}
                 />
             )}
             {noneStatus && <NoneView type={noneStatus} />}

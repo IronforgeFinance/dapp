@@ -3,11 +3,12 @@ import './less/index.less';
 import { Fragment } from 'react';
 import { useModel, useIntl } from 'umi';
 
-interface NoneView {
-    type: 'noAssets' | 'noConnection' | 'noRecords' | undefined;
+export type NoneTypes = 'noAssets' | 'noConnection' | 'noRecords' | undefined;
+export interface NoneViewProps {
+    type: NoneTypes;
 }
 
-const NoneView = (props: NoneView) => {
+const NoneView = (props: NoneViewProps) => {
     const { type } = props;
     const intl = useIntl();
 
