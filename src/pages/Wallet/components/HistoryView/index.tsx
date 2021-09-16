@@ -125,7 +125,7 @@ const useParseDataOfPancake =
             name: item.pair.token1.name,
             amount: toFixedWithoutRound(item.amount1, 6),
         },
-        link: BSCSCAN_EXPLORER,
+        link: `${BSCSCAN_EXPLORER}tx/${item.txhash}`,
         dealtime: item.timestamp,
     });
 
@@ -162,7 +162,7 @@ const parseDataOfOur = (item): HistoryViewProps => {
             ),
         },
         status: item.status,
-        link: BSCSCAN_EXPLORER,
+        link: `${BSCSCAN_EXPLORER}tx/${item.txhash}`,
         dealtime: item.timestamp,
         canRevert: item.canRevert,
     };
