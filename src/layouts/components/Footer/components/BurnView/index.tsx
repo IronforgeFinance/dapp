@@ -53,7 +53,10 @@ const columns = [
         dataIndex: 'ratio',
         render: (value, row) => (
             <PureView
-                customData={`${+ethers.utils.formatUnits(value, 18) * 100}%`}
+                customData={`${(
+                    (1 / parseFloat(ethers.utils.formatEther(value))) *
+                    100
+                ).toFixed(2)}%`}
             />
         ),
     },

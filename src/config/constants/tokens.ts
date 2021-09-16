@@ -54,8 +54,8 @@ export default {
         symbol: 'FUSD',
         address: {
             56: '',
-            97: testnetOutput.fusdToken,
-            1337: localOutput.fusdToken,
+            97: testnetOutput.FUSD,
+            1337: localOutput.FUSD,
         },
         decimals: 18,
     },
@@ -63,8 +63,8 @@ export default {
         symbol: 'lBTC',
         address: {
             56: '',
-            97: testnetOutput.lbtcToken,
-            1337: localOutput.lbtcToken,
+            97: testnetOutput.lBTC,
+            1337: localOutput.lBTC,
         },
         decimals: 18,
     },
