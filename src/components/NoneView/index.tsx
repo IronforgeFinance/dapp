@@ -1,7 +1,7 @@
 import './less/index.less';
 
 import { Fragment } from 'react';
-import { useModel } from 'umi';
+import { useModel, useIntl } from 'umi';
 
 interface NoneView {
     type: 'noAssets' | 'noConnection' | 'noRecords' | undefined;
@@ -9,6 +9,7 @@ interface NoneView {
 
 const NoneView = (props: NoneView) => {
     const { type } = props;
+    const intl = useIntl();
 
     const { requestConnectWallet } = useModel('app', (model) => ({
         requestConnectWallet: model.requestConnectWallet,
@@ -19,7 +20,7 @@ const NoneView = (props: NoneView) => {
             {type === 'noAssets' && (
                 <Fragment>
                     <i className="icon-no-assets" />
-                    <p>Don't have any assets</p>
+                    <p>{intl.formatMessage({ id: 'noAssets' })}</p>
                     <a
                         className="common-btn common-btn-red"
                         target="_self"
@@ -32,7 +33,7 @@ const NoneView = (props: NoneView) => {
             {type === 'noConnection' && (
                 <Fragment>
                     <i className="icon-no-connection" />
-                    <p>您还没有连接钱包，请先连接钱包</p>
+                    <p>{intl.formatMessage({ id: 'noConnection' })}</p>
                     <a
                         className="common-btn common-btn-red"
                         onClick={requestConnectWallet}
@@ -44,7 +45,7 @@ const NoneView = (props: NoneView) => {
             {type === 'noRecords' && (
                 <Fragment>
                     <i className="icon-no-records" />
-                    <p>暂无历史记录，请先去铸造？</p>
+                    <p>{intl.formatMessage({ id: 'noTrades' })}</p>
                     <a
                         className="common-btn common-btn-red"
                         target="_self"

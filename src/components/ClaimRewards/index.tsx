@@ -1,7 +1,7 @@
 import './less/index.less';
 import { useEffect } from 'react';
 import { createContext, useCallback, useState, ReactNode } from 'react';
-import { Button } from 'antd';
+import { Button, Popover } from 'antd';
 import classNames from 'classnames';
 import { history, useModel } from 'umi';
 import Overlay from '@/components/Overlay';
@@ -29,6 +29,7 @@ const ClaimRewards = (props: ClaimRewardsProps) => {
     const [visable, setVisable] = useState(false);
     const [stakeData, setStakeData] = useState(DEFAULT_POOL);
     const [submitting, setSubmitting] = useState(false);
+    const { account } = useWeb3React();
 
     const close = useCallback(() => setVisable(false), []);
     const open = useCallback(() => setVisable(true), []);
@@ -40,7 +41,6 @@ const ClaimRewards = (props: ClaimRewardsProps) => {
         },
     );
 
-    const { account } = useWeb3React();
     const MinerReward = useMinerReward();
 
     const fetchRewardInfo = async () => {
@@ -85,7 +85,14 @@ const ClaimRewards = (props: ClaimRewardsProps) => {
                                 <div className="bottom">
                                     <p className="price">
                                         {stakeDataList[0].redeemableReward} BS
-                                        <i className="icon-question size-20" />
+                                        <Popover
+                                            trigger="hover"
+                                            placement="topLeft"
+                                            content="收益来自于铸造中锁仓的BS，50%可即刻提取，50%将于30天内线性释放。"
+                                        >
+                                            <i className="icon-question size-20" />
+                                        </Popover>
+                                        
                                     </p>
                                     <Button
                                         className="claim-btn common-btn common-btn-red"
@@ -111,7 +118,13 @@ const ClaimRewards = (props: ClaimRewardsProps) => {
                                 </span>
                                 <span className="label">
                                     Earning ratio{' '}
-                                    <i className="icon-question size-20" />
+                                    <Popover
+                                        trigger="hover"
+                                        placement="topRight"
+                                        content="收益/锁仓"
+                                    >
+                                        <i className="icon-question size-20" />
+                                    </Popover>
                                 </span>
                             </div>
                             <div className="after" />

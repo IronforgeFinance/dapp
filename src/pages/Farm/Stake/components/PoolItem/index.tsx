@@ -62,7 +62,7 @@ export default (props: { pool: IStakePool; handleFlipper: () => void }) => {
                         <p className="value">
                             {(apy * 100).toFixed(2) + '%'}{' '}
                             <Popover
-                                content={'这是APY计算规则说明'}
+                                content={intl.formatMessage({ id: 'apyDesc' })}
                                 trigger="hover"
                                 placement="topRight"
                             >
@@ -75,7 +75,7 @@ export default (props: { pool: IStakePool; handleFlipper: () => void }) => {
                         <p className="value">
                             BS{' '}
                             <Popover
-                                content={'这是奖励说明'}
+                                content={intl.formatMessage({ id: 'bsDesc' })}
                                 trigger="hover"
                                 placement="topRight"
                             >
@@ -99,7 +99,9 @@ export default (props: { pool: IStakePool; handleFlipper: () => void }) => {
                             >
                                 {redeemableReward}{' '}
                                 <Popover
-                                    content={'Redeemable'}
+                                    content={intl.formatMessage({
+                                        id: 'bsTotalDesc',
+                                    })}
                                     trigger="hover"
                                     placement="bottom"
                                 >

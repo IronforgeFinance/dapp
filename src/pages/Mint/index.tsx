@@ -252,14 +252,27 @@ export default () => {
 
     /**@description 弹出npc */
     useEffect(
-        () => setWords(lockedAmount > 0 ? 'lockedAmount' : ''),
+        () =>
+            setWords(
+                lockedAmount > 0
+                    ? '质押物中BS锁仓量的占比越高，质押率F-Ratio越低, 最低可至350%'
+                    : '',
+            ),
         [lockedAmount],
     );
     useEffect(
         () => setWords(collateralToken ? 'collateralToken' : ''),
         [collateralToken],
     );
-    useEffect(() => setWords(toToken ? 'toToken' : ''), [toToken]);
+    useEffect(
+        () =>
+            setWords(
+                toToken
+                    ? 'IronForge提供永续和交割这两种类型的合成资产，交割类合成资产的交割日到期后，资产价格将被锁定，背后的债务也会被冻结并不再跟随公共债务池的变化；永续资产无日期限制，价格永远跟随市场变化，故用户没有销毁的债务将一直随着公共债务池的变化'
+                    : '',
+            ),
+        [toToken],
+    );
     useEffect(() => {
         return () => {
             setWords('');
@@ -488,7 +501,6 @@ export default () => {
         });
     }, [collateralToken, collateralAmount, toToken, toAmount, lockedAmount]);
 
-
     /**@type 质押率进度百分比 */
     const sliderRatio = useMemo(() => {
         const ratio = ((computedRatio * 100) / RATIO_MAX_MINT) * 100;
@@ -513,7 +525,9 @@ export default () => {
                 {!isMobile && (
                     <CommentaryCard
                         title={intl.formatMessage({ id: 'mint.title' })}
-                        description={intl.formatMessage({ id: 'mint.desc' })}
+                        description={
+                            '用户可以通过单币质押或是组合质押来铸造合成资产'
+                        }
                     />
                 )}
                 <div className="mint-form-box common-box">
@@ -569,7 +583,7 @@ export default () => {
                         <div className="label">
                             {intl.formatMessage({ id: 'mint.locked' })}
                             <Popover
-                                content={'这是一段文字这是一段文字这是一段文字'}
+                                content={'选择质押物中BS的比例'}
                                 trigger="hover"
                                 placement="topLeft"
                             >

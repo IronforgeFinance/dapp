@@ -56,6 +56,13 @@ export const GET_BURNS_FROM_PANCAKE = gql`
  * >>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Our Subgraph <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
  */
 
+export const GET_MINTS_TOTAL = gql`
+    query Mints($user: String) {
+        mints(where: { user_contains: $user }) {
+            id
+        }
+    }
+`;
 export const GET_MINTS = gql`
     query Mints($offset: Int, $limit: Int, $user: String) {
         mints(skip: $offset, first: $limit, where: { user_contains: $user }) {
@@ -73,6 +80,13 @@ export const GET_MINTS = gql`
     }
 `;
 
+export const GET_BURNS_TOTAL = gql`
+    query Burns($user: String) {
+        burns(where: { user_contains: $user }) {
+            id
+        }
+    }
+`;
 export const GET_BURNS = gql`
     query Burns($offset: Int, $limit: Int, $user: String) {
         burns(skip: $offset, first: $limit, where: { user_contains: $user }) {
@@ -94,6 +108,13 @@ export const GET_BURNS = gql`
  * @property {Deposit | Withdraw | Harvest | Mint | Trade | Burn} type 操作记录类型
  * @property {HexString} txhash 交易哈希
  */
+export const GET_OPERATIONS_TOTAL = gql`
+    query Operations($user: String, $type: String) {
+        operations(where: { user_contains: $user, type_contains: $type }) {
+            id
+        }
+    }
+`;
 export const GET_OPERATIONS = gql`
     query Operations($offset: Int, $limit: Int, $user: String, $type: String) {
         operations(
@@ -110,6 +131,14 @@ export const GET_OPERATIONS = gql`
             txhash
             timestamp
             status
+        }
+    }
+`;
+
+export const GET_OPERATIONS_FUZZY_TOTAL = gql`
+    query Operations($user: String, $type: [String]) {
+        operations(where: { user_contains: $user, type_in: $type }) {
+            id
         }
     }
 `;
@@ -141,6 +170,13 @@ export const GET_OPERATIONS_FUZZY = gql`
 /**
  * @description
  */
+export const GET_MINTS_BY_COLLATERAL_TOTAL = gql`
+    query Operations($user: String) {
+        operations(where: { user: $user, collateralCurrency_contains: "-" }) {
+            id
+        }
+    }
+`;
 export const GET_MINTS_BY_COLLATERAL = gql`
     query MintsByCollateral($offset: Int, $limit: Int, $user: String) {
         mints(

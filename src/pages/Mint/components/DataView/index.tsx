@@ -56,9 +56,9 @@ export default (props: DataViewProps) => {
                         </span>
                         <Popover
                             placement="topLeft"
-                            content={intl.formatMessage({
-                                id: 'assetsbar.fratio.desc',
-                            })}
+                            content={
+                                '质押率会根据用户所选质押物类型和币价波动实时变化'
+                            }
                             trigger="hover"
                         >
                             <i
