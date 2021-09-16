@@ -247,7 +247,7 @@ export default () => {
                                 ? stakeDataList[0].totalPendingReward + ' BS'
                                 : '--'}
                         </span>
-                        <span className="label"></span>
+                        <span className="label">Rewards</span>
                         <Button
                             className="see-rewards-btn common-btn common-btn-red"
                             onClick={open}
