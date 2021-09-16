@@ -2,7 +2,7 @@ import './less/index.less';
 
 import { gql, useQuery } from '@apollo/client';
 import { useState, useEffect, useMemo, useCallback } from 'react';
-import { Table } from 'antd';
+import { Table, TablePaginationConfig } from 'antd';
 import { ethers } from 'ethers';
 import { useWeb3React } from '@web3-react/core';
 import {
@@ -11,12 +11,13 @@ import {
     TypeView,
     TimeView,
 } from '@/components/CommonView';
-import { GET_MINTS } from '@/subgraph/graphql';
+import { GET_MINTS, GET_MINTS_TOTAL } from '@/subgraph/graphql';
 import { ourClient } from '@/subgraph/clientManager';
 import { DEFAULT_PAGE_SIZE } from '@/config/constants/constant';
 import { useIntl } from 'umi';
 import { toFixedWithoutRound } from '@/utils/bigNumber';
 import dayjs from 'dayjs';
+import useRefresh from '@/hooks/useRefresh';
 import NoneView from '@/components/NoneView';
 
 const columns = [
@@ -85,9 +86,10 @@ const MintView = () => {
     const intl = useIntl();
     const { account } = useWeb3React();
     const [mints, setMints] = useState([]);
-    const [pagination, setPagination] = useState({
+    const { fastRefresh } = useRefresh();
+    const [pagination, setPagination] = useState<TablePaginationConfig>({
         current: 1,
-        pageSize: DEFAULT_PAGE_SIZE,
+        pageSize: 5,
         total: 0,
     });
 
@@ -101,10 +103,22 @@ const MintView = () => {
             },
         });
         setMints(data?.mints ?? []);
+    }, [account, pagination]);
+
+    const fetchMintsTotal = useCallback(async () => {
+        const { data } = await ourClient.query({
+            query: GET_MINTS_TOTAL,
+            variables: { user: account },
+        });
+        setPagination({ ...pagination, total: data.mints?.length ?? 0 });
     }, [account]);
 
     useEffect(() => {
         fetchMints();
+    }, [fastRefresh, pagination]);
+
+    useEffect(() => {
+        fetchMintsTotal();
     }, []);
 
     const position = useMemo(
@@ -137,6 +151,7 @@ const MintView = () => {
                     rowKey={(record) => record.id}
                     dataSource={mints}
                     pagination={{ ...pagination, position: [position] }}
+                    onChange={(pagination) => setPagination(pagination)}
                 />
             )}
             {noneStatus && <NoneView type={noneStatus} />}

@@ -12,7 +12,6 @@ import BurnView from './components/BurnView';
 import DeliveryView from './components/DeliveryView';
 import { useIntl } from 'umi';
 import { Button } from 'antd';
-import useRefresh from '@/hooks/useRefresh';
 import { MDEX_SWAP_EXPLORER } from '@/config/constants/constant';
 import { getTokenPrice } from '@/utils/index';
 import { ReactComponent as TabBackIcon01 } from '@/assets/images/big-board-svg-01.svg';
@@ -50,7 +49,6 @@ export default () => {
     const [tabKey, setTabKey] = React.useState(tabItems[0].key);
     const [visable, setVisable] = React.useState(false);
     const [showWholeView, setShowWholeView] = React.useState(false);
-    const { fastRefresh } = useRefresh();
 
     const CurrentView = React.useMemo(() => {
         switch (tabKey) {
@@ -90,25 +88,25 @@ export default () => {
         setTabKey(tabItems[0].key);
     }, []);
 
-    useEffect(() => {
-        let unmounted = false;
-        const fetchBalance = async () => {
-            try {
-                const dexPrice = await getTokenPrice(platformToken);
-                setPrice(+dexPrice);
-            } catch (e) {
-                console.error(e);
-            }
-        };
+    // useEffect(() => {
+    //     let unmounted = false;
+    //     const fetchBalance = async () => {
+    //         try {
+    //             const dexPrice = await getTokenPrice(platformToken);
+    //             setPrice(+dexPrice);
+    //         } catch (e) {
+    //             console.error(e);
+    //         }
+    //     };
 
-        if (!unmounted) {
-            fetchBalance();
-        }
+    //     if (!unmounted) {
+    //         fetchBalance();
+    //     }
 
-        return () => {
-            unmounted = true;
-        };
-    }, [fastRefresh]);
+    //     return () => {
+    //         unmounted = true;
+    //     };
+    // }, [fastRefresh]);
 
     return (
         <React.Fragment>
