@@ -209,6 +209,37 @@ const useStakeDataModel = () => {
         newList[index] = info;
         setStakeDataList(newList);
     };
+
+    const fetchSingleTokenPoolTotalEarned = async (
+        tokens: { poolName: string; poolId: number }[],
+    ) => {
+        let total = 0;
+        const minerReward = getMinerRewardContract(provider);
+        const block = await provider.getBlockNumber();
+
+        const totalAllocPoint = parseFloat(
+            ethers.utils.formatEther(await minerReward.totalAllocPoint()),
+        );
+        const rewardPerBlock = parseFloat(
+            ethers.utils.formatEther(await minerReward.rewardPerBlock()),
+        );
+        console.log('current block: ', block);
+        for (let i = 0; i < tokens.length; i++) {
+            const poolInfo = await minerReward.poolInfo(tokens[i].poolId);
+            const lastRewardBlock = parseFloat(
+                ethers.utils.formatEther(poolInfo.lastRewardBlock),
+            );
+            const allocPoint = parseFloat(
+                ethers.utils.formatEther(poolInfo.allocPoint),
+            );
+            const reward =
+                ((block - lastRewardBlock) * rewardPerBlock * allocPoint) /
+                totalAllocPoint;
+            total += reward;
+        }
+        return total;
+    };
+
     return {
         stakeDataList,
         setStakeDataList,

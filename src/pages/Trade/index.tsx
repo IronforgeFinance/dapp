@@ -51,6 +51,12 @@ export default () => {
     const [showSelectFromToken, setShowSelectFromToken] = useState(false);
     const [showSelectToToken, setShowSelectToToken] = useState(false);
 
+    useEffect(() => {
+        (async () => {
+            const canRevert = await exchangeSystem.canOnlyBeReverted(1);
+            console.log('canRevert: ', canRevert);
+        })();
+    }, []);
     const prices = usePrices();
 
     const { requestConnectWallet } = useModel('app', (model) => ({

@@ -256,9 +256,14 @@ const HistoryView = () => {
      * status 有：pending, settled, reverted.
      * @param entryId Operation的type为Exchange的数据的id
      */
-    const fetchIfCanRevert = useCallback(async (entryId: string) => {
+    const fetchIfCanRevert = useCallback(async (entryId: number) => {
         const canRevert = await exchangeSystem.canOnlyBeReverted(entryId);
+        console.log('canRevert: ', canRevert);
         return canRevert;
+    }, []);
+
+    useEffect(() => {
+        fetchIfCanRevert(1);
     }, []);
 
     /**
