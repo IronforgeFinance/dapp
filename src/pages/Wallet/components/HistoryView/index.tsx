@@ -271,29 +271,35 @@ const HistoryView = () => {
                                             : 'hidden',
                                 }}
                             />
-                            {row?.status === 'pending' && row.canRevert && (
-                                <Button
-                                    className="revert-btn common-btn common-btn-red"
-                                    onClick={() => doRevert(row.id)}
-                                    loading={txLoading}
-                                >
-                                    Revert
-                                </Button>
-                            )}
-                            {row?.status === 'pending' && row.canRevert && (
-                                <Popover
-                                    placement="leftBottom"
-                                    trigger="hover"
-                                    content="xxxxxxx"
-                                >
-                                    <i
-                                        style={{
-                                            marginLeft: 6,
-                                        }}
-                                        className="icon-question size-18"
-                                    />
-                                </Popover>
-                            )}
+                            <Button
+                                className="revert-btn common-btn common-btn-red"
+                                onClick={() => doRevert(row.id)}
+                                loading={txLoading}
+                                style={{
+                                    visibility:
+                                        row?.status === 'pending'
+                                            ? 'visible'
+                                            : 'hidden',
+                                }}
+                            >
+                                Revert
+                            </Button>
+                            <Popover
+                                placement="leftBottom"
+                                trigger="hover"
+                                content="xxxxxxx"
+                            >
+                                <i
+                                    style={{
+                                        visibility:
+                                            row?.status === 'pending'
+                                                ? 'visible'
+                                                : 'hidden',
+                                        marginLeft: 6,
+                                    }}
+                                    className="icon-question size-18"
+                                />
+                            </Popover>
                         </div>
                     </div>
                 );
