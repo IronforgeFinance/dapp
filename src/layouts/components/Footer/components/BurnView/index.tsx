@@ -14,6 +14,7 @@ import {
 import { GET_BURNS } from '@/subgraph/graphql';
 import { ourClient } from '@/subgraph/clientManager';
 import { DEFAULT_PAGE_SIZE } from '@/config/constants/constant';
+import NoneView from '@/components/NoneView';
 
 const columns = [
     {
@@ -100,15 +101,27 @@ const BurnView = () => {
         [pagination],
     );
 
+    const noneStatus = useMemo(() => {
+        if (!account) {
+            return 'noConnection';
+        }
+        if (!burns?.length) {
+            return 'noAssets';
+        }
+    }, [account, burns]);
+
     return (
         <div className="burn-view">
-            <Table
-                className="custom-table"
-                columns={noData ? [] : columns}
-                rowKey={(record) => record.id}
-                dataSource={burns}
-                pagination={{ ...pagination, position: [position] }}
-            />
+            {!noneStatus && (
+                <Table
+                    className="custom-table"
+                    columns={noData ? [] : columns}
+                    rowKey={(record) => record.id}
+                    dataSource={burns}
+                    pagination={{ ...pagination, position: [position] }}
+                />
+            )}
+            {noneStatus && <NoneView type={noneStatus} />}
         </div>
     );
 };

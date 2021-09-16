@@ -15,6 +15,7 @@ import {
 import { GET_MINTS_BY_COLLATERAL } from '@/subgraph/graphql';
 import { ourClient } from '@/subgraph/clientManager';
 import { DEFAULT_PAGE_SIZE } from '@/config/constants/constant';
+import NoneView from '@/components/NoneView';
 
 const columns = [
     {
@@ -119,15 +120,27 @@ const DeliveryView = () => {
         [pagination],
     );
 
+    const noneStatus = useMemo(() => {
+        if (!account) {
+            return 'noConnection';
+        }
+        if (!mints?.length) {
+            return 'noAssets';
+        }
+    }, [account, mints]);
+
     return (
         <div className="mint-view">
-            <Table
-                className="custom-table"
-                columns={noData ? [] : columns}
-                rowKey={(record) => record.id}
-                dataSource={mints}
-                pagination={{ ...pagination, position: [position] }}
-            />
+            {!noneStatus && (
+                <Table
+                    className="custom-table"
+                    columns={noData ? [] : columns}
+                    rowKey={(record) => record.id}
+                    dataSource={mints}
+                    pagination={{ ...pagination, position: [position] }}
+                />
+            )}
+            {noneStatus && <NoneView type={noneStatus} />}
         </div>
     );
 };

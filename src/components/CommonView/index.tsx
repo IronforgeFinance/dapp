@@ -71,6 +71,7 @@ export interface HistoryViewProps {
     token0?: TokenProps;
     token1?: TokenProps;
     link?: string;
+    status?: string;
     dealtime?: string | number;
 }
 

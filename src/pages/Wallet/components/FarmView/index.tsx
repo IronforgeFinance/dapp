@@ -1,6 +1,6 @@
 import './less/index.less';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { Table } from 'antd';
 import {
     PureView,
@@ -15,6 +15,7 @@ import { useWeb3React } from '@web3-react/core';
 import { history, useModel } from 'umi';
 import { LP_TOKENS } from '@/config/';
 import { useIntl } from 'umi';
+import NoneView from '@/components/NoneView';
 
 const columns = [
     {
@@ -127,18 +128,31 @@ const FarmView = () => {
             }
         })();
     }, [account, slowRefresh]);
+
+    const noneStatus = useMemo(() => {
+        if (!account) {
+            return 'noConnection';
+        }
+        if (!dataSource?.length) {
+            return 'noAssets';
+        }
+    }, [account, dataSource]);
+
     return (
         <div className="farm-view">
-            <Table
-                className="custom-table"
-                columns={columns.map((item) => ({
-                    ...item,
-                    title: intl.formatMessage({ id: item.title }),
-                }))}
-                rowKey={(record) => record.id}
-                dataSource={dataSource}
-                pagination={false}
-            />
+            {!noneStatus && (
+                <Table
+                    className="custom-table"
+                    columns={columns.map((item) => ({
+                        ...item,
+                        title: intl.formatMessage({ id: item.title }),
+                    }))}
+                    rowKey={(record) => record.id}
+                    dataSource={dataSource}
+                    pagination={false}
+                />
+            )}
+            {noneStatus && <NoneView type={noneStatus} />}
         </div>
     );
 };
