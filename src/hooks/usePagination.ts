@@ -48,6 +48,7 @@ const usePagination = (props: PaginationProps) => {
     const [list, setList] = useState([]);
     const { fastRefresh } = useRefresh();
     const mounted = useMounted();
+    const isClear = useRef(false);
     const [pagination, setPagination] = useState<TablePaginationConfig>({
         current: 1,
         pageSize: size || DEFAULT_PAGE_SIZE,
@@ -101,20 +102,24 @@ const usePagination = (props: PaginationProps) => {
             pageSize: size || DEFAULT_PAGE_SIZE,
             total: 0,
         });
+        isClear.current = false;
     }, [pagination, list]);
 
     /**@description Reset data */
     const clear = useCallback(() => {
         setList([]);
+        isClear.current = true;
     }, [pagination, list]);
 
     useEffect(() => {
         if (!mounted.current) return;
+        if (isClear.current) return;
         fetchList();
     }, [fastRefresh, pagination]);
 
     useEffect(() => {
         if (!mounted.current) return;
+        if (isClear.current) return;
         if (customFetch) return; //自定义fetch不需要拿total
         fetchListTotal();
     }, []);

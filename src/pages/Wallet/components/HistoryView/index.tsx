@@ -140,10 +140,6 @@ const useParseDataOfPancake =
  * @returns {HistoryViewProps}
  */
 const parseDataOfOur = (item): HistoryViewProps => {
-    console.log(
-        '>> otherTypeToTabType[item.type] is %s',
-        otherTypeToTabType[item.type],
-    );
     return {
         id: item.id,
         icon: (
@@ -471,8 +467,6 @@ const HistoryView = () => {
      * @description Combine all kinds of datas for unified data format
      */
     const records = useMemo(() => {
-        console.log('>> operations is %o', operations);
-
         const handledData = operations.map(parseDataOfOur);
         return [...handledData, ...mintsTable.list, ...burnsTable.list].sort(
             ((a, b) => Number(b.dealtime) - Number(a.dealtime)) as (
