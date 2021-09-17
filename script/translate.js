@@ -20,7 +20,6 @@ function filter(newJson, referJson) {
             process.exit(1);
         }
     }, {});
-    debugger;
     return newTrans;
 }
 
@@ -58,7 +57,6 @@ function translate(filename, temp) {
             return curr;
         }, {});
     }
-
     fs.writeFileSync(
         path.join(root, output),
         `export default ${JSON.stringify(result, null, '\t')};`,

@@ -1,6 +1,6 @@
 import './less/index.less';
 
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, Fragment } from 'react';
 import TabGroup from '@/components/TabGroup';
 import ProvideForm from './components/ProvideForm';
 import WithdrawForm from './components/WithdrawForm';
@@ -42,34 +42,31 @@ export default (props) => {
     );
 
     return (
-        <div className="provide-container">
-            <div className="custom-tabs">
-                {/* <Tabs onChange={onTabChange} type="card">
+        <Fragment>
+            <button className="back-btn" onClick={() => history.goBack()} />
+            <div className="provide-container">
+                <div className="custom-tabs">
+                    {/* <Tabs onChange={onTabChange} type="card">
                     <TabPane tab="Provide" key="1"></TabPane>
                     <TabPane tab="Withdraw" key="2"></TabPane>
                 </Tabs> */}
-                <TabGroup
-                    items={tabItems}
-                    value={tabKey}
-                    onChange={onTabChange}
-                />
-                <div className="tab-content">
-                    <button
-                        className="common-btn-back icon-back"
-                        onClick={() => {
-                            history.goBack();
-                        }}
+                    <TabGroup
+                        items={tabItems}
+                        value={tabKey}
+                        onChange={onTabChange}
                     />
-                    <ITabKeyContext.Provider value={tabKey}>
-                        <IsShow condition={tabKey === '1'}>
-                            <ProvideForm />
-                        </IsShow>
-                        <IsShow condition={tabKey === '2'}>
-                            <WithdrawForm />
-                        </IsShow>
-                    </ITabKeyContext.Provider>
+                    <div className="tab-content">
+                        <ITabKeyContext.Provider value={tabKey}>
+                            <IsShow condition={tabKey === '1'}>
+                                <ProvideForm />
+                            </IsShow>
+                            <IsShow condition={tabKey === '2'}>
+                                <WithdrawForm />
+                            </IsShow>
+                        </ITabKeyContext.Provider>
+                    </div>
                 </div>
             </div>
-        </div>
+        </Fragment>
     );
 };

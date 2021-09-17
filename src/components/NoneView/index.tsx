@@ -1,7 +1,9 @@
 import './less/index.less';
 
-import { Fragment } from 'react';
-import { useModel, useIntl } from 'umi';
+import { Fragment, useContext } from 'react';
+import { useModel, useIntl, history } from 'umi';
+import { TabRecordBoardContext } from '@/components/TabRecordBoard';
+import { useCallback } from 'react';
 
 export type NoneTypes = 'noAssets' | 'noConnection' | 'noRecords' | undefined;
 export interface NoneViewProps {
@@ -11,10 +13,16 @@ export interface NoneViewProps {
 const NoneView = (props: NoneViewProps) => {
     const { type } = props;
     const intl = useIntl();
+    const { close } = useContext(TabRecordBoardContext);
 
     const { requestConnectWallet } = useModel('app', (model) => ({
         requestConnectWallet: model.requestConnectWallet,
     }));
+
+    const gotoMint = useCallback(() => {
+        history.push('/mint');
+        close && close();
+    }, [close]);
 
     return (
         <div className="none-view">
@@ -22,11 +30,7 @@ const NoneView = (props: NoneViewProps) => {
                 <Fragment>
                     <i className="icon-no-assets" />
                     <p>{intl.formatMessage({ id: 'noAssets' })}</p>
-                    <a
-                        className="common-btn common-btn-red"
-                        target="_self"
-                        href="/mint"
-                    >
+                    <a className="common-btn common-btn-red" onClick={gotoMint}>
                         Lets Mint
                     </a>
                 </Fragment>
@@ -47,11 +51,7 @@ const NoneView = (props: NoneViewProps) => {
                 <Fragment>
                     <i className="icon-no-records" />
                     <p>{intl.formatMessage({ id: 'noTrades' })}</p>
-                    <a
-                        className="common-btn common-btn-red"
-                        target="_self"
-                        href="/mint"
-                    >
+                    <a className="common-btn common-btn-red" onClick={gotoMint}>
                         Lets Mint
                     </a>
                 </Fragment>

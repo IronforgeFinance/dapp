@@ -3,7 +3,14 @@ import './less/index.less';
 import { ReactComponent as TabBackIcon01 } from '@/assets/images/big-board-svg-01.svg';
 import classNames from 'classnames';
 import Overlay from '../Overlay';
-import { Fragment } from 'react';
+import { Fragment, createContext } from 'react';
+
+interface TabRecordBoardContextProps {
+    close?(): void;
+}
+
+export const TabRecordBoardContext =
+    createContext<TabRecordBoardContextProps | null>(null);
 
 interface TabOptions {
     name: string;
@@ -62,7 +69,11 @@ const TabRecordBoard = (props: TabRecordBoardProps) => {
                 <h3 className="common-title silver tab-record-board-title">
                     <span>{title}</span>
                 </h3>
-                <main>{children}</main>
+                <main>
+                    <TabRecordBoardContext.Provider value={{ close }}>
+                        {children}
+                    </TabRecordBoardContext.Provider>
+                </main>
             </div>
             {mode === 'modal' && (
                 <button className="icon-close" onClick={close} />

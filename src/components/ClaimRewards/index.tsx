@@ -79,12 +79,16 @@ const ClaimRewards = (props: ClaimRewardsProps) => {
                             <div className="content">
                                 <i className="icon-rewards" />
                                 <span className="value">
-                                    {stakeDataList[0].totalPendingReward} BS
+                                    {account
+                                        ? `${stakeDataList[0].totalPendingReward} BS`
+                                        : '--'}
                                 </span>
                                 <span className="label">Rewards</span>
                                 <div className="bottom">
                                     <p className="price">
-                                        {stakeDataList[0].redeemableReward} BS
+                                        {account
+                                            ? `${stakeDataList[0].redeemableReward} BS`
+                                            : '--'}
                                         <Popover
                                             trigger="hover"
                                             placement="topLeft"
@@ -112,8 +116,13 @@ const ClaimRewards = (props: ClaimRewardsProps) => {
                             <div className="before" />
                             <div className="content">
                                 <span className="value">
-                                    {(stakeDataList[0].apy * 100).toFixed(4) +
-                                        '%'}
+                                    {account
+                                        ? `${
+                                              (
+                                                  stakeDataList[0].apy * 100
+                                              ).toFixed(4) + '%'
+                                          }`
+                                        : '--'}
                                 </span>
                                 <span className="label">
                                     Earning ratio{' '}

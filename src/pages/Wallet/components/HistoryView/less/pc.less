@@ -1,6 +1,12 @@
 @import '../../../less/index.less';
 
 .history-view {
+    .iron-switch {
+        margin-bottom: 20px;
+        margin-left: 80%;
+        display: none;
+    }
+
     .custom-tabs.ant-tabs {
         .ant-table-cell {
             max-width: 805px;
@@ -127,7 +133,8 @@
                 #image.icon(18px, '~@/assets/images/wallet-history-skip.svg');
             }
 
-            .loading {
+            .loading,
+            .icon-success-green {
                 margin-left: 57px;
             }
 
