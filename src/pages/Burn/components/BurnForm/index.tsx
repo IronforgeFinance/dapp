@@ -262,8 +262,8 @@ export default (props: IProps) => {
             ).toFixed(2),
         );
         let burnAmount = burnFUSDAmount;
-        if (toToken !== 'FUSD') {
-            const tokenPrice = await getTokenPrice(toToken);
+        if (fromToken !== 'FUSD') {
+            const tokenPrice = await getTokenPrice(fromToken);
             burnAmount = parseFloat(
                 new BigNumber(burnFUSDAmount).dividedBy(tokenPrice).toFixed(6),
             );
@@ -293,6 +293,7 @@ export default (props: IProps) => {
         setBurnType(v);
         const fromTokenPrice = await getTokenPrice(fromToken);
         if (fromTokenBalance * fromTokenPrice < toTokenDebtInUsd) {
+            setBurnAmount(0);
             message.warning(
                 '钱包余额不足。请到dex购买相应的fAsset，保证金额大于您的债务',
                 5,
@@ -384,6 +385,10 @@ export default (props: IProps) => {
     const openBurnConfirm = useCallback(async () => {
         if (!burnAmount && !unstakeAmount) {
             message.warning('Burned amount and unstaking can not be both 0');
+            return;
+        }
+        if (burnAmount > fromTokenBalance) {
+            message.warning('Burned amount is greater than balance');
             return;
         }
         if (Number(burnAmount) > Number(totalDebtInUSD)) {
@@ -528,7 +533,8 @@ export default (props: IProps) => {
                     </div>
                 </div>
                 <span className="debt">
-                    {intl.formatMessage({ id: 'burn.debt:' })}{' '}
+                    {intl.formatMessage({ id: 'burn.debt:' })}
+                    {'$'}
                     {toTokenDebtInUsd}
                 </span>
             </div>
