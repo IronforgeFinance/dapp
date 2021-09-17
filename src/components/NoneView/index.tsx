@@ -4,6 +4,7 @@ import { Fragment, useContext } from 'react';
 import { useModel, useIntl, history } from 'umi';
 import { TabRecordBoardContext } from '@/components/TabRecordBoard';
 import { useCallback } from 'react';
+import { MyDebtsContext } from '../MyDebts';
 
 export type NoneTypes = 'noAssets' | 'noConnection' | 'noRecords' | undefined;
 export interface NoneViewProps {
@@ -13,7 +14,8 @@ export interface NoneViewProps {
 const NoneView = (props: NoneViewProps) => {
     const { type } = props;
     const intl = useIntl();
-    const { close } = useContext(TabRecordBoardContext) ?? {};
+    const { close } =
+        useContext(TabRecordBoardContext) ?? useContext(MyDebtsContext) ?? {};
 
     const { requestConnectWallet } = useModel('app', (model) => ({
         requestConnectWallet: model.requestConnectWallet,
