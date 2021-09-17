@@ -39,6 +39,7 @@ import { isDeliveryAsset } from '@/utils';
 import * as message from '@/components/Notification';
 import NoneView from '@/components/NoneView';
 import ISwitch from '@/components/Switch';
+import useMounted from '@/hooks/useMounted';
 
 const { TabPane } = Tabs;
 
@@ -180,13 +181,12 @@ const HistoryView = () => {
     const [burnsPool, setBurnsPool] = useState([]);
     const [operations, setOperations] = useState([]);
     const [checked, setChecked] = useState(true);
+    const mounted = useMounted();
     const [pagination, setPagination] = useState({
         current: 1,
         pageSize: DEFAULT_PAGE_SIZE,
         total: 0,
     });
-    const [txLoading, setTxLoading] = useState(false);
-    const { open: openConfirmModal } = useContext(TransitionConfirmContext);
     const exchangeSystem = useExchangeSystem();
 
     const columns = [
@@ -194,8 +194,34 @@ const HistoryView = () => {
             title: 'history',
             dataIndex: 'id',
             render: (value, row: HistoryViewProps) => {
-                const [txLoading, setTxLoading] = useState(false);
                 const intl = useIntl();
+                const [txLoading, setTxLoading] = useState(false);
+                const { open: openConfirmModal } = useContext(
+                    TransitionConfirmContext,
+                );
+
+                /**@description 交易前的确认 */
+                const openRevertConfirm = useCallback(async () => {
+                    setTxLoading(true);
+
+                    openConfirmModal({
+                        view: 'trade',
+                        fromToken: {
+                            name: row.token0.name,
+                            amount: row.token0.amount,
+                        },
+                        toToken: {
+                            name: row.token1.name,
+                            amount: row.token1.amount,
+                        },
+                        type: isDeliveryAsset(row.token0.name)
+                            ? 'Delivery'
+                            : 'Perpetuation',
+                        confirm: async () => await doRevert(row.id),
+                        final: () => setTxLoading(false),
+                    });
+                }, [row]);
+
                 return (
                     <div className="history">
                         <div className="operation">
@@ -206,7 +232,7 @@ const HistoryView = () => {
                             </div>
                         </div>
                         {row.token0 && (
-                            <div className="form">
+                            <p>
                                 {row.token0 && (
                                     <Fragment>
                                         {intl
@@ -254,7 +280,7 @@ const HistoryView = () => {
                                         {row.token1.name}
                                     </Fragment>
                                 )}
-                            </div>
+                            </p>
                         )}
                         <div className="last-wraper">
                             {row.link && (
@@ -264,15 +290,16 @@ const HistoryView = () => {
                                     href={row.link}
                                 />
                             )}
-                            {row?.status !== 'pending' && (
-                                <i className="icon-success-green size-24" />
-                            )}
+                            {row?.status !== 'pending' &&
+                                row.type === 'Trade' && (
+                                    <i className="icon-success-green size-24" />
+                                )}
                             {row?.status === 'pending' && (
                                 <i className="loading size-18" />
                             )}
                             <Button
                                 className="revert-btn common-btn common-btn-red"
-                                onClick={() => doRevert(row.id)}
+                                onClick={openRevertConfirm}
                                 loading={txLoading}
                                 style={{
                                     visibility:
@@ -429,6 +456,8 @@ const HistoryView = () => {
     }, [account, requestType]);
 
     useEffect(() => {
+        if (!mounted) return;
+
         setPagination({ ...pagination, current: 1 });
 
         switch (tabKey) {
@@ -472,14 +501,6 @@ const HistoryView = () => {
     }, [tabKey, requestType]);
 
     const changeTab = useCallback((tabKey) => setTabKey(tabKey), []);
-
-    /**
-     * @property {boolean} isEnd
-     */
-    const isEnd = useMemo(
-        () => !(mintsPool?.length || burnsPool?.length || operations?.length),
-        [mintsPool, burnsPool, operations],
-    );
 
     /**
      * @description Combine all kinds of datas for unified data format
