@@ -1,70 +1,75 @@
 import './less/index.less';
 
-import React, { useState, useEffect, useMemo } from 'react';
-import { useWeb3React } from '@web3-react/core';
-import {
-    useDebtSystem,
-    useCollateralSystem,
-    usePrices,
-} from '@/hooks/useContract';
-import { ethers } from 'ethers';
-import { toFixedWithoutRound } from '@/utils/bigNumber';
-import IconDown from '@/assets/images/down.svg';
-import DebtInfoDetail from './components/DebtInfoDetail';
-import DebtInfoSimple from './components/SimpleDebtInfo';
-import useWeb3Provider from '@/hooks/useWeb3Provider';
-import { useBep20Balance } from '@/hooks/useTokenBalance';
+import { useMemo } from 'react';
 import { useModel } from 'umi';
-import { COLLATERAL_TOKENS } from '@/config';
-import { TokenIcon } from '@/components/Icon';
-import { getTokenPrice } from '@/utils';
-import { IDebtItemInfo } from '@/models/burnData';
+import { Table } from 'antd';
+import { useWeb3React } from '@web3-react/core';
+import { TokenView, PureView, PriceView } from '@/components/CommonView';
+import NoneView, { NoneTypes } from '@/components/NoneView';
 
-interface IDebtItemProps {}
+const columns = [
+    {
+        title: '质押物',
+        dataIndex: 'collateralToken',
+        render: (value, row) => (
+            <TokenView {...row} currency={row.collateralToken} />
+        ),
+    },
+    {
+        title: '质押率',
+        dataIndex: 'ratio',
+        render: (value, row) => <PureView customData={value} />,
+    },
+    {
+        title: '数量',
+        dataIndex: 'collateral',
+        render: (value, row) => <PureView customData={value} />,
+    },
+    {
+        title: '锁定',
+        dataIndex: 'locked',
+        render: (value, row) => <PureView customData={value} />,
+    },
+];
 
-export default (props: IDebtItemProps) => {
-    const [showInfos, setShowInfos] = useState(true);
-
-    const { debtItemInfos, totalDebtInUSD } = useModel('burnData', (model) => ({
+export default (props) => {
+    const { account } = useWeb3React();
+    const { totalDebtInUSD, debtItemInfos } = useModel('burnData', (model) => ({
         ...model,
     }));
 
-    const { lockedData, setLockedData } = useModel('dataView', (model) => ({
-        lockedData: model.lockedData,
-        setLockedData: model.setLockedData,
-    }));
+    const noneStatus: NoneTypes = useMemo(() => {
+        if (!account) {
+            return 'noConnection';
+        }
+        if (!debtItemInfos?.length) {
+            return 'noAssets';
+        }
+    }, [account, debtItemInfos]);
 
     return (
         <div className="debt-item">
-            {/* <div className="debt-item-head">
-                <div className="debt-token">
-                    <TokenIcon size={36} name={mintedToken} />
-                    <div className="token-minted">
-                        <span>{mintedToken}</span>
-                        <span>{mintedTokenNum}</span>
+            {!noneStatus && (
+                <section className="your-debts">
+                    <div className="summary">
+                        <div className="data">
+                            <span className="label">Your Debt Value</span>
+                            <span className="value">{totalDebtInUSD} fUSD</span>
+                        </div>
                     </div>
-                </div>
-                <div
-                    className={`debt-in-usd ${
-                        showInfos ? 'show-infos' : 'hide-infos'
-                    }`}
-                    onClick={() => setShowInfos(!showInfos)}
-                >
-                    <p>${fusdBalance}</p>
-                    <img src={IconDown} />
-                </div>
-            </div> */}
-            <section className="your-debts">
-                <div className="summary">
-                    <div className="data">
-                        <span className="label">Your Debt Value</span>
-                        <span className="value">{totalDebtInUSD} fUSD</span>
-                    </div>
-                </div>
-            </section>
+                </section>
+            )}
             <div className="content-box">
-                {!showInfos && <DebtInfoSimple infos={debtItemInfos} />}
-                {showInfos && <DebtInfoDetail infos={debtItemInfos} />}
+                {!noneStatus && (
+                    <Table
+                        className="custom-table"
+                        columns={columns}
+                        rowKey={(record) => record.collateralToken}
+                        dataSource={debtItemInfos}
+                        pagination={false}
+                    />
+                )}
+                {noneStatus && <NoneView type={noneStatus} />}
             </div>
         </div>
     );

@@ -13,7 +13,7 @@ export interface NoneViewProps {
 const NoneView = (props: NoneViewProps) => {
     const { type } = props;
     const intl = useIntl();
-    const { close } = useContext(TabRecordBoardContext);
+    const { close } = useContext(TabRecordBoardContext) ?? {};
 
     const { requestConnectWallet } = useModel('app', (model) => ({
         requestConnectWallet: model.requestConnectWallet,

@@ -53,9 +53,7 @@
             width: 517px;
             max-width: 517px;
             height: 255.43px;
-            padding-top: 50px;
-            padding-left: 56px;
-            padding-right: 66px;
+            padding: 50px 66px 50px 56px;
             box-sizing: border-box;
 
             font-family: Poppins;
@@ -66,16 +64,35 @@
             /* or 28px */
 
             text-align: justify;
+            position: relative;
+            display: flex;
 
             /* 辅助色3-深红色 */
 
             color: #460d12;
+
+            > a {
+                font-style: normal;
+                font-weight: bold;
+                font-size: 15px;
+                line-height: 22px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                color: #ac4c06;
+                min-width: 80px;
+                position: absolute;
+                right: 66px;
+                bottom: 76px;
+                z-index: 3;
+            }
 
             > span {
                 position: relative;
                 z-index: 1;
                 word-break: break-all;
                 white-space: normal;
+                display: inline-block;
             }
         }
     }

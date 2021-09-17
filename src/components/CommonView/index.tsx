@@ -178,7 +178,6 @@ export const PriceView = (props: RecordProps) => {
 
 export const TokenView = (props: RecordProps) => {
     const { noToken, noPrice, amount, currency } = props;
-
     const longToken = useMemo(
         () => currency.split('-')?.length > 1 ?? false,
         [currency],
@@ -190,17 +189,21 @@ export const TokenView = (props: RecordProps) => {
                 {!(noToken ?? false) && <TokenIcon name={currency} />}
                 {!longToken && (
                     <Fragment>
-                        <b className="amount">
-                            {ethers.utils.formatUnits(amount, 18)}
-                        </b>
+                        {amount && (
+                            <b className="amount">
+                                {ethers.utils.formatUnits(amount, 18)}
+                            </b>
+                        )}
                         <span className="currency">{currency}</span>
                     </Fragment>
                 )}
                 {longToken && (
                     <div style={{ display: 'flex', flexDirection: 'column' }}>
-                        <b className="amount">
-                            {ethers.utils.formatUnits(amount, 18)}
-                        </b>
+                        {amount && (
+                            <b className="amount">
+                                {ethers.utils.formatUnits(amount, 18)}
+                            </b>
+                        )}
                         <span className="currency">{currency}</span>
                     </div>
                 )}

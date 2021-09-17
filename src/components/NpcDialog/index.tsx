@@ -54,7 +54,7 @@ const NpcDialog = (props: NpcDialog) => {
         });
 
         // 5s后自动隐藏
-        delayKey.current = setTimeout(close, wordsArray.length * 100 + 5000);
+        // delayKey.current = setTimeout(close, wordsArray.length * 100 + 5000);
     }, [words]);
 
     const close = useCallback(() => {
@@ -120,6 +120,7 @@ const NpcDialog = (props: NpcDialog) => {
                     />
                     <p className="words">
                         <span>{slowWords}</span>
+                        <a onClick={close}>我知道了</a>
                     </p>
                 </div>
             </section>
