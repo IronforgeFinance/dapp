@@ -1,6 +1,6 @@
 import './less/index.less';
 
-import React, { useState, useEffect, useMemo, useContext } from 'react';
+import React, { useState, useEffect, useMemo, useContext, useRef } from 'react';
 import { InputNumber, Select, Progress, Button, Popover, Slider } from 'antd';
 import * as message from '@/components/Notification';
 import { request, useIntl, useModel } from 'umi';
@@ -59,6 +59,7 @@ export default () => {
     const { setWords } = useContext(NpcDialogContext);
     const { account } = useWeb3React();
     const provider = useProvider();
+    const currentStakedValue = useRef(0);
     const [collateralAmount, setCollateralAmount] = useState<
         undefined | number
     >();
@@ -74,7 +75,9 @@ export default () => {
     const [toToken, setToToken] = useState(MINT_TOKENS[0]);
     const [submitting, setSubmitting] = useState(false);
     const [computedRatio, setComputedRatio] = useState(0);
-    const [lockedScale, setLockedScale] = useState<string | number>('0');
+    const [lockedScale, setLockedScale] = useState<string | number | null>(
+        null,
+    );
 
     const collateralSystem = useCollateralSystem();
     const exchangeSystem = useExchangeSystem();
@@ -314,6 +317,7 @@ export default () => {
                 endValue: currentStakeValue,
             });
 
+            currentStakedValue.current = Number(v) * price;
             scaleHandler(lockedScale);
         }, 500),
         [stakedData, lockedScale],
@@ -341,16 +345,21 @@ export default () => {
 
     const scaleHandler = useCallback(
         async (v) => {
+            if (v == undefined) return;
+
             setLockedScale(+v);
             const bsPrice = await getTokenPrice(PLATFORM_TOKEN);
             console.log('>> bsp: %s', bsPrice);
 
             /**@description 计算公式：(锁定比例 * 质押价值) / BSP */
-            let amount = (stakedData.endValue * Number(v)) / bsPrice;
+            let amount = (currentStakedValue.current * Number(v)) / bsPrice;
             console.log('>> stake total value: %s', amount);
 
             /**@description 超过余额的计算 */
-            amount = amount < fTokenBalance ? amount : fTokenBalance;
+            amount =
+                amount < fTokenBalance && fTokenBalance > 0
+                    ? amount
+                    : fTokenBalance;
             setLockedAmount(toFixedWithoutRound(amount, 6));
 
             const val = toFixedWithoutRound(bsPrice * amount, 2);
