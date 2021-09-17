@@ -29,6 +29,8 @@ import {
     GET_BURNS_FROM_PANCAKE,
     GET_MINTS_FROM_PANCAKE,
     GET_OPERATIONS_FUZZY,
+    GET_MINTS_FROM_PANCAKE_TOTAL,
+    GET_BURNS_FROM_PANCAKE_TOTAL,
 } from '@/subgraph/graphql';
 import { pancakeswapClient, ourClient } from '@/subgraph/clientManager';
 import { TransitionConfirmContext } from '@/components/TransactionConfirm';
@@ -40,6 +42,7 @@ import * as message from '@/components/Notification';
 import NoneView from '@/components/NoneView';
 import ISwitch from '@/components/Switch';
 import useMounted from '@/hooks/useMounted';
+import usePagination from '@/hooks/usePagination';
 
 const { TabPane } = Tabs;
 
@@ -177,8 +180,6 @@ const HistoryView = () => {
     const intl = useIntl();
     const { account } = useWeb3React();
     const [tabKey, setTabKey] = useState('All' as TabType);
-    const [mintsPool, setMintsPool] = useState([]);
-    const [burnsPool, setBurnsPool] = useState([]);
     const [operations, setOperations] = useState([]);
     const [checked, setChecked] = useState(true);
     const mounted = useMounted();
@@ -188,6 +189,23 @@ const HistoryView = () => {
         total: 0,
     });
     const exchangeSystem = useExchangeSystem();
+
+    const mintsTable = usePagination({
+        client: pancakeswapClient,
+        listGql: GET_MINTS_FROM_PANCAKE,
+        totalGql: GET_MINTS_FROM_PANCAKE_TOTAL,
+        parser: useParseDataOfPancake('mint'),
+        key: 'mints',
+        extVars: { user: '' },
+    });
+    const burnsTable = usePagination({
+        client: pancakeswapClient,
+        listGql: GET_BURNS_FROM_PANCAKE,
+        totalGql: GET_BURNS_FROM_PANCAKE_TOTAL,
+        parser: useParseDataOfPancake('burn'),
+        key: 'burns',
+        extVars: { user: '' },
+    });
 
     const columns = [
         {
@@ -246,26 +264,11 @@ const HistoryView = () => {
                                             })
                                             .trimEnd()}{' '}
                                         <b>{row.token0.amount}</b>{' '}
-                                        {isOverflow([row.token0.name], 8) ? (
-                                            <Fragment>
-                                                <br />
-                                                {row.token0.name}
-                                            </Fragment>
-                                        ) : (
-                                            row.token0.name
-                                        )}
+                                        {row.token0.name}
                                     </Fragment>
                                 )}
                                 {row.token1 && row.conj && (
                                     <Fragment>
-                                        {' '}
-                                        {isOverflow(
-                                            [
-                                                row.token0.name,
-                                                row.token0.amount,
-                                            ],
-                                            8,
-                                        ) && <br />}
                                         {intl
                                             .formatMessage({
                                                 id: `conj.${
@@ -369,44 +372,6 @@ const HistoryView = () => {
             }
         }
     };
-    /**
-     * @description Fetch pool of mints from pancake site.
-     * @returns {void}
-     */
-    const fetchMintsPool = useCallback(async () => {
-        try {
-            const { data } = await pancakeswapClient.query({
-                query: GET_MINTS_FROM_PANCAKE,
-                variables: {
-                    offset: pagination.current - 1,
-                    limit: pagination.pageSize * 0.25,
-                    user: account,
-                },
-            });
-            setMintsPool(data.mints.map(useParseDataOfPancake('mint')));
-        } catch (error) {
-            console.error(error);
-        }
-    }, [account]);
-    /**
-     * @description Fetch pool of burns from pancake site.
-     * @returns {void}
-     */
-    const fetchBurnsPool = useCallback(async () => {
-        try {
-            const { data } = await pancakeswapClient.query({
-                query: GET_BURNS_FROM_PANCAKE,
-                variables: {
-                    offset: pagination.current - 1,
-                    limit: pagination.pageSize * 0.25,
-                    user: account,
-                },
-            });
-            setBurnsPool(data.burns.map(useParseDataOfPancake('burn')));
-        } catch (error) {
-            console.error(error);
-        }
-    }, [account]);
 
     /**
      * @description Calculate request type for filtering.
@@ -456,44 +421,44 @@ const HistoryView = () => {
     }, [account, requestType]);
 
     useEffect(() => {
-        if (!mounted) return;
+        if (!mounted.current) return;
 
         setPagination({ ...pagination, current: 1 });
 
         switch (tabKey) {
             case 'All': {
-                fetchMintsPool();
-                fetchBurnsPool();
+                mintsTable.reset();
+                burnsTable.reset();
                 fetchOperations();
                 break;
             }
             case 'Mint': {
-                setMintsPool([]);
-                setBurnsPool([]);
+                mintsTable.clear();
+                burnsTable.clear();
                 fetchOperations();
                 break;
             }
             case 'Burn': {
-                setMintsPool([]);
-                setBurnsPool([]);
+                mintsTable.clear();
+                burnsTable.clear();
                 fetchOperations();
                 break;
             }
             case 'Trade': {
-                setMintsPool([]);
-                setBurnsPool([]);
+                mintsTable.clear();
+                burnsTable.clear();
                 fetchOperations();
                 break;
             }
             case 'Farm': {
-                setMintsPool([]);
-                setBurnsPool([]);
+                mintsTable.clear();
+                burnsTable.clear();
                 fetchOperations();
                 break;
             }
             case 'Pool': {
-                fetchMintsPool();
-                fetchBurnsPool();
+                mintsTable.reset();
+                burnsTable.reset();
                 setOperations([]);
                 break;
             }
@@ -506,14 +471,16 @@ const HistoryView = () => {
      * @description Combine all kinds of datas for unified data format
      */
     const records = useMemo(() => {
+        console.log('>> operations is %o', operations);
+
         const handledData = operations.map(parseDataOfOur);
-        return [...handledData, ...mintsPool, ...burnsPool].sort(
+        return [...handledData, ...mintsTable.list, ...burnsTable.list].sort(
             ((a, b) => Number(b.dealtime) - Number(a.dealtime)) as (
                 a: HistoryViewProps,
                 b: HistoryViewProps,
             ) => number,
         );
-    }, [mintsPool, burnsPool, operations]);
+    }, [mintsTable, burnsTable, operations]);
 
     const noneStatus = useMemo(() => {
         if (!account) {

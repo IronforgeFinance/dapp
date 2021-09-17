@@ -17,12 +17,15 @@ import useRefresh from '@/hooks/useRefresh';
 import { TablePaginationConfig } from 'antd';
 import { DEFAULT_PAGE_SIZE } from '@/config/constants/constant';
 import { NoneTypes } from '@/components/NoneView';
+import useMounted from './useMounted';
 
 interface PaginationProps {
     client?: ApolloClient<NormalizedCacheObject>;
     size?: number;
     listGql?: DocumentNode;
     totalGql?: DocumentNode;
+    /**@param {function} parser 转换器  */
+    parser?(any): any;
     key: string;
     /**@param {any} extVars 扩展query参数  */
     extVars?: any;
@@ -37,13 +40,14 @@ const usePagination = (props: PaginationProps) => {
         listGql,
         totalGql,
         key,
+        parser,
         extVars = {},
         customFetch,
     } = props;
     const { account } = useWeb3React();
     const [list, setList] = useState([]);
     const { fastRefresh } = useRefresh();
-    const mounted = useRef(false);
+    const mounted = useMounted();
     const [pagination, setPagination] = useState<TablePaginationConfig>({
         current: 1,
         pageSize: size || DEFAULT_PAGE_SIZE,
@@ -66,7 +70,11 @@ const usePagination = (props: PaginationProps) => {
                         ...extVars,
                     },
                 });
-                setList(data ? data[key] : []);
+                if (parser) {
+                    setList(data ? data[key].map(parser) : []);
+                } else {
+                    setList(data ? data[key] : []);
+                }
             }
         }
     }, [account, pagination]);
@@ -85,14 +93,20 @@ const usePagination = (props: PaginationProps) => {
         }
     }, [account]);
 
-    /**@description Init mounted state before fetching */
-    useLayoutEffect(() => {
-        mounted.current = true;
+    /**@description Reset data */
+    const reset = useCallback(() => {
+        setList([]);
+        setPagination({
+            current: 1,
+            pageSize: size || DEFAULT_PAGE_SIZE,
+            total: 0,
+        });
+    }, [pagination, list]);
 
-        return () => {
-            mounted.current = false;
-        };
-    }, []);
+    /**@description Reset data */
+    const clear = useCallback(() => {
+        setList([]);
+    }, [pagination, list]);
 
     useEffect(() => {
         if (!mounted.current) return;
@@ -125,6 +139,8 @@ const usePagination = (props: PaginationProps) => {
         setPagination,
         position,
         noneStatus,
+        reset,
+        clear,
     };
 };
 

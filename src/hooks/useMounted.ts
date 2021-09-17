@@ -1,6 +1,6 @@
 import { useRef, useLayoutEffect } from 'react';
 
-const usePagination = () => {
+const useMounted = () => {
     const mounted = useRef(false);
 
     /**@description Init mounted state before fetching */
@@ -12,7 +12,7 @@ const usePagination = () => {
         };
     }, []);
 
-    return mounted.current;
+    return mounted;
 };
 
-export default usePagination;
+export default useMounted;
