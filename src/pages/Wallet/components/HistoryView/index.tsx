@@ -38,6 +38,7 @@ import { useExchangeSystem } from '@/hooks/useContract';
 import { isDeliveryAsset } from '@/utils';
 import * as message from '@/components/Notification';
 import NoneView from '@/components/NoneView';
+import ISwitch from '@/components/Switch';
 
 const { TabPane } = Tabs;
 
@@ -178,6 +179,7 @@ const HistoryView = () => {
     const [mintsPool, setMintsPool] = useState([]);
     const [burnsPool, setBurnsPool] = useState([]);
     const [operations, setOperations] = useState([]);
+    const [checked, setChecked] = useState(true);
     const [pagination, setPagination] = useState({
         current: 1,
         pageSize: DEFAULT_PAGE_SIZE,
@@ -262,15 +264,12 @@ const HistoryView = () => {
                                     href={row.link}
                                 />
                             )}
-                            <i
-                                className="loading size-18"
-                                style={{
-                                    visibility:
-                                        row?.status === 'pending'
-                                            ? 'visible'
-                                            : 'hidden',
-                                }}
-                            />
+                            {row?.status !== 'pending' && (
+                                <i className="icon-success-green size-24" />
+                            )}
+                            {row?.status === 'pending' && (
+                                <i className="loading size-18" />
+                            )}
                             <Button
                                 className="revert-btn common-btn common-btn-red"
                                 onClick={() => doRevert(row.id)}
@@ -521,6 +520,12 @@ const HistoryView = () => {
                             })}
                             key={tabKey}
                         >
+                            <ISwitch
+                                checkedChildren="Live"
+                                unCheckedChildren="Finished"
+                                onChange={setChecked}
+                                checked={checked}
+                            />
                             <Table
                                 className="custom-table"
                                 columns={columns}

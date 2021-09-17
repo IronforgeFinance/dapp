@@ -4,6 +4,7 @@ import CommentaryCard from '@/components/CommentaryCard';
 import message from '@iron/Notification';
 import WalletModal from '@/layouts/components/WalletModal';
 import { BSCSCAN_EXPLORER } from '@/config/constants/constant';
+import ISwitch from '@/components/Switch';
 
 export default () => {
     // * 选择token演示
@@ -113,6 +114,13 @@ export default () => {
                 <li>
                     <h3>8. 钱包连接</h3>
                     <WalletConnectDemo />
+                </li>
+                <li>
+                    <h3>9. switcher</h3>
+                    <ISwitch
+                        checkedChildren="Live"
+                        unCheckedChildren="Finished"
+                    />
                 </li>
             </ul>
         </div>
