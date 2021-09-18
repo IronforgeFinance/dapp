@@ -6,7 +6,7 @@ export default {
         address: {
             56: '0x55d398326f99059fF775485246999027B3197955',
             97: testnetOutput.buildTokens.usdtToken,
-            1337: localOutput.usdtToken,
+            1337: localOutput.buildTokens.usdtToken,
         },
         decimals: 18,
         projectLink: 'https://tether.to/',
@@ -77,15 +77,6 @@ export default {
         },
         decimals: 18,
     },
-    'lBTC-202112': {
-        symbol: 'lBTC-202112',
-        address: {
-            56: '',
-            97: localOutput.lbtcToken202112,
-            1337: localOutput.lbtcToken202112,
-        },
-        decimals: 18,
-    },
     'USDC-IFT': {
         symbol: 'USDC-IFT',
         address: {
@@ -104,21 +95,21 @@ export default {
         },
         decimals: 18,
     },
-    'lBTCUSD_210924': {
+    lBTCUSD_210924: {
         symbol: 'lBTCUSD_210924',
         address: {
             56: '',
             97: testnetOutput.quarterlyContracts.lBTCUSD_210924,
-            1337: localOutput.quarterlyContracts.lbtcToken202112,
+            1337: localOutput.quarterlyContracts.lBTCUSD_210924,
         },
         decimals: 18,
     },
-    'lBTCUSD_211231': {
+    lBTCUSD_211231: {
         symbol: 'lBTCUSD_211231',
         address: {
             56: '',
             97: testnetOutput.quarterlyContracts.lBTCUSD_211231,
-            1337: localOutput.quarterlyContracts.lbtcToken202112,
+            1337: localOutput.quarterlyContracts.lBTCUSD_211231,
         },
         decimals: 18,
     },

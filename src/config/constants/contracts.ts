@@ -2,9 +2,7 @@
  * @description 在本地缓存设置innerLocalContracts/innerTestContracts来扩展或覆盖对应的合约配置
  */
 import localContracts from '../../../contracts.local.json';
-export const localOutput = {
-    ...localContracts,
-};
+
 export const testnetOutput = {
     buildTokens: {
         platformToken: '0xc367998739358837CE991f6DE25658Cf43379cBa',
@@ -42,6 +40,10 @@ export const testnetOutput = {
     LinearRelease: '0x0c32d86ED288cd37c3b21862d3385ba9ca1F9C40',
     Timelock: '0x9793f387ae8A0d60c1E1772C67a562d1c0537053',
     'USDC-ETH': '0xe6052EeAc24ed4cE0d838806c272c406d45eb8B2',
+};
+export const localOutput = {
+    ...testnetOutput,
+    ...localContracts,
 };
 export default {
     masterChef: {
