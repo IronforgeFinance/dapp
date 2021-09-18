@@ -5,6 +5,7 @@ import {
     useMemo,
     useRef,
     useLayoutEffect,
+    useContext,
 } from 'react';
 import { ourClient } from '@/subgraph/clientManager';
 import {
@@ -18,6 +19,7 @@ import { TablePaginationConfig } from 'antd';
 import { DEFAULT_PAGE_SIZE } from '@/config/constants/constant';
 import { NoneTypes } from '@/components/NoneView';
 import useMounted from './useMounted';
+import { LoadingContext } from '@/contexts/LoadingContext';
 
 interface PaginationProps {
     client?: ApolloClient<NormalizedCacheObject>;
@@ -46,6 +48,7 @@ const usePagination = (props: PaginationProps) => {
     } = props;
     const { account } = useWeb3React();
     const [list, setList] = useState([]);
+    const { loading, setLoading } = useContext(LoadingContext);
     const { fastRefresh } = useRefresh();
     const mounted = useMounted();
     const isClear = useRef(false);
@@ -58,24 +61,28 @@ const usePagination = (props: PaginationProps) => {
     /**@description Fetch data list */
     const fetchList = useCallback(async () => {
         if (account) {
-            if (customFetch) {
-                const { data } = await customFetch(account);
-                setList(data ? data[key] : []);
-            } else {
-                const { data } = await client.query({
-                    query: listGql,
-                    variables: {
-                        offset: pagination.current - 1,
-                        limit: pagination.pageSize,
-                        user: account,
-                        ...extVars,
-                    },
-                });
-                if (parser) {
-                    setList(data ? data[key].map(parser) : []);
-                } else {
+            try {
+                if (customFetch) {
+                    const { data } = await customFetch(account);
                     setList(data ? data[key] : []);
+                } else {
+                    const { data } = await client.query({
+                        query: listGql,
+                        variables: {
+                            offset: pagination.current - 1,
+                            limit: pagination.pageSize,
+                            user: account,
+                            ...extVars,
+                        },
+                    });
+                    if (parser) {
+                        setList(data ? data[key].map(parser) : []);
+                    } else {
+                        setList(data ? data[key] : []);
+                    }
                 }
+            } finally {
+                loading && setLoading(false);
             }
         }
     }, [account, pagination]);
@@ -110,6 +117,8 @@ const usePagination = (props: PaginationProps) => {
         setList([]);
         isClear.current = true;
     }, [pagination, list]);
+
+    useLayoutEffect(() => setLoading(true), []);
 
     useEffect(() => {
         if (!mounted.current) return;
@@ -146,6 +155,7 @@ const usePagination = (props: PaginationProps) => {
         noneStatus,
         reset,
         clear,
+        loading,
     };
 };
 
