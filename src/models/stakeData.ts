@@ -40,13 +40,9 @@ export const DEFAULT_POOL = {
 };
 
 const useStakeDataModel = () => {
-    const [stakeDataList, setStakeDataList] = useState<IStakePool[]>(
-        LP_TOKENS.map((item) => ({
-            ...DEFAULT_POOL,
-            name: item.poolName,
-            poolId: item.poolId,
-        })),
-    );
+    const [stakeDataList, setStakeDataList] = useState<IStakePool[]>([
+        DEFAULT_POOL,
+    ]);
     const [currentStakePool, setCurrentStakePool] = useState<IStakePool>();
     const [singleTokenPoolTotalEarned, setSingleTokenPoolTotalEarned] =
         useState(0);
@@ -109,7 +105,7 @@ const useStakeDataModel = () => {
     ) => {
         const chainId = process.env.APP_CHAIN_ID;
         const minerRewardAddress = Addresses.MinerReward[chainId];
-        const minerReward = getMinerRewardContract(provider);
+        const minerReward = getMinerRewardContract();
         const poolInfo = await minerReward.poolInfo(poolId);
         const lpAddress = poolInfo.stakeToken;
         const lpContract = getBep20Contract(lpAddress, provider);

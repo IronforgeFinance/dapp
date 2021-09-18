@@ -104,21 +104,21 @@ export default {
         },
         decimals: 18,
     },
-    'BTCUSD_210924': {
-        symbol: 'BTCUSD_210924',
+    'lBTCUSD_210924': {
+        symbol: 'lBTCUSD_210924',
         address: {
             56: '',
-            97: testnetOutput.quarterlyContracts.BTCUSD_210924,
-            1337: localOutput.lbtcToken202112,
+            97: testnetOutput.quarterlyContracts.lBTCUSD_210924,
+            1337: localOutput.quarterlyContracts.lbtcToken202112,
         },
         decimals: 18,
     },
-    'BTCUSD_211231': {
-        symbol: 'BTCUSD_211231',
+    'lBTCUSD_211231': {
+        symbol: 'lBTCUSD_211231',
         address: {
             56: '',
-            97: testnetOutput.quarterlyContracts.BTCUSD_211231,
-            1337: localOutput.lbtcToken202112,
+            97: testnetOutput.quarterlyContracts.lBTCUSD_211231,
+            1337: localOutput.quarterlyContracts.lbtcToken202112,
         },
         decimals: 18,
     },

@@ -48,8 +48,6 @@ export default () => {
     const [submitting, setSubmitting] = useState(false);
     const [feeRate, setFeeRate] = useState(0);
     const [estimateAmount, setEstimateAmount] = useState(0);
-    const [showSelectFromToken, setShowSelectFromToken] = useState(false);
-    const [showSelectToToken, setShowSelectToToken] = useState(false);
 
     useEffect(() => {
         (async () => {
@@ -57,7 +55,6 @@ export default () => {
             console.log('canRevert: ', canRevert);
         })();
     }, []);
-    const prices = usePrices();
 
     const { requestConnectWallet } = useModel('app', (model) => ({
         requestConnectWallet: model.requestConnectWallet,
@@ -75,20 +72,6 @@ export default () => {
             console.log('feeRate: ', value);
             setFeeRate(parseFloat(value));
         }
-    };
-
-    const getTradeSettlementDelay = async () => {
-        const res = await configContract.getUint(
-            ethers.utils.formatBytes32String('TradeSettlementDelay'),
-        );
-        console.log('getTradeSettlementDelay', res.toNumber());
-    };
-
-    const getRevertDelay = async () => {
-        const res = await configContract.getUint(
-            ethers.utils.formatBytes32String('TradeRevertDelay'),
-        );
-        console.log('getRevertDelay', res.toNumber());
     };
 
     useEffect(() => {
@@ -126,25 +109,11 @@ export default () => {
         setToAmount(v);
     };
 
-    const settleTrade = async (entryId: number) => {
-        const res = await exchangeSystem.settle(entryId);
-        console.log(res);
-    };
-
-    // 超时的只能revert
-    const revertTrade = async (entryId: number) => {
-        const res = await exchangeSystem.revertPendingExchange(entryId);
-        console.log(res);
-    };
-
     const canTrade = React.useMemo(() => {
         return !(fromAmount > fromTokenBalance);
     }, [fromAmount, fromTokenBalance]);
 
     const onSubmit = async () => {
-        // await revertTrade(3);
-        // await revertTrade(4);
-        // return;
         if (!fromAmount || !toAmount) {
             message.warning('From amount and to amount are required');
             return;
@@ -163,44 +132,10 @@ export default () => {
             );
             const receipt = await tx.wait();
             console.log(receipt);
-            handleTxReceipt(receipt);
             setSubmitting(false);
-            message.success(
-                'Tx confirmed. Pls wait for the delay and then check your balance.',
-            );
         } catch (err) {
             setSubmitting(false);
             console.log(err);
-        }
-    };
-
-    //TODO to be removed
-    const handleTxReceipt = (receipt) => {
-        getTradeSettlementDelay();
-        getRevertDelay();
-        const exchangeContract =
-            Contracts.ExchangeSystem[process.env.APP_CHAIN_ID];
-        for (const event of receipt.events) {
-            if (event.address === exchangeContract) {
-                const lastEntryId = event.args[0].toNumber();
-                console.log('>>> lastEntryId <<<', lastEntryId);
-                setTimeout(async () => {
-                    try {
-                        await settleTrade(lastEntryId);
-                        message.success(
-                            'Trade has been settled.Pls check your balance',
-                        );
-                    } catch (err) {
-                        setTimeout(async () => {
-                            await revertTrade(lastEntryId);
-                            message.error(
-                                'Trade has been reverted. Pls try again.',
-                            );
-                        }, 60000);
-                        console.log(err);
-                    }
-                }, 6000); // 合约目前设置的delay是6秒,revert delay 是1min。
-            }
         }
     };
 

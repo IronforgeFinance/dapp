@@ -12,7 +12,7 @@ import { useIntl } from 'umi';
 export default () => {
     const intl = useIntl();
     const { account } = useWeb3React();
-    const { fetchStakePoolList, stakeDataList } = useModel(
+    const { fetchStakePoolList, stakeDataList, setStakeDataList } = useModel(
         'stakeData',
         (model) => ({
             ...model,
@@ -27,10 +27,11 @@ export default () => {
 
     useEffect(() => {
         (async () => {
-            if (account) {
-                await fetchStakePoolList(LP_TOKENS, account);
-            }
+            await fetchStakePoolList(LP_TOKENS, account);
         })();
+        return () => {
+            setStakeDataList([]);
+        };
     }, [account, slowRefresh]);
 
     return (
