@@ -244,7 +244,7 @@ export default () => {
                     <div className="rewards-box">
                         <span className="amount">
                             {account
-                                ? stakeDataList[0].totalPendingReward + ' BS'
+                                ? stakeDataList[0]?.totalPendingReward + ' BS'
                                 : '--'}
                         </span>
                         <span className="label">Rewards</span>

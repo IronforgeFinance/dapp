@@ -80,14 +80,14 @@ const ClaimRewards = (props: ClaimRewardsProps) => {
                                 <i className="icon-rewards" />
                                 <span className="value">
                                     {account
-                                        ? `${stakeDataList[0].totalPendingReward} BS`
+                                        ? `${stakeDataList[0]?.totalPendingReward} BS`
                                         : '--'}
                                 </span>
                                 <span className="label">Rewards</span>
                                 <div className="bottom">
                                     <p className="price">
                                         {account
-                                            ? `${stakeDataList[0].redeemableReward} BS`
+                                            ? `${stakeDataList[0]?.redeemableReward} BS`
                                             : '--'}
                                         <Popover
                                             trigger="hover"
@@ -101,7 +101,7 @@ const ClaimRewards = (props: ClaimRewardsProps) => {
                                         className="claim-btn common-btn common-btn-red"
                                         onClick={handleRedeem}
                                         disabled={
-                                            stakeDataList[0].redeemableReward <=
+                                            stakeDataList[0]?.redeemableReward <=
                                             0
                                         }
                                         loading={submitting}
@@ -119,7 +119,7 @@ const ClaimRewards = (props: ClaimRewardsProps) => {
                                     {account
                                         ? `${
                                               (
-                                                  stakeDataList[0].apy * 100
+                                                  stakeDataList[0]?.apy * 100
                                               ).toFixed(4) + '%'
                                           }`
                                         : '--'}

@@ -415,7 +415,6 @@ export default () => {
             try {
                 setSubmitting(true);
                 if (toToken !== 'FUSD') {
-                    const tokenPrice = await getTokenPrice(toToken);
                     const tx1 = await collateralSystem.stakeAndBuildNonFUSD(
                         ethers.utils.formatBytes32String(collateralToken), // stakeCurrency
                         expandTo18Decimals(collateralAmount), // stakeAmount

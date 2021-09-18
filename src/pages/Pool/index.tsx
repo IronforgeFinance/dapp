@@ -18,6 +18,7 @@ export default () => {
         stakeDataList,
         singleTokenPoolTotalEarned,
         fetchSingleTokenPoolTotalEarned,
+        setStakeDataList,
     } = useModel('stakeData', (model) => ({
         ...model,
     }));
@@ -25,17 +26,18 @@ export default () => {
 
     useEffect(() => {
         (async () => {
-            if (account) {
-                fetchStakePoolList(POOL_TOKENS, account).then((list) => {
-                    const total = list.reduce((prev, item) => {
-                        return prev + item.totalStaked;
-                    }, 0);
-                    setTotalStaked(total);
-                });
-                fetchSingleTokenPoolTotalEarned(POOL_TOKENS);
-            }
+            fetchStakePoolList(POOL_TOKENS, account).then((list) => {
+                const total = list.reduce((prev, item) => {
+                    return prev + item.totalStaked;
+                }, 0);
+                setTotalStaked(total);
+            });
+            fetchSingleTokenPoolTotalEarned(POOL_TOKENS);
         })();
-    }, [account, slowRefresh]);
+        return () => {
+            setStakeDataList([]);
+        };
+    }, [slowRefresh]);
 
     return (
         <div className="farm-container">
