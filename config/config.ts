@@ -4,6 +4,7 @@ import path from 'path';
 import pxToViewPort from 'postcss-px-to-viewport';
 
 export default defineConfig({
+    favicon: 'favicon.ico',
     plugins: ['babel-plugin-styled-components'],
     nodeModulesTransform: {
         type: 'none',
