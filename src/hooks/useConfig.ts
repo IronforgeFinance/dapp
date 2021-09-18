@@ -10,13 +10,17 @@ export const useInitialRatio = (currency: string) => {
     useEffect(() => {
         if (currency) {
             (async () => {
-                const res = await configContract.getBuildRatio(
-                    ethers.utils.formatBytes32String(currency),
-                );
-                const value = Number(ethers.utils.formatUnits(res, 18));
-                if (value > 0) {
-                    setInitialRatio(1 / value);
-                    console.log('build ratio: ', 1 / value);
+                try {
+                    const res = await configContract.getBuildRatio(
+                        ethers.utils.formatBytes32String(currency),
+                    );
+                    const value = Number(ethers.utils.formatUnits(res, 18));
+                    if (value > 0) {
+                        setInitialRatio(1 / value);
+                        console.log('build ratio: ', 1 / value);
+                    }
+                } catch (err) {
+                    console.log('build ratio:', err);
                 }
             })();
         }
