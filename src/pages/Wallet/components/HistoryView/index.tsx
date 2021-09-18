@@ -192,7 +192,7 @@ const HistoryView = () => {
         totalGql: GET_MINTS_FROM_PANCAKE_TOTAL,
         parser: useParseDataOfPancake('mint'),
         key: 'mints',
-        extVars: { user: '' },
+        // extVars: { user: '' },
     });
     const burnsTable = usePagination({
         client: pancakeswapClient,
@@ -200,7 +200,7 @@ const HistoryView = () => {
         totalGql: GET_BURNS_FROM_PANCAKE_TOTAL,
         parser: useParseDataOfPancake('burn'),
         key: 'burns',
-        extVars: { user: '' },
+        // extVars: { user: '' },
     });
 
     const columns = [
