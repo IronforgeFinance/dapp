@@ -33,6 +33,7 @@ import {
     toFixedWithoutRound,
     expandToNDecimals,
     expandTo18Decimals,
+    ethersToBigNumber,
 } from '@/utils/bigNumber';
 import useDataView from '@/hooks/useDataView';
 import { useTokenPrice } from '@/hooks/useTokenPrice';
@@ -103,8 +104,6 @@ export default () => {
             Tokens.IFT.address[process.env.APP_CHAIN_ID],
             collateralSytemContract,
         );
-
-    const prices = usePrices();
 
     const { currencyRatio } = useDataView(collateralToken);
 
@@ -216,34 +215,43 @@ export default () => {
 
                 console.log('calcBuildRatio: ', buildRatio);
                 newRatio = 1 / buildRatio;
-                setfRatioData({
-                    ...fRatioData,
-                    endValue: parseFloat((newRatio * 100).toFixed(2)),
-                });
+            } else {
+                newRatio = initialRatio;
             }
+            setfRatioData({
+                ...fRatioData,
+                endValue: parseFloat((newRatio * 100).toFixed(2)),
+            });
             setComputedRatio(newRatio);
         })();
-    }, [collateralAmount, collateralToken, lockedAmount, account]);
+    }, [
+        collateralAmount,
+        collateralToken,
+        lockedAmount,
+        account,
+        initialRatio,
+    ]);
 
     // 计算toAmount
     useEffect(() => {
         debounce(async () => {
-            if (computedRatio && toToken && collateralAmount) {
-                const maxCanBuild = await collateralSystem.getMaxBuildAmount(
+            let maxCanbuild;
+            if (account && toToken && collateralAmount) {
+                //TODO 该接口需要有用户地址，否则报错
+                const res = await collateralSystem.getMaxBuildAmount(
                     ethers.utils.formatBytes32String(collateralToken),
                     expandTo18Decimals(collateralAmount),
                     ethers.utils.formatBytes32String(toToken),
                     expandTo18Decimals(lockedAmount || 0),
                 );
-                setToAmount(
-                    toFixedWithoutRound(
-                        ethers.utils.formatEther(maxCanBuild),
-                        6,
-                    ),
-                );
+                maxCanbuild = parseFloat(ethers.utils.formatEther(res));
             } else {
-                setToAmount(undefined);
+                const fromPrice = await getTokenPrice(collateralToken);
+                const toPrice = await getTokenPrice(toToken);
+                maxCanbuild =
+                    (fromPrice * collateralAmount) / (toPrice * initialRatio);
             }
+            setToAmount(toFixedWithoutRound(maxCanbuild, 6));
         }, 500)();
     }, [
         collateralToken,
@@ -251,6 +259,7 @@ export default () => {
         lockedAmount,
         computedRatio,
         toToken,
+        account,
     ]);
 
     /**@description 弹出npc */

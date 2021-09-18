@@ -30,6 +30,10 @@ import { useIntl, useModel } from 'umi';
 import { getTokenPrice } from '@/utils';
 import { TokenSelectorContext } from '@/components/TokenSelector';
 import { TransitionConfirmContext } from '@/components/TransactionConfirm';
+import {
+    useCheckERC20ApprovalStatus,
+    useERC20Approve,
+} from '@/hooks/useApprove';
 //TODO: for test.从配置中读取
 const TOKEN_OPTIONS = MINT_TOKENS.map((token) => ({ name: token }));
 
@@ -55,6 +59,30 @@ export default () => {
             console.log('canRevert: ', canRevert);
         })();
     }, []);
+    const exchangeSystemContract =
+        Contracts.ExchangeSystem[process.env.APP_CHAIN_ID];
+    const {
+        isApproved: fromApproved,
+        setLastUpdated: setFromApprovedLastUpdated,
+    } = useCheckERC20ApprovalStatus(fromToken, exchangeSystemContract);
+    const {
+        handleApprove: handleFromApprove,
+        requestedApproval: requestFromApproval,
+    } = useERC20Approve(
+        fromToken,
+        exchangeSystemContract,
+        setFromApprovedLastUpdated,
+    );
+    const { isApproved: toApproved, setLastUpdated: setToApprovedLastUpdated } =
+        useCheckERC20ApprovalStatus(toToken, exchangeSystemContract);
+    const {
+        handleApprove: handleToApprove,
+        requestedApproval: requestToApproval,
+    } = useERC20Approve(
+        toToken,
+        exchangeSystemContract,
+        setToApprovedLastUpdated,
+    );
 
     const { requestConnectWallet } = useModel('app', (model) => ({
         requestConnectWallet: model.requestConnectWallet,
@@ -296,7 +324,25 @@ export default () => {
                             </div>
                         </div>
                     </div>
-                    {account && (
+                    {account && !fromApproved && (
+                        <Button
+                            className="btn-trade common-btn common-btn-red"
+                            onClick={handleFromApprove}
+                            loading={requestFromApproval}
+                        >
+                            {intl.formatMessage({ id: 'trade.approve' })}
+                        </Button>
+                    )}
+                    {account && fromApproved && !toApproved && (
+                        <Button
+                            className="btn-trade common-btn common-btn-red"
+                            onClick={handleToApprove}
+                            loading={requestToApproval}
+                        >
+                            {intl.formatMessage({ id: 'trade.approve' })}
+                        </Button>
+                    )}
+                    {account && fromApproved && toApproved && (
                         <Button
                             className="btn-trade common-btn common-btn-red"
                             disabled={!canTrade}

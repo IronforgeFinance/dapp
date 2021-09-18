@@ -55,6 +55,7 @@ export default {
     'burn.approve': 'Approve to burn',
     'trade.from': 'From',
     'trade.to': 'To',
+    'trade.approve': 'Approve to Trade',
     'trade.marketing:': 'Market Details: ',
     'trade.24h.volume': '24H Volume',
     'trade.24h.marketcap': 'Market Cap',

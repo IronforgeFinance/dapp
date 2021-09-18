@@ -78,6 +78,7 @@ export default {
     /**
      * @description 交易商店
      */
+    'trade.approve': '授权交易',
     'trade.from': 'From',
     'trade.to': 'To',
     'trade.marketing:': '交易行情：',
