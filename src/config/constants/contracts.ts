@@ -1,7 +1,6 @@
 /**
  * @description 在本地缓存设置innerLocalContracts/innerTestContracts来扩展或覆盖对应的合约配置
  */
-import localContracts from '../../../contracts.local.json';
 
 export const testnetOutput = {
     buildTokens: {
@@ -40,10 +39,16 @@ export const testnetOutput = {
     LinearRelease: '0x0c32d86ED288cd37c3b21862d3385ba9ca1F9C40',
     Timelock: '0x9793f387ae8A0d60c1E1772C67a562d1c0537053',
     'USDC-ETH': '0xe6052EeAc24ed4cE0d838806c272c406d45eb8B2',
+    ...JSON.parse(localStorage.getItem('innerTestContracts') ?? '{}'),
 };
 export const localOutput = {
     ...testnetOutput,
-    ...localContracts,
+    /**
+     * @deprecated
+     * @description 往localStorage里面的innerLocalContracts扩展合约信息
+     */
+    // ...localContracts,
+    ...JSON.parse(localStorage.getItem('innerLocalContracts') ?? '{}'),
 };
 export default {
     masterChef: {

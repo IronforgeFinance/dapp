@@ -13,6 +13,7 @@ import ClaimRewards from '@/components/ClaimRewards';
 import TokenSelector from '@/components/TokenSelector';
 import TransactionConfirm from '@/components/TransactionConfirm';
 import MyDebts from '@/components/MyDebts';
+import LoadingContextProvider from '@/contexts/LoadingContext';
 
 export default function Layout({
     children,
@@ -79,15 +80,17 @@ export default function Layout({
                 </video>
             )}
             <CommonHeader />
-            <MyDebts>
-                <TransactionConfirm>
-                    <TokenSelector>
-                        <ClaimRewards>
-                            <NpcDialog>{children}</NpcDialog>
-                        </ClaimRewards>
-                    </TokenSelector>
-                </TransactionConfirm>
-            </MyDebts>
+            <LoadingContextProvider>
+                <MyDebts>
+                    <TransactionConfirm>
+                        <TokenSelector>
+                            <ClaimRewards>
+                                <NpcDialog>{children}</NpcDialog>
+                            </ClaimRewards>
+                        </TokenSelector>
+                    </TransactionConfirm>
+                </MyDebts>
+            </LoadingContextProvider>
             {!isMobile && <CommonFooter />}
         </div>
     );

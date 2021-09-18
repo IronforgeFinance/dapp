@@ -481,7 +481,7 @@ const HistoryView = () => {
             return 'noConnection';
         }
         if (!records?.length) {
-            return 'noAssets';
+            return 'noRecords';
         }
     }, [account, records]);
 
