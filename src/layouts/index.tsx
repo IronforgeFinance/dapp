@@ -79,8 +79,8 @@ export default function Layout({
                     />
                 </video>
             )}
-            <CommonHeader />
             <LoadingContextProvider>
+                <CommonHeader />
                 <MyDebts>
                     <TransactionConfirm>
                         <TokenSelector>
@@ -90,8 +90,8 @@ export default function Layout({
                         </TokenSelector>
                     </TransactionConfirm>
                 </MyDebts>
+                {!isMobile && <CommonFooter />}
             </LoadingContextProvider>
-            {!isMobile && <CommonFooter />}
         </div>
     );
 }
