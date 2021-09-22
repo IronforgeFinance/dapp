@@ -31,7 +31,7 @@ import {
 import Contracts from '@/config/constants/contracts';
 import { TokenSelectorContext } from '@/components/TokenSelector';
 import { TransitionConfirmContext as TransactionConfirmContext } from '@/components/TransactionConfirm';
-import { MyDebtsContext } from '@/components/MyDebts';
+import { useMyDebts } from '@/components/MyDebts';
 
 const TO_TOKENS = ['BTC'];
 interface IProps {
@@ -53,7 +53,7 @@ export default (props: IProps) => {
     const [burnMaxAvailable, setBurnMaxAvailable] = useState(false);
     const { open } = useContext(TokenSelectorContext);
     const { open: openConfirmModal } = useContext(TransactionConfirmContext);
-    const { open: checkoutMyDebts } = useContext(MyDebtsContext);
+    const { open: checkoutMyDebts } = useMyDebts();
 
     const { requestConnectWallet } = useModel('app', (model) => ({
         requestConnectWallet: model.requestConnectWallet,

@@ -10,13 +10,12 @@ import React, {
 import useEagerConnect from '@/hooks/useEagerConnect';
 import Blacksmith from '@/assets/images/blacksmith.png';
 import Merchant from '@/assets/images/merchant.png';
-import { Link } from 'umi';
 import { useInitialRatio } from '@/hooks/useConfig';
 import { COLLATERAL_TOKENS, PLATFORM_TOKEN } from '@/config';
 import { useBep20Balance } from '@/hooks/useTokenBalance';
 import PreloadAssetsSuspense from '@/components/PreloadAssetsSuspense';
 import TabGroup from '@/components/TabGroup';
-import { ClaimRewardsContext } from '@/components/ClaimRewards';
+import { useClaimRewards } from '@/components/ClaimRewards';
 import { useIntl, useModel } from 'umi';
 import { Button, Popover } from 'antd';
 import { useWeb3React } from '@web3-react/core';
@@ -54,7 +53,7 @@ export default () => {
     };
     const intl = useIntl();
     const isMobile = useEnv();
-    const { open } = useContext(ClaimRewardsContext);
+    const { open: openClaimRewards } = useClaimRewards();
     const [tabKey, setTabKey] = useState(tabItems[0].key);
     const [showSelectFromToken, setShowSelectFromToken] = useState(false);
     const { account } = useWeb3React();
@@ -303,7 +302,7 @@ export default () => {
                             <span className="label">Rewards</span>
                             <Button
                                 className="see-rewards-btn common-btn common-btn-red"
-                                onClick={open}
+                                onClick={openClaimRewards}
                             >
                                 Detail
                             </Button>

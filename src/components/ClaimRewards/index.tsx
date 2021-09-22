@@ -1,38 +1,24 @@
 import './less/index.less';
-import { useEffect } from 'react';
-import { createContext, useCallback, useState, ReactNode } from 'react';
+
+import { useState, useContext } from 'react';
 import { Button, Popover } from 'antd';
-import classNames from 'classnames';
-import { history, useModel } from 'umi';
+import { useModel } from 'umi';
 import Overlay from '@/components/Overlay';
 import { useWeb3React } from '@web3-react/core';
 import { useMinerReward } from '@/hooks/useContract';
 import * as message from '@/components/Notification';
-import { DEFAULT_POOL } from '@/models/stakeData';
-interface ClaimRewardsContextProps {
-    visable: boolean;
-    open(): void;
-    close(): void;
-}
-
-interface ClaimRewardsProps {
-    children: ReactNode;
-}
-
-export const ClaimRewardsContext =
-    createContext<ClaimRewardsContextProps | null>(null);
-export const ClaimRewardsContextProvier = ClaimRewardsContext.Provider;
+import { ClaimRewardsContext } from './provider';
 
 const POOL_ID = 0;
-const ClaimRewards = (props: ClaimRewardsProps) => {
-    const { children } = props;
-    const [visable, setVisable] = useState(false);
-    const [stakeData, setStakeData] = useState(DEFAULT_POOL);
+
+export const useClaimRewards = () => {
+    return useContext(ClaimRewardsContext);
+};
+
+const ClaimRewards = () => {
+    const { visable, close } = useContext(ClaimRewardsContext);
     const [submitting, setSubmitting] = useState(false);
     const { account } = useWeb3React();
-
-    const close = useCallback(() => setVisable(false), []);
-    const open = useCallback(() => setVisable(true), []);
 
     const { fetchStakePoolList, stakeDataList } = useModel(
         'stakeData',
@@ -63,85 +49,75 @@ const ClaimRewards = (props: ClaimRewardsProps) => {
     };
 
     return (
-        <ClaimRewardsContext.Provider
-            value={{
-                visable,
-                close,
-                open,
-            }}
-        >
-            <Overlay visable={visable}>
-                <section className="claim-rewards">
-                    <a className="back-btn" onClick={close} />
-                    <ul className="cards-group">
-                        <li className="rewards card">
-                            <div className="before" />
-                            <div className="content">
-                                <i className="icon-rewards" />
-                                <span className="value">
+        <Overlay visable={visable}>
+            <section className="claim-rewards">
+                <a className="back-btn" onClick={close} />
+                <ul className="cards-group">
+                    <li className="rewards card">
+                        <div className="before" />
+                        <div className="content">
+                            <i className="icon-rewards" />
+                            <span className="value">
+                                {account
+                                    ? `${stakeDataList[0]?.totalPendingReward} BS`
+                                    : '--'}
+                            </span>
+                            <span className="label">Rewards</span>
+                            <div className="bottom">
+                                <p className="price">
                                     {account
-                                        ? `${stakeDataList[0]?.totalPendingReward} BS`
+                                        ? `${stakeDataList[0]?.redeemableReward} BS`
                                         : '--'}
-                                </span>
-                                <span className="label">Rewards</span>
-                                <div className="bottom">
-                                    <p className="price">
-                                        {account
-                                            ? `${stakeDataList[0]?.redeemableReward} BS`
-                                            : '--'}
-                                        <Popover
-                                            trigger="hover"
-                                            placement="topLeft"
-                                            content="收益来自于铸造中锁仓的BS，50%可即刻提取，50%将于30天内线性释放。"
-                                        >
-                                            <i className="icon-question size-20" />
-                                        </Popover>
-                                    </p>
-                                    <Button
-                                        className="claim-btn common-btn common-btn-red"
-                                        onClick={handleRedeem}
-                                        disabled={
-                                            stakeDataList[0]?.redeemableReward <=
-                                            0
-                                        }
-                                        loading={submitting}
-                                    >
-                                        Claim
-                                    </Button>
-                                </div>
-                            </div>
-                            <div className="after" />
-                        </li>
-                        <li className="ratio card">
-                            <div className="before" />
-                            <div className="content">
-                                <span className="value">
-                                    {account
-                                        ? `${
-                                              (
-                                                  stakeDataList[0]?.apy * 100
-                                              ).toFixed(4) + '%'
-                                          }`
-                                        : '--'}
-                                </span>
-                                <span className="label">
-                                    Earning ratio{' '}
                                     <Popover
                                         trigger="hover"
-                                        placement="topRight"
-                                        content="APR"
+                                        placement="topLeft"
+                                        content="收益来自于铸造中锁仓的BS，50%可即刻提取，50%将于30天内线性释放。"
                                     >
                                         <i className="icon-question size-20" />
                                     </Popover>
-                                </span>
+                                </p>
+                                <Button
+                                    className="claim-btn common-btn common-btn-red"
+                                    onClick={handleRedeem}
+                                    disabled={
+                                        stakeDataList[0]?.redeemableReward <= 0
+                                    }
+                                    loading={submitting}
+                                >
+                                    Claim
+                                </Button>
                             </div>
-                            <div className="after" />
-                        </li>
-                    </ul>
-                </section>
-            </Overlay>
-            {children}
-        </ClaimRewardsContext.Provider>
+                        </div>
+                        <div className="after" />
+                    </li>
+                    <li className="ratio card">
+                        <div className="before" />
+                        <div className="content">
+                            <span className="value">
+                                {account
+                                    ? `${
+                                          (stakeDataList[0]?.apy * 100).toFixed(
+                                              4,
+                                          ) + '%'
+                                      }`
+                                    : '--'}
+                            </span>
+                            <span className="label">
+                                Earning ratio{' '}
+                                <Popover
+                                    trigger="hover"
+                                    placement="topRight"
+                                    content="APR"
+                                >
+                                    <i className="icon-question size-20" />
+                                </Popover>
+                            </span>
+                        </div>
+                        <div className="after" />
+                    </li>
+                </ul>
+            </section>
+        </Overlay>
     );
 };
 

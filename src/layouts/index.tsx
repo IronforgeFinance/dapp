@@ -18,6 +18,8 @@ import HistoryBoard from '@/components/HistoryBoard';
 import MobileNavigationContextProvider from './components/Header/components/MobileNavigation/provider';
 import HistoryBoardContextProvider from '@/components/HistoryBoard/provider';
 import NpcDialogContextProvider from '@/components/NpcDialog/provider';
+import MyDebtsContextProvider from '@/components/MyDebts/provider';
+import ClaimRewardsContextProvider from '@/components/ClaimRewards/provider';
 
 export default function Layout({
     children,
@@ -90,26 +92,29 @@ export default function Layout({
                 <MobileNavigationContextProvider>
                     <HistoryBoardContextProvider>
                         <NpcDialogContextProvider>
-                            {/* 多为弹窗组件，优势：复用、防止包含块、单例（避免多实例造成内存浪费）、支持跨层（调用灵活）。相关操作方法由provider提供 */}
-                            <Fragment>
-                                <NpcDialog />
-                                <HistoryBoard />
-                            </Fragment>
+                            <MyDebtsContextProvider>
+                                <ClaimRewardsContextProvider>
+                                    {/* 多为弹窗组件，优势：复用、防止包含块、单例（避免多实例造成内存浪费）、支持跨层（调用灵活）。相关操作方法由provider提供 */}
+                                    <Fragment>
+                                        <NpcDialog />
+                                        <HistoryBoard />
+                                        <MyDebts />
+                                        <ClaimRewards />
+                                    </Fragment>
 
-                            {/* 页面内容 */}
-                            <Fragment>
-                                <CommonHeader />
-                                <MyDebts>
-                                    <TransactionConfirm>
-                                        <TokenSelector>
-                                            <ClaimRewards>
+                                    {/* 页面内容 */}
+                                    <Fragment>
+                                        <CommonHeader />
+
+                                        <TransactionConfirm>
+                                            <TokenSelector>
                                                 {children}
-                                            </ClaimRewards>
-                                        </TokenSelector>
-                                    </TransactionConfirm>
-                                </MyDebts>
-                                {!isMobile && <CommonFooter />}
-                            </Fragment>
+                                            </TokenSelector>
+                                        </TransactionConfirm>
+                                        {!isMobile && <CommonFooter />}
+                                    </Fragment>
+                                </ClaimRewardsContextProvider>
+                            </MyDebtsContextProvider>
                         </NpcDialogContextProvider>
                     </HistoryBoardContextProvider>
                 </MobileNavigationContextProvider>
