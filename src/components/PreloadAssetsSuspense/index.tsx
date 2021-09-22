@@ -7,7 +7,9 @@ interface PreloadAssetsSuspenseProps {
 }
 
 const EntranceLoading = () => (
-    <div className="entrance-loading">Loading...</div>
+    <div className="entrance-loading">
+        <i className="transaction-confirm-loading" />
+    </div>
 );
 
 const PreloadAssetsSuspense = (props: PreloadAssetsSuspenseProps) => {
