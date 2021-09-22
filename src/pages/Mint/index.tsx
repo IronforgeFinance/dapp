@@ -48,7 +48,7 @@ import { isDeliveryAsset } from '@/utils';
 // import Popover from '@/components/Popover';
 import { TokenIcon } from '@/components/Icon';
 import { StatusType } from '@/components/ProgressBar';
-import { NpcDialogContext } from '@/components/NpcDialog';
+import { useNpcDialog } from '@/components/NpcDialog';
 import { getTokenPrice } from '@/utils';
 import useEnv from '@/hooks/useEnv';
 
@@ -57,7 +57,7 @@ const RATIO_MAX_MINT = 800;
 export default () => {
     const intl = useIntl();
     const isMobile = useEnv();
-    const { setWords } = useContext(NpcDialogContext);
+    const { setWords } = useNpcDialog();
     const { account } = useWeb3React();
     const provider = useProvider();
     const currentStakedValue = useRef(0);
@@ -85,6 +85,7 @@ export default () => {
     const [minSliderRatio, setMinSliderRatio] = useState(
         (500 / RATIO_MAX_MINT) * 100,
     );
+    const _fTokenBalance = useRef(0);
 
     const collateralSystem = useCollateralSystem();
     const exchangeSystem = useExchangeSystem();
@@ -174,6 +175,8 @@ export default () => {
     const { balance: fTokenBalance, refresh: refreshIFTBalance } =
         useBep20Balance(PLATFORM_TOKEN);
     console.log('fTokenBalance: ', fTokenBalance);
+        useBep20Balance('IFT');
+    _fTokenBalance.current = fTokenBalance;
 
     const { balance: collateralBalance, refresh: refreshCollateralBalance } =
         useBep20Balance(collateralToken, 6);
@@ -311,7 +314,7 @@ export default () => {
             }
         })();
     }, [toToken, toAmount]);
-    const collateralAmountHandler = React.useCallback(
+    const collateralAmountHandler = useCallback(
         debounce(async (v) => {
             setCollateralAmount(v);
             const price = await getTokenPrice(collateralToken);
@@ -346,11 +349,12 @@ export default () => {
                 endValue: val + lockedData.startValue,
             });
         }, 500),
-        [fTokenBalance, lockedData],
+        [lockedData],
     );
 
-    const scaleHandler = async (v) => {
-        if (v == undefined) return;
+    const scaleHandler = useCallback(
+        debounce(async (v) => {
+            if (v == undefined) return;
 
         setLockedScale(+v);
         const bsPrice = await getTokenPrice(PLATFORM_TOKEN);
@@ -360,19 +364,21 @@ export default () => {
         let amount = (currentStakedValue.current * Number(v)) / bsPrice;
         console.log('>> stake total value: %s', amount);
 
-        /**@description 超过余额的计算 */
-        amount =
-            amount < fTokenBalance && fTokenBalance > 0
-                ? amount
-                : fTokenBalance;
-        setLockedAmount(toFixedWithoutRound(amount, 6));
+            /**@description 超过余额的计算 */
+            amount =
+                amount < _fTokenBalance.current && _fTokenBalance.current > 0
+                    ? amount
+                    : _fTokenBalance.current;
+            setLockedAmount(toFixedWithoutRound(amount, 6));
 
-        const val = toFixedWithoutRound(bsPrice * amount, 2);
-        setLockedData({
-            ...lockedData,
-            endValue: val || 0,
-        });
-    };
+            const val = toFixedWithoutRound(bsPrice * amount, 2);
+            setLockedData({
+                ...lockedData,
+                endValue: val || 0,
+            });
+        }),
+        [currentStakedValue],
+    );
 
     const toAmountHandler = (v) => {
         setToAmount(v);

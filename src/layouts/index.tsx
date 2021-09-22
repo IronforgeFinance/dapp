@@ -1,6 +1,6 @@
 import './less/index.less';
 
-import { useEffect, useRef } from 'react';
+import { Fragment, useEffect, useRef } from 'react';
 import { IRouteComponentProps } from 'umi';
 import CommonHeader from './components/Header';
 import CommonFooter from './components/Footer';
@@ -14,6 +14,12 @@ import TokenSelector from '@/components/TokenSelector';
 import TransactionConfirm from '@/components/TransactionConfirm';
 import MyDebts from '@/components/MyDebts';
 import LoadingContextProvider from '@/contexts/LoadingContext';
+import HistoryBoard from '@/components/HistoryBoard';
+import MobileNavigationContextProvider from './components/Header/components/MobileNavigation/provider';
+import HistoryBoardContextProvider from '@/components/HistoryBoard/provider';
+import NpcDialogContextProvider from '@/components/NpcDialog/provider';
+import MyDebtsContextProvider from '@/components/MyDebts/provider';
+import ClaimRewardsContextProvider from '@/components/ClaimRewards/provider';
 
 export default function Layout({
     children,
@@ -34,20 +40,23 @@ export default function Layout({
     };
 
     useEffect(() => {
-        if (location.pathname === '/mint') {
-            player.current.src = isDev()
-                ? 'http://localhost:5000/files/mint.webm'
-                : './static/mint.webm';
-            player.current.play();
-        } else if (location.pathname === '/burn') {
-            player.current.src = isDev()
-                ? 'http://localhost:5000/files/burn.webm'
-                : './static/burn.webm';
-            player.current.play();
-        } else {
-            player.current.src = '';
-            player.current.pause();
+        if (!isMobile) {
+            if (location.pathname === '/mint') {
+                player.current.src = isDev()
+                    ? 'http://localhost:5000/files/mint.webm'
+                    : './static/mint.webm';
+                player.current.play();
+            } else if (location.pathname === '/burn') {
+                player.current.src = isDev()
+                    ? 'http://localhost:5000/files/burn.webm'
+                    : './static/burn.webm';
+                player.current.play();
+            } else {
+                player.current.src = '';
+                player.current.pause();
+            }
         }
+
         clearDataView();
     }, [location, account]);
     return (
@@ -80,17 +89,35 @@ export default function Layout({
                 </video>
             )}
             <LoadingContextProvider>
-                <CommonHeader />
-                <MyDebts>
-                    <TransactionConfirm>
-                        <TokenSelector>
-                            <ClaimRewards>
-                                <NpcDialog>{children}</NpcDialog>
-                            </ClaimRewards>
-                        </TokenSelector>
-                    </TransactionConfirm>
-                </MyDebts>
-                {!isMobile && <CommonFooter />}
+                <MobileNavigationContextProvider>
+                    <HistoryBoardContextProvider>
+                        <NpcDialogContextProvider>
+                            <MyDebtsContextProvider>
+                                <ClaimRewardsContextProvider>
+                                    {/* 多为弹窗组件，优势：复用、防止包含块、单例（避免多实例造成内存浪费）、支持跨层（调用灵活）。相关操作方法由provider提供 */}
+                                    <Fragment>
+                                        <NpcDialog />
+                                        <HistoryBoard />
+                                        <MyDebts />
+                                        <ClaimRewards />
+                                    </Fragment>
+
+                                    {/* 页面内容 */}
+                                    <Fragment>
+                                        <CommonHeader />
+
+                                        <TransactionConfirm>
+                                            <TokenSelector>
+                                                {children}
+                                            </TokenSelector>
+                                        </TransactionConfirm>
+                                        {!isMobile && <CommonFooter />}
+                                    </Fragment>
+                                </ClaimRewardsContextProvider>
+                            </MyDebtsContextProvider>
+                        </NpcDialogContextProvider>
+                    </HistoryBoardContextProvider>
+                </MobileNavigationContextProvider>
             </LoadingContextProvider>
         </div>
     );

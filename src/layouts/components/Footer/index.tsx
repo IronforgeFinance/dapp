@@ -1,72 +1,45 @@
 import './less/index.less';
 
-import React, { useEffect, useState } from 'react';
+import {
+    useEffect,
+    useState,
+    useMemo,
+    useContext,
+    Fragment,
+    useCallback,
+} from 'react';
 import IconTwitter from '@/assets/images/twitter.svg';
 import IconGithub from '@/assets/images/github.svg';
 import IconMedium from '@/assets/images/medium.svg';
-import { useGetBnbBalance } from '@/hooks/useTokenBalance';
-import TabRecordBoard from '@/components/TabRecordBoard';
 import { history } from 'umi';
-import MintView from './components/MintView';
-import BurnView from './components/BurnView';
-import DeliveryView from './components/DeliveryView';
 import { useIntl } from 'umi';
 import { Button } from 'antd';
 import { MDEX_SWAP_EXPLORER } from '@/config/constants/constant';
-import { getTokenPrice } from '@/utils/index';
-import { ReactComponent as TabBackIcon01 } from '@/assets/images/big-board-svg-01.svg';
-import { ReactComponent as TabBackIcon02 } from '@/assets/images/big-board-svg-02.svg';
-import { ReactComponent as TabBackIcon03 } from '@/assets/images/big-board-svg-03.svg';
-
-const tabItems = [
-    {
-        name: 'history.mint',
-        key: 'mint',
-        icon: <TabBackIcon01 fill="#89512D" />,
-    },
-    {
-        name: 'history.burn',
-        key: 'burn',
-        icon: <TabBackIcon02 fill="#89512D" />,
-    },
-    {
-        name: 'history.delivery',
-        key: 'delivery',
-        icon: <TabBackIcon03 fill="#89512D" />,
-    },
-];
-
-const filterList = ['/', '/trade', '/farm', '/farm/provide', '/wallet'];
-
-const platformToken = 'IFT';
+import { TokenIcon } from '@/components/Icon';
+import useEnv from '@/hooks/useEnv';
+import { useHistoryBoard } from '@/components/HistoryBoard';
+import { MobileNavigationContext } from '@/layouts/components/Header/components/MobileNavigation/provider';
 
 export default () => {
     const intl = useIntl();
-    // const { price, rate } = useFtokenPrice();
-    const [price, setPrice] = useState(0);
-    const [rate, setRate] = useState('0.00%');
-    const { balance } = useGetBnbBalance();
-    const [tabKey, setTabKey] = React.useState(tabItems[0].key);
-    const [visable, setVisable] = React.useState(false);
-    const [showWholeView, setShowWholeView] = React.useState(false);
+    const [price] = useState(0);
+    const { openWithTabKey } = useHistoryBoard();
+    const { setVisible: setMobileNavigationVisible } = useContext(
+        MobileNavigationContext,
+    );
+    const isMobile = useEnv();
+    const [rate] = useState('0.00%');
+    const [showWholeView, setShowWholeView] = useState(false);
 
-    const CurrentView = React.useMemo(() => {
-        switch (tabKey) {
-            case tabItems[0].key: {
-                return <MintView />;
-            }
-            case tabItems[1].key: {
-                return <BurnView />;
-            }
-            case tabItems[2].key: {
-                return <DeliveryView />;
-            }
-            default:
-                return null;
-        }
-    }, [tabKey]);
+    const filterList = useMemo(
+        () =>
+            isMobile
+                ? []
+                : ['/', '/trade', '/farm', '/farm/provide', '/wallet'],
+        [isMobile],
+    );
 
-    React.useEffect(() => {
+    useEffect(() => {
         setShowWholeView(
             !filterList.some((item) => item === window.location!.pathname),
         );
@@ -76,40 +49,19 @@ export default () => {
                 !filterList.some((item) => item === location.pathname),
             );
         });
+    }, [filterList]);
+
+    const openHistory = useCallback(() => {
+        openWithTabKey(2);
+        setMobileNavigationVisible(false);
     }, []);
-
-    const openHistory = React.useCallback(() => {
-        setVisable(true);
-        setTabKey(tabItems[2].key);
+    const openMint = useCallback(() => {
+        openWithTabKey();
+        setMobileNavigationVisible(false);
     }, []);
-
-    const openMint = React.useCallback(() => {
-        setVisable(true);
-        setTabKey(tabItems[0].key);
-    }, []);
-
-    // useEffect(() => {
-    //     let unmounted = false;
-    //     const fetchBalance = async () => {
-    //         try {
-    //             const dexPrice = await getTokenPrice(platformToken);
-    //             setPrice(+dexPrice);
-    //         } catch (e) {
-    //             console.error(e);
-    //         }
-    //     };
-
-    //     if (!unmounted) {
-    //         fetchBalance();
-    //     }
-
-    //     return () => {
-    //         unmounted = true;
-    //     };
-    // }, [fastRefresh]);
 
     return (
-        <React.Fragment>
+        <Fragment>
             {showWholeView && (
                 <div className="footer-container">
                     <div className="entries">
@@ -118,6 +70,7 @@ export default () => {
                     </div>
                     <div className="ftoken">
                         <p className="price">
+                            <TokenIcon name="bs" />
                             <span className="symbol">$</span>
                             {price}
                         </p>
@@ -136,23 +89,8 @@ export default () => {
                         <img key={2} src={IconGithub} />
                         <img key={3} src={IconMedium} />
                     </div>
-
-                    <TabRecordBoard
-                        title={intl.formatMessage({ id: 'history' })}
-                        tabItems={tabItems.map((item) => ({
-                            ...item,
-                            name: intl.formatMessage({ id: item.name }),
-                        }))}
-                        tabKey={tabKey}
-                        onChange={(key) => setTabKey(key)}
-                        close={() => setVisable(false)}
-                        visible={visable}
-                        mode="modal"
-                    >
-                        {CurrentView}
-                    </TabRecordBoard>
                 </div>
             )}
-        </React.Fragment>
+        </Fragment>
     );
 };

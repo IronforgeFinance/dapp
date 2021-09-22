@@ -1,37 +1,35 @@
 import './less/index.less';
 
 import {
-    createContext,
     useCallback,
     useState,
     useEffect,
+    useContext,
     ReactNode,
     useMemo,
     useRef,
+    Fragment,
 } from 'react';
 import MintNpcPng from '@/assets/images/npc-dialog-mint-person.png';
 import HomeNpcPng from '@/assets/images/npc-dialog-home-person.png';
 import classNames from 'classnames';
 import { history } from 'umi';
-
-interface NpcDialogContextProps {
-    words: string;
-    setWords(words: string): void;
-}
+import useEnv from '@/hooks/useEnv';
+import { NpcDialogContext } from './provider';
 
 interface NpcDialog {
-    children: ReactNode;
+    children?: ReactNode;
 }
 
-export const NpcDialogContext = createContext<NpcDialogContextProps | null>(
-    null,
-);
-export const NpcDialogContextProvier = NpcDialogContext.Provider;
+export const useNpcDialog = () => {
+    return useContext(NpcDialogContext);
+};
 
 const NpcDialog = (props: NpcDialog) => {
     const { children } = props;
+    const isMobile = useEnv();
     const [visable, setVisable] = useState(false);
-    const [words, setWords] = useState('');
+    const { words, setWords } = useContext(NpcDialogContext);
     const [slowWords, setSlowWords] = useState('');
     const [pathname, setPathname] = useState('/mint');
     const tmKeys = useRef([]);
@@ -95,37 +93,34 @@ const NpcDialog = (props: NpcDialog) => {
     useEffect(() => clearTms, []);
 
     return (
-        <NpcDialogContext.Provider
-            value={{
-                words,
-                setWords,
-            }}
-        >
-            <section
-                className={classNames({
-                    'npc-dilaog': true,
-                    show: visable,
-                    hide: !visable,
-                })}
-            >
-                <div
+        <Fragment>
+            {!isMobile && (
+                <section
                     className={classNames({
-                        'dialog-box': true,
-                        home: isHome,
+                        'npc-dilaog': true,
+                        show: visable,
+                        hide: !visable,
                     })}
                 >
-                    <img
-                        className={classNames({ npc: true, home: isHome })}
-                        src={isHome ? HomeNpcPng : MintNpcPng}
-                    />
-                    <p className="words">
-                        <span>{slowWords}</span>
-                        <a onClick={close}>我知道了</a>
-                    </p>
-                </div>
-            </section>
+                    <div
+                        className={classNames({
+                            'dialog-box': true,
+                            home: isHome,
+                        })}
+                    >
+                        <img
+                            className={classNames({ npc: true, home: isHome })}
+                            src={isHome ? HomeNpcPng : MintNpcPng}
+                        />
+                        <p className="words">
+                            <span>{slowWords}</span>
+                            <a onClick={close}>我知道了</a>
+                        </p>
+                    </div>
+                </section>
+            )}
             {children}
-        </NpcDialogContext.Provider>
+        </Fragment>
     );
 };
 

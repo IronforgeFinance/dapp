@@ -3,7 +3,7 @@ import './less/index.less';
 import 'react';
 import { NavLink, useIntl } from 'umi';
 import WalletStatus from '../WalletStatus';
-import MobileNavigation from './components/Navigation';
+import MobileNavigation from './components/MobileNavigation';
 import Logo from '@/assets/images/header-logo.png';
 import useEagerConnect from '@/hooks/useEagerConnect';
 import LangSwitcher from '../LangSwitcher';
