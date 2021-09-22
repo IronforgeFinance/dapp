@@ -1,10 +1,9 @@
 import './less/index.less';
 
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo, Fragment, useCallback } from 'react';
 import IconTwitter from '@/assets/images/twitter.svg';
 import IconGithub from '@/assets/images/github.svg';
 import IconMedium from '@/assets/images/medium.svg';
-import { useGetBnbBalance } from '@/hooks/useTokenBalance';
 import TabRecordBoard from '@/components/TabRecordBoard';
 import { history } from 'umi';
 import MintView from './components/MintView';
@@ -13,10 +12,11 @@ import DeliveryView from './components/DeliveryView';
 import { useIntl } from 'umi';
 import { Button } from 'antd';
 import { MDEX_SWAP_EXPLORER } from '@/config/constants/constant';
-import { getTokenPrice } from '@/utils/index';
 import { ReactComponent as TabBackIcon01 } from '@/assets/images/big-board-svg-01.svg';
 import { ReactComponent as TabBackIcon02 } from '@/assets/images/big-board-svg-02.svg';
 import { ReactComponent as TabBackIcon03 } from '@/assets/images/big-board-svg-03.svg';
+import { TokenIcon } from '@/components/Icon';
+import useEnv from '@/hooks/useEnv';
 
 const tabItems = [
     {
@@ -36,21 +36,19 @@ const tabItems = [
     },
 ];
 
-const filterList = ['/', '/trade', '/farm', '/farm/provide', '/wallet'];
-
 const platformToken = 'IFT';
 
 export default () => {
     const intl = useIntl();
     // const { price, rate } = useFtokenPrice();
     const [price, setPrice] = useState(0);
+    const isMobile = useEnv();
     const [rate, setRate] = useState('0.00%');
-    const { balance } = useGetBnbBalance();
-    const [tabKey, setTabKey] = React.useState(tabItems[0].key);
-    const [visable, setVisable] = React.useState(false);
-    const [showWholeView, setShowWholeView] = React.useState(false);
+    const [tabKey, setTabKey] = useState(tabItems[0].key);
+    const [visable, setVisable] = useState(false);
+    const [showWholeView, setShowWholeView] = useState(false);
 
-    const CurrentView = React.useMemo(() => {
+    const CurrentView = useMemo(() => {
         switch (tabKey) {
             case tabItems[0].key: {
                 return <MintView />;
@@ -66,7 +64,15 @@ export default () => {
         }
     }, [tabKey]);
 
-    React.useEffect(() => {
+    const filterList = useMemo(
+        () =>
+            isMobile
+                ? []
+                : ['/', '/trade', '/farm', '/farm/provide', '/wallet'],
+        [isMobile],
+    );
+
+    useEffect(() => {
         setShowWholeView(
             !filterList.some((item) => item === window.location!.pathname),
         );
@@ -76,14 +82,14 @@ export default () => {
                 !filterList.some((item) => item === location.pathname),
             );
         });
-    }, []);
+    }, [filterList]);
 
-    const openHistory = React.useCallback(() => {
+    const openHistory = useCallback(() => {
         setVisable(true);
         setTabKey(tabItems[2].key);
     }, []);
 
-    const openMint = React.useCallback(() => {
+    const openMint = useCallback(() => {
         setVisable(true);
         setTabKey(tabItems[0].key);
     }, []);
@@ -109,7 +115,7 @@ export default () => {
     // }, [fastRefresh]);
 
     return (
-        <React.Fragment>
+        <Fragment>
             {showWholeView && (
                 <div className="footer-container">
                     <div className="entries">
@@ -118,6 +124,7 @@ export default () => {
                     </div>
                     <div className="ftoken">
                         <p className="price">
+                            <TokenIcon name="bs" />
                             <span className="symbol">$</span>
                             {price}
                         </p>
@@ -153,6 +160,6 @@ export default () => {
                     </TabRecordBoard>
                 </div>
             )}
-        </React.Fragment>
+        </Fragment>
     );
 };

@@ -4,6 +4,7 @@ import { useState, Fragment, useEffect } from 'react';
 import { Drawer } from 'antd';
 import { history } from 'umi';
 import { useCallback } from 'react';
+import Footer from '@/layouts/components/Footer';
 
 const menuItems = [
     { name: 'HOME', path: '/' },
@@ -23,7 +24,7 @@ const MobileHeader = () => {
     const onClose = () => setVisible(false);
     const changeLink = useCallback((path) => {
         onClose();
-        setTimeout(() => (location.href = path), 100);
+        setTimeout(() => history.push(path), 100);
     }, []);
 
     useEffect(() => {
@@ -56,6 +57,7 @@ const MobileHeader = () => {
                         </li>
                     ))}
                 </ul>
+                <Footer />
             </Drawer>
         </Fragment>
     );
