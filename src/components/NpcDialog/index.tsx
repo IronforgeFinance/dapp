@@ -13,6 +13,7 @@ import MintNpcPng from '@/assets/images/npc-dialog-mint-person.png';
 import HomeNpcPng from '@/assets/images/npc-dialog-home-person.png';
 import classNames from 'classnames';
 import { history } from 'umi';
+import useEnv from '@/hooks/useEnv';
 
 interface NpcDialogContextProps {
     words: string;
@@ -30,6 +31,7 @@ export const NpcDialogContextProvier = NpcDialogContext.Provider;
 
 const NpcDialog = (props: NpcDialog) => {
     const { children } = props;
+    const isMobile = useEnv();
     const [visable, setVisable] = useState(false);
     const [words, setWords] = useState('');
     const [slowWords, setSlowWords] = useState('');
@@ -101,29 +103,31 @@ const NpcDialog = (props: NpcDialog) => {
                 setWords,
             }}
         >
-            <section
-                className={classNames({
-                    'npc-dilaog': true,
-                    show: visable,
-                    hide: !visable,
-                })}
-            >
-                <div
+            {!isMobile && (
+                <section
                     className={classNames({
-                        'dialog-box': true,
-                        home: isHome,
+                        'npc-dilaog': true,
+                        show: visable,
+                        hide: !visable,
                     })}
                 >
-                    <img
-                        className={classNames({ npc: true, home: isHome })}
-                        src={isHome ? HomeNpcPng : MintNpcPng}
-                    />
-                    <p className="words">
-                        <span>{slowWords}</span>
-                        <a onClick={close}>我知道了</a>
-                    </p>
-                </div>
-            </section>
+                    <div
+                        className={classNames({
+                            'dialog-box': true,
+                            home: isHome,
+                        })}
+                    >
+                        <img
+                            className={classNames({ npc: true, home: isHome })}
+                            src={isHome ? HomeNpcPng : MintNpcPng}
+                        />
+                        <p className="words">
+                            <span>{slowWords}</span>
+                            <a onClick={close}>我知道了</a>
+                        </p>
+                    </div>
+                </section>
+            )}
             {children}
         </NpcDialogContext.Provider>
     );

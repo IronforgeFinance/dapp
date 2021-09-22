@@ -34,20 +34,23 @@ export default function Layout({
     };
 
     useEffect(() => {
-        if (location.pathname === '/mint') {
-            player.current.src = isDev()
-                ? 'http://localhost:5000/files/mint.webm'
-                : './static/mint.webm';
-            player.current.play();
-        } else if (location.pathname === '/burn') {
-            player.current.src = isDev()
-                ? 'http://localhost:5000/files/burn.webm'
-                : './static/burn.webm';
-            player.current.play();
-        } else {
-            player.current.src = '';
-            player.current.pause();
+        if (!isMobile) {
+            if (location.pathname === '/mint') {
+                player.current.src = isDev()
+                    ? 'http://localhost:5000/files/mint.webm'
+                    : './static/mint.webm';
+                player.current.play();
+            } else if (location.pathname === '/burn') {
+                player.current.src = isDev()
+                    ? 'http://localhost:5000/files/burn.webm'
+                    : './static/burn.webm';
+                player.current.play();
+            } else {
+                player.current.src = '';
+                player.current.pause();
+            }
         }
+
         clearDataView();
     }, [location, account]);
     return (
