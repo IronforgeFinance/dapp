@@ -48,7 +48,7 @@ import { isDeliveryAsset } from '@/utils';
 // import Popover from '@/components/Popover';
 import { TokenIcon } from '@/components/Icon';
 import { StatusType } from '@/components/ProgressBar';
-import { NpcDialogContext } from '@/components/NpcDialog';
+import { useNpcDialog } from '@/components/NpcDialog';
 import { getTokenPrice } from '@/utils';
 import useEnv from '@/hooks/useEnv';
 
@@ -57,7 +57,7 @@ const RATIO_MAX_MINT = 1000;
 export default () => {
     const intl = useIntl();
     const isMobile = useEnv();
-    const { setWords } = useContext(NpcDialogContext);
+    const { setWords } = useNpcDialog();
     const { account } = useWeb3React();
     const provider = useProvider();
     const currentStakedValue = useRef(0);

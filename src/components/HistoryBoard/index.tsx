@@ -16,7 +16,7 @@ import DeliveryView from '@/layouts/components/Footer/components/DeliveryView';
 import { ReactComponent as TabBackIcon01 } from '@/assets/images/big-board-svg-01.svg';
 import { ReactComponent as TabBackIcon02 } from '@/assets/images/big-board-svg-02.svg';
 import { ReactComponent as TabBackIcon03 } from '@/assets/images/big-board-svg-03.svg';
-import { HistoryBoardContext } from './HistoryBoardContextProvider';
+import { HistoryBoardContext } from './provider';
 
 export const tabItems = [
     {
@@ -36,8 +36,12 @@ export const tabItems = [
     },
 ];
 
+export const useHistoryBoard = () => {
+    return useContext(HistoryBoardContext);
+};
+
 interface HistoryBoardProps {
-    children: ReactNode;
+    children?: ReactNode;
 }
 
 export default (props: HistoryBoardProps) => {

@@ -1,39 +1,35 @@
 import './less/index.less';
 
 import {
-    createContext,
     useCallback,
     useState,
     useEffect,
+    useContext,
     ReactNode,
     useMemo,
     useRef,
+    Fragment,
 } from 'react';
 import MintNpcPng from '@/assets/images/npc-dialog-mint-person.png';
 import HomeNpcPng from '@/assets/images/npc-dialog-home-person.png';
 import classNames from 'classnames';
 import { history } from 'umi';
 import useEnv from '@/hooks/useEnv';
-
-interface NpcDialogContextProps {
-    words: string;
-    setWords(words: string): void;
-}
+import { NpcDialogContext } from './provider';
 
 interface NpcDialog {
-    children: ReactNode;
+    children?: ReactNode;
 }
 
-export const NpcDialogContext = createContext<NpcDialogContextProps | null>(
-    null,
-);
-export const NpcDialogContextProvier = NpcDialogContext.Provider;
+export const useNpcDialog = () => {
+    return useContext(NpcDialogContext);
+};
 
 const NpcDialog = (props: NpcDialog) => {
     const { children } = props;
     const isMobile = useEnv();
     const [visable, setVisable] = useState(false);
-    const [words, setWords] = useState('');
+    const { words, setWords } = useContext(NpcDialogContext);
     const [slowWords, setSlowWords] = useState('');
     const [pathname, setPathname] = useState('/mint');
     const tmKeys = useRef([]);
@@ -97,12 +93,7 @@ const NpcDialog = (props: NpcDialog) => {
     useEffect(() => clearTms, []);
 
     return (
-        <NpcDialogContext.Provider
-            value={{
-                words,
-                setWords,
-            }}
-        >
+        <Fragment>
             {!isMobile && (
                 <section
                     className={classNames({
@@ -129,7 +120,7 @@ const NpcDialog = (props: NpcDialog) => {
                 </section>
             )}
             {children}
-        </NpcDialogContext.Provider>
+        </Fragment>
     );
 };
 

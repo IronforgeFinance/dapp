@@ -5,7 +5,7 @@ import { Drawer } from 'antd';
 import { history } from 'umi';
 import { useCallback } from 'react';
 import Footer from '@/layouts/components/Footer';
-import { MobileNavigationContext } from './MobileNavigationProvider';
+import { MobileNavigationContext } from './provider';
 
 const menuItems = [
     { name: 'HOME', path: '/' },
@@ -20,6 +20,10 @@ const menuItems = [
 export interface MobileNavigationProps {
     children?: ReactNode;
 }
+
+export const useMobileNavigation = () => {
+    return useContext(MobileNavigationContext);
+};
 
 const MobileNavigation = (props: MobileNavigationProps) => {
     const { children } = props;

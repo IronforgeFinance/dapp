@@ -17,13 +17,13 @@ import { Button } from 'antd';
 import { MDEX_SWAP_EXPLORER } from '@/config/constants/constant';
 import { TokenIcon } from '@/components/Icon';
 import useEnv from '@/hooks/useEnv';
-import { HistoryBoardContext } from '@/components/HistoryBoard/HistoryBoardContextProvider';
-import { MobileNavigationContext } from '@/layouts/components/Header/components/MobileNavigation/MobileNavigationProvider';
+import { useHistoryBoard } from '@/components/HistoryBoard';
+import { MobileNavigationContext } from '@/layouts/components/Header/components/MobileNavigation/provider';
 
 export default () => {
     const intl = useIntl();
     const [price] = useState(0);
-    const { openWithTabKey } = useContext(HistoryBoardContext);
+    const { openWithTabKey } = useHistoryBoard();
     const { setVisible: setMobileNavigationVisible } = useContext(
         MobileNavigationContext,
     );
