@@ -48,11 +48,6 @@ export default () => {
                             </NavLink>
                         </li>
                         <li>
-                            <NavLink to="/pool">
-                                {intl.formatMessage({ id: 'nav.pool' })}
-                            </NavLink>
-                        </li>
-                        <li>
                             <NavLink to="/wallet">
                                 {intl.formatMessage({ id: 'nav.wallet' })}
                             </NavLink>
