@@ -35,13 +35,16 @@ const tabItems = [
     },
 ];
 
-export default (props: { lp: string; handleFlipper: () => void }) => {
+export default (props: {
+    lp: string;
+    handleFlipper: () => void;
+    updatePool: () => void;
+}) => {
     const [submitting, setSubmitting] = useState(false);
-    const { lp } = props;
+    const { lp, handleFlipper, updatePool } = props;
     const [tabKey, setTabKey] = useState(tabItems[0].key);
     const [lpAmount, setLpAmount] = useState<number>();
     const [staked, setStaked] = useState<number>();
-    console.log('props2: ', props, lp);
 
     const { updateStakePoolItem } = useModel('stakeData', (model) => ({
         ...model,
@@ -126,7 +129,7 @@ export default (props: { lp: string; handleFlipper: () => void }) => {
                 );
                 fetchStakedBalance();
             }
-            updateStakePoolItem({ poolId, poolName: lp }, account);
+            updatePool();
         } catch (err) {
             console.log(err);
             setSubmitting(false);

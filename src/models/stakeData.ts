@@ -49,15 +49,6 @@ const useStakeDataModel = () => {
     const [singleTokenPoolTotalStaked, setSingleTokenPoolTotalStaked] =
         useState(0);
     const provider = useWeb3Provider();
-    const prices = usePrices();
-
-    // const getTokenPrice = async (token: string) => {
-    //     if (!token) return 0;
-    //     const res = await prices.getPrice(
-    //         ethers.utils.formatBytes32String(token),
-    //     );
-    //     return parseFloat(ethers.utils.formatEther(res));
-    // };
 
     const getLpPrice = async (lpToken: string) => {
         const chainId = process.env.APP_CHAIN_ID;
@@ -177,7 +168,6 @@ const useStakeDataModel = () => {
             totalPendingReward,
             redeemableReward,
         };
-        console.log(data);
         return data;
     };
 
@@ -227,6 +217,7 @@ const useStakeDataModel = () => {
         // console.log('current block: ', block);
 
         for (let i = 0; i < tokens.length; i++) {
+            // const userInfo = await minerReward.userInfo()
             const poolInfo = await minerReward.poolInfo(tokens[i].poolId);
             // const lastRewardBlock = parseFloat(poolInfo.lastRewardBlock);
             // const allocPoint = parseFloat(
@@ -238,6 +229,7 @@ const useStakeDataModel = () => {
             const poolReward = poolInfo.amount
                 .mul(poolInfo.accRewardPerShare)
                 .div(1e12);
+
             total += parseFloat(ethers.utils.formatEther(poolReward));
         }
         const price = await getTokenPrice(PLATFORM_TOKEN);
