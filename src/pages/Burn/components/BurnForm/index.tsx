@@ -49,7 +49,7 @@ export default (props: IProps) => {
     const [burnType, setBurnType] = useState('');
     const [scale, setScale] = useState('');
     const [submitting, setSubmitting] = useState(false);
-    const [burnInitialAvailable, setBurnInitialAvailable] = useState(false);
+    const [burnInitialAvailable, setBurnInitialAvailable] = useState(true);
     const [burnMaxAvailable, setBurnMaxAvailable] = useState(false);
     const { open } = useContext(TokenSelectorContext);
     const { open: openConfirmModal } = useContext(TransactionConfirmContext);
@@ -224,17 +224,16 @@ export default (props: IProps) => {
             setBurnMaxAvailable(false);
         } else {
             /*TODO 计算toToken的 ratio.
-            只有质押率小于初始质押率才可点击burn to initial
             钱包余额大于等于债务数，则可直接burn to max
             钱包余额小于债务数，用户执行一个burn to max操作，实际上进行两个合约步骤：
                 1.直接用bnb进行债务购买来补充钱包不足的债务，
                 2.购买后，钱包余额大于等于债务数，正常燃烧
             */
-            if (currencyRatio < initialRatio) {
-                setBurnInitialAvailable(true);
-            } else {
-                setBurnInitialAvailable(false);
-            }
+            // if (currencyRatio < initialRatio) {
+            //     setBurnInitialAvailable(true);
+            // } else {
+            //     setBurnInitialAvailable(false);
+            // }
             setBurnMaxAvailable(true);
             if (fromTokenBalance > totalDebtInUSD) {
                 // 不能直接burn max。
@@ -247,43 +246,73 @@ export default (props: IProps) => {
     // 计算burned 和unstaking amount
     const burnInitialHandler = async (v) => {
         setBurnType(v);
-        setUnstakeAmount(0);
-        const res = await collateralSystem.getUserCollateralInUsd(
-            account,
-            ethers.utils.formatBytes32String(toToken),
-        );
-        const userCollateralInUsd = new BigNumber(
-            ethers.utils.formatEther(res),
-        );
-        const burnFUSDAmount = parseFloat(
-            new BigNumber(
-                toTokenDebtInUsd -
-                    userCollateralInUsd.dividedBy(initialRatio).toNumber(),
-            ).toFixed(2),
-        );
-        let burnAmount = burnFUSDAmount;
-        if (fromToken !== 'FUSD') {
-            const tokenPrice = await getTokenPrice(fromToken);
-            burnAmount = parseFloat(
-                new BigNumber(burnFUSDAmount).dividedBy(tokenPrice).toFixed(6),
+        if (currencyRatio < initialRatio) {
+            setUnstakeAmount(0);
+            const res = await collateralSystem.getUserCollateralInUsd(
+                account,
+                ethers.utils.formatBytes32String(toToken),
             );
+            const userCollateralInUsd = new BigNumber(
+                ethers.utils.formatEther(res),
+            );
+            const burnFUSDAmount = parseFloat(
+                new BigNumber(
+                    toTokenDebtInUsd -
+                        userCollateralInUsd.dividedBy(initialRatio).toNumber(),
+                ).toFixed(2),
+            );
+            let burnAmount = burnFUSDAmount;
+            if (fromToken !== 'FUSD') {
+                const tokenPrice = await getTokenPrice(fromToken);
+                burnAmount = parseFloat(
+                    new BigNumber(burnFUSDAmount)
+                        .dividedBy(tokenPrice)
+                        .toFixed(6),
+                );
+            }
+            setBurnAmount(burnAmount);
+            setStakedData({
+                ...stakedData,
+            });
+            setDebtData({
+                ...debtData,
+                endValue: debtData.startValue - burnFUSDAmount,
+            });
+            setfRatioData({
+                ...fRatioData,
+                endValue: initialRatio * 100,
+            });
+            setLockedData({
+                ...lockedData,
+                endValue: lockedData.startValue,
+            });
+        } else {
+            // 抵押率过高，可以解绑一些抵押物
+            setBurnAmount(0);
+            const debtInfo = debtItemInfos.find(
+                (item) => item.collateralToken === toToken,
+            );
+            const toTokenPrice = await getTokenPrice(toToken);
+            const unstakeAmount =
+                (toTokenDebtInUsd * initialRatio) / toTokenPrice -
+                debtInfo.collateral;
+            if (unstakeAmount < 0) {
+                return;
+            }
+            setUnstakeAmount(unstakeAmount);
+            setStakedData({
+                ...stakedData,
+                endValue: stakedData.startValue - unstakeAmount * toTokenPrice,
+            });
+            setfRatioData({
+                ...fRatioData,
+                endValue: initialRatio * 100,
+            });
+            setLockedData({
+                ...lockedData,
+                endValue: lockedData.startValue,
+            });
         }
-        setBurnAmount(burnAmount);
-        setStakedData({
-            ...stakedData,
-        });
-        setDebtData({
-            ...debtData,
-            endValue: debtData.startValue - burnFUSDAmount,
-        });
-        setfRatioData({
-            ...fRatioData,
-            endValue: initialRatio * 100,
-        });
-        setLockedData({
-            ...lockedData,
-            endValue: lockedData.startValue,
-        });
     };
 
     /* 如果余额小于债务 提示进行两个交易，tx1用账户里bnb去购买fusd，tx2进行unstake
