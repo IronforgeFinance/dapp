@@ -79,6 +79,7 @@ export default () => {
     const [lockedScale, setLockedScale] = useState<string | number | null>(
         null,
     );
+    const _fTokenBalance = useRef(0);
 
     const collateralSystem = useCollateralSystem();
     const exchangeSystem = useExchangeSystem();
@@ -165,8 +166,9 @@ export default () => {
         requestConnectWallet: model.requestConnectWallet,
     }));
 
-    const { balance, refresh: refreshIFTBalance } = useBep20Balance('IFT');
-    const fTokenBalance = balance as number;
+    const { balance: fTokenBalance, refresh: refreshIFTBalance } =
+        useBep20Balance('IFT');
+    _fTokenBalance.current = fTokenBalance;
 
     const { balance: collateralBalance, refresh: refreshCollateralBalance } =
         useBep20Balance(collateralToken, 6);
@@ -314,7 +316,7 @@ export default () => {
             }
         })();
     }, [toToken, toAmount]);
-    const collateralAmountHandler = React.useCallback(
+    const collateralAmountHandler = useCallback(
         debounce(async (v) => {
             setCollateralAmount(v);
             const price = await getTokenPrice(collateralToken);
@@ -349,11 +351,11 @@ export default () => {
                 endValue: val + lockedData.startValue,
             });
         }, 500),
-        [fTokenBalance, lockedData],
+        [lockedData],
     );
 
     const scaleHandler = useCallback(
-        async (v) => {
+        debounce(async (v) => {
             if (v == undefined) return;
 
             setLockedScale(+v);
@@ -366,9 +368,9 @@ export default () => {
 
             /**@description 超过余额的计算 */
             amount =
-                amount < fTokenBalance && fTokenBalance > 0
+                amount < _fTokenBalance.current && _fTokenBalance.current > 0
                     ? amount
-                    : fTokenBalance;
+                    : _fTokenBalance.current;
             setLockedAmount(toFixedWithoutRound(amount, 6));
 
             const val = toFixedWithoutRound(bsPrice * amount, 2);
@@ -376,8 +378,8 @@ export default () => {
                 ...lockedData,
                 endValue: val || 0,
             });
-        },
-        [stakedData, fTokenBalance],
+        }),
+        [currentStakedValue],
     );
 
     const toAmountHandler = (v) => {

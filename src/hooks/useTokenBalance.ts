@@ -107,6 +107,7 @@ export const useBep20Balance = (token: string, fixed: number = 2) => {
         }
     }, [account, token, fastRefresh, SUCCESS, FAILED, provider, lastUpdated]);
 
+    /**@todo balanceState.balance会导致组件的useCallback必包变量无法更新 */
     return { balance: balanceState.balance, refresh: setLastUpdated };
 };
 
