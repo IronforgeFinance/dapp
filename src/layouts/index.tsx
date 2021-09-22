@@ -14,6 +14,9 @@ import TokenSelector from '@/components/TokenSelector';
 import TransactionConfirm from '@/components/TransactionConfirm';
 import MyDebts from '@/components/MyDebts';
 import LoadingContextProvider from '@/contexts/LoadingContext';
+import HistoryBoard from '@/components/HistoryBoard';
+import MobileNavigationContextProvider from './components/Header/components/MobileNavigation/MobileNavigationProvider';
+import HistoryBoardContextProvider from '@/components/HistoryBoard/HistoryBoardContextProvider';
 
 export default function Layout({
     children,
@@ -83,17 +86,23 @@ export default function Layout({
                 </video>
             )}
             <LoadingContextProvider>
-                <CommonHeader />
-                <MyDebts>
-                    <TransactionConfirm>
-                        <TokenSelector>
-                            <ClaimRewards>
-                                <NpcDialog>{children}</NpcDialog>
-                            </ClaimRewards>
-                        </TokenSelector>
-                    </TransactionConfirm>
-                </MyDebts>
-                {!isMobile && <CommonFooter />}
+                <MobileNavigationContextProvider>
+                    <HistoryBoardContextProvider>
+                        <HistoryBoard>
+                            <CommonHeader />
+                        </HistoryBoard>
+                        <MyDebts>
+                            <TransactionConfirm>
+                                <TokenSelector>
+                                    <ClaimRewards>
+                                        <NpcDialog>{children}</NpcDialog>
+                                    </ClaimRewards>
+                                </TokenSelector>
+                            </TransactionConfirm>
+                        </MyDebts>
+                        {!isMobile && <CommonFooter />}
+                    </HistoryBoardContextProvider>
+                </MobileNavigationContextProvider>
             </LoadingContextProvider>
         </div>
     );

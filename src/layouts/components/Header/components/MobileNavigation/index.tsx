@@ -1,10 +1,11 @@
 import './less/index.less';
 
-import { useState, Fragment, useEffect } from 'react';
+import { useState, Fragment, useEffect, ReactNode, useContext } from 'react';
 import { Drawer } from 'antd';
 import { history } from 'umi';
 import { useCallback } from 'react';
 import Footer from '@/layouts/components/Footer';
+import { MobileNavigationContext } from './MobileNavigationProvider';
 
 const menuItems = [
     { name: 'HOME', path: '/' },
@@ -16,29 +17,33 @@ const menuItems = [
     { name: 'WALLET', path: '/wallet' },
 ];
 
-const MobileHeader = () => {
-    const [visible, setVisible] = useState(false);
-    const [pathname, setPathname] = useState('/');
+export interface MobileNavigationProps {
+    children?: ReactNode;
+}
 
-    const showDrawer = () => setVisible(true);
-    const onClose = () => setVisible(false);
+const MobileNavigation = (props: MobileNavigationProps) => {
+    const { children } = props;
+    const [pathname, setPathname] = useState('/');
+    const { visible, setVisible } = useContext(MobileNavigationContext);
+
+    const open = () => setVisible(true);
+    const close = () => setVisible(false);
     const changeLink = useCallback((path) => {
-        onClose();
+        close();
         setTimeout(() => history.push(path), 100);
     }, []);
 
     useEffect(() => {
         setPathname(location.pathname);
-
         return history.listen((location) => setPathname(location.pathname));
     }, []);
 
     return (
         <Fragment>
-            <button className="icon-nav-stretch" onClick={showDrawer} />
+            <button className="icon-nav-stretch" onClick={open} />
             <Drawer
                 placement="right"
-                onClose={onClose}
+                onClose={close}
                 visible={visible}
                 className="custom-navigation"
                 closable={false}
@@ -57,10 +62,12 @@ const MobileHeader = () => {
                         </li>
                     ))}
                 </ul>
+
                 <Footer />
             </Drawer>
+            {children}
         </Fragment>
     );
 };
 
-export default MobileHeader;
+export default MobileNavigation;
