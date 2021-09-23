@@ -384,10 +384,16 @@ export default () => {
             >
                 <div className="lp-list">
                     <div className="header">
-                        <p>Your Liquidity</p>
                         <p>
-                            You can click Add Liquidity to add Lp quickly or
-                            remove liquidity to receive tokens back.
+                            {intl.formatMessage({
+                                id: 'liquidity.yourLiquidity',
+                                defaultMessage: 'Your Liquidity',
+                            })}
+                        </p>
+                        <p>
+                            {intl.formatMessage({
+                                id: 'liquidity.yourLiquidityDesc',
+                            })}
                         </p>
                     </div>
                     <div className="lp-list-content">
@@ -425,7 +431,10 @@ export default () => {
                                     className="select-token-btn"
                                     onClick={openFromTokenList}
                                 >
-                                    {token1 || 'Select a Token'}
+                                    {token1 ||
+                                        intl.formatMessage({
+                                            id: 'selecttoken',
+                                        })}
                                     <i className="icon-down size-24" />
                                 </Button>
                             </div>
@@ -461,7 +470,10 @@ export default () => {
                                     className="select-token-btn"
                                     onClick={openToTokenList}
                                 >
-                                    {token2 || 'Select a Token'}
+                                    {token2 ||
+                                        intl.formatMessage({
+                                            id: 'selecttoken',
+                                        })}
                                     <i className="icon-down size-24" />
                                 </Button>
                             </div>

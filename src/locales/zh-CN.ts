@@ -110,6 +110,14 @@ export default {
     'liquidity.withdraw.willreceive': '将会获得',
     'liquidity.withdraw.approve': '授权提现',
 
+    'liquidity.bs.tvl': 'BS TVL',
+    'liquidity.bs.circulatingVal': 'BS Circulating Value',
+    'liquidity.bs.totalEarned': 'BS Total Earned',
+
+    'liquidity.yourLiquidity': 'Your Liquidity',
+    'liquidity.yourLiquidityDesc':
+        'You can click Add Liquidity to add Lp quickly or remove liquidity to receive tokens back.',
+
     'pool.totalStaked': '质押总额',
     'pool.totalEarned': '收益总额',
 
@@ -186,4 +194,20 @@ export default {
     'conj.and': '和',
     'conj.x': ' ',
     'app.unlockWallet': '解锁钱包',
+    amount: 'Amount',
+    stake: 'Stake',
+    unstake: 'Unstake',
+    approve: 'Approve',
+    dontHave: "Dont't have ",
+    get: 'Get ',
+    totalStaked: 'Total staked',
+    APY: 'APY',
+    earn: 'EARN',
+    bsTotalEarned: 'BS Total Earned',
+    harvest: 'Harvest',
+    STAKED: 'STAKED',
+    'npc.mintAssets':
+        'IronForge提供永续和交割这两种类型的合成资产，交割类合成资产的交割日到期后，资产价格将被锁定，背后的债务也会被冻结并不再跟随公共债务池的变化；永续资产无日期限制，价格永远跟随市场变化，故用户没有销毁的债务将一直随着公共债务池的变化',
+    'npc.mintRatio':
+        '质押物中BS锁仓量的占比越高，质押率F-Ratio越低, 最低可至350%',
 };
