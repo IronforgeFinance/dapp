@@ -311,57 +311,66 @@ dl {
     }
 }
 
-.iron-progress.ant-progress {
+.iron-progress.ant-slider {
     font-style: unset;
     font-weight: unset;
     font-size: unset;
     line-height: unset;
     color: unset;
-    // height: unset;
+    height: unset;
     display: unset;
     flex-direction: unset;
     justify-content: unset;
+    margin: unset;
+    // padding: unset;
 
-    .ant-progress-outer {
-        margin-top: unset;
+    .ant-slider-step,
+    .ant-slider-rail {
+        // width: unset;
         height: unset;
-        width: unset;
-        border-radius: unset;
         background: unset;
         box-shadow: 0px 0px 1px 3px #654609,
             inset 0px -2px 1px rgba(0, 0, 0, 0.25),
             inset -1px 1px 1px rgba(255, 247, 236, 0.38);
-        padding: unset;
+        border-radius: unset;
+        display: unset;
+        align-items: unset;
         box-sizing: unset;
+    }
 
-        .ant-progress-inner {
-            background-color: unset;
+    .ant-slider-handle,
+    .ant-slider-handle.ant-tooltip-open,
+    .ant-slider-handle:hover,
+    .ant-slider-handle:focus {
+        border: unset;
+        z-index: unset;
+        margin-top: unset;
+    }
 
-            .ant-progress-bg {
-                height: unset;
-                background: linear-gradient(
-                    90deg,
-                    #fcd144 62.3%,
-                    #ffad33 92.56%
-                );
-            }
+    &:hover {
+        .ant-slider-handle:not(.ant-tooltip-open) {
+            border-color: unset;
         }
+    }
+
+    .ant-slider-track {
+        height: unset;
+        background: unset;
+        position: unset;
+        z-index: unset;
     }
 
     .ant-progress-text {
         width: unset;
-        font-family: unset;
+        text-align: unset;
+        display: unset;
+        margin-top: unset;
+        margin-left: unset;
         font-style: unset;
         font-weight: unset;
         font-size: unset;
         line-height: unset;
-        display: unset;
-        align-items: unset;
-        justify-content: unset;
         color: unset;
-        margin: unset;
-        margin-top: unset;
-        // margin-bottom: unset;
     }
 }
 
@@ -385,6 +394,7 @@ dl {
     align-items: unset;
     color: unset;
     display: unset;
+    margin-right: unset;
 }
 
 .common-title {

@@ -118,7 +118,7 @@
             background-image: url(@image);
 
             & when (@direct ='hortizontal') {
-                width: @ratio;
+                width: calc(@ratio + 1vw);
                 height: 100%;
                 top: 50%;
                 transform: translateY(-50%);
@@ -128,7 +128,7 @@
 
             & when (@direct ='vertical') {
                 width: 100%;
-                height: @ratio;
+                height: calc(@ratio + 1vw);
                 left: 50%;
                 transform: translateX(-50%);
                 top: 0;
@@ -145,7 +145,7 @@
             background-image: url(@image);
 
             & when (@direct ='hortizontal') {
-                width: @ratio;
+                width: calc(@ratio + 1vw);
                 height: 100%;
                 top: 50%;
                 transform: translateY(-50%);
@@ -155,7 +155,7 @@
 
             & when (@direct ='vertical') {
                 width: 100%;
-                height: @ratio;
+                height: calc(@ratio + 1vw);
                 left: 50%;
                 transform: translateX(-50%);
                 bottom: 0;
