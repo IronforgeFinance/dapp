@@ -51,7 +51,7 @@ div.mint-container {
     .right-box {
         display: flex;
         flex-direction: column;
-        margin: 46.21px + @commentary-card-title-h 178px 0 178px;
+        margin: calc(46.21px + @commentary-card-title-h) 3% 0 auto;
     }
 
     .btn-setting {
@@ -130,5 +130,12 @@ div.mint-container {
 
     .icon-arrow-white {
         margin: 0 10px;
+    }
+}
+
+.input-item {
+    .mint-locked-input.input {
+        display: flex;
+        flex-direction: row;
     }
 }

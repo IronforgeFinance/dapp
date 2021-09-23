@@ -70,6 +70,21 @@
         }
     }
 
+    &.loading {
+        #image.dinamicBg('~@/assets/images/notify-loading-bg.svg', 50%, 'vertical');
+        background-color: unset;
+
+        .ant-notification-notice-close {
+            position: unset;
+        }
+
+        > div,
+        > a {
+            position: unset;
+            z-index: unset;
+        }
+    }
+
     &.fail {
         #image.background('~@/assets/images/notify-fail-bg.png');
     }
@@ -130,6 +145,20 @@
 
     .icon-status {
         object-fit: unset;
+
+        &.loading {
+            @keyframes rotate {
+                from {
+                    transform: unset;
+                }
+
+                to {
+                    transform: unset;
+                }
+            }
+
+            animation: unset;
+        }
     }
 
     .icon-close {

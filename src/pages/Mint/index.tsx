@@ -626,7 +626,7 @@ export default () => {
                                     </span>
                                 </p>
                             </div>
-                            <div className="input">
+                            <div className="input mint-locked-input">
                                 <InputNumber
                                     value={lockedAmount}
                                     onChange={lockedAmountHandler}
