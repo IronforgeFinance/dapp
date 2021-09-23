@@ -2,7 +2,7 @@ import './less/index.less';
 
 import React, { useState, useEffect } from 'react';
 import { history, useModel } from 'umi';
-import { Button, Tabs } from 'antd';
+import { Button } from 'antd';
 import StakeItem from './Stake';
 import { useWeb3React } from '@web3-react/core';
 import { LP_TOKENS, PLATFORM_TOKEN, POOL_TOKENS } from '@/config';
@@ -14,11 +14,7 @@ import Tokens from '@/config/constants/tokens';
 import { ethers } from 'ethers';
 import { expandTo18Decimals, toFixedWithoutRound } from '@/utils/bigNumber';
 import useWeb3Provider from '@/hooks/useWeb3Provider';
-const { TabPane } = Tabs;
-const TabKeys = {
-    FARM: 'farm',
-    POOL: 'pool',
-};
+import ISwitch from '@/components/Switch';
 export default () => {
     const intl = useIntl();
     const { account } = useWeb3React();
@@ -26,7 +22,7 @@ export default () => {
     const [circulatinVal, setCirculatinVal] = useState(0);
     const [tvl, setTvl] = useState(0);
     const [totalEarned, setTotalEarned] = useState(0);
-    const [tabKey, setTabKey] = useState(TabKeys.FARM);
+    const [checked, setChecked] = useState(true);
     const { fetchStakePoolList, stakeDataList, setStakeDataList } = useModel(
         'stakeData',
         (model) => ({
@@ -121,31 +117,19 @@ export default () => {
                     </span>
                 </Button>
             </div>
-            <div className="tabs">
-                <Tabs
-                    onChange={(key) => {
-                        setTabKey(key);
-                    }}
-                    type="card"
-                    className="custom-tabs"
-                >
-                    <TabPane
-                        tab={'Farm'}
-                        key={TabKeys.FARM}
-                        className="custom-tab-pane"
-                    ></TabPane>
-                    <TabPane
-                        tab={'Pool'}
-                        key={TabKeys.POOL}
-                        className="custom-tab-pane"
-                    ></TabPane>
-                </Tabs>
+            <div className="farm-tabs">
+                <ISwitch
+                    checkedChildren="Farm"
+                    unCheckedChildren="Pool"
+                    onChange={setChecked}
+                    checked={checked}
+                />
             </div>
 
             <div
                 className="farm-pool"
                 style={{
-                    display: tabKey === TabKeys.FARM ? 'flex' : 'none',
+                    display: checked ? 'flex' : 'none',
                 }}
             >
                 {LP_TOKENS.map((item, index) => (
@@ -156,7 +140,7 @@ export default () => {
             <div
                 className="farm-pool"
                 style={{
-                    display: tabKey === TabKeys.POOL ? 'flex' : 'none',
+                    display: !checked ? 'flex' : 'none',
                 }}
             >
                 {POOL_TOKENS.map((item, index) => (
