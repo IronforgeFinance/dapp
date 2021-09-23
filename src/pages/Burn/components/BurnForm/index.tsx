@@ -123,14 +123,18 @@ export default (props: IProps) => {
             let _unstakeAmount;
             const fromTokenPrice = await getTokenPrice(fromToken);
             const toTokenPrice = await getTokenPrice(toToken);
-            if (currencyRatio < initialRatio) {
-                _unstakeAmount = 0;
-            } else {
-                _unstakeAmount = toFixedWithoutRound(
-                    (v * fromTokenPrice * initialRatio) / toTokenPrice,
-                    2,
-                );
-            }
+            // if (currencyRatio < initialRatio) {
+            //     _unstakeAmount = 0;
+            // } else {
+            //     _unstakeAmount = toFixedWithoutRound(
+            //         (v * fromTokenPrice * initialRatio) / toTokenPrice,
+            //         2,
+            //     );
+            // }
+            _unstakeAmount = toFixedWithoutRound(
+                (v * fromTokenPrice * initialRatio) / toTokenPrice,
+                2,
+            );
             if (fromToken !== 'FUSD') {
                 setUnstakeAmount(_unstakeAmount * (1 - 0.01)); // 考虑exchange手续费
             } else {
@@ -438,16 +442,16 @@ export default (props: IProps) => {
         //     );
         //     return;
         // }
-        if (
-            currencyRatio < initialRatio &&
-            unstakeAmount > 0 &&
-            burnType !== 'max'
-        ) {
-            message.warning(
-                '当前抵押率低于初始抵押率。不能解锁抵押物。请燃烧多余的债务后解锁。',
-            );
-            return;
-        }
+        // if (
+        //     currencyRatio < initialRatio &&
+        //     unstakeAmount > 0 &&
+        //     burnType !== 'max'
+        // ) {
+        //     message.warning(
+        //         '当前抵押率低于初始抵押率。不能解锁抵押物。请燃烧多余的债务后解锁。',
+        //     );
+        //     return;
+        // }
         const debtInfo = debtItemInfos.find(
             (item) => item.collateralToken === toToken,
         );

@@ -51,6 +51,7 @@ import { StatusType } from '@/components/ProgressBar';
 import { useNpcDialog } from '@/components/NpcDialog';
 import { getTokenPrice } from '@/utils';
 import useEnv from '@/hooks/useEnv';
+import RatioSlider from './components/RatioSlider';
 
 const RATIO_MAX_MINT = 800;
 
@@ -79,12 +80,7 @@ export default () => {
     const [lockedScale, setLockedScale] = useState<string | number | null>(
         null,
     );
-    const [sliderRatio, setSliderRatio] = useState(
-        (500 / RATIO_MAX_MINT) * 100,
-    );
-    const [minSliderRatio, setMinSliderRatio] = useState(
-        (500 / RATIO_MAX_MINT) * 100,
-    );
+    const [sliderRatio, setSliderRatio] = useState(0);
     const _fTokenBalance = useRef(0);
 
     const collateralSystem = useCollateralSystem();
@@ -219,10 +215,7 @@ export default () => {
                 endValue: parseFloat((newRatio * 100).toFixed(2)),
             });
             setComputedRatio(newRatio);
-            if (newRatio < initialRatio) {
-                setMinSliderRatio((newRatio * 100) / RATIO_MAX_MINT);
-            }
-            setSliderRatio(((newRatio * 100) / RATIO_MAX_MINT) * 100);
+            setSliderRatio(newRatio);
         })();
     }, [
         collateralAmount,
@@ -384,6 +377,18 @@ export default () => {
         setToAmount(v);
     };
 
+    const sliderRatioHandler = async (v) => {
+        const ratio = v / 10;
+        setSliderRatio(ratio);
+        if (collateralToken && collateralAmount && ratio > 0) {
+            const price = await getTokenPrice(toToken);
+            const amount = currentStakedValue.current / ratio / price;
+            setToAmount(amount);
+        } else if (ratio === 0) {
+            setToAmount(0);
+        }
+    };
+
     const collateralTokenHandler = (v) => {
         setCollateralToken(v);
         setCollateralAmount(0);
@@ -467,10 +472,10 @@ export default () => {
     /**@description 交易前的确认 */
     const openMintConfirm = useCallback(async () => {
         setSubmitting(true);
-        const collateralTokenPrice = await getTokenPrice(collateralToken);
-        const toTokenPrice = await getTokenPrice(toToken);
-        const lockedPrice = await getTokenPrice(PLATFORM_TOKEN); // TODO change name
-
+        if (sliderRatio && sliderRatio < computedRatio) {
+            message.warning('F-ratio is too low. Can not mint now.');
+            return setSubmitting(false);
+        }
         if (!account) {
             message.warning('Pls connect wallet first');
             return setSubmitting(false);
@@ -479,6 +484,9 @@ export default () => {
             message.warning('Collateral amount and to amount are required');
             return setSubmitting(false);
         }
+        const collateralTokenPrice = await getTokenPrice(collateralToken);
+        const toTokenPrice = await getTokenPrice(toToken);
+        const lockedPrice = await getTokenPrice(PLATFORM_TOKEN); // TODO change name
 
         console.log(
             '>> collateral price: ',
@@ -692,22 +700,11 @@ export default () => {
                         </div>
                     </div>
 
-                    <div className="ratio">
-                        <Slider
-                            className="iron-progress"
-                            tooltipVisible={false}
-                            step={1}
-                            value={sliderRatio}
-                            min={minSliderRatio}
-                            max={100}
-                            onChange={(v) => setSliderRatio(v)}
-                        />
-                        <div className="stake-ratio">
-                            <span className="final">
-                                {(sliderRatio / 100) * RATIO_MAX_MINT}%
-                            </span>
-                        </div>
-                    </div>
+                    <RatioSlider
+                        value={sliderRatio * 10}
+                        onChange={sliderRatioHandler}
+                        safeRatio={computedRatio * 10}
+                    />
                     {!account && (
                         <Button
                             className="btn-mint common-btn common-btn-yellow"
