@@ -213,7 +213,7 @@ export default (props: {
                     </Button>
                 )}
             </div>
-            {lp && tabKey === STAKE_TABS.stake && (
+            {lp && lp.includes('-') && tabKey === STAKE_TABS.stake && (
                 <div className="info-footer">
                     <p className="tips">Don't have {lp}?</p>
                     <p className="link">
