@@ -167,6 +167,13 @@ export default () => {
         } catch (err) {
             console.log(err);
             setSubmitting(false);
+            if (err && err.code === 4001) {
+                message.error({
+                    message: 'Transaction rejected',
+                    description: 'Rejected by user',
+                });
+                return;
+            }
         } finally {
             setShowTxConfirm(false);
         }

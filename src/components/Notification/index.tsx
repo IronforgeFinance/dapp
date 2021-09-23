@@ -18,7 +18,7 @@ const DEFAULT_LOADING_MESSAGE = 'Waiting for Transaction Submitted...';
 
 interface Notification {
     message?: string;
-    description: string;
+    description: string | React.ReactNode;
     duration?: number;
     hide?(): void;
 }

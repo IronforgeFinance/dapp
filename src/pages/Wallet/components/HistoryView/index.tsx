@@ -364,6 +364,13 @@ const HistoryView = () => {
                 }
             } catch (err) {
                 console.log(err);
+                if (err && err.code === 4001) {
+                    message.error({
+                        message: 'Transaction rejected',
+                        description: 'Rejected by user',
+                    });
+                    return;
+                }
                 message.error('Revert failed.');
             }
         }
