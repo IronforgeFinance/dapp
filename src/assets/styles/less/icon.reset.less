@@ -4,6 +4,15 @@
     cursor: unset;
 }
 
+.transaction-confirm-loading {
+    height: unset;
+    width: unset;
+    transform: unset;
+    #image.background('~@/assets/images/icon-loading2.gif');
+    position: unset;
+    z-index: unset;
+}
+
 .icon {
     &-down {
         #image.background('~@/assets/images/icon-down.png');
@@ -17,8 +26,22 @@
         #image.background('~@/assets/images/bar-arrow.svg');
     }
 
+    &-success-green {
+        #image.background('~@/assets/images/icon-success-green.svg');
+    }
+
+    &-arrow-down {
+        #image.icon(18px, '~@/assets/images/icon-arrow-yellow.svg');
+        margin: unset;
+        display: unset;
+    }
+
     &-arrow-white {
         #image.background('~@/assets/images/arrow-white.svg');
+    }
+
+    &-nav-stretch {
+        #image.background('~@/assets/images/nav-stretch.svg');
     }
 }
 
@@ -34,6 +57,11 @@
         display: unset;
     }
 
+    &-18 {
+        width: unset;
+        height: unset;
+    }
+
     &-20 {
         width: unset;
         height: unset;
@@ -44,17 +72,7 @@
         height: unset;
     }
 
-    &-22 {
-        width: unset;
-        height: unset;
-    }
-
     &-32 {
-        width: unset;
-        height: unset;
-    }
-
-    &-44 {
         width: unset;
         height: unset;
     }
