@@ -59,6 +59,7 @@ dl {
 #root {
     position: relative;
     z-index: 1;
+    overflow-x: hidden;
 }
 
 #root ~ div {
@@ -89,7 +90,7 @@ dl {
         /* Note: backdrop-filter has minimal browser support */
         border-radius: 6px;
         border-radius: 6px;
-        padding: 26px 20px 38px 20px;
+        padding: 26px 20px;
 
         .content-label {
             font-family: Poppins;
@@ -123,7 +124,7 @@ dl {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-top: 42px;
+            margin-top: 30px;
 
             input[role='spinbutton'] {
                 height: unset;

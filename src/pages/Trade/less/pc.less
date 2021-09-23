@@ -2,11 +2,13 @@
 
 .trade-container {
     width: 100%;
-    height: 100%;
+    // height: 100%;
     display: flex;
     // align-items: center;
     justify-content: center;
     position: relative;
+    padding: 0;
+    min-height: 0;
 
     // TODO 这里图片有点大，下周分拆出多个部件图出来合成，充分利用图片并发
     .shop {
@@ -14,7 +16,7 @@
         height: 518px;
         // padding: 100.88px 81.89px 32.78px 92.65px;
         // box-sizing: border-box;
-        margin-top: 163.26px;
+        margin: 163.26px auto 0 auto;
         position: relative;
 
         > .roof {
@@ -43,13 +45,15 @@
 
         .form {
             width: 431.82px;
-            height: 477.09px;
+            height: 577.09px;
             padding-top: 88.99px;
             padding-left: 27.3px;
             padding-right: 30.54px;
 
             .btn-trade {
                 margin: 39.72px auto 0 auto;
+                width: 236px;
+                height: 70px;
             }
 
             .fee-cost {
