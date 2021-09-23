@@ -87,20 +87,20 @@ export default () => {
                 <div className="info-item">
                     <p className="value">${tvl}</p>
                     <p className="label">
-                        {intl.formatMessage({ id: 'liquidity.bs.price' })}
+                        {intl.formatMessage({ id: 'liquidity.bs.tvl' })}
                     </p>
                 </div>
                 <div className="info-item">
                     <p className="value">${circulatinVal}</p>
                     <p className="label">
-                        {intl.formatMessage({ id: 'liquidity.bs.vol' })}
+                        {intl.formatMessage({ id: 'liquidity.bs.circulatingVal' })}
                     </p>
                 </div>
                 <div className="info-item">
                     <p className="value">${totalEarned}</p>
                     <p className="label">
                         {intl.formatMessage({
-                            id: 'liquidity.bs.circulatingsupply',
+                            id: 'liquidity.bs.totalEarned',
                         })}
                     </p>
                 </div>

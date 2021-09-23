@@ -54,11 +54,13 @@ export default (props: { pool: IStakePool; handleFlipper: () => void }) => {
                 </div>
                 <div className="pool-total-staked">
                     <p>${totalStaked}</p>
-                    <p>Total staked</p>
+                    <p>{intl.formatMessage({ id: 'totalStaked' })}</p>
                 </div>
                 <div className="total-info">
                     <div className="total-info-item">
-                        <p className="label">APY:</p>
+                        <p className="label">
+                            {intl.formatMessage({ id: 'APY' })}:
+                        </p>
                         <p className="value">
                             {(apy * 100).toFixed(2) + '%'}{' '}
                             <Popover
@@ -71,7 +73,7 @@ export default (props: { pool: IStakePool; handleFlipper: () => void }) => {
                         </p>
                     </div>
                     <div className="total-info-item">
-                        <p className="label">EARN:</p>
+                        <p className="label">{intl.formatMessage({ id: 'earn' })}:</p>
                         <p className="value">
                             BS{' '}
                             <Popover
@@ -88,7 +90,7 @@ export default (props: { pool: IStakePool; handleFlipper: () => void }) => {
                 <div className="user-info">
                     <div className="user-info-item">
                         <div className="label-item">
-                            <p className="label">BS Total EARNED</p>
+                            <p className="label">{intl.formatMessage({ id: 'bsTotalEarned' })}</p>
                             <p className="label">{totalPendingReward}</p>
                         </div>
                         <div className="value">
@@ -114,12 +116,12 @@ export default (props: { pool: IStakePool; handleFlipper: () => void }) => {
                                 loading={submitting}
                                 disabled={redeemableReward === 0 || !account}
                             >
-                                Harvest
+                                {intl.formatMessage({ id: 'harvest' })}
                             </Button>
                         </div>
                     </div>
                     <div className="user-info-item">
-                        <p className="label">{name} STAKED</p>
+                        <p className="label">{name} {intl.formatMessage({ id: 'STAKED' })}</p>
                         <div className="value">
                             {account && (
                                 <>
@@ -137,7 +139,7 @@ export default (props: { pool: IStakePool; handleFlipper: () => void }) => {
                                             // history.push('/farm/stake?lp=' + name);
                                         }}
                                     >
-                                        Stake
+                                        {intl.formatMessage({ id: 'stake' })}
                                     </Button>
                                 </>
                             )}

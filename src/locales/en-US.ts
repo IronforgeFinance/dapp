@@ -80,6 +80,15 @@ export default {
     'liquidity.withdraw.lp': 'Lp',
     'liquidity.withdraw.willreceive': "You'll receive",
     'liquidity.withdraw.approve': 'Approve to withdraw',
+
+    'liquidity.bs.tvl': 'BS TVL',
+    'liquidity.bs.circulatingVal': 'BS Circulating Value',
+    'liquidity.bs.totalEarned': 'BS Total Earned',
+
+    'liquidity.yourLiquidity': 'Your Liquidity',
+    'liquidity.yourLiquidityDesc':
+        'You can click Add Liquidity to add Lp quickly or remove liquidity to receive tokens back.',
+
     'pool.totalStaked': 'Total staked value',
     'pool.totalEarned': 'Total users earned',
     'wallet.title': 'My Wallet',
@@ -143,4 +152,20 @@ export default {
     'conj.and': 'and',
     'conj.x': ' ',
     'app.unlockWallet': 'Unlock wallet',
+    amount: 'Amount',
+    stake: 'Stake',
+    unstake: 'Unstake',
+    approve: 'Approve',
+    dontHave: "Dont't have ",
+    get: 'Get ',
+    totalStaked: 'Total staked',
+    APY: 'APY',
+    earn: 'EARN',
+    bsTotalEarned: 'BS Total Earned',
+    harvest: 'Harvest',
+    STAKED: 'STAKED',
+    'npc.mintAssets':
+        'IronForge provides two types of synthetic assets: perpetual and delivery. After the delivery date of the delivery synthetic asset expires, the asset price will be locked, and the debt behind it will also be frozen and no longer follow changes in the public debt pool; perpetual There is no date limit for assets, and the price will always follow the market changes, so the debts that users have not destroyed will always follow the changes in the public debt pool.',
+    'npc.mntRatio':
+        'The higher the proportion of BS locked in the pledge, the lower the pledge rate F-Ratio, which can be as low as 350%',
 };

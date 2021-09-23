@@ -17,7 +17,7 @@ import { useWeb3React } from '@web3-react/core';
 import { expandTo18Decimals } from '@/utils/bigNumber';
 import { ethers } from 'ethers';
 import TabGroup from '@/components/TabGroup';
-import { useModel } from 'umi';
+import { useModel, useIntl } from 'umi';
 const STAKE_TOKENS = [...LP_TOKENS, ...POOL_TOKENS];
 enum STAKE_TABS {
     stake = 'stake',
@@ -46,6 +46,7 @@ export default (props: {
     const [lpAmount, setLpAmount] = useState<number>();
     const [staked, setStaked] = useState<number>();
 
+    const intl = useIntl();
     const { updateStakePoolItem } = useModel('stakeData', (model) => ({
         ...model,
     }));
@@ -152,11 +153,11 @@ export default (props: {
                 }}
             />
             <div className="input-item custom-input-container">
-                <p className="label">Amount</p>
+                <p className="label">{intl.formatMessage({ id: 'amount' })}</p>
                 <div className="input-item-content">
                     <div className="content-label">
                         <p className="right">
-                            Balance:
+                            {intl.formatMessage({ id: 'balance:' })}
                             <span className="balance">
                                 {tabKey === STAKE_TABS.stake
                                     ? lpBalance
@@ -200,7 +201,9 @@ export default (props: {
                         onClick={handleSubmit}
                         loading={submitting}
                     >
-                        {tabKey === STAKE_TABS.stake ? 'Stake' : 'Unstake'}
+                        {tabKey === STAKE_TABS.stake
+                            ? intl.formatMessage({ id: 'stake' })
+                            : intl.formatMessage({ id: 'unstake' })}
                     </Button>
                 )}
                 {lp && !isApproved && (
@@ -209,15 +212,17 @@ export default (props: {
                         onClick={handleApprove}
                         loading={requestedApproval}
                     >
-                        Approve To Stake
+                        {intl.formatMessage({ id: 'Approve' })}
                     </Button>
                 )}
             </div>
             {lp && lp.includes('-') && tabKey === STAKE_TABS.stake && (
                 <div className="info-footer">
-                    <p className="tips">Don't have {lp}?</p>
+                    <p className="tips">
+                        {intl.formatMessage({ id: 'dontHave' })} {lp}?
+                    </p>
                     <p className="link">
-                        Get {lp} LP <span></span>{' '}
+                        {intl.formatMessage({ id: 'get' })} {lp} <span></span>{' '}
                     </p>
                 </div>
             )}

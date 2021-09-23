@@ -268,7 +268,7 @@ export default () => {
                             <div className="pannel-content">
                                 {tabKey === 'total-staked' && (
                                     <Fragment>
-                                        {account ? `${totalStaked} FUSD` : '--'}
+                                        {account ? `$${totalStaked}` : '--'}
                                     </Fragment>
                                 )}
                                 {tabKey === 'collateral' && (

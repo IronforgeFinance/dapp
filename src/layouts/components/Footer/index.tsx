@@ -19,10 +19,14 @@ import { TokenIcon } from '@/components/Icon';
 import useEnv from '@/hooks/useEnv';
 import { useHistoryBoard } from '@/components/HistoryBoard';
 import { MobileNavigationContext } from '@/layouts/components/Header/components/MobileNavigation/provider';
+import useRefresh from '@/hooks/useRefresh';
+import { getTokenPrice } from '@/utils';
+import { PLATFORM_TOKEN } from '@/config';
 
 export default () => {
     const intl = useIntl();
-    const [price] = useState(0);
+    const { slowRefresh } = useRefresh();
+    const [price, setPrice] = useState(0);
     const { openWithTabKey } = useHistoryBoard();
     const { setVisible: setMobileNavigationVisible } = useContext(
         MobileNavigationContext,
@@ -51,6 +55,13 @@ export default () => {
         });
     }, [filterList]);
 
+    useEffect(() => {
+        (async () => {
+            const price = await getTokenPrice(PLATFORM_TOKEN);
+            setPrice(price);
+        })();
+    }, [slowRefresh]);
+
     const openHistory = useCallback(() => {
         openWithTabKey(2);
         setMobileNavigationVisible(false);
@@ -76,7 +87,7 @@ export default () => {
                         </p>
                         <p className="label">
                             {intl.formatMessage({ id: 'footer.ftoken.price' })}{' '}
-                            <span className="rate">{rate}</span>
+                            {/* <span className="rate">{rate}</span> */}
                         </p>
                     </div>
                     <Button className="btn-buy-token common-btn common-btn-red">
