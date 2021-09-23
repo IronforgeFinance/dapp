@@ -26,6 +26,7 @@ import { getTokenPrice } from '@/utils';
 import { toFixedWithoutRound } from '@/utils/bigNumber';
 import { IDebtItemInfo } from '@/models/burnData';
 import useWeb3Provider from '@/hooks/useWeb3Provider';
+import useEnv from '@/hooks/useEnv';
 
 export default () => {
     const intl = useIntl();
@@ -36,6 +37,7 @@ export default () => {
     const [currentDebt, setCurrentDebt] = useState(0);
     const { balance: fusdBalance } = useBep20Balance('FUSD');
     const provider = useWeb3Provider();
+    const isMobile = useEnv();
 
     const { requestConnectWallet } = useModel('app', (model) => ({
         requestConnectWallet: model.requestConnectWallet,
@@ -165,19 +167,17 @@ export default () => {
 
     return (
         <div className="burn-container">
-            <DataView />
+            {!isMobile && <DataView />}
             <div className="burn-box">
-                <CommentaryCard
-                    title={intl.formatMessage({ id: 'burn.title' })}
-                    description={intl.formatMessage({ id: 'burn.desc' })}
-                />
-                <Fragment>
-                    <Fragment>
-                        <BurnForm onSubmitSuccess={onSubmitSuccess} />
-                        {/* <BackBtn /> */}
-                    </Fragment>
-                </Fragment>
+                {!isMobile && (
+                    <CommentaryCard
+                        title={intl.formatMessage({ id: 'burn.title' })}
+                        description={intl.formatMessage({ id: 'burn.desc' })}
+                    />
+                )}
+                <BurnForm onSubmitSuccess={onSubmitSuccess} />
             </div>
+            {isMobile && <DataView />}
         </div>
     );
 };

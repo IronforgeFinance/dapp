@@ -16,41 +16,80 @@
         margin-bottom: 10px;
         padding: 10px;
     }
-}
 
-.burn-box {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    position: relative;
-
-    margin: 58.21px 178px 0 178px;
-}
-
-.form-view {
-    height: 568.9771728515625px;
-    width: 446.8630065917969px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding-top: 49.54px;
-
-    .my-debt {
+    .burn-box {
         display: flex;
-        // align-items: center;
+        flex-direction: column;
+        align-items: center;
+        position: relative;
 
-        > .ratio {
-            width: 24px;
-            height: 24px;
-            flex-shrink: 0;
-            #image.icon(24px, '~@/assets/images/common-radio.png', transparent, false);
+        margin: 58.21px 178px 0 178px;
 
-            &.active {
-                #image.icon(24px, '~@/assets/images/common-radio-active.png', transparent, false);
+        .form-view {
+            height: 568.9771728515625px;
+            width: 446.8630065917969px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding-top: 49.54px;
+
+            .group-scale {
+                margin: 0;
+                padding: 0;
             }
 
-            margin-top: 40px;
-            margin-right: 6px;
+            .debt {
+                font-family: Poppins;
+                font-style: normal;
+                font-weight: bold;
+                font-size: 15px;
+                line-height: 22px;
+                display: flex;
+                align-items: center;
+                color: rgba(255, 255, 255, 0.5);
+            }
+
+            .input-item.from-input {
+                margin-top: 20px;
+
+                .from-content.input-item-content {
+                    padding: 12px 9px;
+
+                    .ftoken {
+                        display: flex;
+                        align-items: center;
+                    }
+                }
+            }
+
+            .btn-burn {
+                margin-top: 30px;
+
+                .ant-btn.btn-mint {
+                    margin-top: 0;
+                    width: 236px;
+                    height: 70px;
+                }
+            }
+
+            .my-debt {
+                display: flex;
+                // align-items: center;
+
+                > .ratio {
+                    width: 24px;
+                    height: 24px;
+                    flex-shrink: 0;
+                    #image.icon(24px, '~@/assets/images/common-radio.png', transparent, false);
+
+                    &.active {
+                        #image.icon(24px, '~@/assets/images/common-radio-active.png', transparent, false);
+                    }
+
+                    margin-top: 40px;
+                    margin-right: 6px;
+                }
+            }
         }
     }
 }

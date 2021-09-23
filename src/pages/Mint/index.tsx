@@ -175,7 +175,7 @@ export default () => {
     const { balance: fTokenBalance, refresh: refreshIFTBalance } =
         useBep20Balance(PLATFORM_TOKEN);
     console.log('fTokenBalance: ', fTokenBalance);
-        useBep20Balance('IFT');
+    useBep20Balance('IFT');
     _fTokenBalance.current = fTokenBalance;
 
     const { balance: collateralBalance, refresh: refreshCollateralBalance } =
@@ -356,13 +356,13 @@ export default () => {
         debounce(async (v) => {
             if (v == undefined) return;
 
-        setLockedScale(+v);
-        const bsPrice = await getTokenPrice(PLATFORM_TOKEN);
-        console.log('>> bsp: %s', bsPrice);
+            setLockedScale(+v);
+            const bsPrice = await getTokenPrice(PLATFORM_TOKEN);
+            console.log('>> bsp: %s', bsPrice);
 
-        /**@description 计算公式：(锁定比例 * 质押价值) / BSP */
-        let amount = (currentStakedValue.current * Number(v)) / bsPrice;
-        console.log('>> stake total value: %s', amount);
+            /**@description 计算公式：(锁定比例 * 质押价值) / BSP */
+            let amount = (currentStakedValue.current * Number(v)) / bsPrice;
+            console.log('>> stake total value: %s', amount);
 
             /**@description 超过余额的计算 */
             amount =
@@ -618,7 +618,7 @@ export default () => {
                                     </span>
                                 </p>
                             </div>
-                            <div className="input">
+                            <div className="input mint-locked-input">
                                 <InputNumber
                                     value={lockedAmount}
                                     onChange={lockedAmountHandler}
