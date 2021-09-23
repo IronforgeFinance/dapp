@@ -52,7 +52,7 @@ export default () => {
     }, [tabKey]);
 
     return (
-        <div className="wallet">
+        <div className="wallet-container">
             <TabRecordBoard
                 title={intl.formatMessage({ id: 'wallet.title' })}
                 tabItems={tabItems.map((item) => ({
