@@ -316,6 +316,44 @@ dl {
     }
 }
 
+.ratio {
+    margin-bottom: 15px;
+    .safe-tip {
+        z-index: 10;
+        // left: 50%;
+        position: relative;
+        bottom: -5px;
+        color: #fff;
+        .divider {
+            width: 2px;
+            height: 16px;
+            background: #fcea44;
+            box-shadow: 0px 1px 2px 1px #e1ab3b;
+            border-radius: 1px;
+        }
+    }
+    .icon-divider {
+        position: absolute;
+        bottom: -15px;
+        z-index: 100;
+        height: 20px;
+        left: -4px;
+    }
+}
+
+.ratio {
+    .ant-tooltip-placement-bottom .ant-tooltip-arrow {
+        display: none;
+    }
+    .ant-tooltip-placement-bottom {
+        padding: 0;
+    }
+    .ant-tooltip-inner {
+        background: none;
+        padding: 0;
+    }
+}
+
 .iron-progress.ant-slider {
     font-style: normal;
     font-weight: normal;
@@ -328,6 +366,13 @@ dl {
     justify-content: center;
     margin: 0;
     // padding: 4px 3px;
+    .ant-slider-dot {
+        display: none;
+    }
+
+    .ant-slider-mark {
+        top: 34px;
+    }
 
     .ant-slider-step,
     .ant-slider-rail {
@@ -379,6 +424,26 @@ dl {
         font-size: 15px;
         line-height: 22px;
         color: #ffffff;
+    }
+}
+
+.iron-progress-low.ant-slider {
+    .ant-slider-track {
+        background: linear-gradient(
+            90deg,
+            #bd674c 39.1%,
+            #ce471c 92.56%
+        ) !important;
+    }
+}
+
+.iron-progress-safe.ant-slider {
+    .ant-slider-track {
+        background: linear-gradient(
+            90deg,
+            #37e7df 39.1%,
+            #44fcf4 92.56%
+        ) !important;
     }
 }
 
