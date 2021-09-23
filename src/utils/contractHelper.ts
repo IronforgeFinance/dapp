@@ -1,6 +1,7 @@
 import { ethers } from 'ethers';
 import { simpleRpcProvider } from '@/utils/providers';
 import Addresses from '@/config/constants/contracts';
+import Tokens from '@/config/constants/tokens';
 import {
     getAddress,
     getCakeAddress,
@@ -18,6 +19,7 @@ import PricesAbi from '@/config/abi/MockPrices.json';
 import PancakeRouter from '@/config/abi/PancakeRouterV2.json';
 import PancakeFactory from '@/config/abi/PancakeFactory.json';
 import MinerReward from '@/config/abi/MinerReward.json';
+import PlatformToken from '@/config/abi/IronForgeToken.json';
 
 export const getContract = (
     abi: any,
@@ -114,4 +116,12 @@ export const getMinerRewardContract = (
     const chainId = process.env.APP_CHAIN_ID as string;
     const address = Addresses.MinerReward[chainId];
     return getContract(MinerReward, address, signer);
+};
+
+export const getPlatformTokenContract = (
+    signer?: ethers.Signer | ethers.providers.Provider,
+) => {
+    const chainId = process.env.APP_CHAIN_ID as string;
+    const address = Tokens.BS.address[chainId];
+    return getContract(PlatformToken, address, signer);
 };

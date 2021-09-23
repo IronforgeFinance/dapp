@@ -172,52 +172,6 @@ export default () => {
                     description={intl.formatMessage({ id: 'burn.desc' })}
                 />
                 <Fragment>
-                    {/* {!showForm && (
-                        <Fragment>
-                            {!haveAssets && <NoAssetsView />}
-                            {haveAssets && (
-                                <div className="form-view common-box">
-                                    <div className="my-debt">
-                                        <button
-                                            className={classNames({
-                                                ratio: true,
-                                                active: currentDebt == 0,
-                                            })}
-                                            onClick={() => setCurrentDebt(0)}
-                                        />
-                                        <DebtItem
-                                            mintedToken="FUSD"
-                                            mintedTokenName="USD"
-                                        />
-                                    </div>
-                                    {account && (
-                                        <Button
-                                            className="btn-mint common-btn common-btn-red"
-                                            onClick={() =>
-                                                setShowForm(!showForm)
-                                            }
-                                        >
-                                            {intl.formatMessage({
-                                                id: 'burn.burn',
-                                            })}
-                                        </Button>
-                                    )}
-                                    {!account && (
-                                        <Button
-                                            className="btn-mint common-btn common-btn-yellow"
-                                            onClick={() => {
-                                                requestConnectWallet();
-                                            }}
-                                        >
-                                            {intl.formatMessage({
-                                                id: 'app.unlockWallet',
-                                            })}
-                                        </Button>
-                                    )}
-                                </div>
-                            )}
-                        </Fragment>
-                    )} */}
                     <Fragment>
                         <BurnForm onSubmitSuccess={onSubmitSuccess} />
                         {/* <BackBtn /> */}

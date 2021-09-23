@@ -210,11 +210,11 @@ export default () => {
 
     const updateToken2Amount = (token1Amount) => {
         if (token1Amount && token1 && token2) {
-            const token1Price =
+            const token2Price =
                 currentLpData.token1 === token1
-                    ? currentLpData.token1Price
-                    : currentLpData.token2Price;
-            const token2Amount = token1Price * token1Amount;
+                    ? currentLpData.token2Price
+                    : currentLpData.token1Price;
+            const token2Amount = token2Price * token1Amount;
             setToken2Amount(token2Amount);
         } else {
             setToken2Amount(undefined);
@@ -223,11 +223,11 @@ export default () => {
 
     const updateToken1Amount = (token2Amount) => {
         if (token2Amount && token2 && token1) {
-            const token2Price =
+            const token1Price =
                 currentLpData.token2 === token2
-                    ? currentLpData.token2Price
-                    : currentLpData.token1Price;
-            const token1Amount = token2Price * token2Amount;
+                    ? currentLpData.token1Price
+                    : currentLpData.token2Price;
+            const token1Amount = token1Price * token2Amount;
             setToken1Amount(token1Amount);
         } else {
             setToken1Amount(undefined);

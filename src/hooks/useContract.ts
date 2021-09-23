@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import useWeb3Provider from './useWeb3Provider';
-
+import Tokens from '@/config/constants/tokens';
 import {
     getBep20Contract,
     getBuildBurnSystemContract,
@@ -12,43 +12,56 @@ import {
     getPricesContract,
     getRouterContract,
     getPancakeFactoryContract,
-    getMinerRewardContract
+    getMinerRewardContract,
+    getPlatformTokenContract,
 } from '@/utils/contractHelper';
 
 export const useERC20 = (address: string) => {
     const provider = useWeb3Provider();
-    return useMemo(() => getBep20Contract(address, provider.getSigner()), [
-        address,
-        provider,
-    ]);
+    return useMemo(
+        () => getBep20Contract(address, provider.getSigner()),
+        [address, provider],
+    );
+};
+
+export const usePlatformToken = () => {
+    const provider = useWeb3Provider();
+    return useMemo(
+        () => getPlatformTokenContract(provider.getSigner()),
+        [provider],
+    );
 };
 
 export const useBuildBurnSystem = () => {
     const provider = useWeb3Provider();
-    return useMemo(() => getBuildBurnSystemContract(provider.getSigner()), [
-        provider,
-    ]);
+    return useMemo(
+        () => getBuildBurnSystemContract(provider.getSigner()),
+        [provider],
+    );
 };
 
 export const useCollateralSystem = () => {
     const provider = useWeb3Provider();
-    return useMemo(() => getCollateralSystemContract(provider.getSigner()), [
-        provider,
-    ]);
+    return useMemo(
+        () => getCollateralSystemContract(provider.getSigner()),
+        [provider],
+    );
 };
 
 export const useExchangeSystem = () => {
     const provider = useWeb3Provider();
-    return useMemo(() => getExchangeSystemContract(provider.getSigner()), [
-        provider,
-    ]);
+    return useMemo(
+        () => getExchangeSystemContract(provider.getSigner()),
+        [provider],
+    );
 };
 
 export const useDebtSystem = () => {
     const provider = useWeb3Provider();
-    return useMemo(() => getDebtSystemContract(provider.getSigner()), [
-        provider,
-    ]);
+    return useMemo(
+        () => getDebtSystemContract(provider.getSigner()),
+        [provider],
+    );
 };
 
 export const useConfig = () => {
@@ -58,9 +71,10 @@ export const useConfig = () => {
 
 export const useLiquidation = () => {
     const provider = useWeb3Provider();
-    return useMemo(() => getLiquidationContract(provider.getSigner()), [
-        provider,
-    ]);
+    return useMemo(
+        () => getLiquidationContract(provider.getSigner()),
+        [provider],
+    );
 };
 
 export const usePrices = () => {
@@ -75,14 +89,16 @@ export const useRouter = () => {
 
 export const usePancakeFactory = () => {
     const provider = useWeb3Provider();
-    return useMemo(() => getPancakeFactoryContract(provider.getSigner()), [
-        provider,
-    ]);
+    return useMemo(
+        () => getPancakeFactoryContract(provider.getSigner()),
+        [provider],
+    );
 };
 
 export const useMinerReward = () => {
     const provider = useWeb3Provider();
-    return useMemo(() => getMinerRewardContract(provider.getSigner()), [
-        provider,
-    ]);
+    return useMemo(
+        () => getMinerRewardContract(provider.getSigner()),
+        [provider],
+    );
 };

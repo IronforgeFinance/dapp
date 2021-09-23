@@ -10,7 +10,6 @@ export default [
             { exact: true, path: '/burn', component: '@/pages/Burn' },
             { exact: true, path: '/trade', component: '@/pages/Trade' },
             { exact: true, path: '/farm', component: '@/pages/Farm' },
-            { exact: true, path: '/pool', component: '@/pages/Pool' },
             {
                 exact: true,
                 path: '/farm/provide',

@@ -52,7 +52,7 @@ import { useNpcDialog } from '@/components/NpcDialog';
 import { getTokenPrice } from '@/utils';
 import useEnv from '@/hooks/useEnv';
 
-const RATIO_MAX_MINT = 1000;
+const RATIO_MAX_MINT = 800;
 
 export default () => {
     const intl = useIntl();
@@ -78,6 +78,12 @@ export default () => {
     const [computedRatio, setComputedRatio] = useState(0);
     const [lockedScale, setLockedScale] = useState<string | number | null>(
         null,
+    );
+    const [sliderRatio, setSliderRatio] = useState(
+        (500 / RATIO_MAX_MINT) * 100,
+    );
+    const [minSliderRatio, setMinSliderRatio] = useState(
+        (500 / RATIO_MAX_MINT) * 100,
     );
     const _fTokenBalance = useRef(0);
 
@@ -167,6 +173,8 @@ export default () => {
     }));
 
     const { balance: fTokenBalance, refresh: refreshIFTBalance } =
+        useBep20Balance(PLATFORM_TOKEN);
+    console.log('fTokenBalance: ', fTokenBalance);
         useBep20Balance('IFT');
     _fTokenBalance.current = fTokenBalance;
 
@@ -181,21 +189,7 @@ export default () => {
         refreshCollateralBalance();
         refreshMintBalance();
     };
-    // TODO fToken价值/Collateral价值 最高不超过3/10
-    // const maxLockedAmount = useMemo(() => {
-    //     if (collateralToken && collateralAmount) {
-    //         const amount =
-    //             (Number(collateralAmount) *
-    //                 TokenPrices[collateralToken] *
-    //                 0.3) /
-    //             TokenPrices['fToken_USDT'];
-    //         return amount;
-    //     } else {
-    //         return fTokenBalance;
-    //     }
-    // }, [collateralAmount, collateralToken, fTokenBalance]);
 
-    // 实时计算的ratio。用来判断能否mint和计算能mint多少toToken
     useEffect(() => {
         (async () => {
             let newRatio = currencyRatio;
@@ -225,6 +219,10 @@ export default () => {
                 endValue: parseFloat((newRatio * 100).toFixed(2)),
             });
             setComputedRatio(newRatio);
+            if (newRatio < initialRatio) {
+                setMinSliderRatio((newRatio * 100) / RATIO_MAX_MINT);
+            }
+            setSliderRatio(((newRatio * 100) / RATIO_MAX_MINT) * 100);
         })();
     }, [
         collateralAmount,
@@ -358,13 +356,13 @@ export default () => {
         debounce(async (v) => {
             if (v == undefined) return;
 
-            setLockedScale(+v);
-            const bsPrice = await getTokenPrice(PLATFORM_TOKEN);
-            console.log('>> bsp: %s', bsPrice);
+        setLockedScale(+v);
+        const bsPrice = await getTokenPrice(PLATFORM_TOKEN);
+        console.log('>> bsp: %s', bsPrice);
 
-            /**@description 计算公式：(锁定比例 * 质押价值) / BSP */
-            let amount = (currentStakedValue.current * Number(v)) / bsPrice;
-            console.log('>> stake total value: %s', amount);
+        /**@description 计算公式：(锁定比例 * 质押价值) / BSP */
+        let amount = (currentStakedValue.current * Number(v)) / bsPrice;
+        console.log('>> stake total value: %s', amount);
 
             /**@description 超过余额的计算 */
             amount =
@@ -520,22 +518,13 @@ export default () => {
         });
     }, [collateralToken, collateralAmount, toToken, toAmount, lockedAmount]);
 
-    /**@type 质押率进度百分比 */
-    const sliderRatio = useMemo(() => {
-        const ratio = ((computedRatio * 100) / RATIO_MAX_MINT) * 100;
-        console.log('>> slider ratio is %s', ratio);
+    // /**@type 质押率进度百分比 */
+    // const sliderRatio = useMemo(() => {
+    //     const ratio = ((computedRatio * 100) / RATIO_MAX_MINT) * 100;
+    //     console.log('>> slider ratio is %s', ratio);
 
-        return ratio;
-    }, [computedRatio]);
-
-    /**
-     * @description 调整质押率
-     * @type {number} 0-100
-     */
-    const changeStakeRatio = useCallback((v) => {
-        const adjustmentRatio = ((v / 100) * RATIO_MAX_MINT) / 100;
-        setComputedRatio(adjustmentRatio);
-    }, []);
+    //     return ratio;
+    // }, [computedRatio]);
 
     return (
         <div className="mint-container">
@@ -707,23 +696,15 @@ export default () => {
                         <Slider
                             className="iron-progress"
                             tooltipVisible={false}
-                            step={0.000001}
+                            step={1}
                             value={sliderRatio}
-                            min={0}
+                            min={minSliderRatio}
                             max={100}
-                            onChange={changeStakeRatio}
+                            onChange={(v) => setSliderRatio(v)}
                         />
                         <div className="stake-ratio">
                             <span className="final">
-                                {fRatioData.endValue}%
-                            </span>
-                            <i
-                                className={`icon-arrow-white ${
-                                    isMobile ? 'size-24' : 'size-16'
-                                }`}
-                            />
-                            <span className="initial">
-                                {fRatioData.startValue}%
+                                {(sliderRatio / 100) * RATIO_MAX_MINT}%
                             </span>
                         </div>
                     </div>

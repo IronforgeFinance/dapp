@@ -13,7 +13,7 @@ const menuItems = [
     { name: 'BURN', path: '/burn' },
     { name: 'TRADE', path: '/trade' },
     { name: 'FARM', path: '/farm' },
-    { name: 'POOL', path: '/pool' },
+    // { name: 'POOL', path: '/pool' },
     { name: 'WALLET', path: '/wallet' },
 ];
 
