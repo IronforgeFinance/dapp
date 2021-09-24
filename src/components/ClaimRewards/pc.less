@@ -1,0 +1,230 @@
+@media (min-width: 751px) {
+    @import '~@/assets/styles/iron.less';
+
+    div.ant-popover {
+        max-width: 300px;
+    }
+
+    .claim-rewards {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100vw;
+        height: 100vh;
+        position: relative;
+
+        .back-btn {
+            position: absolute;
+            display: inline-block;
+            width: 84px;
+            height: 64px;
+            #image.background('~@/assets/images/icon-back.png');
+            left: 70px;
+            top: 180px;
+        }
+
+        .cards-group {
+            display: flex;
+            list-style: none;
+
+            .card {
+                width: 420px;
+                height: 496px;
+                display: flex;
+                flex-direction: column;
+                position: relative;
+                background: linear-gradient(
+                    23.5deg,
+                    rgba(56, 25, 19, 0.8) 2.6%,
+                    rgba(55, 25, 18, 0) 87.73%
+                );
+                border: 2px solid #e1ab3b;
+                box-sizing: border-box;
+                backdrop-filter: blur(20px);
+                border-radius: 8px;
+
+                &:nth-child(n + 2) {
+                    margin-left: 92px;
+                }
+
+                .before {
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
+                    width: 100%;
+                    position: absolute;
+                    top: 0;
+                    padding: 13px;
+
+                    &:before {
+                        content: '';
+                        display: inline-block;
+                        border: 2px solid #d80899;
+                        border-top-left-radius: 10px;
+                        border-bottom: none;
+                        border-right: none;
+                        width: 30px;
+                        height: 30px;
+                    }
+
+                    &:after {
+                        content: '';
+                        display: inline-block;
+                        border: 2px solid #d80899;
+                        border-top-right-radius: 10px;
+                        border-bottom: none;
+                        border-left: none;
+                        width: 30px;
+                        height: 30px;
+                    }
+                }
+
+                .after {
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
+                    width: 100%;
+                    position: absolute;
+                    bottom: 0;
+                    padding: 13px;
+
+                    &:before {
+                        content: '';
+                        display: inline-block;
+                        border: 2px solid #d80899;
+                        border-bottom-left-radius: 10px;
+                        border-top: none;
+                        border-right: none;
+                        width: 30px;
+                        height: 30px;
+                    }
+
+                    &:after {
+                        content: '';
+                        display: inline-block;
+                        border: 2px solid #d80899;
+                        border-bottom-right-radius: 10px;
+                        border-top: none;
+                        border-left: none;
+                        width: 30px;
+                        height: 30px;
+                    }
+                }
+            }
+
+            .rewards {
+                border: 1px solid #d80899;
+
+                .icon-rewards {
+                    #image.background('~@/assets/images/icon-claim-rewards.png');
+                    height: 222.92837524414062px;
+                    width: 184.12295532226562px;
+                }
+
+                .value {
+                    margin-top: -30px;
+                    font-size: 48px;
+                    line-height: 72px;
+                }
+
+                .label {
+                    font-size: 24px;
+                    line-height: 36px;
+                }
+            }
+
+            .ratio {
+                border: 1px solid #e1ab3b;
+                padding-top: 130px;
+
+                .icon-question {
+                    margin-left: 10px;
+                    cursor: pointer;
+                }
+
+                .before,
+                .after {
+                    &:before {
+                        border-color: #e1ab3b;
+                    }
+
+                    &:after {
+                        border-color: #e1ab3b;
+                    }
+                }
+            }
+
+            .content {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                padding: 46px 36px;
+            }
+
+            .icon-rewards {
+                width: 184.12px;
+                height: 222.93px;
+            }
+
+            .value {
+                font-family: Poppins;
+                font-style: normal;
+                font-weight: bold;
+                font-size: 48px;
+                line-height: 72px;
+                text-align: center;
+                color: #e1ab3b;
+            }
+
+            .label {
+                font-family: Poppins;
+                font-style: normal;
+                font-weight: normal;
+                font-size: 28px;
+                line-height: 42px;
+                display: flex;
+                align-items: center;
+                text-align: center;
+                color: #ffffff;
+            }
+
+            .bottom {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                width: 100%;
+                margin-top: 50px;
+
+                .price {
+                    font-family: Poppins;
+                    font-style: normal;
+                    font-weight: bold;
+                    font-size: 28px;
+                    line-height: 42px;
+                    display: flex;
+                    align-items: center;
+                    color: #e1ab3b;
+                }
+
+                .icon-question {
+                    margin-left: 10px;
+                    cursor: pointer;
+                }
+
+                .claim-btn {
+                    width: 96px;
+                    height: 38px;
+                    font-family: Poppins;
+                    font-style: normal;
+                    font-weight: bold;
+                    font-size: 15px;
+                    line-height: 22px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    color: #ffffff;
+                }
+            }
+        }
+    }
+}
