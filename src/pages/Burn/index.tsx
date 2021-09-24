@@ -20,6 +20,14 @@ import { useMemo } from 'react';
 import classNames from 'classnames';
 import { useModel, useIntl } from 'umi';
 import { useBep20Balance } from '@/hooks/useTokenBalance';
+import { COLLATERAL_TOKENS } from '@/config';
+import { TokenIcon } from '@/components/Icon';
+import { getTokenPrice } from '@/utils';
+import { toFixedWithoutRound } from '@/utils/bigNumber';
+import { IDebtItemInfo } from '@/models/burnData';
+import useWeb3Provider from '@/hooks/useWeb3Provider';
+import useEnv from '@/hooks/useEnv';
+
 export default () => {
     const intl = useIntl();
     const { account } = useWeb3React();
@@ -28,27 +36,112 @@ export default () => {
     const [showForm, setShowForm] = useState(false);
     const [currentDebt, setCurrentDebt] = useState(0);
     const { balance: fusdBalance } = useBep20Balance('FUSD');
+    const provider = useWeb3Provider();
+    const isMobile = useEnv();
 
     const { requestConnectWallet } = useModel('app', (model) => ({
         requestConnectWallet: model.requestConnectWallet,
     }));
 
-    const onSubmitSuccess = () => {
-        setShowForm(false);
+    const { setDebtItemInfos, setTotalDebtInUSD } = useModel(
+        'burnData',
+        (model) => ({
+            ...model,
+        }),
+    );
+
+    /* TODO:合约接口没有查询total debt in usd，
+    只能查询某个抵押物currency 对应的debt in usd。
+    前端先写死支持的币，然后分别查询debt in usd，并求和; 
+    */
+    const getDebtInUSD = async () => {
+        const res = await Promise.all(
+            COLLATERAL_TOKENS.map((token) =>
+                debtSystem.GetUserDebtBalanceInUsd(
+                    account,
+                    ethers.utils.formatBytes32String(token.name),
+                ),
+            ),
+        );
+
+        const totalDebtInUsd = res.reduce((total, item) => {
+            const val = parseFloat(ethers.utils.formatUnits(item[0], 18));
+            total += val;
+            return total;
+        }, 0);
+        const val = toFixedWithoutRound(totalDebtInUsd, 2);
+        setTotalDebtInUSD(val);
     };
 
-    const haveAssets = useMemo(() => /*fusdBalance > 0*/ true, []); // TODO 获取资产总计
-
-    const BackBtn = () => {
-        return (
-            <img
-                className="btn-back"
-                src={IconBack}
-                onClick={() => {
-                    setShowForm(!showForm);
-                }}
-            />
+    const getCollateralDataByToken = async (account, token) => {
+        const res = await collateralSystem.getUserCollateral(
+            account,
+            ethers.utils.formatBytes32String(token),
         );
+        const data = parseFloat(ethers.utils.formatUnits(res, 18));
+        const price = await getTokenPrice(token);
+        const collateralInUSD = data * price;
+        console.log('getCollateralData: ', token, data);
+        const lockRes = await collateralSystem.userLockedData(
+            account,
+            ethers.utils.formatBytes32String(token),
+        );
+        const lockData = parseFloat(ethers.utils.formatEther(lockRes));
+        return {
+            collateral: data,
+            inUSD: collateralInUSD,
+            locked: lockData,
+        };
+    };
+
+    const getDebtInfo = async () => {
+        const tokens = COLLATERAL_TOKENS.map((token) => token.name);
+        const res = await Promise.all(
+            tokens.map((token) => getCollateralDataByToken(account, token)),
+        );
+
+        const total = res.reduce((total, item, i) => {
+            return total + item.inUSD;
+        }, 0);
+
+        const totalLocked = res.reduce((total, item) => {
+            return total + item.locked;
+        }, 0);
+        // setLockedData({
+        //     ...lockedData,
+        //     startValue: totalLocked,
+        //     endValue: totalLocked,
+        // });
+        const infos = res.map((item, index) => {
+            const ratioValue =
+                total > 0 ? Number((100 * item.inUSD) / total).toFixed(2) : 0;
+            return {
+                collateralToken: tokens[index],
+                ratio: ratioValue + '%',
+                ratioValue,
+                collateral: item.collateral,
+                locked: item.locked,
+            } as IDebtItemInfo;
+        });
+        infos.sort((a, b) => Number(b.ratioValue) - Number(a.ratioValue));
+        setDebtItemInfos(infos);
+    };
+
+    const refreshData = () => {
+        if (account) {
+            getDebtInUSD();
+            getDebtInfo();
+        }
+    };
+
+    useEffect(() => {
+        if (account) {
+            refreshData();
+        }
+    }, [account, provider]); //fixme: provider 不是metask时合约接口会报错。
+
+    const onSubmitSuccess = () => {
+        setShowForm(false);
     };
 
     const NoAssetsView = () => {
@@ -72,84 +165,19 @@ export default () => {
         );
     };
 
-    const SearchDebts = () => {
-        return (
-            <div className="search-debts">
-                <div className="search-input-wrapper">
-                    <input
-                        type="text"
-                        placeholder={intl.formatMessage({ id: 'burn.search' })}
-                    />
-                </div>
-                <button className="search-btn" />
-            </div>
-        );
-    };
-
     return (
         <div className="burn-container">
-            <DataView />
+            {!isMobile && <DataView />}
             <div className="burn-box">
-                <CommentaryCard
-                    title={intl.formatMessage({ id: 'burn.title' })}
-                    description={intl.formatMessage({ id: 'burn.desc' })}
-                />
-                <Fragment>
-                    {!showForm && (
-                        <Fragment>
-                            {!haveAssets && <NoAssetsView />}
-                            {haveAssets && (
-                                <div className="form-view common-box">
-                                    <SearchDebts />
-                                    <div className="my-debt">
-                                        <button
-                                            className={classNames({
-                                                ratio: true,
-                                                active: currentDebt == 0,
-                                            })}
-                                            onClick={() => setCurrentDebt(0)}
-                                        />
-                                        <DebtItem
-                                            mintedToken="FUSD"
-                                            mintedTokenName="USD"
-                                        />
-                                    </div>
-                                    {account && (
-                                        <Button
-                                            className="btn-mint common-btn common-btn-red"
-                                            onClick={() =>
-                                                setShowForm(!showForm)
-                                            }
-                                        >
-                                            {intl.formatMessage({
-                                                id: 'burn.burn',
-                                            })}
-                                        </Button>
-                                    )}
-                                    {!account && (
-                                        <Button
-                                            className="btn-mint common-btn common-btn-yellow"
-                                            onClick={() => {
-                                                requestConnectWallet();
-                                            }}
-                                        >
-                                            {intl.formatMessage({
-                                                id: 'app.unlockWallet',
-                                            })}
-                                        </Button>
-                                    )}
-                                </div>
-                            )}
-                        </Fragment>
-                    )}
-                    {showForm && (
-                        <Fragment>
-                            <BurnForm onSubmitSuccess={onSubmitSuccess} />
-                            <BackBtn />
-                        </Fragment>
-                    )}
-                </Fragment>
+                {!isMobile && (
+                    <CommentaryCard
+                        title={intl.formatMessage({ id: 'burn.title' })}
+                        description={intl.formatMessage({ id: 'burn.desc' })}
+                    />
+                )}
+                <BurnForm onSubmitSuccess={onSubmitSuccess} />
             </div>
+            {isMobile && <DataView />}
         </div>
     );
 };

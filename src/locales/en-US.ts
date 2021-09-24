@@ -1,13 +1,11 @@
 export default {
-    /**
-     * @description 首页
-     */
     WELCOME: '{account}, welcome!',
     'nav.home': 'Home',
     'nav.mint': 'Mint',
     'nav.burn': 'Burn',
     'nav.trade': 'Trade',
     'nav.farm': 'Farm',
+    'nav.pool': 'Pool',
     'nav.wallet': 'Wallet',
     'nav.connectWallet': 'Connect Wallet',
     'entry.learnmore': 'Learn more',
@@ -23,10 +21,6 @@ export default {
         'Earn rewards staking fToken. You will need a Binance Chain wallet for the transaction. Learn more',
     'data.pledgrate': 'My Current Pledge Ratio',
     'data.activedebt': 'Active Debt',
-
-    /**
-     * @description 合成资产
-     */
     'mint.from': 'From',
     'mint.to': 'To',
     'mint.selectCasting': 'Select casting',
@@ -39,10 +33,6 @@ export default {
     'mint.title': 'Begin To Mint',
     'mint.desc':
         'Mint fUSD by staking your Token. Token stakers earn weekly staking rewards . ',
-
-    /**
-     * @description 燃烧资产
-     */
     'burn.from': 'From',
     'burn.to': 'To',
     'burn.title': 'Your Debt',
@@ -51,8 +41,10 @@ export default {
     'burn.search': 'Search name or your debt',
     'burn.unstaking': 'Unstaking',
     'burn.collateral': 'Collateral',
+    'burn.amount': 'Amount',
     'burn.ratio': 'Ratio',
-    'burn.debt:': 'Debt',
+    'burn.debt': '债务',
+    'burn.debt:': 'Debt: ',
     'burn.locked': 'Locked',
     'burn.burn': 'Burn',
     'burn.burned': 'Burned',
@@ -60,12 +52,10 @@ export default {
     'burn.tomint': 'Lets Mint',
     'burn.initial': 'Burn to initial',
     'burn.max': 'Burn max',
-
-    /**
-     * @description 交易商店
-     */
+    'burn.approve': 'Approve to burn',
     'trade.from': 'From',
     'trade.to': 'To',
+    'trade.approve': 'Approve to Trade',
     'trade.marketing:': 'Market Details: ',
     'trade.24h.volume': '24H Volume',
     'trade.24h.marketcap': 'Market Cap',
@@ -76,10 +66,6 @@ export default {
     'trade.button': 'Trade',
     'trade.selecttoken': 'Select a token',
     'trade.feecost': 'Fee cost: ',
-
-    /**
-     * @description Defi挖矿
-     */
     'liquidity.toprovide': 'Provide Liquidity',
     'liquidity.bs.price': 'BS Price',
     'liquidity.bs.vol': 'BS Vol',
@@ -95,9 +81,17 @@ export default {
     'liquidity.withdraw.willreceive': "You'll receive",
     'liquidity.withdraw.approve': 'Approve to withdraw',
 
-    /**
-     * @description 我的资产
-     */
+    'liquidity.bs.tvl': 'BS TVL',
+    'liquidity.bs.circulatingVal': 'BS Circulating Value',
+    'liquidity.bs.totalEarned': 'BS Total Earned',
+
+    'liquidity.yourLiquidity': 'Your Liquidity',
+    'liquidity.yourLiquidityDesc':
+        'You can click Add Liquidity to add Lp quickly or remove liquidity to receive tokens back.',
+    'liquidity.noLiquidity': 'No such liquidity',
+
+    'pool.totalStaked': 'Total staked value',
+    'pool.totalEarned': 'Total users earned',
     'wallet.title': 'My Wallet',
     'wallet.pool': 'Pool',
     'wallet.farm': 'Farm',
@@ -109,10 +103,6 @@ export default {
     'wallet.tab.trade': 'Trade',
     'wallet.tab.farm': 'Farm',
     'wallet.tab.pool': 'Pool',
-
-    /**
-     * @description 公共组件
-     */
     'assetsbar.staked': 'Staked',
     'assetsbar.lockedtoken': 'Locked BS',
     'assetsbar.acitvedebt': 'Active Debt',
@@ -133,10 +123,9 @@ export default {
     'history.mint.col.date': 'Date',
     'history.burn': 'Burn',
     'history.delivery': 'Delivery',
-
-    /**
-     * @description 通用词
-     */
+    noAssets: '暂无资产',
+    noTrades: '暂无交易记录',
+    noConnection: '点击“连接钱包”后查看',
     perpetual: 'Perpetual',
     delivery: 'Delivery',
     days: 'Days',
@@ -151,16 +140,33 @@ export default {
     change: 'Change',
     changeWallet: 'Change Wallet',
     connectWallet: 'Connect Wallet',
-    /** @description 动词 */
-    'verb.from': 'From', //动词省略
+    apyDesc: 'APY是包含复投的收益',
+    bsDesc: 'BS是Iron Forge的平台代币',
+    bsTotalDesc: '奖励50%可即刻提取,50%将于30天内线性释放',
+    'verb.from': 'From',
     'verb.send': 'Send',
     'verb.provide.liquidity': 'provide liquidity',
     'verb.withdraw.liquidity': 'withdraw liquidity',
     'verb.stake.lp': 'stake lp',
     'verb.x': ' ',
-    /** @description 连词 */
     'conj.to': 'To',
     'conj.and': 'and',
     'conj.x': ' ',
     'app.unlockWallet': 'Unlock wallet',
+    amount: 'Amount',
+    stake: 'Stake',
+    unstake: 'Unstake',
+    approve: 'Approve',
+    dontHave: "Dont't have ",
+    get: 'Get ',
+    totalStaked: 'Total staked',
+    APY: 'APY',
+    earn: 'EARN',
+    bsTotalEarned: 'BS Total Earned',
+    harvest: 'Harvest',
+    STAKED: 'STAKED',
+    'npc.mintAssets':
+        'IronForge provides two types of synthetic assets: perpetual and delivery. After the delivery date of the delivery synthetic asset expires, the asset price will be locked, and the debt behind it will also be frozen and no longer follow changes in the public debt pool; perpetual There is no date limit for assets, and the price will always follow the market changes, so the debts that users have not destroyed will always follow the changes in the public debt pool.',
+    'npc.mntRatio':
+        'The higher the proportion of BS locked in the pledge, the lower the pledge rate F-Ratio, which can be as low as 350%',
 };

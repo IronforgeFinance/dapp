@@ -1,22 +1,17 @@
 import './less/index.less';
 
-import { gql, useQuery } from '@apollo/client';
-import { useState, useEffect, useMemo, useCallback } from 'react';
 import { Table } from 'antd';
 import { ethers } from 'ethers';
-import { useWeb3React } from '@web3-react/core';
 import {
     TokenView,
     PureView,
     TypeView,
     TimeView,
 } from '@/components/CommonView';
-import { GET_MINTS } from '@/subgraph/graphql';
-import { ourClient } from '@/subgraph/clientManager';
-import { DEFAULT_PAGE_SIZE } from '@/config/constants/constant';
+import { GET_MINTS, GET_MINTS_TOTAL } from '@/subgraph/graphql';
 import { useIntl } from 'umi';
-import { toFixedWithoutRound } from '@/utils/bigNumber';
-import dayjs from 'dayjs';
+import NoneView from '@/components/NoneView';
+import usePagination from '@/hooks/usePagination';
 
 const columns = [
     {
@@ -82,53 +77,38 @@ const columns = [
 
 const MintView = () => {
     const intl = useIntl();
-    const { account } = useWeb3React();
-    const [mints, setMints] = useState([]);
-    const [pagination, setPagination] = useState({
-        current: 1,
-        pageSize: DEFAULT_PAGE_SIZE,
-        total: 0,
+    const {
+        list: mints,
+        setPagination,
+        pagination,
+        position,
+        noneStatus,
+    } = usePagination({
+        listGql: GET_MINTS,
+        totalGql: GET_MINTS_TOTAL,
+        key: 'mints',
     });
-
-    const fetchMints = useCallback(async () => {
-        const { data } = await ourClient.query({
-            query: GET_MINTS,
-            variables: {
-                offset: pagination.current - 1,
-                limit: pagination.pageSize,
-                user: account,
-            },
-        });
-        setMints(data?.mints ?? []);
-    }, [account]);
-
-    useEffect(() => {
-        fetchMints();
-    }, []);
-
-    const noData = useMemo(() => !mints?.length, [mints]);
-
-    const position = useMemo(
-        () => (pagination.total > pagination.pageSize ? 'bottomRight' : 'none'),
-        [pagination],
-    );
 
     return (
         <div className="mint-view">
-            <Table
-                className="custom-table"
-                columns={columns.map((col) => ({
-                    ...col,
-                    title: intl.formatMessage({
-                        id: `history.mint.col.${(
-                            col.title as string
-                        ).toLocaleLowerCase()}`,
-                    }),
-                }))}
-                rowKey={(record) => record.id}
-                dataSource={mints}
-                pagination={{ ...pagination, position: [position] }}
-            />
+            {!noneStatus && (
+                <Table
+                    className="custom-table"
+                    columns={columns.map((col) => ({
+                        ...col,
+                        title: intl.formatMessage({
+                            id: `history.mint.col.${(
+                                col.title as string
+                            ).toLocaleLowerCase()}`,
+                        }),
+                    }))}
+                    rowKey={(record) => record.id}
+                    dataSource={mints}
+                    pagination={{ ...pagination, position: [position] }}
+                    onChange={(pagination) => setPagination(pagination)}
+                />
+            )}
+            {noneStatus && <NoneView type={noneStatus} />}
         </div>
     );
 };

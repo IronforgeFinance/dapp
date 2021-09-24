@@ -6,7 +6,7 @@ export default {
         address: {
             56: '0x55d398326f99059fF775485246999027B3197955',
             97: testnetOutput.buildTokens.usdtToken,
-            1337: localOutput.usdtToken,
+            1337: localOutput.buildTokens.usdtToken,
         },
         decimals: 18,
         projectLink: 'https://tether.to/',
@@ -16,7 +16,7 @@ export default {
         address: {
             56: '',
             97: testnetOutput.buildTokens.usdcToken,
-            1337: localOutput.usdcToken,
+            1337: localOutput.buildTokens.usdcToken,
         },
         decimals: 18,
         projectLink: 'https://tether.to/',
@@ -26,7 +26,7 @@ export default {
         address: {
             56: '0x7130d2A12B9BCbFAe4f2634d864A1Ee1Ce3Ead9c',
             97: testnetOutput.buildTokens.btcToken,
-            1337: localOutput.btcToken,
+            1337: localOutput.buildTokens.btcToken,
         },
         decimals: 18,
         projectLink: 'https://bitcoin.org/',
@@ -36,7 +36,7 @@ export default {
         address: {
             56: '0x2170Ed0880ac9A755fd29B2688956BD959F933F8',
             97: testnetOutput.buildTokens.ethToken,
-            1337: localOutput.ethToken,
+            1337: localOutput.buildTokens.ethToken,
         },
         decimals: 18,
         projectLink: 'https://ethereum.org/en/',
@@ -46,7 +46,16 @@ export default {
         address: {
             56: '0x55d398326f99059fF775485246999027B3197955', //TODO usdt for test
             97: testnetOutput.buildTokens.platformToken, //TODO usdt for test
-            1337: localOutput.PlatformToken,
+            1337: localOutput.buildTokens.platformToken,
+        },
+        decimals: 18,
+    },
+    BS: {
+        symbol: 'BS',
+        address: {
+            56: '0x55d398326f99059fF775485246999027B3197955', //TODO usdt for test
+            97: testnetOutput.buildTokens.platformToken, //TODO usdt for test
+            1337: localOutput.buildTokens.platformToken,
         },
         decimals: 18,
     },
@@ -54,8 +63,8 @@ export default {
         symbol: 'FUSD',
         address: {
             56: '',
-            97: testnetOutput.fusdToken,
-            1337: localOutput.fusdToken,
+            97: testnetOutput.FUSD,
+            1337: localOutput.FUSD,
         },
         decimals: 18,
     },
@@ -63,17 +72,8 @@ export default {
         symbol: 'lBTC',
         address: {
             56: '',
-            97: testnetOutput.lbtcToken,
-            1337: localOutput.lbtcToken,
-        },
-        decimals: 18,
-    },
-    'lBTC-202112': {
-        symbol: 'lBTC-202112',
-        address: {
-            56: '',
-            97: localOutput.lbtcToken202112,
-            1337: localOutput.lbtcToken202112,
+            97: testnetOutput.lBTC,
+            1337: localOutput.lBTC,
         },
         decimals: 18,
     },
@@ -95,21 +95,21 @@ export default {
         },
         decimals: 18,
     },
-    'BTCUSD_210924': {
-        symbol: 'BTCUSD_210924',
+    lBTCUSD_210924: {
+        symbol: 'lBTCUSD_210924',
         address: {
             56: '',
-            97: testnetOutput.quarterlyContracts.BTCUSD_210924,
-            1337: localOutput.lbtcToken202112,
+            97: testnetOutput.quarterlyContracts.lBTCUSD_210924,
+            1337: localOutput.quarterlyContracts.lBTCUSD_210924,
         },
         decimals: 18,
     },
-    'BTCUSD_211231': {
-        symbol: 'BTCUSD_211231',
+    lBTCUSD_211231: {
+        symbol: 'lBTCUSD_211231',
         address: {
             56: '',
-            97: testnetOutput.quarterlyContracts.BTCUSD_211231,
-            1337: localOutput.lbtcToken202112,
+            97: testnetOutput.quarterlyContracts.lBTCUSD_211231,
+            1337: localOutput.quarterlyContracts.lBTCUSD_211231,
         },
         decimals: 18,
     },

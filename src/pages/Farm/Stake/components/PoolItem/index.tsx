@@ -54,15 +54,17 @@ export default (props: { pool: IStakePool; handleFlipper: () => void }) => {
                 </div>
                 <div className="pool-total-staked">
                     <p>${totalStaked}</p>
-                    <p>Total staked</p>
+                    <p>{intl.formatMessage({ id: 'totalStaked' })}</p>
                 </div>
                 <div className="total-info">
                     <div className="total-info-item">
-                        <p className="label">APY:</p>
+                        <p className="label">
+                            {intl.formatMessage({ id: 'APY' })}:
+                        </p>
                         <p className="value">
                             {(apy * 100).toFixed(2) + '%'}{' '}
                             <Popover
-                                content={'这是APY计算规则说明'}
+                                content={intl.formatMessage({ id: 'apyDesc' })}
                                 trigger="hover"
                                 placement="topRight"
                             >
@@ -71,11 +73,11 @@ export default (props: { pool: IStakePool; handleFlipper: () => void }) => {
                         </p>
                     </div>
                     <div className="total-info-item">
-                        <p className="label">EARN:</p>
+                        <p className="label">{intl.formatMessage({ id: 'earn' })}:</p>
                         <p className="value">
                             BS{' '}
                             <Popover
-                                content={'这是奖励说明'}
+                                content={intl.formatMessage({ id: 'bsDesc' })}
                                 trigger="hover"
                                 placement="topRight"
                             >
@@ -88,7 +90,7 @@ export default (props: { pool: IStakePool; handleFlipper: () => void }) => {
                 <div className="user-info">
                     <div className="user-info-item">
                         <div className="label-item">
-                            <p className="label">BS Total EARNED</p>
+                            <p className="label">{intl.formatMessage({ id: 'bsTotalEarned' })}</p>
                             <p className="label">{totalPendingReward}</p>
                         </div>
                         <div className="value">
@@ -99,7 +101,9 @@ export default (props: { pool: IStakePool; handleFlipper: () => void }) => {
                             >
                                 {redeemableReward}{' '}
                                 <Popover
-                                    content={'Redeemable'}
+                                    content={intl.formatMessage({
+                                        id: 'bsTotalDesc',
+                                    })}
                                     trigger="hover"
                                     placement="bottom"
                                 >
@@ -107,17 +111,17 @@ export default (props: { pool: IStakePool; handleFlipper: () => void }) => {
                                 </Popover>
                             </p>
                             <Button
-                                className="common-btn common-btn-yellow common-btn-s"
+                                className="harvest-btn common-btn common-btn-yellow common-btn-s"
                                 onClick={handleHarvest}
                                 loading={submitting}
                                 disabled={redeemableReward === 0 || !account}
                             >
-                                Harvest
+                                {intl.formatMessage({ id: 'harvest' })}
                             </Button>
                         </div>
                     </div>
                     <div className="user-info-item">
-                        <p className="label">{name} STAKED</p>
+                        <p className="label">{name} {intl.formatMessage({ id: 'STAKED' })}</p>
                         <div className="value">
                             {account && (
                                 <>
@@ -128,15 +132,15 @@ export default (props: { pool: IStakePool; handleFlipper: () => void }) => {
                                     >
                                         {staked}
                                     </p>
-                                    <button
-                                        className="common-btn common-btn-red common-btn-s"
+                                    <Button
+                                        className="stake-lp-btn common-btn common-btn-red common-btn-s"
                                         onClick={() => {
                                             props.handleFlipper();
                                             // history.push('/farm/stake?lp=' + name);
                                         }}
                                     >
-                                        Stake LP
-                                    </button>
+                                        {intl.formatMessage({ id: 'stake' })}
+                                    </Button>
                                 </>
                             )}
                             {!account && (

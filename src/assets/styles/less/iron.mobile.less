@@ -1,3 +1,5 @@
+@import '~@/layouts/components/Header/less/mobile.less';
+
 @usdt: linear-gradient(90deg, #fcd144 85.54%, #ffad33 98.08%);
 @usdc: linear-gradient(90deg, #26a17b 85.54%, #0c8f67 98.08%);
 @usd: linear-gradient(116.98deg, #611bf6 31.39%, #8d33ff 83.13%);
@@ -106,6 +108,64 @@
         flex-shrink: 0;
     }
 
+    .dinamicBg(@image, @ratio: 50%, @direct: 'hortizontal') {
+        position: relative;
+
+        &:before {
+            flex: 1;
+            content: '';
+            position: absolute;
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-image: url(@image);
+
+            & when (@direct ='hortizontal') {
+                width: calc(@ratio + 1px);
+                height: 100%;
+                top: 50%;
+                transform: translateY(-50%);
+                left: 0;
+                background-position: left top;
+            }
+
+            & when (@direct ='vertical') {
+                width: 100%;
+                height: calc(@ratio + 1px);
+                left: 50%;
+                transform: translateX(-50%);
+                top: 0;
+                background-position: left top;
+            }
+        }
+
+        &:after {
+            flex: 1;
+            content: '';
+            position: absolute;
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-image: url(@image);
+
+            & when (@direct ='hortizontal') {
+                width: calc(@ratio + 1px);
+                height: 100%;
+                top: 50%;
+                transform: translateY(-50%);
+                right: 0;
+                background-position: left bottom;
+            }
+
+            & when (@direct ='vertical') {
+                width: 100%;
+                height: calc(@ratio + 1px);
+                left: 50%;
+                transform: translateX(-50%);
+                bottom: 0;
+                background-position: left bottom;
+            }
+        }
+    }
+
     .icon(@size, @bgImage, @bgColor: transparent, @pure: true) {
         .background(@bgImage, @bgColor);
 
@@ -163,4 +223,16 @@
         bottom: 0;
         transform: @move;
     }
+}
+
+.page-container(@image: '') {
+    #image.background(@image);
+    padding-top: @navHeight;
+    display: flex;
+    flex-direction: column;
+    min-width: 100vw;
+    min-height: 100vh;
+    background-size: 100% 100%;
+    background-position: 0 0;
+    padding-bottom: 300px;
 }

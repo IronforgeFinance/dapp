@@ -6,6 +6,7 @@ import { useERC20 } from '@/hooks/useContract';
 import useLastUpdated from '@/hooks/useLastUpdated';
 // import { message } from 'antd';
 import * as message from '@/components/Notification';
+import Token from '@/config/constants/tokens';
 
 // Approve erc20
 export const useERC20Approve = (
@@ -14,6 +15,10 @@ export const useERC20Approve = (
     setLastUpdated: () => void,
 ) => {
     const [requestedApproval, setRequestedApproval] = useState(false);
+    if (!address.startsWith('0x') && Token[address]) {
+        const token = Token[address];
+        address = token.address[process.env.APP_CHAIN_ID];
+    }
     const erc20 = useERC20(address);
 
     const handleApprove = async () => {
@@ -42,6 +47,10 @@ export const useCheckERC20ApprovalStatus = (
     const [isApproved, setIsApproved] = useState(false);
     const { account } = useWeb3React();
     const { lastUpdated, setLastUpdated } = useLastUpdated();
+    if (!address.startsWith('0x') && Token[address]) {
+        const token = Token[address];
+        address = token.address[process.env.APP_CHAIN_ID];
+    }
     const erc20 = useERC20(address);
     useEffect(() => {
         const checkApprovalStatus = async () => {
@@ -53,7 +62,7 @@ export const useCheckERC20ApprovalStatus = (
                 setIsApproved(false);
             }
         };
-        if(account) {
+        if (account) {
             checkApprovalStatus();
         }
     }, [account, erc20, spender, address, lastUpdated]);

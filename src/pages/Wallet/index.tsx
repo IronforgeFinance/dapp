@@ -1,29 +1,30 @@
 import './less/index.less';
 
 import React from 'react';
-import BigBoard from './components/BigBoard';
-import HoldingView from './components/HoldingView';
 import PoolView from './components/PoolView';
 import HistoryView from './components/HistoryView';
 import FarmView from './components/FarmView';
+import TabRecordBoard from '@/components/TabRecordBoard';
 import { useIntl } from 'umi';
+import { ReactComponent as TabBackIcon02 } from '@/assets/images/big-board-svg-02.svg';
+import { ReactComponent as TabBackIcon03 } from '@/assets/images/big-board-svg-03.svg';
+import { ReactComponent as TabBackIcon04 } from '@/assets/images/big-board-svg-04.svg';
 
 const tabItems = [
-    // {
-    //     name: 'Holding',
-    //     key: 'holding',
-    // },
     {
         name: 'wallet.pool',
         key: 'pool',
+        icon: <TabBackIcon02 fill="#89512D" />,
     },
     {
         name: 'wallet.farm',
         key: 'farm',
+        icon: <TabBackIcon03 fill="#89512D" />,
     },
     {
         name: 'history',
         key: 'history',
+        icon: <TabBackIcon04 fill="#89512D" />,
     },
 ];
 
@@ -51,15 +52,18 @@ export default () => {
     }, [tabKey]);
 
     return (
-        <div className="wallet">
-            <BigBoard
+        <div className="wallet-container">
+            <TabRecordBoard
                 title={intl.formatMessage({ id: 'wallet.title' })}
-                tabItems={tabItems}
+                tabItems={tabItems.map((item) => ({
+                    ...item,
+                    name: intl.formatMessage({ id: item.name }),
+                }))}
                 tabKey={tabKey}
                 onChange={(key) => setTabKey(key)}
             >
                 {CurrentView}
-            </BigBoard>
+            </TabRecordBoard>
         </div>
     );
 };

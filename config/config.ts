@@ -1,9 +1,10 @@
 import { defineConfig } from 'umi';
+import routes from './routes';
 import path from 'path';
 import pxToViewPort from 'postcss-px-to-viewport';
-import routes from './routes';
 
 export default defineConfig({
+    favicon: 'favicon.ico',
     plugins: ['babel-plugin-styled-components'],
     nodeModulesTransform: {
         type: 'none',

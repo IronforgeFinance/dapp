@@ -59,6 +59,7 @@ dl {
 #root {
     position: relative;
     z-index: 1;
+    overflow-x: hidden;
 }
 
 #root ~ div {
@@ -70,12 +71,15 @@ dl {
     margin-bottom: 10px;
 
     .label {
+        font-family: Poppins;
         font-style: normal;
         font-weight: bold;
-        font-size: 15px;
-        line-height: 22px;
+        font-size: 22px;
+        line-height: 33px;
+        display: flex;
         align-items: center;
         color: #ffffff;
+        margin-bottom: 9px;
     }
 
     .input-item-content {
@@ -86,25 +90,28 @@ dl {
         /* Note: backdrop-filter has minimal browser support */
         border-radius: 6px;
         border-radius: 6px;
-        padding: 9px 12px;
+        padding: 26px 20px;
 
         .content-label {
-            display: block;
-            height: 22px;
-            margin-bottom: 13px;
-
+            font-family: Poppins;
             font-style: normal;
             font-weight: normal;
-            font-size: 15px;
-            line-height: 22px;
+            font-size: 22px;
+            line-height: 33px;
+            display: flex;
+            align-items: center;
+            color: rgba(255, 255, 255, 0.7);
+            display: flex;
+            align-items: center;
 
             .left {
-                float: left;
                 color: rgba(255, 255, 255, 0.7);
+                flex: 1;
+                display: flex;
+                align-items: center;
             }
 
             .right {
-                float: right;
                 color: #ffffff;
 
                 .price {
@@ -117,6 +124,20 @@ dl {
             display: flex;
             justify-content: space-between;
             align-items: center;
+            margin-top: 30px;
+
+            input[role='spinbutton'] {
+                height: unset;
+                font-family: Poppins;
+                font-style: normal;
+                font-weight: bold;
+                font-size: 28px;
+                line-height: 42px;
+                display: flex;
+                align-items: center;
+                // color: rgba(255, 255, 255, 0.5);
+                color: #fcd144;
+            }
 
             .ant-input-number-focused {
                 border: none !important;
@@ -185,8 +206,7 @@ dl {
 }
 
 .icon-add {
-    margin: 10px auto;
-    margin-bottom: 0;
+    margin: 31px auto 11px auto;
     display: block;
 }
 
@@ -207,7 +227,8 @@ dl {
 //     color: #fffefe !important;
 // }
 
-.common-btn-s {
+.common-btn-s,
+.common-btn-s.ant-btn {
     height: 38px;
     min-width: 96px;
 
@@ -220,7 +241,7 @@ dl {
 }
 
 .common-box {
-    background-image: url('~@/assets/images/common-box-bg.png');
+    background-image: url('~@/assets/images/mobile-form-box-bg.png');
     background-repeat: no-repeat;
     background-position: center;
     background-size: 100% 100%;
@@ -237,9 +258,9 @@ dl {
         width: 100%;
         height: 10%;
         left: 50%;
-        top: 2px;
+        top: 4px;
         transform: translateX(-50%);
-        background: url('~@/assets/images/common-box-corner.png') no-repeat;
+        background: url('~@/assets/images/mobile-form-box-corner.png') no-repeat;
         background-size: cover;
         background-position: center top;
         pointer-events: none;
@@ -253,7 +274,7 @@ dl {
         left: 50%;
         bottom: 0;
         transform: translateX(-50%);
-        background: url('~@/assets/images/common-box-corner.png') no-repeat;
+        background: url('~@/assets/images/mobile-form-box-corner.png') no-repeat;
         background-size: cover;
         background-position: center bottom;
         pointer-events: none;
@@ -263,8 +284,8 @@ dl {
 .common-btn-back {
     background: url(~@/assets/images/icon-back.png) no-repeat;
     background-size: cover;
-    width: 48px;
-    height: 36px;
+    width: 68px;
+    height: 48px;
     display: inline-block;
     border: none;
     cursor: pointer;
@@ -292,7 +313,7 @@ dl {
     }
 }
 
-.iron-progress {
+.iron-progress.ant-slider {
     font-style: normal;
     font-weight: normal;
     font-size: 15px;
@@ -302,9 +323,12 @@ dl {
     display: flex;
     flex-direction: column;
     justify-content: center;
+    margin: 0;
+    // padding: 4px 3px;
 
-    .ant-progress-outer {
-        width: 364px;
+    .ant-slider-step,
+    .ant-slider-rail {
+        // width: 364px;
         height: 12px;
         background: #585448;
         box-shadow: 0px 0px 1px 3px #654609,
@@ -313,21 +337,29 @@ dl {
         border-radius: 10px;
         display: flex;
         align-items: center;
-        padding: 4px 3px;
         box-sizing: border-box;
+    }
 
-        .ant-progress-inner {
-            background-color: transparent;
+    .ant-slider-handle,
+    .ant-slider-handle.ant-tooltip-open,
+    .ant-slider-handle:hover,
+    .ant-slider-handle:focus {
+        border: 6px solid #e1ab3b;
+        z-index: 10;
+        margin-top: 1px;
+    }
 
-            .ant-progress-bg {
-                height: 4px !important;
-                background: linear-gradient(
-                    90deg,
-                    #fcd144 62.3%,
-                    #ffad33 92.56%
-                );
-            }
+    &:hover {
+        .ant-slider-handle:not(.ant-tooltip-open) {
+            border-color: #e1ab3b;
         }
+    }
+
+    .ant-slider-track {
+        height: 4px;
+        background: linear-gradient(90deg, #fcd144 62.3%, #ffad33 92.56%);
+        position: relative;
+        z-index: 1;
     }
 
     .ant-progress-text {
@@ -344,6 +376,17 @@ dl {
     }
 }
 
+.fee-cost {
+    font-family: Poppins;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 20px;
+    line-height: 30px;
+    display: flex;
+    align-items: center;
+    color: #e1ab3b;
+}
+
 .max {
     font-style: normal;
     font-weight: bold;
@@ -353,11 +396,12 @@ dl {
     align-items: center;
     color: #e1ab3b;
     display: inline-block;
+    margin-right: 10px;
 }
 
 .common-title {
-    width: 268px;
-    height: 58px;
+    width: 389.45px;
+    height: 82px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -391,8 +435,8 @@ dl {
         z-index: 1;
         font-style: normal;
         font-weight: bold;
-        font-size: 16px;
-        line-height: 24px;
+        font-size: 24px;
+        line-height: 32px;
         text-align: center;
         color: #1c1c1d;
     }
@@ -401,7 +445,7 @@ dl {
         flex: 1;
         content: '';
         position: absolute;
-        width: 50%;
+        width: calc(50% + 1vw);
         height: 100%;
         top: 50%;
         transform: translateY(-50%);
@@ -415,7 +459,7 @@ dl {
         flex: 1;
         content: '';
         position: absolute;
-        width: 50%;
+        width: calc(50% + 1vw);
         height: 100%;
         top: 50%;
         transform: translateY(-50%);
@@ -460,8 +504,8 @@ dl {
     .ant-popover-inner-content {
         font-style: normal;
         font-weight: 300;
-        font-size: 15px;
-        line-height: 22px;
+        font-size: 22px;
+        line-height: 33px;
         display: flex;
         align-items: center;
         text-align: center;
@@ -508,6 +552,8 @@ dl {
         border: none;
         position: relative;
         z-index: 1;
+        font-size: 18px;
+        line-height: 27px;
     }
 
     .ant-table-tbody > tr.ant-table-row:hover > td {

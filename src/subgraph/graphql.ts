@@ -7,6 +7,13 @@ import { gql } from '@apollo/client';
  * @see https://bsc.streamingfast.io/subgraphs/name/pancakeswap/exchange-v2/graphql?query=%23%20Welcome%20to%20GraphiQL%0A%23%0A%23%20GraphiQL%20is%20an%20in-browser%20tool%20for%20writing%2C%20validating%2C%20and%0A%23%20testing%20GraphQL%20queries.%0A%23%0A%23%20Type%20queries%20into%20this%20side%20of%20the%20screen%2C%20and%20you%20will%20see%20intelligent%0A%23%20typeaheads%20aware%20of%20the%20current%20GraphQL%20type%20schema%20and%20live%20syntax%20and%0A%23%20validation%20errors%20highlighted%20within%20the%20text.%0A%23%0A%23%20GraphQL%20queries%20typically%20start%20with%20a%20%22%7B%22%20character.%20Lines%20that%20starts%0A%23%20with%20a%20%23%20are%20ignored.%0A%23%0A%23%20An%20example%20GraphQL%20query%20might%20look%20like%3A%0A%23%0A%23%20%20%20%20%20%7B%0A%23%20%20%20%20%20%20%20field(arg%3A%20%22value%22)%20%7B%0A%23%20%20%20%20%20%20%20%20%20subField%0A%23%20%20%20%20%20%20%20%7D%0A%23%20%20%20%20%20%7D%0A%23%0A%23%20Keyboard%20shortcuts%3A%0A%23%0A%23%20%20Prettify%20Query%3A%20%20Shift-Ctrl-P%20(or%20press%20the%20prettify%20button%20above)%0A%23%0A%23%20%20%20%20%20%20%20Run%20Query%3A%20%20Ctrl-Enter%20(or%20press%20the%20play%20button%20above)%0A%23%0A%23%20%20%20Auto%20Complete%3A%20%20Ctrl-Space%20(or%20just%20start%20typing)%0A%23%0Aquery%20%7B%0A%20%20mints(first%3A100)%20%7B%0A%20%20%20%20id%0A%20%20%20%20pair%20%7B%0A%20%20%20%20%20%20name%0A%20%20%20%20%20%20token0%7B%0A%20%20%20%20%20%20%20%20name%0A%20%20%20%20%20%20%7D%0A%20%20%20%20%20%20token1%7B%0A%20%20%20%20%20%20%20%20name%0A%20%20%20%20%20%20%7D%0A%20%20%20%20%7D%0A%20%20%20%20amount0%0A%20%20%20%20amount1%0A%20%20%20%20sender%0A%20%20%7D%0A%7D
  * @description
  */
+export const GET_MINTS_FROM_PANCAKE_TOTAL = gql`
+    query PancakeMints($user: String) {
+        mints(where: { sender_contains: $user }) {
+            id
+        }
+    }
+`;
 export const GET_MINTS_FROM_PANCAKE = gql`
     query PancakeMints($offset: Int, $limit: Int, $user: String) {
         mints(skip: $offset, first: $limit, where: { sender_contains: $user }) {
@@ -31,6 +38,13 @@ export const GET_MINTS_FROM_PANCAKE = gql`
 /**
  * @description
  */
+export const GET_BURNS_FROM_PANCAKE_TOTAL = gql`
+    query PancakeMints($user: String) {
+        burns(where: { sender_contains: $user }) {
+            id
+        }
+    }
+`;
 export const GET_BURNS_FROM_PANCAKE = gql`
     query PancakeBurns($offset: Int, $limit: Int, $user: String) {
         burns(skip: $offset, first: $limit, where: { sender_contains: $user }) {
@@ -56,6 +70,13 @@ export const GET_BURNS_FROM_PANCAKE = gql`
  * >>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Our Subgraph <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
  */
 
+export const GET_MINTS_TOTAL = gql`
+    query Mints($user: String) {
+        mints(where: { user_contains: $user }) {
+            id
+        }
+    }
+`;
 export const GET_MINTS = gql`
     query Mints($offset: Int, $limit: Int, $user: String) {
         mints(skip: $offset, first: $limit, where: { user_contains: $user }) {
@@ -73,6 +94,13 @@ export const GET_MINTS = gql`
     }
 `;
 
+export const GET_BURNS_TOTAL = gql`
+    query Burns($user: String) {
+        burns(where: { user_contains: $user }) {
+            id
+        }
+    }
+`;
 export const GET_BURNS = gql`
     query Burns($offset: Int, $limit: Int, $user: String) {
         burns(skip: $offset, first: $limit, where: { user_contains: $user }) {
@@ -94,6 +122,13 @@ export const GET_BURNS = gql`
  * @property {Deposit | Withdraw | Harvest | Mint | Trade | Burn} type 操作记录类型
  * @property {HexString} txhash 交易哈希
  */
+export const GET_OPERATIONS_TOTAL = gql`
+    query Operations($user: String, $type: String) {
+        operations(where: { user_contains: $user, type_contains: $type }) {
+            id
+        }
+    }
+`;
 export const GET_OPERATIONS = gql`
     query Operations($offset: Int, $limit: Int, $user: String, $type: String) {
         operations(
@@ -109,6 +144,15 @@ export const GET_OPERATIONS = gql`
             toAmount
             txhash
             timestamp
+            status
+        }
+    }
+`;
+
+export const GET_OPERATIONS_FUZZY_TOTAL = gql`
+    query Operations($user: String, $type: [String]) {
+        operations(where: { user_contains: $user, type_in: $type }) {
+            id
         }
     }
 `;
@@ -132,6 +176,7 @@ export const GET_OPERATIONS_FUZZY = gql`
             toAmount
             txhash
             timestamp
+            status
         }
     }
 `;
@@ -139,6 +184,13 @@ export const GET_OPERATIONS_FUZZY = gql`
 /**
  * @description
  */
+export const GET_MINTS_BY_COLLATERAL_TOTAL = gql`
+    query Operations($user: String) {
+        operations(where: { user: $user, collateralCurrency_contains: "-" }) {
+            id
+        }
+    }
+`;
 export const GET_MINTS_BY_COLLATERAL = gql`
     query MintsByCollateral($offset: Int, $limit: Int, $user: String) {
         mints(

@@ -35,6 +35,7 @@
         width: 572px;
         height: 632px;
         pointer-events: none;
+        z-index: 2;
     }
 
     .sheepskin-box {
@@ -147,81 +148,247 @@
         }
     }
 
-    .pledge-ratio-box {
+    .slogan-box {
         display: flex;
         flex-direction: column;
-        align-items: center;
-        #image.background('~@/assets/images/home-middata-bg-corner.png');
-        width: 282px;
-        height: 184px;
-
-        position: fixed;
-        bottom: 0;
-        margin-left: 51%;
-
-        padding: 14px 24px;
         box-sizing: border-box;
+        transition: all 0.2s;
+        position: fixed;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
 
-        .common-select {
-            align-self: flex-start;
-        }
+        font-family: Poppins;
+        font-style: normal;
+        font-weight: bold;
+        font-size: 90px;
+        line-height: 135px;
+        text-align: center;
 
-        .ratio {
-            margin-top: 20px;
-            display: inline-block;
-            font-style: normal;
-            font-weight: bold;
-            font-size: 36px;
-            line-height: 54px;
-            text-align: center;
-            color: #ff6a00;
-            text-shadow: 0px 2px 4px rgba(167, 98, 255, 0.8);
-        }
+        p {
+            color: white;
+            width: 1162px;
+            max-width: 1162px;
 
-        .desc {
-            margin-top: 14px;
-            display: inline-block;
-            font-style: normal;
-            font-weight: normal;
-            font-size: 18px;
-            line-height: 27px;
-            display: flex;
-            align-items: center;
-            text-align: center;
-            color: #6f4123;
+            b {
+                color: #e96013;
+            }
         }
     }
 
-    .amount-box {
-        width: 282px;
-        height: 184px;
-        position: fixed;
-        bottom: 0;
-        left: 80%;
+    .data-box {
         display: flex;
-        flex-direction: column;
-        align-items: center;
-        padding-top: 110px;
-        box-sizing: border-box;
+        justify-content: space-between;
+        align-items: flex-end;
+        position: fixed;
+        flex-wrap: wrap;
+        right: 0;
+        bottom: 0;
+        width: 100%;
+        z-index: 3;
+        padding: 0 15vw 37px 15vw;
 
-        .amount {
-            font-style: normal;
-            font-weight: bold;
-            font-size: 24px;
-            line-height: 36px;
-            text-align: center;
-            color: #e1ab3b;
+        .staked-and-collateral-box {
+            background: linear-gradient(
+                23.5deg,
+                rgba(56, 25, 19, 0.8) 2.6%,
+                rgba(55, 25, 18, 0) 87.73%
+            );
+            backdrop-filter: blur(20px);
+            border-radius: 8px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 330px;
+            height: 208px;
+            max-height: 208px;
+
+            .tab-group {
+                padding: 18px 18px 0 18px;
+                box-sizing: border-box;
+                justify-content: space-between;
+
+                .tab-btn {
+                    width: 138px;
+                    height: 38px;
+                }
+            }
+
+            .pannel-content {
+                padding: 36px 55px 48px 55px;
+                font-family: Poppins;
+                font-style: normal;
+                font-weight: bold;
+                font-size: 24px;
+                line-height: 36px;
+                text-align: center;
+                color: #e1ab3b;
+                width: 100%;
+                word-break: break-all;
+            }
+
+            .callterals {
+                display: flex;
+                align-items: center;
+                flex-wrap: wrap;
+
+                button {
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+
+                    &:nth-child(n + 2) {
+                        margin-left: 10px;
+                    }
+                }
+            }
         }
 
-        .desc {
-            font-style: normal;
-            font-weight: normal;
-            font-size: 18px;
-            line-height: 27px;
+        .rewards-box {
+            background: linear-gradient(
+                23.5deg,
+                rgba(56, 25, 19, 0.8) 2.6%,
+                rgba(55, 25, 18, 0) 87.73%
+            );
+            backdrop-filter: blur(20px);
+            border-radius: 8px;
             display: flex;
+            flex-direction: column;
             align-items: center;
-            text-align: center;
-            color: #a762ff;
+            min-width: 330px;
+            padding: 22px 47px 14px 47px;
+            box-sizing: border-box;
+
+            .see-rewards-btn.common-btn {
+                margin-top: 26px;
+                width: 236px;
+                font-family: Poppins;
+                font-style: normal;
+                font-weight: bold;
+                font-size: 18px;
+                line-height: 27px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                color: #ffffff;
+            }
+
+            .amount {
+                font-family: Poppins;
+                font-style: normal;
+                font-weight: bold;
+                font-size: 44px;
+                line-height: 66px;
+                display: flex;
+                align-items: center;
+                text-align: center;
+                color: #e1ab3b;
+                word-break: break-all;
+            }
+
+            .label {
+                font-family: Poppins;
+                font-style: normal;
+                font-weight: normal;
+                font-size: 20px;
+                line-height: 30px;
+                display: flex;
+                align-items: center;
+                text-align: center;
+                color: #a005ff;
+            }
+        }
+
+        .pledge-ratio-box {
+            background: linear-gradient(
+                23.5deg,
+                rgba(56, 25, 19, 0.8) 2.6%,
+                rgba(55, 25, 18, 0) 87.73%
+            );
+            backdrop-filter: blur(20px);
+            border-radius: 8px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            #image.background('~@/assets/images/home-middata-bg-corner.png');
+            min-width: 282px;
+
+            // position: fixed;
+            // bottom: 37px;
+            // margin-left: 51%;
+
+            padding: 14px 24px;
+            box-sizing: border-box;
+
+            .common-select {
+                align-self: flex-start;
+            }
+
+            .ratio {
+                margin-top: 20px;
+                display: inline-block;
+                font-style: normal;
+                font-weight: bold;
+                font-size: 36px;
+                line-height: 54px;
+                text-align: center;
+                color: #ff6a00;
+                text-shadow: 0px 2px 4px rgba(167, 98, 255, 0.8);
+            }
+
+            .desc {
+                margin-top: 14px;
+                display: inline-block;
+                font-style: normal;
+                font-weight: normal;
+                font-size: 18px;
+                line-height: 27px;
+                display: flex;
+                align-items: center;
+                text-align: center;
+                color: #6f4123;
+            }
+        }
+
+        .amount-box {
+            background: linear-gradient(
+                23.5deg,
+                rgba(56, 25, 19, 0.8) 2.6%,
+                rgba(55, 25, 18, 0) 87.73%
+            );
+            backdrop-filter: blur(20px);
+            border-radius: 8px;
+            min-width: 282px;
+            height: 184px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+            box-sizing: border-box;
+            padding: 37px 48px 53px 48px;
+
+            .amount {
+                font-family: Poppins;
+                font-style: normal;
+                font-weight: bold;
+                font-size: 44px;
+                line-height: 66px;
+                text-align: center;
+                color: #e1ab3b;
+                word-break: break-all;
+            }
+
+            .desc {
+                font-family: Poppins;
+                font-style: normal;
+                font-weight: normal;
+                font-size: 20px;
+                line-height: 30px;
+                display: flex;
+                align-items: center;
+                text-align: center;
+                color: #a005ff;
+            }
         }
     }
 }

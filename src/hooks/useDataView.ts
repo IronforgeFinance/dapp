@@ -77,6 +77,8 @@ const useDataView = (currency: string) => {
     const fetchStakedData = async () => {
         if (account) {
             try {
+                console.log('getUserCollateralInUsd', currency);
+
                 const res = await collateralSystem.getUserCollateralInUsd(
                     account,
                     ethers.utils.formatBytes32String(currency),
@@ -91,12 +93,20 @@ const useDataView = (currency: string) => {
                 };
                 setStakedDataInModel(newVal);
             } catch (err) {
-                console.log(err);
+                console.log(
+                    'getUserCollateralInUsd: ',
+                    err,
+                    currency,
+                    account,
+                    collateralSystem.address,
+                );
             }
         }
     };
     const fetchLockedData = async () => {
         try {
+            console.log('fetchLockedData: ', currency);
+
             const res = await collateralSystem.userLockedData(
                 account,
                 ethers.utils.formatBytes32String(currency),
@@ -111,11 +121,19 @@ const useDataView = (currency: string) => {
             };
             setLockedDataInModel(newVal);
         } catch (err) {
-            console.log(err);
+            console.log(
+                'fetchLockedData: ',
+                err,
+                currency,
+                account,
+                collateralSystem.address,
+            );
         }
     };
     const fetchDebtData = async () => {
         try {
+            console.log('fetchDebtData: ', currency);
+
             const res = await debtSystem.GetUserDebtBalanceInUsd(
                 account,
                 ethers.utils.formatBytes32String(currency),
@@ -128,17 +146,36 @@ const useDataView = (currency: string) => {
             };
             setDebtDataInModel(newVal);
         } catch (err) {
-            console.log(err);
+            console.log(
+                'fetchDebtData: ',
+                err,
+                currency,
+                account,
+                debtSystem.address,
+            );
         }
     };
 
     const fetchCurrencyRatio = async () => {
         if (currency) {
             try {
+                console.log('fetchCurrencyRatio: ', currency);
+
                 const res = await collateralSystem.getRatio(
                     account,
                     ethers.utils.formatBytes32String(currency),
                 );
+                /**
+                 * >> get ratio from collateral system: (2) [BigNumber, BigNumber]. parse big number, get: 0.199988058529550446 0.2
+                 * @todo res[0]=实时计算的质押率，存在计算问题
+                 */
+                console.log(
+                    '>> get ratio from collateral system: %o. parse big number, get: %s',
+                    res,
+                    ethers.utils.formatEther(res[0]),
+                    ethers.utils.formatEther(res[1]),
+                );
+
                 const resVal = res.map((item) =>
                     ethers.utils.formatEther(item),
                 );
@@ -146,7 +183,7 @@ const useDataView = (currency: string) => {
                 const _val = Number(resVal[0]) === 0 ? 0 : 1 / Number(res[0]);
 
                 const val = toFixedWithoutRound(_val, 6); // 保留多位精度
-                const ratioData = parseFloat((val * 100).toFixed(2));
+                const ratioData = toFixedWithoutRound(val * 100, 2);
                 console.log('fetchCurrencyRatio: ', val, resVal);
                 const newVal = {
                     ...fRatioData,
@@ -157,7 +194,13 @@ const useDataView = (currency: string) => {
                 setCurrencyRatio(val);
                 return val;
             } catch (err) {
-                console.log(err);
+                console.log(
+                    'fetchCurrencyRatio: ',
+                    err,
+                    currency,
+                    account,
+                    collateralSystem.address,
+                );
             }
         }
         return 0;

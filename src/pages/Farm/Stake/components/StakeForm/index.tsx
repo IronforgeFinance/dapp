@@ -3,7 +3,7 @@ import './less/index.less';
 import React, { useState, useEffect } from 'react';
 import { InputNumber, Select, Progress, Button } from 'antd';
 import * as message from '@/components/Notification';
-import { LP_TOKENS } from '@/config';
+import { LP_TOKENS, POOL_TOKENS } from '@/config';
 
 import { useBep20Balance } from '@/hooks/useTokenBalance';
 import {
@@ -17,8 +17,8 @@ import { useWeb3React } from '@web3-react/core';
 import { expandTo18Decimals } from '@/utils/bigNumber';
 import { ethers } from 'ethers';
 import TabGroup from '@/components/TabGroup';
-import { useModel } from 'umi';
-
+import { useModel, useIntl } from 'umi';
+const STAKE_TOKENS = [...LP_TOKENS, ...POOL_TOKENS];
 enum STAKE_TABS {
     stake = 'stake',
     unstake = 'unstake',
@@ -35,14 +35,18 @@ const tabItems = [
     },
 ];
 
-export default (props: { lp: string; handleFlipper: () => void }) => {
+export default (props: {
+    lp: string;
+    handleFlipper: () => void;
+    updatePool: () => void;
+}) => {
     const [submitting, setSubmitting] = useState(false);
-    const { lp: lpParam } = props;
+    const { lp, handleFlipper, updatePool } = props;
     const [tabKey, setTabKey] = useState(tabItems[0].key);
     const [lpAmount, setLpAmount] = useState<number>();
     const [staked, setStaked] = useState<number>();
-    const [lp, setLp] = useState<string>(lpParam || LP_TOKENS[0].poolName);
 
+    const intl = useIntl();
     const { updateStakePoolItem } = useModel('stakeData', (model) => ({
         ...model,
     }));
@@ -62,7 +66,7 @@ export default (props: { lp: string; handleFlipper: () => void }) => {
     );
 
     const fetchStakedBalance = async () => {
-        const poolId = LP_TOKENS.find((item) => item.poolName === lp).poolId;
+        const poolId = STAKE_TOKENS.find((item) => item.poolName === lp).poolId;
         const userInfo = await MinerReward.userInfo(poolId, account);
         const staked = parseFloat(ethers.utils.formatEther(userInfo.amount));
         setStaked(staked);
@@ -92,7 +96,7 @@ export default (props: { lp: string; handleFlipper: () => void }) => {
         }
         try {
             setSubmitting(true);
-            const poolId = LP_TOKENS.find(
+            const poolId = STAKE_TOKENS.find(
                 (item) => item.poolName === lp,
             ).poolId;
             if (tabKey === STAKE_TABS.stake) {
@@ -126,10 +130,17 @@ export default (props: { lp: string; handleFlipper: () => void }) => {
                 );
                 fetchStakedBalance();
             }
-            updateStakePoolItem({ poolId, poolName: lp }, account);
+            updatePool();
         } catch (err) {
             console.log(err);
             setSubmitting(false);
+            if (err && err.code === 4001) {
+                message.error({
+                    message: 'Transaction rejected',
+                    description: 'Rejected by user',
+                });
+                return;
+            }
         }
     };
     return (
@@ -149,11 +160,11 @@ export default (props: { lp: string; handleFlipper: () => void }) => {
                 }}
             />
             <div className="input-item custom-input-container">
-                <p className="label">Amount</p>
+                <p className="label">{intl.formatMessage({ id: 'amount' })}</p>
                 <div className="input-item-content">
                     <div className="content-label">
                         <p className="right">
-                            Balance:
+                            {intl.formatMessage({ id: 'balance:' })}
                             <span className="balance">
                                 {tabKey === STAKE_TABS.stake
                                     ? lpBalance
@@ -169,6 +180,7 @@ export default (props: { lp: string; handleFlipper: () => void }) => {
                             }}
                             placeholder="0.00"
                             className="custom-input"
+                            type="number"
                         />
                         <div className="custom-token">
                             <span
@@ -196,7 +208,9 @@ export default (props: { lp: string; handleFlipper: () => void }) => {
                         onClick={handleSubmit}
                         loading={submitting}
                     >
-                        {tabKey === STAKE_TABS.stake ? 'Stake' : 'Unstake'}
+                        {tabKey === STAKE_TABS.stake
+                            ? intl.formatMessage({ id: 'stake' })
+                            : intl.formatMessage({ id: 'unstake' })}
                     </Button>
                 )}
                 {lp && !isApproved && (
@@ -205,15 +219,17 @@ export default (props: { lp: string; handleFlipper: () => void }) => {
                         onClick={handleApprove}
                         loading={requestedApproval}
                     >
-                        Approve To Stake
+                        {intl.formatMessage({ id: 'Approve' })}
                     </Button>
                 )}
             </div>
-            {lp && tabKey === STAKE_TABS.stake && (
+            {lp && lp.includes('-') && tabKey === STAKE_TABS.stake && (
                 <div className="info-footer">
-                    <p className="tips">Don't have {lp}?</p>
+                    <p className="tips">
+                        {intl.formatMessage({ id: 'dontHave' })} {lp}?
+                    </p>
                     <p className="link">
-                        Get {lp} LP <span></span>{' '}
+                        {intl.formatMessage({ id: 'get' })} {lp} <span></span>{' '}
                     </p>
                 </div>
             )}

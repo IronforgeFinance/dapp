@@ -1,61 +1,49 @@
 import './less/index.less';
 
-import React from 'react';
+import {
+    useEffect,
+    useState,
+    useMemo,
+    useContext,
+    Fragment,
+    useCallback,
+} from 'react';
 import IconTwitter from '@/assets/images/twitter.svg';
 import IconGithub from '@/assets/images/github.svg';
 import IconMedium from '@/assets/images/medium.svg';
-import { useFtokenPrice, useGetBnbBalance } from '@/hooks/useTokenBalance';
-import DataBoard from './components/DataBoard';
 import { history } from 'umi';
-import MintView from './components/MintView';
-import BurnView from './components/BurnView';
-import DeliveryView from './components/DeliveryView';
 import { useIntl } from 'umi';
 import { Button } from 'antd';
 import { MDEX_SWAP_EXPLORER } from '@/config/constants/constant';
-
-const tabItems = [
-    {
-        name: 'history.mint',
-        key: 'mint',
-    },
-    {
-        name: 'history.burn',
-        key: 'burn',
-    },
-    {
-        name: 'history.delivery',
-        key: 'delivery',
-    },
-];
-
-const filterList = ['/', '/farm'];
+import { TokenIcon } from '@/components/Icon';
+import useEnv from '@/hooks/useEnv';
+import { useHistoryBoard } from '@/components/HistoryBoard';
+import { MobileNavigationContext } from '@/layouts/components/Header/components/MobileNavigation/provider';
+import useRefresh from '@/hooks/useRefresh';
+import { getTokenPrice } from '@/utils';
+import { PLATFORM_TOKEN } from '@/config';
 
 export default () => {
     const intl = useIntl();
-    const { price, rate } = useFtokenPrice();
-    const { balance } = useGetBnbBalance();
-    const [tabKey, setTabKey] = React.useState(tabItems[0].key);
-    const [visable, setVisable] = React.useState(false);
-    const [showWholeView, setShowWholeView] = React.useState(false);
+    const { slowRefresh } = useRefresh();
+    const [price, setPrice] = useState(0);
+    const { openWithTabKey } = useHistoryBoard();
+    const { setVisible: setMobileNavigationVisible } = useContext(
+        MobileNavigationContext,
+    );
+    const isMobile = useEnv();
+    const [rate] = useState('0.00%');
+    const [showWholeView, setShowWholeView] = useState(false);
 
-    const CurrentView = React.useMemo(() => {
-        switch (tabKey) {
-            case tabItems[0].key: {
-                return <MintView />;
-            }
-            case tabItems[1].key: {
-                return <BurnView />;
-            }
-            case tabItems[2].key: {
-                return <DeliveryView />;
-            }
-            default:
-                return null;
-        }
-    }, [tabKey]);
+    const filterList = useMemo(
+        () =>
+            isMobile
+                ? []
+                : ['/', '/trade', '/farm', '/farm/provide', '/wallet'],
+        [isMobile],
+    );
 
-    React.useEffect(() => {
+    useEffect(() => {
         setShowWholeView(
             !filterList.some((item) => item === window.location!.pathname),
         );
@@ -65,20 +53,26 @@ export default () => {
                 !filterList.some((item) => item === location.pathname),
             );
         });
-    }, []);
+    }, [filterList]);
 
-    const openHistory = React.useCallback(() => {
-        setVisable(true);
-        setTabKey(tabItems[2].key);
-    }, []);
+    useEffect(() => {
+        (async () => {
+            const price = await getTokenPrice(PLATFORM_TOKEN);
+            setPrice(price);
+        })();
+    }, [slowRefresh]);
 
-    const openMint = React.useCallback(() => {
-        setVisable(true);
-        setTabKey(tabItems[0].key);
+    const openHistory = useCallback(() => {
+        openWithTabKey(2);
+        setMobileNavigationVisible(false);
+    }, []);
+    const openMint = useCallback(() => {
+        openWithTabKey();
+        setMobileNavigationVisible(false);
     }, []);
 
     return (
-        <React.Fragment>
+        <Fragment>
             {showWholeView && (
                 <div className="footer-container">
                     <div className="entries">
@@ -87,12 +81,13 @@ export default () => {
                     </div>
                     <div className="ftoken">
                         <p className="price">
+                            <TokenIcon name="bs" />
                             <span className="symbol">$</span>
                             {price}
                         </p>
                         <p className="label">
                             {intl.formatMessage({ id: 'footer.ftoken.price' })}{' '}
-                            <span className="rate">{rate}</span>
+                            {/* <span className="rate">{rate}</span> */}
                         </p>
                     </div>
                     <Button className="btn-buy-token common-btn common-btn-red">
@@ -100,31 +95,13 @@ export default () => {
                             {intl.formatMessage({ id: 'footer.ftoken.button' })}
                         </a>
                     </Button>
-                    {/* <p className="balance">Balance: {balance}</p> */}
                     <div className="medias">
                         <img key={1} src={IconTwitter} />
                         <img key={2} src={IconGithub} />
                         <img key={3} src={IconMedium} />
                     </div>
-
-                    <DataBoard
-                        // title={tabKey.replace(/^([\w]{1})/, (v) =>
-                        //     v.toUpperCase(),
-                        // )}
-                        title={intl.formatMessage({ id: 'history' })}
-                        tabItems={tabItems.map((item) => ({
-                            ...item,
-                            name: intl.formatMessage({ id: item.name }),
-                        }))}
-                        tabKey={tabKey}
-                        onChange={(key) => setTabKey(key)}
-                        onClose={() => setVisable(false)}
-                        visable={visable}
-                    >
-                        {CurrentView}
-                    </DataBoard>
                 </div>
             )}
-        </React.Fragment>
+        </Fragment>
     );
 };

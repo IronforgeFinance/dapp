@@ -4,7 +4,7 @@ import { Fragment, ReactNode, useMemo } from 'react';
 import { getRemainDaysOfQuarterAsset, isDeliveryAsset } from '@/utils';
 import { TokenIcon } from '@/components/Icon';
 import { ethers } from 'ethers';
-import { Popover } from 'antd';
+import { Popover, Button } from 'antd';
 import { DefiActType } from '@/config/constants/types';
 import { useIntl } from 'umi';
 import dayjs from 'dayjs';
@@ -71,7 +71,9 @@ export interface HistoryViewProps {
     token0?: TokenProps;
     token1?: TokenProps;
     link?: string;
+    status?: string;
     dealtime?: string | number;
+    canRevert?: boolean;
 }
 
 interface MintViewProps {
@@ -121,15 +123,15 @@ export const ActionView = (props: { actions: ActionProps[] }) => {
     return (
         <div className="action-view">
             {actions.map((action) => (
-                <button
+                <Button
                     onClick={action.onClick}
                     key={action.title}
                     className={`common-btn common-btn-${
                         action.color || ('red' as ActionBtnColors)
-                    }`}
+                    } action-btn`}
                 >
                     {action.title}
-                </button>
+                </Button>
             ))}
         </div>
     );
@@ -176,7 +178,6 @@ export const PriceView = (props: RecordProps) => {
 
 export const TokenView = (props: RecordProps) => {
     const { noToken, noPrice, amount, currency } = props;
-
     const longToken = useMemo(
         () => currency.split('-')?.length > 1 ?? false,
         [currency],
@@ -188,17 +189,21 @@ export const TokenView = (props: RecordProps) => {
                 {!(noToken ?? false) && <TokenIcon name={currency} />}
                 {!longToken && (
                     <Fragment>
-                        <b className="amount">
-                            {ethers.utils.formatUnits(amount, 18)}
-                        </b>
+                        {amount && (
+                            <b className="amount">
+                                {ethers.utils.formatUnits(amount, 18)}
+                            </b>
+                        )}
                         <span className="currency">{currency}</span>
                     </Fragment>
                 )}
                 {longToken && (
                     <div style={{ display: 'flex', flexDirection: 'column' }}>
-                        <b className="amount">
-                            {ethers.utils.formatUnits(amount, 18)}
-                        </b>
+                        {amount && (
+                            <b className="amount">
+                                {ethers.utils.formatUnits(amount, 18)}
+                            </b>
+                        )}
                         <span className="currency">{currency}</span>
                     </div>
                 )}

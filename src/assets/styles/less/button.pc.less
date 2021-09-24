@@ -6,11 +6,11 @@ button {
     cursor: pointer;
 
     &:disabled {
-        cursor: no-drop;
+        cursor: not-allowed !important;
     }
 }
 
-.select-token-btn {
+.select-token-btn.ant-btn {
     font-style: normal;
     font-weight: normal;
     font-size: 15px;
@@ -19,6 +19,10 @@ button {
     align-items: center;
     text-align: right;
     color: #e1ab3b;
+    background: transparent;
+    border: none;
+    padding-left: 0;
+    padding-right: 0;
 
     > span {
         padding-right: 4px;
@@ -26,18 +30,33 @@ button {
     }
 }
 
-.common-btn {
-    min-width: 236px;
+.disaconnect-btn {
+    margin: 30px auto 0 auto;
+}
+
+.back-btn {
+    position: absolute;
+    display: inline-block;
+    width: 84px;
+    height: 64px;
+    #image.background('~@/assets/images/icon-back.png');
+    left: 70px;
+    top: 180px;
+}
+
+.common-btn,
+.common-btn.ant-btn {
+    width: 236px;
     height: 68px;
+    flex-shrink: 0;
 
     font-style: normal;
     font-weight: bold;
     font-size: 18px;
     display: flex;
     align-items: center;
-    text-align: center;
+    justify-content: center;
     color: #fffefe;
-    text-align: center;
     display: block;
     cursor: pointer;
     border: none;

@@ -1,92 +1,53 @@
-import { ChainIds } from '@/pages/Wallet/type';
-
 /**
- * @description 合并自定义contracts配置
- * @property {Object} mergedOutput
+ * @description 在本地缓存设置innerLocalContracts/innerTestContracts来扩展或覆盖对应的合约配置
  */
 
-let mergedOutput;
-try {
-    switch (process.env.APP_CHAIN_ID as ChainIds) {
-        case '1337': {
-            mergedOutput = require('../../../contracts.local.json') ?? {};
-            break;
-        }
-        // case '97': {
-        //     mergedOutput = require('../../../contracts.test.json') ?? {};
-        //     break;
-        // }
-        // case '56': {
-        //     mergedOutput = require('../../../contracts.prod.json') ?? {};
-        //     break;
-        // }
-    }
-} catch (error) {
-    console.warn(
-        "⚠️ There's no mreged config of contracts. It will use default config.",
-    );
-}
-
-export const localOutput = {
-    PlatformToken: '0x5cd474fEC769D3a5Fe9BAb2c5651D6D45F91dFe8',
-    pancakeFactory: '0x2e58536d243E6ba5194FA8fAC978553a0dCf4d2D',
-    pancakeRouter: '0x1Fd8e4d766161Ae9a611113ae0bE777525CA8D1c',
-    usdcToken: '0xC0C837C0eAD64050850B249Cd2ec2e5787A5635f',
-    'USDC-IFT': '0xe0a93aB85784555186EAB38E2C1d53aB407FE0F4',
-    AssetSystem: '0x16365E250b30C36d6E92aaac8cC866539731c04F',
-    BuildBurnSystem: '0x6f636436c65B1798861F279b6769d28B6ef50872',
-    Config: '0xe7f6159A2B2a1D0eF4B77238A1A45A2aB659A9F5',
-    AccessControl: '0x3BC86fad19e7Fed6EE36a0D224EA50277a40E4cC',
-    Prices: '0x203338E9F735328c73D679e79254b59bc539c3F3',
-    DebtSystem: '0x568B1192ae14f51FE3694Da9bEc240cB119F6E31',
-    CollateralSystem: '0x181668B5f694ab3488DFe43a7E622a0772CFF245',
-    ExchangeSystem: '0x2991072b30755f474d81B3F05d6a632b5fEd7BCe',
-    Liquidation: '0x81590f5593f7DF70A40e0a1B98940318756A6f40',
-    DexPriceHelper: '0x48Df29BCC2edA321544a0f87EacF0f0Acf62a90f',
-    fusdToken: '0x970c4D173C7Ec5c719313DF7ccbD168C2De8B855',
-    lbtcToken: '0x7D25ef82d92f508d5C24Ab52db9C1a76eD71252A',
-    lbtcToken202112: '0x848d3E41333C7bE47FE42dd2b16F16406B9ad61d',
-    btcToken: '0x2eA107747AE72D001D598F6558e80ea1f55EE6e6',
-    ethToken: '0x22C1beC67bdc4F0702838e8E4F8aB147123c8f92',
-    usdtToken: '0x631a8E2BaC1D7f64345C6fE9Dbe41E8F9c78BdC9',
-    RewardSystem: '0x5808E6FF0fAFC23e710a03eaD0Ec5EE5A89d7f9f',
-    MinerReward: '0x59358bCD31115D2352f57366246c8dA69AAa3370',
-    LinearRelease: '0xd4a88A8b1F1705b7267B05D1A8c47F25DD7AD254',
-    ...mergedOutput,
-};
 export const testnetOutput = {
     buildTokens: {
-        platformToken: '0xBd38e6B30206dcc02155e8303988588e46feec3f',
-        usdcToken: '0x4abcaD271e0B5A2Ab9B9d0cD4d29732D9b91a56b',
-        btcToken: '0xAf24Df7D020Da2F6153bB31f05Fd05Cd499d1EA9',
-        ethToken: '0xa02c8b48d4C5c7AFc93e47d370C2f072AeA94be6',
-        usdtToken: '0x6a7Ff2637F62deC78AC94EB9aABfb003C3d55636',
+        platformToken: '0x69317C42F823453BC5712da530938059Dd8bC755',
+        usdcToken: '0x6E76F4C945c9B26557cc426C38Aa071E0566aa8c',
+        btcToken: '0x9d34Cd6530fCdC06c527FF5c4C2b83A8aF363180',
+        ethToken: '0x18120071ea22B186b290cB6e5c5d97c17051B498',
+        usdtToken: '0xfF4145a2492f3a5021eFB7f085504c8900Bf11f0',
     },
-    platformToken: '0xBd38e6B30206dcc02155e8303988588e46feec3f',
-    pancakeFactory: '0xDa0A1aB4b2EF3b274741e2E2e622f57d6639E952',
-    pancakeRouter: '0x82AB341ba8419C19B5a501FA5B33BfCE8612f83D',
-    'USDC-IFT': '0x846aA8d47028fe4D7A246fDA2bf9779feF426bfa',
-    AssetSystem: '0xCB45d30571BE90bF411837ffA7049f0037A03075',
-    BuildBurnSystem: '0x1511a962c5d9A905505081218e75b5bfB78BFE08',
-    AccessControl: '0xc73377267359B2665a603a0e4bBf7F95f042F405',
-    DebtSystem: '0x53804680a256a9e507336Ceb0D01BE3696b87102',
-    CollateralSystem: '0x4E3E7B4C8d6C68d01E576C0C98557E2F015f6E1D',
-    ExchangeSystem: '0x20c32A03C24256b17CD4b6D37e19899156115c05',
-    Prices: '0x1C6034955b7c2b494824d97a8d6ae868Acb5165C',
-    QuarterlyContractOracle: '0x2d3eB6f1e0a16853aA1a1069E2c0809EB0e68D73',
-    platformTokenDexOracle: '0x43Cc6d09dae81b1159D5A5FCbB154A96cB8d2288',
-    Config: '0x6D2f557434375A62C54303d2d73670b530AdA23d',
-    Liquidation: '0x11770AE80e3c748E2c47400612D2C85758f6aFcd',
-    fusdToken: '0xF2F977040FEe0F11dBFA2b893C223C87cdF2F97b',
-    lbtcToken: '0xc13A0D2D8ae2BCf6a7Ea971Aea623FEF95d3725b',
+    platformToken: '0x69317C42F823453BC5712da530938059Dd8bC755',
+    pancakeFactory: '0xda0055CF41653f645ff35afE71291943875BA2C2',
+    pancakeRouter: '0x591460e006AcC4e4696800064D33797EA18062C2',
+    'USDC-IFT': '0x153eed88e187372D121D2a698519A869f132693f',
+    AssetSystem: '0x07FF6eA3E3e647f98091A23d9489cf8A3357C736',
+    BuildBurnSystem: '0xB9d8ac7250b59645720EaE81a332A27B3C5b6383',
+    AccessControl: '0x526b745bF0C05Ca724c2590063861500021D2328',
+    DebtSystem: '0x0fCA87000eB8619cA2Ee6129D2Bb1406adB345E5',
+    lBTCUSD_210924: '0xE404d7353AbCeD41419A4cB6842c1147dC1f9822',
+    lBTCUSD_211231: '0xf056dE90EEC2EA68ca7B639e203028DE3B34366b',
+    lBTC: '0xa25e35c44D30D208818a5C424b317233852AaC59',
+    lETH: '0xF399EC91616C0a1Ee0B7C8611A4c21Ca34e3e16C',
+    FUSD: '0x7083e7E756030F3bcDBc5ba6bAe09B2d1647c03b',
+    CollateralSystem: '0x958752eF13Ca153F1D58b8E10be609E62A35a66D',
+    ExchangeSystem: '0xd059EA745094c2556bDA8cDF559307521dD1B504',
+    Prices: '0xB7BC91b38B014922Dee7E3dDEEAB228B33000D57',
+    QuarterlyContractOracle: '0xA1Be2BEDE7E281f9e66EF4590bA28f598efDE406',
+    platformTokenDexOracle: '0x4294C5c9fE03932117D934899bFBB96857AF316c',
+    Config: '0x11081D385086d938266AD58e9Dd0f4b1566f5717',
+    Liquidation: '0x401264F3dce137364Bfd57B238FF8a0b99225Cfe',
     quarterlyContracts: {
-        BTCUSD_210924: '0x3F7443908C6b4Fb45ed0E581eAd87F630feBB864',
-        BTCUSD_211231: '0x637dbAF095a6032Ccf4f3378639445133E8132c7',
+        lBTCUSD_210924: '0x64a156f980cE95d05647AAd1e814829e690a0862',
+        lBTCUSD_211231: '0xFe70D8bd7C55f8bF0fC3378437D6BAF695542976',
     },
-    RewardSystem: '0x4c07c1Bf9d5e2A8F43E9DC763116901C4A698288',
-    MinerReward: '0xfD6e515734c2D4A81c37495ED13ca73bFFA796ec',
-    LinearRelease: '0x2B7C66d658E8C023Bd66F96F09693D4C4F84C490',
-    'USDC-ETH': '0x5Ed6E11CA01039E4AEA297D058251248E334C4b3',
+    RewardSystem: '0x3596F57443CE5Ec96040b203d9CD91F935A38F7D',
+    MinerReward: '0xE8f453FcC03D929c674F191e53c20b5A8bdE9e2F',
+    LinearRelease: '0xf3Cdca6Baf81C6e02a825a97167C96eCfE3675D6',
+    Timelock: '0x69fE91C8250B1554eE58327710e9374ecDDC87d9',
+    'USDC-ETH': '0x3457b7B7757c1bC8d7Dccd185eB45724A5cD799b',
+};
+export const localOutput = {
+    ...testnetOutput,
+    /**
+     * @deprecated
+     * @description 往localStorage里面的innerLocalContracts扩展合约信息
+     */
+    // ...localContracts,
+    ...JSON.parse(localStorage.getItem('innerLocalContracts') ?? '{}'),
 };
 export default {
     masterChef: {

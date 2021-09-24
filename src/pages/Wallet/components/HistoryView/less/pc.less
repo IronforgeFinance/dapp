@@ -1,8 +1,11 @@
 @import '../../../less/index.less';
 
 .history-view {
-    &:extend(.wallet-container);
-    padding: 117px 32px 60px 32px;
+    .iron-switch {
+        margin-bottom: 20px;
+        margin-left: 80%;
+        display: none;
+    }
 
     .custom-tabs.ant-tabs {
         .ant-table-cell {
@@ -35,11 +38,13 @@
     .history {
         display: flex;
         align-items: center;
-        width: 90%;
+        // width: 90%;
 
         .operation {
             display: flex;
             align-items: center;
+            width: 230px;
+            max-width: 230px;
 
             .icon {
                 @size: 28px;
@@ -99,7 +104,7 @@
             }
         }
 
-        .form {
+        > p {
             white-space: nowrap;
             font-style: normal;
             font-weight: 300;
@@ -107,36 +112,45 @@
             line-height: 22px;
             color: #292725;
             min-width: 112px;
+            display: flex;
+            flex-wrap: wrap;
+            max-width: 270px;
 
             b {
                 color: #ac4c06;
                 font-weight: bold;
+                margin: 0 4px;
             }
         }
 
-        .to {
-            white-space: nowrap;
-            font-style: normal;
-            font-weight: 300;
-            font-size: 15px;
-            line-height: 22px;
-            color: #292725;
-            margin-left: 10px;
-            min-width: 78px;
-
-            b {
-                color: #ac4c06;
-                font-weight: bold;
-            }
-        }
-
-        .skip-wraper {
+        .last-wraper {
             flex: 1;
-            text-align: right;
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
 
             .skip {
                 #image.icon(18px, '~@/assets/images/wallet-history-skip.svg');
-                margin-left: 137px;
+            }
+
+            .loading,
+            .icon-success-green {
+                margin-left: 57px;
+            }
+
+            .revert-btn {
+                height: 38px;
+                width: 96px;
+                font-family: Poppins;
+                font-style: normal;
+                font-weight: bold;
+                font-size: 15px;
+                line-height: 22px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                color: #ffffff;
+                margin-left: 26px;
             }
         }
     }

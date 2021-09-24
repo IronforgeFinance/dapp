@@ -10,15 +10,19 @@ button {
     }
 }
 
-.select-token-btn {
+.select-token-btn.ant-btn {
     font-style: normal;
     font-weight: normal;
-    font-size: 15px;
-    line-height: 22px;
+    font-size: 24px;
+    line-height: 36px;
     display: flex;
     align-items: center;
     text-align: right;
     color: #e1ab3b;
+    background: transparent;
+    border: none;
+    padding-left: 0;
+    padding-right: 0;
 
     > span {
         padding-right: 4px;
@@ -26,21 +30,29 @@ button {
     }
 }
 
-.common-btn {
-    min-width: 236px;
-    height: 68px;
-
-    font-style: normal;
-    font-weight: bold;
-    font-size: 18px;
+.common-btn,
+.common-btn.ant-btn {
+    height: 90px;
+    flex-shrink: 0;
     display: flex;
     align-items: center;
-    text-align: center;
+    justify-content: center;
     color: #fffefe;
-    text-align: center;
     display: block;
     cursor: pointer;
     border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    > span {
+        font-family: Poppins;
+        font-style: normal;
+        font-weight: bold;
+        font-size: 22px;
+        line-height: 33px;
+        color: #fffefe;
+    }
 }
 
 .common-btn-red,

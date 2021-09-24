@@ -1,31 +1,17 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState } from 'react';
 import './index.less';
-import { notification } from 'antd';
-import SelectTokens from '@/components/SelectTokens';
 import CommentaryCard from '@/components/CommentaryCard';
-// import DebtItemRatio from '@/components/DebtItemRatio';
-// import DebtItem from '@/components/DebtItem';
 import message from '@iron/Notification';
-// import Popover from '@/components/Popover';
-import TransitionConfirm from '@/components/TransitionConfirm';
 import WalletModal from '@/layouts/components/WalletModal';
+import { BSCSCAN_EXPLORER } from '@/config/constants/constant';
+import ISwitch from '@/components/Switch';
 
 export default () => {
     // * 选择token演示
     const SelectTokensDemo = () => {
         const [showSetting, setShowSetting] = useState(false);
 
-        return (
-            <SelectTokens
-            >
-                <button
-                    className="btn-select-tokens"
-                    onClick={() => setShowSetting(true)}
-                >
-                    Click Select Tokens
-                </button>
-            </SelectTokens>
-        );
+        return <div></div>;
     };
 
     const TransitionConfirmDemo = () => {
@@ -33,39 +19,6 @@ export default () => {
 
         return (
             <div className="transition-confirm-demo">
-                <TransitionConfirm
-                    visable={visable}
-                    onClose={() => setVisable(false)}
-                    dataSource={[
-                        {
-                            label: 'Collateral',
-                            direct: 'from',
-                            value: {
-                                token: 'BNB',
-                                amount: 20,
-                                mappingPrice: 6162.8,
-                            },
-                        },
-                        {
-                            label: 'Mint',
-                            direct: 'to',
-                            value: {
-                                token: 'fETH',
-                                amount: 5,
-                                mappingPrice: 6162.8,
-                            },
-                        },
-                        {
-                            label: 'Locked',
-                            value: {
-                                token: 'ftoken',
-                                amount: 0,
-                                mappingPrice: 6162.8,
-                            },
-                        },
-                        { label: 'Type', value: 'Delivery' },
-                    ]}
-                />
                 <button onClick={() => setVisable(true)}>
                     Test TransitionConfirm
                 </button>
@@ -108,13 +61,14 @@ export default () => {
                 <li>
                     <h3>5. 成功通知</h3>
                     <button
-                        onClick={() =>
-                            // message.success({
-                            //     message: 'Transaction receipt',
-                            //     description: 'Mint fUSD from USDC',
-                            //     showView: true,
-                            // })
-                            message.success('Transaction success')
+                        onClick={
+                            () =>
+                                message.success({
+                                    message: 'Transaction receipt',
+                                    description: 'Mint fUSD from USDC',
+                                    scanHref: BSCSCAN_EXPLORER,
+                                })
+                            // message.success('Transaction success')
                         }
                     >
                         成功
@@ -130,6 +84,22 @@ export default () => {
                     >
                         失败
                     </button>
+                    <button
+                        onClick={() =>
+                            // message.fail({
+                            //     message: 'Transaction receipt',
+                            //     description: 'Mint fUSD from USDC',
+                            // })
+                            message.loading({
+                                message: '123',
+                                description: '123',
+                                scale: () => {},
+                                revert: () => {},
+                            })
+                        }
+                    >
+                        Loading
+                    </button>
                 </li>
                 {/* <li>
                     <h3>6. Popover</h3>
@@ -144,6 +114,13 @@ export default () => {
                 <li>
                     <h3>8. 钱包连接</h3>
                     <WalletConnectDemo />
+                </li>
+                <li>
+                    <h3>9. switcher</h3>
+                    <ISwitch
+                        checkedChildren="Live"
+                        unCheckedChildren="Finished"
+                    />
                 </li>
             </ul>
         </div>

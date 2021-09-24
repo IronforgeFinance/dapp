@@ -21,6 +21,7 @@ export default {
     'nav.burn': '销毁',
     'nav.trade': '商店',
     'nav.farm': '挖矿',
+    'nav.pool': '质押',
     'nav.wallet': '资产',
     'nav.connectWallet': '连接钱包',
     'entry.learnmore': '了解更多',
@@ -29,10 +30,9 @@ export default {
     'entry.mint.desc':
         '可通过质押您的Token铸造fUSD。质押Token的一方通过交换可每周赚取质押奖励来管理质押率和债务。',
     'entry.trade': '货币交易',
-    'entry.trade.desc': '赚取质押fToken的奖励，您将需要一个币安钱包进行交易。',
+    'entry.trade.desc': '赚取质押BS的奖励，您将需要一个币安钱包进行交易。',
     'entry.buyToken': '挖矿',
-    'entry.buyToken.desc':
-        '赚取质押fToken的奖励，您将需要一个币安钱包进行交易。',
+    'entry.buyToken.desc': '赚取质押BS的奖励，您将需要一个币安钱包进行交易。',
     'data.pledgrate': '当前质押率',
     'data.activedebt': '活动债务',
 
@@ -44,7 +44,7 @@ export default {
     'mint.selectCasting': '选择铸造',
     'mint.locked': '锁定',
     'mint.collateral': '质押物',
-    'mint.ftoken': 'FToken',
+    'mint.ftoken': 'BS',
     'mint.approve': '授权铸币',
     'mint.cast': '铸造',
     'mint.fassets': 'F资产',
@@ -62,6 +62,7 @@ export default {
     'burn.search': '搜索债务',
     'burn.unstaking': '分解',
     'burn.collateral': '质押物',
+    'burn.amount': '数量',
     'burn.ratio': '质押率',
     'burn.debt': '债务',
     'burn.debt:': '债务：',
@@ -72,10 +73,12 @@ export default {
     'burn.tomint': '去铸造',
     'burn.initial': '初始化',
     'burn.max': '最大化',
+    'burn.approve': '授权燃烧',
 
     /**
      * @description 交易商店
      */
+    'trade.approve': '授权交易',
     'trade.from': 'From',
     'trade.to': 'To',
     'trade.marketing:': '交易行情：',
@@ -107,6 +110,17 @@ export default {
     'liquidity.withdraw.willreceive': '将会获得',
     'liquidity.withdraw.approve': '授权提现',
 
+    'liquidity.bs.tvl': 'BS TVL',
+    'liquidity.bs.circulatingVal': 'BS Circulating Value',
+    'liquidity.bs.totalEarned': 'BS Total Earned',
+
+    'liquidity.yourLiquidity': 'Your Liquidity',
+    'liquidity.yourLiquidityDesc':
+        'You can click Add Liquidity to add Lp quickly or remove liquidity to receive tokens back.',
+
+    'pool.totalStaked': '质押总额',
+    'pool.totalEarned': '收益总额',
+
     /**
      * @description 我的资产
      */
@@ -126,14 +140,14 @@ export default {
      * @description 公共组件
      */
     'assetsbar.staked': '质押物',
-    'assetsbar.lockedtoken': '锁定FToken',
+    'assetsbar.lockedtoken': '锁定BS',
     'assetsbar.acitvedebt': '活动债务',
     'assetsbar.fratio': 'F质押率',
     'assetsbar.fratio.desc': '这是一段解释f-ratio变化规则的文字',
     'assetsbar.fratio.current': '当前质押率：',
     'assetsbar.fratio.initial': '初始质押率：',
-    'footer.ftoken.price': 'FToken价格',
-    'footer.ftoken.button': '购买FToken',
+    'footer.ftoken.price': 'BS价格',
+    'footer.ftoken.button': '购买BS',
     selecttoken: '选择Token',
     'selecttoken.search': '搜索',
     'history.mint': '铸造',
@@ -146,9 +160,11 @@ export default {
     'history.burn': '燃烧',
     'history.delivery': '交割',
 
-    /**
-     * @description 通用词
-     */
+    /**@description 空 */
+    noAssets: '暂无资产',
+    noTrades: '暂无交易记录',
+    noConnection: '点击“连接钱包”后查看',
+    /**@description 通用词 */
     perpetual: '永续合约',
     delivery: '交割合约',
     days: '天',
@@ -163,6 +179,9 @@ export default {
     change: '修改',
     changeWallet: '更换钱包',
     connectWallet: '连接钱包',
+    apyDesc: 'APY是包含复投的收益',
+    bsDesc: 'BS是Iron Forge的平台代币',
+    bsTotalDesc: '奖励50%可即刻提取,50%将于30天内线性释放',
     /** @description 动词 */
     'verb.from': '从', //就当动词省略
     'verb.send': '发送',
@@ -175,4 +194,20 @@ export default {
     'conj.and': '和',
     'conj.x': ' ',
     'app.unlockWallet': '解锁钱包',
+    amount: 'Amount',
+    stake: 'Stake',
+    unstake: 'Unstake',
+    approve: 'Approve',
+    dontHave: "Dont't have ",
+    get: 'Get ',
+    totalStaked: 'Total staked',
+    APY: 'APY',
+    earn: 'EARN',
+    bsTotalEarned: 'BS Total Earned',
+    harvest: 'Harvest',
+    STAKED: 'STAKED',
+    'npc.mintAssets':
+        'IronForge提供永续和交割这两种类型的合成资产，交割类合成资产的交割日到期后，资产价格将被锁定，背后的债务也会被冻结并不再跟随公共债务池的变化；永续资产无日期限制，价格永远跟随市场变化，故用户没有销毁的债务将一直随着公共债务池的变化',
+    'npc.mintRatio':
+        '质押物中BS锁仓量的占比越高，质押率F-Ratio越低, 最低可至350%',
 };

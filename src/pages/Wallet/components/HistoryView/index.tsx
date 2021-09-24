@@ -1,7 +1,14 @@
 import './less/index.less';
 
-import { Tabs, Table } from 'antd';
-import { useState, useCallback, Fragment, useMemo, useEffect } from 'react';
+import { Tabs, Table, Button, Popover } from 'antd';
+import {
+    useState,
+    useCallback,
+    Fragment,
+    useMemo,
+    useEffect,
+    useContext,
+} from 'react';
 import { parseEnumToArray } from '@/utils';
 import {
     ConjType,
@@ -22,10 +29,20 @@ import {
     GET_BURNS_FROM_PANCAKE,
     GET_MINTS_FROM_PANCAKE,
     GET_OPERATIONS_FUZZY,
+    GET_MINTS_FROM_PANCAKE_TOTAL,
+    GET_BURNS_FROM_PANCAKE_TOTAL,
 } from '@/subgraph/graphql';
 import { pancakeswapClient, ourClient } from '@/subgraph/clientManager';
+import { TransitionConfirmContext } from '@/components/TransactionConfirm';
 import { ethers } from 'ethers';
 import { useIntl } from 'umi';
+import { useExchangeSystem } from '@/hooks/useContract';
+import { isDeliveryAsset } from '@/utils';
+import * as message from '@/components/Notification';
+import NoneView from '@/components/NoneView';
+import ISwitch from '@/components/Switch';
+import useMounted from '@/hooks/useMounted';
+import usePagination from '@/hooks/usePagination';
 
 const { TabPane } = Tabs;
 
@@ -92,82 +109,6 @@ function isOverflow(origins, len = 12): boolean {
     return origins.some((item) => String(item)?.length > len);
 }
 
-const columns = [
-    {
-        title: 'history',
-        dataIndex: 'id',
-        render: (value, row: HistoryViewProps) => {
-            const intl = useIntl();
-
-            return (
-                <div className="history">
-                    <div className="operation">
-                        <i className={`icon ${row.icon}`} />
-                        <div className="info">
-                            <span>{row.type}</span>
-                            <TimeView timestamp={row.dealtime} />
-                        </div>
-                    </div>
-                    {row.token0 && (
-                        <div className="form">
-                            {row.token0 && (
-                                <Fragment>
-                                    {intl
-                                        .formatMessage({
-                                            id: `verb.${
-                                                (row.verb as string)
-                                                    .toLocaleLowerCase()
-                                                    .replace(' ', '.') || 'x'
-                                            }`,
-                                        })
-                                        .trimEnd()}{' '}
-                                    <b>{row.token0.amount}</b>{' '}
-                                    {isOverflow([row.token0.name], 8) ? (
-                                        <Fragment>
-                                            <br />
-                                            {row.token0.name}
-                                        </Fragment>
-                                    ) : (
-                                        row.token0.name
-                                    )}
-                                </Fragment>
-                            )}
-                            {row.token1 && row.conj && (
-                                <Fragment>
-                                    {' '}
-                                    {isOverflow(
-                                        [row.token0.name, row.token0.amount],
-                                        8,
-                                    ) && <br />}
-                                    {intl
-                                        .formatMessage({
-                                            id: `conj.${
-                                                (row.conj as string)
-                                                    .toLocaleLowerCase()
-                                                    .replace(' ', '.') || 'x'
-                                            }`,
-                                        })
-                                        .trimEnd()}{' '}
-                                    <b>{row.token1.amount}</b> {row.token1.name}
-                                </Fragment>
-                            )}
-                        </div>
-                    )}
-                    {row.link && (
-                        <div className="skip-wraper">
-                            <a
-                                className="skip"
-                                target="_blank"
-                                href={row.link}
-                            />
-                        </div>
-                    )}
-                </div>
-            );
-        },
-    },
-];
-
 /**
  * @description Parse data of pool which is from pancake site.
  * @param {HistoryViewProps} item
@@ -189,7 +130,7 @@ const useParseDataOfPancake =
             name: item.pair.token1.name,
             amount: toFixedWithoutRound(item.amount1, 6),
         },
-        link: BSCSCAN_EXPLORER,
+        link: `${BSCSCAN_EXPLORER}tx/${item.txhash}`,
         dealtime: item.timestamp,
     });
 
@@ -199,10 +140,6 @@ const useParseDataOfPancake =
  * @returns {HistoryViewProps}
  */
 const parseDataOfOur = (item): HistoryViewProps => {
-    console.log(
-        '>> otherTypeToTabType[item.type] is %s',
-        otherTypeToTabType[item.type],
-    );
     return {
         id: item.id,
         icon: (
@@ -225,8 +162,10 @@ const parseDataOfOur = (item): HistoryViewProps => {
                 6,
             ),
         },
-        link: BSCSCAN_EXPLORER,
+        status: item.status,
+        link: `${BSCSCAN_EXPLORER}tx/${item.txhash}`,
         dealtime: item.timestamp,
+        canRevert: item.canRevert,
     };
 };
 
@@ -237,53 +176,205 @@ const HistoryView = () => {
     const intl = useIntl();
     const { account } = useWeb3React();
     const [tabKey, setTabKey] = useState('All' as TabType);
-    const [mintsPool, setMintsPool] = useState([]);
-    const [burnsPool, setBurnsPool] = useState([]);
     const [operations, setOperations] = useState([]);
+    const [checked, setChecked] = useState(true);
+    const mounted = useMounted();
     const [pagination, setPagination] = useState({
         current: 1,
         pageSize: DEFAULT_PAGE_SIZE,
         total: 0,
     });
+    const exchangeSystem = useExchangeSystem();
+
+    const mintsTable = usePagination({
+        client: pancakeswapClient,
+        listGql: GET_MINTS_FROM_PANCAKE,
+        totalGql: GET_MINTS_FROM_PANCAKE_TOTAL,
+        parser: useParseDataOfPancake('mint'),
+        key: 'mints',
+        // extVars: { user: '' },
+    });
+    const burnsTable = usePagination({
+        client: pancakeswapClient,
+        listGql: GET_BURNS_FROM_PANCAKE,
+        totalGql: GET_BURNS_FROM_PANCAKE_TOTAL,
+        parser: useParseDataOfPancake('burn'),
+        key: 'burns',
+        // extVars: { user: '' },
+    });
+
+    const columns = [
+        {
+            title: 'history',
+            dataIndex: 'id',
+            render: (value, row: HistoryViewProps) => {
+                const intl = useIntl();
+                const [txLoading, setTxLoading] = useState(false);
+                const { open: openConfirmModal } = useContext(
+                    TransitionConfirmContext,
+                );
+
+                /**@description 交易前的确认 */
+                const openRevertConfirm = useCallback(async () => {
+                    setTxLoading(true);
+
+                    openConfirmModal({
+                        view: 'trade',
+                        fromToken: {
+                            name: row.token0.name,
+                            amount: row.token0.amount,
+                        },
+                        toToken: {
+                            name: row.token1.name,
+                            amount: row.token1.amount,
+                        },
+                        type: isDeliveryAsset(row.token0.name)
+                            ? 'Delivery'
+                            : 'Perpetuation',
+                        confirm: async () => await doRevert(row.id),
+                        final: () => setTxLoading(false),
+                    });
+                }, [row]);
+
+                return (
+                    <div className="history">
+                        <div className="operation">
+                            <i className={`icon ${row.icon}`} />
+                            <div className="info">
+                                <span>{row.type}</span>
+                                <TimeView timestamp={row.dealtime} />
+                            </div>
+                        </div>
+                        {row.token0 && (
+                            <p>
+                                {row.token0 && (
+                                    <Fragment>
+                                        {intl
+                                            .formatMessage({
+                                                id: `verb.${
+                                                    (row.verb as string)
+                                                        .toLocaleLowerCase()
+                                                        .replace(' ', '.') ||
+                                                    'x'
+                                                }`,
+                                            })
+                                            .trimEnd()}{' '}
+                                        <b>{row.token0.amount}</b>{' '}
+                                        {row.token0.name}
+                                    </Fragment>
+                                )}
+                                {row.token1 && row.conj && (
+                                    <Fragment>
+                                        {intl
+                                            .formatMessage({
+                                                id: `conj.${
+                                                    (row.conj as string)
+                                                        .toLocaleLowerCase()
+                                                        .replace(' ', '.') ||
+                                                    'x'
+                                                }`,
+                                            })
+                                            .trimEnd()}{' '}
+                                        <b>{row.token1.amount}</b>{' '}
+                                        {row.token1.name}
+                                    </Fragment>
+                                )}
+                            </p>
+                        )}
+                        <div className="last-wraper">
+                            {row.link && (
+                                <a
+                                    className="skip"
+                                    target="_blank"
+                                    href={row.link}
+                                />
+                            )}
+                            {row?.status !== 'pending' &&
+                                row.type === 'Trade' && (
+                                    <i className="icon-success-green size-24" />
+                                )}
+                            {row?.status === 'pending' && (
+                                <i className="loading size-18" />
+                            )}
+                            <Button
+                                className="revert-btn common-btn common-btn-red"
+                                onClick={openRevertConfirm}
+                                loading={txLoading}
+                                style={{
+                                    visibility:
+                                        row?.status === 'pending'
+                                            ? 'visible'
+                                            : 'hidden',
+                                }}
+                            >
+                                Revert
+                            </Button>
+                            <Popover
+                                placement="leftBottom"
+                                trigger="hover"
+                                content="xxxxxxx"
+                            >
+                                <i
+                                    style={{
+                                        visibility:
+                                            row?.status === 'pending'
+                                                ? 'visible'
+                                                : 'hidden',
+                                        marginLeft: 6,
+                                    }}
+                                    className="icon-question size-18"
+                                />
+                            </Popover>
+                        </div>
+                    </div>
+                );
+            },
+        },
+    ];
 
     /**
-     * @description Fetch pool of mints from pancake site.
-     * @returns {void}
+     * 查询是否可以revert。只查询status 为pending的，type为Exchange 的数据。
+     * status 有：pending, settled, reverted.
+     * @param entryId Operation的type为Exchange的数据的id
      */
-    const fetchMintsPool = useCallback(async () => {
-        try {
-            const { data } = await pancakeswapClient.query({
-                query: GET_MINTS_FROM_PANCAKE,
-                variables: {
-                    offset: pagination.current - 1,
-                    limit: pagination.pageSize * 0.25,
-                    user: account,
-                },
-            });
-            setMintsPool(data.mints.map(useParseDataOfPancake('mint')));
-        } catch (error) {
-            console.error(error);
-        }
-    }, [account]);
+    const fetchIfCanRevert = useCallback(async (entryId: number) => {
+        const canRevert = await exchangeSystem.canOnlyBeReverted(entryId);
+        return canRevert;
+    }, []);
+
     /**
-     * @description Fetch pool of burns from pancake site.
-     * @returns {void}
+     * 执行revert交易
+     * @param entryId Operation的type为Exchange的数据的id
      */
-    const fetchBurnsPool = useCallback(async () => {
-        try {
-            const { data } = await pancakeswapClient.query({
-                query: GET_BURNS_FROM_PANCAKE,
-                variables: {
-                    offset: pagination.current - 1,
-                    limit: pagination.pageSize * 0.25,
-                    user: account,
-                },
-            });
-            setBurnsPool(data.burns.map(useParseDataOfPancake('burn')));
-        } catch (error) {
-            console.error(error);
+    const doRevert = async (entryId) => {
+        if (account) {
+            try {
+                const tx = await exchangeSystem.rollback(entryId);
+                const receipt = await tx.wait();
+                message.success('Revert successfully.');
+                // revert之后需要更新这一条数据。
+                const _operations = operations.slice();
+                const index = _operations.findIndex(
+                    (item) => item.id === entryId,
+                );
+                if (index > -1) {
+                    _operations[index].status = 'reverted';
+                    _operations[index].canRevert = false;
+                    setOperations(_operations);
+                }
+            } catch (err) {
+                console.log(err);
+                if (err && err.code === 4001) {
+                    message.error({
+                        message: 'Transaction rejected',
+                        description: 'Rejected by user',
+                    });
+                    return;
+                }
+                message.error('Revert failed.');
+            }
         }
-    }, [account]);
+    };
 
     /**
      * @description Calculate request type for filtering.
@@ -319,6 +410,13 @@ const HistoryView = () => {
                     type: requestType,
                 },
             });
+            for (let i = 0; i < data.operations.length; i++) {
+                const item = data.operations[i];
+                if (item.type === 'Exchange' && item.status === 'pending') {
+                    const res = await fetchIfCanRevert(item.id);
+                    item.canRevert = res;
+                }
+            }
             setOperations(data.operations);
         } catch (error) {
             console.error(error);
@@ -326,42 +424,44 @@ const HistoryView = () => {
     }, [account, requestType]);
 
     useEffect(() => {
+        if (!mounted.current) return;
+
         setPagination({ ...pagination, current: 1 });
 
         switch (tabKey) {
             case 'All': {
-                fetchMintsPool();
-                fetchBurnsPool();
+                mintsTable.reset();
+                burnsTable.reset();
                 fetchOperations();
                 break;
             }
             case 'Mint': {
-                setMintsPool([]);
-                setBurnsPool([]);
+                mintsTable.clear();
+                burnsTable.clear();
                 fetchOperations();
                 break;
             }
             case 'Burn': {
-                setMintsPool([]);
-                setBurnsPool([]);
+                mintsTable.clear();
+                burnsTable.clear();
                 fetchOperations();
                 break;
             }
             case 'Trade': {
-                setMintsPool([]);
-                setBurnsPool([]);
+                mintsTable.clear();
+                burnsTable.clear();
                 fetchOperations();
                 break;
             }
             case 'Farm': {
-                setMintsPool([]);
-                setBurnsPool([]);
+                mintsTable.clear();
+                burnsTable.clear();
                 fetchOperations();
                 break;
             }
             case 'Pool': {
-                fetchMintsPool();
-                fetchBurnsPool();
+                mintsTable.reset();
+                burnsTable.reset();
                 setOperations([]);
                 break;
             }
@@ -371,52 +471,62 @@ const HistoryView = () => {
     const changeTab = useCallback((tabKey) => setTabKey(tabKey), []);
 
     /**
-     * @property {boolean} isEnd
-     */
-    const isEnd = useMemo(
-        () => !(mintsPool?.length || burnsPool?.length || operations?.length),
-        [mintsPool, burnsPool, operations],
-    );
-
-    /**
      * @description Combine all kinds of datas for unified data format
      */
     const records = useMemo(() => {
         const handledData = operations.map(parseDataOfOur);
-        return [...handledData, ...mintsPool, ...burnsPool].sort(
+        return [...handledData, ...mintsTable.list, ...burnsTable.list].sort(
             ((a, b) => Number(b.dealtime) - Number(a.dealtime)) as (
                 a: HistoryViewProps,
                 b: HistoryViewProps,
             ) => number,
         );
-    }, [mintsPool, burnsPool, operations]);
+    }, [mintsTable, burnsTable, operations]);
+
+    const noneStatus = useMemo(() => {
+        if (!account) {
+            return 'noConnection';
+        }
+        if (!records?.length) {
+            return 'noRecords';
+        }
+    }, [account, records]);
 
     return (
         <div className="history-view">
-            <Tabs
-                className="custom-tabs"
-                defaultActiveKey={tabKey}
-                onChange={changeTab}
-            >
-                {tabItems.map((tabKey) => (
-                    <TabPane
-                        tab={intl.formatMessage({
-                            id: `wallet.tab.${(
-                                tabKey as string
-                            ).toLowerCase()}`,
-                        })}
-                        key={tabKey}
-                    >
-                        <Table
-                            className="custom-table"
-                            columns={columns}
-                            rowKey={(record) => record.id}
-                            dataSource={records}
-                            pagination={false}
-                        />
-                    </TabPane>
-                ))}
-            </Tabs>
+            {!noneStatus && (
+                <Tabs
+                    className="custom-tabs"
+                    defaultActiveKey={tabKey}
+                    onChange={changeTab}
+                >
+                    {tabItems.map((tabKey) => (
+                        <TabPane
+                            tab={intl.formatMessage({
+                                id: `wallet.tab.${(
+                                    tabKey as string
+                                ).toLowerCase()}`,
+                            })}
+                            key={tabKey}
+                        >
+                            <ISwitch
+                                checkedChildren="Live"
+                                unCheckedChildren="Finished"
+                                onChange={setChecked}
+                                checked={checked}
+                            />
+                            <Table
+                                className="custom-table"
+                                columns={columns}
+                                rowKey={(record) => record.id}
+                                dataSource={records}
+                                pagination={false}
+                            />
+                        </TabPane>
+                    ))}
+                </Tabs>
+            )}
+            {noneStatus && <NoneView type={noneStatus} />}
         </div>
     );
 };

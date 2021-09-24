@@ -1,19 +1,26 @@
-import { IDebtItemInfo } from '../pages/Burn/components/DebtItem/index';
 import { useState, useEffect } from 'react';
 
 const initData = {};
 
+export interface IDebtItemInfo {
+    collateralToken: string;
+    ratio: string;
+    ratioValue: number | string;
+    collateral: number;
+    locked: number;
+}
+
 const useBurnDataModel = () => {
-    const [selectedDebtInfos, setSelectedDebtInfos] = useState<IDebtItemInfo[]>(
+    const [debtItemInfos, setDebtItemInfos] = useState<IDebtItemInfo[]>(
         [],
     );
-    const [selectedDebtInUSD, setSelectedDebtInUSD] = useState(0.0);
+    const [totalDebtInUSD, setTotalDebtInUSD] = useState(0);
     useEffect(() => {}, []);
     return {
-        selectedDebtInfos,
-        setSelectedDebtInfos,
-        selectedDebtInUSD,
-        setSelectedDebtInUSD,
+        debtItemInfos, 
+        setDebtItemInfos,
+        totalDebtInUSD,
+        setTotalDebtInUSD,
     };
 };
 

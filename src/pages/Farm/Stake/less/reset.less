@@ -1,0 +1,43 @@
+.flip-container {
+    perspective: unset;
+    width: unset;
+    // height: unset;
+
+    &.flipper-over .flipper {
+        transform: unset;
+    }
+
+    .front,
+    .back {
+        // width: unset;
+        // height: unset;
+    }
+
+    /* flip speed goes here */
+    .flipper {
+        transition: unset;
+        transform-style: unset;
+
+        position: unset;
+    }
+
+    /* hide back of pane during swap */
+    .front,
+    .back {
+        backface-visibility: unset;
+
+        position: unset;
+        top: unset;
+        left: unset;
+    }
+
+    /* front pane, placed above back */
+    .front {
+        z-index: unset;
+    }
+
+    /* back, initially hidden pane */
+    .back {
+        transform: unset;
+    }
+}

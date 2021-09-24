@@ -5,6 +5,7 @@ import { Popover } from 'antd';
 import { useModel, useIntl } from 'umi';
 import { useWeb3React } from '@web3-react/core';
 import ProgressBar, { StatusType } from '@/components/ProgressBar';
+import useEnv from '@/hooks/useEnv';
 
 interface DataViewProps {
     status?: StatusType;
@@ -12,6 +13,7 @@ interface DataViewProps {
 
 export default (props: DataViewProps) => {
     const intl = useIntl();
+    const isMobile = useEnv();
     const { stakedData, lockedData, debtData, fRatioData } = useModel(
         'dataView',
         (model) => ({
@@ -54,12 +56,16 @@ export default (props: DataViewProps) => {
                         </span>
                         <Popover
                             placement="topLeft"
-                            content={intl.formatMessage({
-                                id: 'assetsbar.fratio.desc',
-                            })}
+                            content={
+                                '质押率会根据用户所选质押物类型和币价波动实时变化'
+                            }
                             trigger="hover"
                         >
-                            <i className="icon-question size-16 ml-8" />
+                            <i
+                                className={`icon-question size-${
+                                    isMobile ? 24 : 16
+                                } ml-8`}
+                            />
                         </Popover>
                     </React.Fragment>
                 }

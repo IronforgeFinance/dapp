@@ -1,5 +1,17 @@
 @import '~@/assets/styles/iron.less';
 
+.checkout-debt-btn {
+    width: 64.46px;
+    height: 38.98px;
+    #image.background('~@/assets/images/icon-money.png');
+    position: absolute;
+    right: 30px;
+    top: 30px;
+    filter: drop-shadow(2px -3px 22px rgba(252, 134, 68, 0.8));
+    z-index: 10;
+    animation: blink-coin 1.5s ease-in-out infinite;
+}
+
 .burn-type {
     margin: 20px 0;
 
@@ -30,6 +42,10 @@
 
 .form-view {
     position: relative;
+
+    .icon-arrow-down {
+        #image.icon(18px, '~@/assets/images/icon-arrow-yellow.svg');
+    }
 
     > .from-input {
         margin-top: 24px;
@@ -100,5 +116,17 @@
         align-items: center;
         text-align: right;
         color: #e1ab3b;
+    }
+}
+
+@keyframes blink-coin {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.2);
+    }
+    100% {
+        transform: scale(1);
     }
 }

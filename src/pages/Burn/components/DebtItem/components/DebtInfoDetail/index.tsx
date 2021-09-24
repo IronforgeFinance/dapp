@@ -17,7 +17,7 @@ export default (props: IProps) => {
             <ul className="cols">
                 <li>{intl.formatMessage({ id: 'burn.collateral' })}</li>
                 <li>{intl.formatMessage({ id: 'burn.ratio' })}</li>
-                <li>{intl.formatMessage({ id: 'burn.debt' })}</li>
+                <li>{intl.formatMessage({ id: 'burn.amount' })}</li>
                 <li>{intl.formatMessage({ id: 'burn.locked' })}</li>
             </ul>
             <ul className="rows">
@@ -32,7 +32,7 @@ export default (props: IProps) => {
                                     <span>{item.collateralToken}</span>
                                 </li>
                                 <li className="ratio">{item.ratio}</li>
-                                <li className="debt">{item.debt}</li>
+                                <li className="debt">{item.collateral}</li>
                                 <li className="locked">{item.locked}</li>
                             </ul>
                             <div

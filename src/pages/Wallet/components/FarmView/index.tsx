@@ -1,8 +1,7 @@
 import './less/index.less';
 
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { Table } from 'antd';
-import { ethers } from 'ethers';
 import {
     PureView,
     LpTokenView,
@@ -16,6 +15,9 @@ import { useWeb3React } from '@web3-react/core';
 import { history, useModel } from 'umi';
 import { LP_TOKENS } from '@/config/';
 import { useIntl } from 'umi';
+import NoneView from '@/components/NoneView';
+import { useCallback } from 'react';
+import usePagination from '@/hooks/usePagination';
 
 const columns = [
     {
@@ -91,22 +93,17 @@ const mockData: FarmViewProps[] = new Array(3).fill('').map((item, index) => ({
 
 const FarmView = () => {
     const intl = useIntl();
-    const [dataSource, setDataSource] = useState([]);
-    const { account } = useWeb3React();
-    const { fetchStakePoolList, stakeDataList } = useModel(
-        'stakeData',
-        (model) => ({
-            ...model,
-        }),
-    );
-    const { slowRefresh } = useRefresh();
-    useEffect(() => {
-        (async () => {
-            if (account) {
-                const list = await fetchStakePoolList(LP_TOKENS, account);
-                const data = list.map((item) => {
+    const { fetchStakePoolList } = useModel('stakeData', (model) => ({
+        ...model,
+    }));
+    const fetchPools = async (account) => {
+        const list = await fetchStakePoolList(LP_TOKENS, account);
+        return {
+            data: {
+                farms: list.map((item) => {
                     const tokens = item.name.split('-');
                     return {
+                        id: item.poolId,
                         token0: {
                             name: tokens[0],
                         },
@@ -123,23 +120,30 @@ const FarmView = () => {
                         },
                         apy: item.apy,
                     };
-                });
-                setDataSource(data);
-            }
-        })();
-    }, [account, slowRefresh]);
+                }),
+            },
+        };
+    };
+    const { list: dataSource, noneStatus } = usePagination({
+        key: 'farms',
+        customFetch: fetchPools,
+    });
+
     return (
-        <div className="burn-view">
-            <Table
-                className="custom-table"
-                columns={columns.map((item) => ({
-                    ...item,
-                    title: intl.formatMessage({ id: item.title }),
-                }))}
-                rowKey={(record) => record.id}
-                dataSource={dataSource}
-                pagination={false}
-            />
+        <div className="farm-view">
+            {!noneStatus && (
+                <Table
+                    className="custom-table"
+                    columns={columns.map((item) => ({
+                        ...item,
+                        title: intl.formatMessage({ id: item.title }),
+                    }))}
+                    rowKey={(record) => record.id}
+                    dataSource={dataSource}
+                    pagination={false}
+                />
+            )}
+            {noneStatus && <NoneView type={noneStatus} />}
         </div>
     );
 };

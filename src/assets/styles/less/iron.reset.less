@@ -1,3 +1,5 @@
+@import '~@/layouts/components/Header/less/mobile.less';
+
 @usdt: unset;
 @usdc: unset;
 @usd: unset;
@@ -76,7 +78,7 @@
     flex-grow: unset;
 }
 
-.dot(@size: 16px, @marginRight: 0px, @bgColor: unset) {
+.dot(@size: 16px, @marginRight: 0px, @bgColor: transparent) {
     display: unset;
     align-items: unset;
 
@@ -97,7 +99,7 @@
 }
 
 #image {
-    .background(@bgImage, @bgColor: unset) {
+    .background(@bgImage, @bgColor: transparent) {
         background-position: unset;
         background-repeat: unset;
         background-image: unset;
@@ -106,7 +108,65 @@
         flex-shrink: unset;
     }
 
-    .icon(@size, @bgImage, @bgColor: transparent, @pure: unset) {
+    .dinamicBg(@image, @ratio: 50%, @direct: 'hortizontal') {
+        position: unset;
+
+        &:before {
+            flex: unset;
+            content: unset;
+            position: unset;
+            background-size: unset;
+            background-repeat: unset;
+            background-image: unset;
+
+            & when (@direct ='hortizontal') {
+                width: unset;
+                height: unset;
+                top: unset;
+                transform: unset;
+                left: unset;
+                background-position: unset;
+            }
+
+            & when (@direct ='vertical') {
+                width: unset;
+                height: unset;
+                left: unset;
+                transform: unset;
+                top: unset;
+                background-position: unset;
+            }
+        }
+
+        &:after {
+            flex: unset;
+            content: unset;
+            position: unset;
+            background-size: unset;
+            background-repeat: unset;
+            background-image: unset;
+
+            & when (@direct ='hortizontal') {
+                width: unset;
+                height: unset;
+                top: unset;
+                transform: unset;
+                right: unset;
+                background-position: unset;
+            }
+
+            & when (@direct ='vertical') {
+                width: unset;
+                height: unset;
+                left: unset;
+                transform: unset;
+                bottom: unset;
+                background-position: unset;
+            }
+        }
+    }
+
+    .icon(@size, @bgImage, @bgColor: transparent, @pure: true) {
         .background(@bgImage, @bgColor);
 
         width: unset;
@@ -121,7 +181,7 @@
         }
     }
 
-    .button(@bgImage, @bgColor: unset) {
+    .button(@bgImage, @bgColor: transparent) {
         .background(@bgImage, @bgColor);
 
         border: unset;
@@ -136,31 +196,43 @@
         position: unset;
     }
 
-    .absHorizCenter(@moveTop: -20%, @top: unset) {
+    .absHorizCenter(@moveTop: -20%, @top: 0) {
         position: unset;
         left: unset;
         top: unset;
         transform: unset;
     }
 
-    .absLtCorner(@move: unset) {
+    .absLtCorner(@move: translate(0%, 0%)) {
         position: unset;
         left: unset;
         top: unset;
         transform: unset;
     }
 
-    .absRtCorner(@move: unset) {
+    .absRtCorner(@move: translate(0%, 0%)) {
         position: unset;
         right: unset;
         top: unset;
         transform: unset;
     }
 
-    .absRbCorner(@move: unset) {
+    .absRbCorner(@move: translate(0%, 0%)) {
         position: unset;
         right: unset;
         bottom: unset;
         transform: unset;
     }
+}
+
+.page-container(@image: '') {
+    #image.background(@image);
+    padding-top: unset;
+    display: unset;
+    flex-direction: unset;
+    min-width: unset;
+    min-height: unset;
+    background-size: unset;
+    background-position: unset;
+    padding-bottom: unset;
 }
