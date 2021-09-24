@@ -1,0 +1,41 @@
+@media (min-width: 751px) {
+    @import '~@/assets/styles/iron.less';
+
+    .record-board {
+        width: 881px;
+        height: 734px;
+        padding: 70px 40px 50px 40px;
+        position: relative;
+        #image.background('~@/assets/images/big-board-bg.png');
+
+        .icon-close {
+            #image.icon(54px, '~@/assets/images/icon-close.png');
+            position: absolute;
+            right: 0;
+            top: 0;
+            transform: translate(25%, -25%);
+        }
+
+        .title-wrapper {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+
+            h1.common-title {
+                font-family: Poppins;
+                font-style: normal;
+                font-weight: bold;
+                font-size: 24px;
+                line-height: 36px;
+                display: flex;
+                align-items: center;
+                text-align: center;
+                color: #1c1c1d;
+
+                height: 70px;
+                width: 356px;
+            }
+        }
+    }
+}

@@ -1,5 +1,3 @@
-import './less/index.less';
-
 import { useState, createContext, ReactNode, useCallback } from 'react';
 import { tabItems } from './index';
 

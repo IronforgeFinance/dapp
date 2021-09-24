@@ -1,4 +1,5 @@
-import './less/index.less';
+import './pc.less';
+import './mobile.less';
 
 import 'react';
 import RecordBoard from '../RecordBoard';
