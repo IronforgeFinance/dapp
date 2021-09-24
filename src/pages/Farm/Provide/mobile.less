@@ -1,0 +1,27 @@
+@media (max-width: 750px) {
+    @import url('~@/assets/styles/iron.less');
+
+    .provide-container {
+        .page-container('~@/assets/images/mobile-farm-bg.jpg');
+        min-height: 150vh;
+    }
+
+    .custom-tabs {
+        margin: 0 auto;
+    }
+
+    .tab-content {
+        position: relative;
+
+        .icon-back {
+            position: absolute;
+            top: 40px;
+            left: 0px;
+            z-index: 100;
+            cursor: pointer;
+        }
+
+        .icon-back:hover {
+        }
+    }
+}
