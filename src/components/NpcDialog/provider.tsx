@@ -1,5 +1,3 @@
-import './less/index.less';
-
 import { createContext, useState, ReactNode } from 'react';
 
 interface NpcDialogContextProps {
