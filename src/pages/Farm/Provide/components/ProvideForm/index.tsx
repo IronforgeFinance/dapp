@@ -1,6 +1,12 @@
 import './less/index.less';
 
-import React, { useState, useEffect, useContext, useCallback } from 'react';
+import React, {
+    useState,
+    useEffect,
+    useContext,
+    useCallback,
+    useMemo,
+} from 'react';
 import { InputNumber, Select, Progress, Button } from 'antd';
 import * as message from '@/components/Notification';
 import IconAdd from '@/assets/images/icon-add.svg';
@@ -45,8 +51,8 @@ const NO_LIQUIDITY_LP = {
     token2: '',
     token1Balance: 0,
     token2Balance: 0,
-    token1Price: 1,
-    token2Price: 1,
+    token1Price: 0,
+    token2Price: 0,
     share: 1,
 };
 export default () => {
@@ -54,16 +60,14 @@ export default () => {
     // const [token2Balance, setToken2Balance] = useState();
     const intl = useIntl();
     const { account } = useWeb3React();
-    const [token1, setToken1] = useState<string>();
-    const [token2, setToken2] = useState<string>();
+    const [token1, setToken1] = useState<string>('');
+    const [token2, setToken2] = useState<string>('');
     const [token1Amount, setToken1Amount] = useState<number>();
     const [token2Amount, setToken2Amount] = useState<number>();
     const [token1Price, setToken1Price] = useState(1);
     const [token2Price, setToken2Price] = useState(1);
     const [share, setShare] = useState(1);
     const [submitting, setSubmitting] = useState(false);
-    const [showSelectFromToken, setShowSelectFromToken] = useState(false);
-    const [showSelectToToken, setShowSelectToToken] = useState(false);
     const {
         lpDataList,
         currentLpData,
@@ -252,7 +256,9 @@ export default () => {
         }
     };
 
+    //TODO 只支持预先设定的lp pair。
     const token1SelectHandler = (v) => {
+        console.log('tokens: ', token1, token2);
         if (token2 === v) {
             setToken2(token1);
             setToken1(v);
@@ -266,10 +272,8 @@ export default () => {
 
     useEffect(() => {
         if (token1 && token2) {
-            if (!isValidLp(token1, token2)) {
-                const data = getCurrentLpData(token1, token2);
-                setCurrentLpData(data);
-            }
+            const data = getCurrentLpData(token1, token2);
+            setCurrentLpData(data);
         }
     }, [token1, token2]);
 
@@ -292,6 +296,58 @@ export default () => {
         if (!address) return;
         registerToken(address, symbol, 18, '');
     };
+
+    const renderBtns = useMemo(() => {
+        if (!account) {
+            return (
+                <Button
+                    className="btn-mint common-btn common-btn-yellow"
+                    onClick={() => {
+                        requestConnectWallet();
+                    }}
+                >
+                    {intl.formatMessage({
+                        id: 'app.unlockWallet',
+                    })}
+                </Button>
+            );
+        } else if (account && (!token1 || !token2)) {
+            return (
+                <Button className="common-btn common-btn-red" disabled>
+                    {intl.formatMessage({
+                        id: 'liquidity.provide',
+                    })}
+                </Button>
+            );
+        } else if (
+            account &&
+            ((token1 && !token1Approved) || (token2 && !token2Approved))
+        ) {
+            return (
+                <Button
+                    className="btn-mint common-btn common-btn-red"
+                    onClick={handleAllApprove}
+                    loading={requestedToken1Approval || requestedToken2Approval}
+                >
+                    {intl.formatMessage({
+                        id: 'liquidity.provide.approve',
+                    })}
+                </Button>
+            );
+        } else if (account && token1Approved && token2Approved) {
+            return (
+                <Button
+                    className="common-btn common-btn-red"
+                    onClick={handleProvide}
+                    loading={submitting}
+                >
+                    {intl.formatMessage({
+                        id: 'liquidity.provide',
+                    })}
+                </Button>
+            );
+        }
+    }, [account, token1, token2, token1Approved, token2Approved]);
 
     const [showTxConfirm, setShowTxConfirm] = useState(false);
     const [tx, setTx] = useState<any | null>(null);
@@ -373,12 +429,12 @@ export default () => {
     const isCurrentTab = React.useMemo(() => tabKey === '1', [tabKey]);
 
     const openFromTokenList = useCallback(
-        () => open(TOKENS, { callback: token1SelectHandler }),
+        () => open(TOKENS, { callback: token1SelectHandler.bind(this) }),
         [],
     );
 
     const openToTokenList = useCallback(
-        () => open(TOKENS, { callback: token2SelectHandler }),
+        () => open(TOKENS, { callback: token2SelectHandler.bind(this) }),
         [],
     );
 
@@ -487,47 +543,9 @@ export default () => {
                         </div>
                     </div>
                 </div>
-                <div className="provide-btn-footer">
-                    {!account && (
-                        <Button
-                            className="btn-mint common-btn common-btn-yellow"
-                            onClick={() => {
-                                requestConnectWallet();
-                            }}
-                        >
-                            {intl.formatMessage({
-                                id: 'app.unlockWallet',
-                            })}
-                        </Button>
-                    )}
-                    {token1Approved && token2Approved && (
-                        <Button
-                            className="common-btn common-btn-red"
-                            onClick={handleProvide}
-                            loading={submitting}
-                        >
-                            {intl.formatMessage({ id: 'liquidity.provide' })}
-                        </Button>
-                    )}
-                    {account &&
-                        ((token1 && !token1Approved) ||
-                            (token2 && !token2Approved)) && (
-                            <Button
-                                className="btn-mint common-btn common-btn-red"
-                                onClick={handleAllApprove}
-                                loading={
-                                    requestedToken1Approval ||
-                                    requestedToken2Approval
-                                }
-                            >
-                                {intl.formatMessage({
-                                    id: 'liquidity.provide.approve',
-                                })}
-                            </Button>
-                        )}
-                </div>
+                <div className="provide-btn-footer">{renderBtns}</div>
             </div>
-            {token1 && token2 && (
+            {token1 && token2 && token1Price && token2Price && (
                 <div className="provide-prices">
                     <div>
                         <p className="title">Prices and pool share</p>

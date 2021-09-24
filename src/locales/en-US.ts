@@ -88,6 +88,7 @@ export default {
     'liquidity.yourLiquidity': 'Your Liquidity',
     'liquidity.yourLiquidityDesc':
         'You can click Add Liquidity to add Lp quickly or remove liquidity to receive tokens back.',
+    'liquidity.noLiquidity': 'No such liquidity',
 
     'pool.totalStaked': 'Total staked value',
     'pool.totalEarned': 'Total users earned',
