@@ -1,0 +1,70 @@
+@media (min-width: 751px) {
+    .farm-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+
+        .add-liquidity-btn.ant-btn {
+            width: 236px;
+            height: 70px;
+        }
+
+        .harvest-btn.ant-btn,
+        .stake-lp-btn.ant-btn {
+            width: 96px;
+            height: 38px;
+        }
+
+        .farm-header {
+            width: 1288px;
+            height: 168px;
+            background: url(~@/assets/images/farm-header-bg.png) no-repeat
+                center;
+            background-size: contain;
+            flex-shrink: 0;
+
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-left: 80px;
+            padding-right: 180px;
+            box-sizing: border-box;
+
+            .info-item {
+                width: 244px;
+                text-align: center;
+
+                .value {
+                    font-style: normal;
+                    font-weight: bold;
+                    font-size: 28px;
+                    line-height: 42px;
+                    text-align: center;
+                    color: #ffffff;
+                    word-break: break-all;
+                }
+
+                .label {
+                    font-weight: 300;
+                    font-size: 16px;
+                    line-height: 24px;
+                    text-align: center;
+                    color: rgba(73, 40, 9, 0.6);
+                }
+            }
+        }
+
+        .farm-tabs {
+            margin: 20px 0;
+        }
+
+        .farm-pool {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            width: 1300px;
+            margin: 50px auto;
+            margin-top: 0px;
+        }
+    }
+}

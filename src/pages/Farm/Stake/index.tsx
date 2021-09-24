@@ -1,4 +1,5 @@
-import './less/index.less';
+import './pc.less';
+import './mobile.less';
 
 import React, { useState, useEffect } from 'react';
 import StakeForm from './components/StakeForm';

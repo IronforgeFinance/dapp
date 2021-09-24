@@ -1,0 +1,136 @@
+@media (min-width: 751px) {
+    .provide-form {
+        width: 450px;
+        border-radius: 30px;
+        height: 500px;
+        padding: 35px;
+        padding-top: 40px;
+        filter: drop-shadow(17px 12px 70px #b5471e);
+        position: relative;
+        margin: 25px;
+        margin-top: 0;
+    }
+
+    .provide-btn-footer {
+        margin-top: 60px;
+
+        button {
+            margin: 0 auto;
+        }
+    }
+
+    .icon-back {
+        position: absolute;
+        top: 40px;
+        left: -20px;
+        width: 45px;
+        height: 33px;
+        cursor: pointer;
+    }
+
+    .provide-prices {
+        margin: 26px auto;
+        margin-bottom: 0;
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+
+        .title {
+            font-style: normal;
+            font-weight: bold;
+            font-size: 15px;
+            line-height: 22px;
+            display: flex;
+            color: #ffffff;
+        }
+
+        .prices-bg {
+            width: 380px;
+            min-height: 100px;
+            background: url(~@/assets/images/lp-prices-bg.png) center center
+                no-repeat;
+            background-size: cover;
+        }
+    }
+
+    .prices-and-share {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        height: 100px;
+        padding: 0 20px;
+
+        .price-item {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+
+            .token {
+                font-style: normal;
+                font-weight: normal;
+                font-size: 15px;
+                line-height: 22px;
+                color: #292725;
+            }
+
+            .price {
+                font-style: normal;
+                font-weight: bold;
+                font-size: 15px;
+                line-height: 22px;
+                color: #292725;
+            }
+        }
+    }
+
+    .lp-list {
+        width: 382px;
+        height: 382px;
+        background: url(~@/assets/images/lp-list-bg.png) center center no-repeat;
+        background-size: cover;
+        padding: 18px 28px;
+        position: relative;
+
+        .header {
+            > p:first-child {
+                font-style: normal;
+                font-weight: bold;
+                font-size: 16px;
+                line-height: 24px;
+                color: #e1ab3b;
+                margin-bottom: 4px;
+            }
+
+            > p:last-child {
+                font-style: normal;
+                font-weight: 300;
+                font-size: 15px;
+                line-height: 24px;
+                text-align: justify;
+                letter-spacing: -0.01em;
+                color: #e1ab3b;
+                margin-bottom: 4px;
+            }
+        }
+
+        .lp-list-content {
+            overflow: auto;
+            height: 220px;
+        }
+    }
+
+    .provide-outer-container {
+        position: relative;
+
+        .iron-folder {
+            top: 0;
+            left: -350px !important;
+            top: 80px;
+
+            .btn-toggle {
+                top: 180px;
+            }
+        }
+    }
+}

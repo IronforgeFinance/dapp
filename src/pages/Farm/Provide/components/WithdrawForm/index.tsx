@@ -1,4 +1,5 @@
-import './less/index.less';
+import './pc.less';
+import './mobile.less';
 
 import React, { useState, useEffect, useContext, useCallback } from 'react';
 import { InputNumber, Select, Button } from 'antd';

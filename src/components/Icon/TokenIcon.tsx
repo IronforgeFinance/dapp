@@ -1,4 +1,5 @@
-import './less/TokenIcon/index.less';
+import './TokenIcon.pc.less';
+import './TokenIcon.mobile.less';
 
 import React from 'react';
 import { IconProps } from './index';
