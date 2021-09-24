@@ -39,7 +39,14 @@ const RatioSlider = (props: IRatioSliderProps) => {
     return (
         <div className="ratio" ref={ref}>
             <div className="safe-tip" style={{ left: safeRatio + '%' }}>
-                <img src={DividerV} alt="" className="icon-divider" />
+                <img
+                    src={DividerV}
+                    alt=""
+                    className="icon-divider"
+                    onClick={() => {
+                        onChange(safeRatio);
+                    }}
+                />
                 <p>
                     <span>Safe: {safeRatio * 10}%</span>
                     <Popover
@@ -69,7 +76,9 @@ const RatioSlider = (props: IRatioSliderProps) => {
                     <span className="custom-ratio-tooltip-text">
                         <Popover
                             content={
-                                value < 20 ? 'F-ratio too low' : 'F-ratio is ok'
+                                value < safeRatio
+                                    ? 'F-ratio is low'
+                                    : 'F-ratio is ok'
                             }
                             trigger="hover"
                             placement="right"

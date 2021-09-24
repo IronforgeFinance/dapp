@@ -206,13 +206,15 @@ export default () => {
                 );
 
                 console.log('calcBuildRatio: ', buildRatio);
-                newRatio = 1 / buildRatio;
+                newRatio = toFixedWithoutRound(1 / buildRatio, 4);
             } else {
                 newRatio = initialRatio;
             }
+            const _endValue = parseFloat((newRatio * 100).toFixed(4));
             setfRatioData({
                 ...fRatioData,
-                endValue: parseFloat((newRatio * 100).toFixed(2)),
+                startValue: fRatioData.startValue || _endValue,
+                endValue: _endValue,
             });
             setComputedRatio(newRatio);
             setSliderRatio(newRatio);
