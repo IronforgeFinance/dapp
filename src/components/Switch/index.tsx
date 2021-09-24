@@ -48,22 +48,22 @@ const ISwitch = (props: ISwitchProps) => {
 
     return (
         <div className={`${className ?? ''} iron-switch`}>
-            <span
+            <button
                 onClick={() => onChange(true)}
                 className={classNames({
                     active: checked,
                 })}
             >
-                {checkedChildren}
-            </span>
-            <span
+                <span>{checkedChildren}</span>
+            </button>
+            <button
                 onClick={() => onChange(false)}
                 className={classNames({
                     active: !checked,
                 })}
             >
-                {unCheckedChildren}
-            </span>
+                <span>{unCheckedChildren}</span>
+            </button>
         </div>
     );
 };
