@@ -1,0 +1,74 @@
+@media (min-width: 751px) {
+    @import '~@/assets/styles/iron.less';
+    @import '~@/assets/styles/global.pc.less';
+
+    .trade-container {
+        width: 100%;
+        // height: 100%;
+        display: flex;
+        // align-items: center;
+        justify-content: center;
+        position: relative;
+        padding: 0;
+        min-height: 0;
+
+        // TODO 这里图片有点大，下周分拆出多个部件图出来合成，充分利用图片并发
+        .shop {
+            width: 446px;
+            height: 518px;
+            // padding: 100.88px 81.89px 32.78px 92.65px;
+            // box-sizing: border-box;
+            margin: 163.26px auto 0 auto;
+            position: relative;
+
+            > .roof {
+                height: 141.03187561035156px;
+                width: 606.36181640625px;
+                #image.background('~@/assets/images/trade-swap-roof-ceiling.png');
+                position: absolute;
+                left: 50%;
+                transform: translateX(-50%);
+                top: -70px;
+            }
+
+            > .sign {
+                width: 275.38px;
+                height: 71.44px;
+                #image.background('~@/assets/images/trade-swap-roof-sign.png');
+                position: absolute;
+                left: 50%;
+                transform: translateX(-50%);
+                top: -95px;
+
+                &.active {
+                    #image.background('~@/assets/images/trade-swap-roof-sign-active.png');
+                }
+            }
+
+            .form {
+                width: 431.82px;
+                height: 577.09px;
+                padding-top: 88.99px;
+                padding-left: 27.3px;
+                padding-right: 30.54px;
+
+                .btn-trade {
+                    margin: 39.72px auto 0 auto;
+                    width: 236px;
+                    height: 70px;
+                }
+
+                .fee-cost {
+                    font-style: normal;
+                    font-weight: normal;
+                    font-size: 15px;
+                    line-height: 22px;
+                    display: flex;
+                    align-items: center;
+                    color: #e1ab3b;
+                    margin-top: 9px;
+                }
+            }
+        }
+    }
+}

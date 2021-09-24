@@ -1,4 +1,5 @@
-import './less/index.less';
+import './pc.less';
+import './mobile.less';
 
 import classNames from 'classnames';
 import React from 'react';

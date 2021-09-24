@@ -1,0 +1,106 @@
+@media (min-width: 751px) {
+    button {
+        transition: 0.2s all;
+        border: none;
+        outline: none;
+        background-color: transparent;
+        cursor: pointer;
+
+        &:disabled {
+            cursor: not-allowed !important;
+        }
+    }
+
+    .select-token-btn.ant-btn {
+        font-style: normal;
+        font-weight: normal;
+        font-size: 15px;
+        line-height: 22px;
+        display: flex;
+        align-items: center;
+        text-align: right;
+        color: #e1ab3b;
+        background: transparent;
+        border: none;
+        padding-left: 0;
+        padding-right: 0;
+
+        > span {
+            padding-right: 4px;
+            padding-left: 6px;
+        }
+    }
+
+    .disaconnect-btn {
+        margin: 30px auto 0 auto;
+    }
+
+    .back-btn {
+        position: absolute;
+        display: inline-block;
+        width: 84px;
+        height: 64px;
+        #image.background('~@/assets/images/icon-back.png');
+        left: 70px;
+        top: 180px;
+    }
+
+    .common-btn,
+    .common-btn.ant-btn {
+        width: 236px;
+        height: 68px;
+        flex-shrink: 0;
+
+        font-style: normal;
+        font-weight: bold;
+        font-size: 18px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #fffefe;
+        display: block;
+        cursor: pointer;
+        border: none;
+    }
+
+    .common-btn-red,
+    .common-btn-red:focus {
+        background: url(~@/assets/images/common-btn-red.png) no-repeat;
+        background-size: 100% 100%;
+        color: rgba(255, 254, 254, 1);
+    }
+
+    .common-btn-red:hover {
+        background: url(~@/assets/images/common-btn-red-hover.png) no-repeat;
+        background-size: 100% 100%;
+        color: rgba(41, 39, 37, 1);
+    }
+
+    .common-btn-red:disabled,
+    .common-btn-red:hover:disabled {
+        background: url(~@/assets/images/common-btn-red-disabled.png) no-repeat;
+        background-size: 100% 100%;
+        color: rgba(255, 254, 254, 0.7);
+    }
+
+    .common-btn-yellow,
+    .common-btn-yellow:focus {
+        background: url(~@/assets/images/common-btn-yellow.png) no-repeat;
+        background-size: 100% 100%;
+        color: rgba(255, 254, 254, 1);
+    }
+
+    .common-btn-yellow:hover {
+        background: url(~@/assets/images/common-btn-yellow-hover.png) no-repeat;
+        background-size: 100% 100%;
+        color: rgba(41, 39, 37, 1);
+    }
+
+    .common-btn-yellow:disabled,
+    .common-btn-yellow:hover:disabled {
+        background: url(~@/assets/images/common-btn-yellow-disabped.png)
+            no-repeat;
+        background-size: 100% 100%;
+        color: rgba(255, 254, 254, 0.7);
+    }
+}

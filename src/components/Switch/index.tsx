@@ -1,4 +1,5 @@
-import './less/index.less';
+import './pc.less';
+import './mobile.less';
 
 import { useLayoutEffect } from 'react';
 import { Switch, SwitchProps } from 'antd';

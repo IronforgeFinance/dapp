@@ -1,4 +1,5 @@
-import './less/index.less';
+import './pc.less';
+import './mobile.less';
 
 import { Fragment, useEffect, useRef } from 'react';
 import { IRouteComponentProps } from 'umi';
