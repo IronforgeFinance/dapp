@@ -1,4 +1,5 @@
-import './less/index.less';
+import './pc.less';
+import './mobile.less';
 
 import { Fragment, useContext } from 'react';
 import { useModel, useIntl, history } from 'umi';

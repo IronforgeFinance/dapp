@@ -1,4 +1,5 @@
-import './less/index.less';
+import './pc.less';
+import './mobile.less';
 
 import { Fragment, ReactNode, useMemo } from 'react';
 import { getRemainDaysOfQuarterAsset, isDeliveryAsset } from '@/utils';

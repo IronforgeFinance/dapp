@@ -1,6 +1,7 @@
-import './less/index.less';
+import './pc.less';
+import './mobile.less';
 
-import React from 'react';
+import 'react';
 
 interface ICommentaryCardProps {
     title: String;

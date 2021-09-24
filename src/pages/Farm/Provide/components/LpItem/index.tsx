@@ -1,4 +1,5 @@
-import './less/index.less';
+import './pc.less';
+import './mobile.less';
 
 import { ILpDataProps } from '@/models/lpData';
 import React, { useState } from 'react';

@@ -1,4 +1,5 @@
-import './less/index.less';
+import './pc.less';
+import './mobile.less';
 
 import React, { useState } from 'react';
 import { history, useIntl } from 'umi';
@@ -73,7 +74,9 @@ export default (props: { pool: IStakePool; handleFlipper: () => void }) => {
                         </p>
                     </div>
                     <div className="total-info-item">
-                        <p className="label">{intl.formatMessage({ id: 'earn' })}:</p>
+                        <p className="label">
+                            {intl.formatMessage({ id: 'earn' })}:
+                        </p>
                         <p className="value">
                             BS{' '}
                             <Popover
@@ -90,7 +93,9 @@ export default (props: { pool: IStakePool; handleFlipper: () => void }) => {
                 <div className="user-info">
                     <div className="user-info-item">
                         <div className="label-item">
-                            <p className="label">{intl.formatMessage({ id: 'bsTotalEarned' })}</p>
+                            <p className="label">
+                                {intl.formatMessage({ id: 'bsTotalEarned' })}
+                            </p>
                             <p className="label">{totalPendingReward}</p>
                         </div>
                         <div className="value">
@@ -121,7 +126,9 @@ export default (props: { pool: IStakePool; handleFlipper: () => void }) => {
                         </div>
                     </div>
                     <div className="user-info-item">
-                        <p className="label">{name} {intl.formatMessage({ id: 'STAKED' })}</p>
+                        <p className="label">
+                            {name} {intl.formatMessage({ id: 'STAKED' })}
+                        </p>
                         <div className="value">
                             {account && (
                                 <>

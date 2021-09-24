@@ -1,5 +1,3 @@
-import './less/index.less';
-
 import { useState, useEffect, useMemo } from 'react';
 import { Table } from 'antd';
 import {

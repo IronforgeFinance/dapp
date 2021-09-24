@@ -1,4 +1,5 @@
-import './less/index.less';
+import './pc.less';
+import './mobile.less';
 
 import { useMemo } from 'react';
 import { useModel } from 'umi';

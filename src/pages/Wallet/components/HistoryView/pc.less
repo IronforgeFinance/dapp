@@ -1,0 +1,159 @@
+@media (min-width: 751px) {
+    @import '../../../pc.less';
+
+    .history-view {
+        .iron-switch {
+            margin-bottom: 20px;
+            margin-left: 80%;
+            display: none;
+        }
+
+        .custom-tabs.ant-tabs {
+            .ant-table-cell {
+                max-width: 805px;
+
+                &:first-child {
+                    padding-left: 53px;
+                }
+            }
+
+            .ant-tabs-tab {
+                &:nth-child(2) {
+                    margin-left: 114px;
+                }
+
+                &:nth-child(n + 3) {
+                    margin-left: 90px;
+                }
+            }
+
+            .ant-tabs-nav-wrap {
+                padding-left: 53px;
+            }
+
+            .ant-tabs-content-holder {
+                overflow-y: scroll;
+            }
+        }
+
+        .history {
+            display: flex;
+            align-items: center;
+            // width: 90%;
+
+            .operation {
+                display: flex;
+                align-items: center;
+                width: 230px;
+                max-width: 230px;
+
+                .icon {
+                    @size: 28px;
+
+                    &.mint {
+                        #image.icon(@size, '~@/assets/images/wallet-history-icon-mint.png');
+                    }
+
+                    &.burn {
+                        #image.icon(@size, '~@/assets/images/wallet-history-icon-burn.png');
+                    }
+
+                    &.trade {
+                        #image.icon(@size, '~@/assets/images/wallet-history-icon-trade.png');
+                    }
+
+                    &.pool-burn {
+                        #image.icon(@size, '~@/assets/images/wallet-history-icon-pool-burn.svg');
+                    }
+
+                    &.pool-mint {
+                        #image.icon(@size, '~@/assets/images/wallet-history-icon-pool-mint.svg');
+                    }
+
+                    &.farm {
+                        #image.icon(@size, '~@/assets/images/wallet-history-icon-farm.svg');
+                    }
+                }
+
+                .info {
+                    display: flex;
+                    flex-direction: column;
+                    margin-left: 14px;
+                    width: 230px;
+
+                    span {
+                        font-style: normal;
+                        font-weight: bold;
+                        font-size: 18px;
+                        line-height: 27px;
+                        display: flex;
+                        align-items: center;
+                        color: #292725;
+                    }
+
+                    .time-view {
+                        align-items: flex-start;
+
+                        .pure-view {
+                            font-style: normal;
+                            font-weight: 300;
+                            font-size: 15px;
+                            line-height: 22px;
+                            color: #6f4123;
+                        }
+                    }
+                }
+            }
+
+            > p {
+                white-space: nowrap;
+                font-style: normal;
+                font-weight: 300;
+                font-size: 15px;
+                line-height: 22px;
+                color: #292725;
+                min-width: 112px;
+                display: flex;
+                flex-wrap: wrap;
+                max-width: 270px;
+
+                b {
+                    color: #ac4c06;
+                    font-weight: bold;
+                    margin: 0 4px;
+                }
+            }
+
+            .last-wraper {
+                flex: 1;
+                display: flex;
+                justify-content: flex-end;
+                align-items: center;
+
+                .skip {
+                    #image.icon(18px, '~@/assets/images/wallet-history-skip.svg');
+                }
+
+                .loading,
+                .icon-success-green {
+                    margin-left: 57px;
+                }
+
+                .revert-btn {
+                    height: 38px;
+                    width: 96px;
+                    font-family: Poppins;
+                    font-style: normal;
+                    font-weight: bold;
+                    font-size: 15px;
+                    line-height: 22px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    color: #ffffff;
+                    margin-left: 26px;
+                }
+            }
+        }
+    }
+}

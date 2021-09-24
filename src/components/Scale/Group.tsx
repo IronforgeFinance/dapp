@@ -1,4 +1,5 @@
-import './less/Group/index.less';
+import './Group.pc.less';
+import './Group.mobile.less';
 
 import React from 'react';
 import { useCallback } from 'react';

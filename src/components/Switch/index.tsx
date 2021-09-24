@@ -1,4 +1,5 @@
-import './less/index.less';
+import './pc.less';
+import './mobile.less';
 
 import { useLayoutEffect } from 'react';
 import { Switch, SwitchProps } from 'antd';
@@ -51,6 +52,7 @@ const ISwitch = (props: ISwitchProps) => {
             <button
                 onClick={() => onChange(true)}
                 className={classNames({
+                    'switch-btn': true,
                     active: checked,
                 })}
             >
@@ -59,6 +61,7 @@ const ISwitch = (props: ISwitchProps) => {
             <button
                 onClick={() => onChange(false)}
                 className={classNames({
+                    'switch-btn': true,
                     active: !checked,
                 })}
             >
