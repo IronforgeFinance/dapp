@@ -1,10 +1,22 @@
-@import '~@/layouts/components/Header/mobile.less';
+@mobileNavHeight: 120px;
 
 @usdt: linear-gradient(90deg, #fcd144 85.54%, #ffad33 98.08%);
 @usdc: linear-gradient(90deg, #26a17b 85.54%, #0c8f67 98.08%);
 @usd: linear-gradient(116.98deg, #611bf6 31.39%, #8d33ff 83.13%);
 @btc: linear-gradient(116.98deg, #f6911b 31.39%, #ffcb44 83.13%);
 @eth: linear-gradient(116.98deg, #c4c3c7 31.39%, #72727a 83.13%);
+
+.mobile(@class) {
+    @media (max-width: 750px) {
+        @class();
+    }
+}
+
+.pc(@class) {
+    @media (min-width: 751px) {
+        @class();
+    }
+}
 
 .token-color(@geometric) {
     &.@{geometric}-usdc {
@@ -167,7 +179,7 @@
     }
 
     .icon(@size, @bgImage, @bgColor: transparent, @pure: true) {
-        .background(@bgImage, @bgColor);
+        #image.background(@bgImage, @bgColor);
 
         width: @size;
         height: @size;
@@ -182,7 +194,7 @@
     }
 
     .button(@bgImage, @bgColor: transparent) {
-        .background(@bgImage, @bgColor);
+        #image.background(@bgImage, @bgColor);
 
         border: none;
         outline: none;
@@ -227,7 +239,7 @@
 
 .page-container(@image: '') {
     #image.background(@image);
-    padding-top: @navHeight;
+    padding-top: @mobileNavHeight;
     display: flex;
     flex-direction: column;
     min-width: 100vw;

@@ -1,3 +1,6 @@
+import '@/assets/styles/global.pc.less';
+import '@/assets/styles/global.mobile.less';
+
 import { Web3ReactProvider } from '@web3-react/core';
 import { HelmetProvider } from 'react-helmet-async';
 import { RefreshContextProvider } from '@/contexts/RefreshContext';
