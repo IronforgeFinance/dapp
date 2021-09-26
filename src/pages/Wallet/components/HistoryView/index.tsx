@@ -296,19 +296,15 @@ const HistoryView = () => {
                             {row?.status === 'pending' && (
                                 <i className="loading size-18" />
                             )}
-                            <Button
-                                className="revert-btn common-btn common-btn-red"
-                                onClick={openRevertConfirm}
-                                loading={txLoading}
-                                style={{
-                                    visibility:
-                                        row?.status === 'pending'
-                                            ? 'visible'
-                                            : 'hidden',
-                                }}
-                            >
-                                Revert
-                            </Button>
+                            {row?.canRevert && (
+                                <Button
+                                    className="revert-btn common-btn common-btn-red"
+                                    onClick={openRevertConfirm}
+                                    loading={txLoading}
+                                >
+                                    Revert
+                                </Button>
+                            )}
                             <Popover
                                 placement="leftBottom"
                                 trigger="hover"
@@ -366,8 +362,10 @@ const HistoryView = () => {
                 console.log(err);
                 if (err && err.code === 4001) {
                     message.error({
-                        message: 'Transaction rejected',
-                        description: 'Rejected by user',
+                        message: intl.formatMessage({ id: 'txRejected' }),
+                        description: intl.formatMessage({
+                            id: 'rejectedByUser',
+                        }),
                     });
                     return;
                 }
@@ -413,7 +411,9 @@ const HistoryView = () => {
             for (let i = 0; i < data.operations.length; i++) {
                 const item = data.operations[i];
                 if (item.type === 'Exchange' && item.status === 'pending') {
+                    debugger;
                     const res = await fetchIfCanRevert(item.id);
+                    console.log('canRevertRes: ', res);
                     item.canRevert = res;
                 }
             }

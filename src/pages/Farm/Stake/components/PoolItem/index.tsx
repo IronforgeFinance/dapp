@@ -44,6 +44,13 @@ export default (props: { pool: IStakePool; handleFlipper: () => void }) => {
         } catch (err) {
             console.log(err);
             setSubmitting(false);
+            if (err && err.code === 4001) {
+                message.error({
+                    message: intl.formatMessage({ id: 'txRejected' }),
+                    description: intl.formatMessage({ id: 'rejectedByUser' }),
+                });
+                return;
+            }
         }
     };
     return (
@@ -73,7 +80,9 @@ export default (props: { pool: IStakePool; handleFlipper: () => void }) => {
                         </p>
                     </div>
                     <div className="total-info-item">
-                        <p className="label">{intl.formatMessage({ id: 'earn' })}:</p>
+                        <p className="label">
+                            {intl.formatMessage({ id: 'earn' })}:
+                        </p>
                         <p className="value">
                             BS{' '}
                             <Popover
@@ -90,7 +99,9 @@ export default (props: { pool: IStakePool; handleFlipper: () => void }) => {
                 <div className="user-info">
                     <div className="user-info-item">
                         <div className="label-item">
-                            <p className="label">{intl.formatMessage({ id: 'bsTotalEarned' })}</p>
+                            <p className="label">
+                                {intl.formatMessage({ id: 'bsTotalEarned' })}
+                            </p>
                             <p className="label">{totalPendingReward}</p>
                         </div>
                         <div className="value">
@@ -116,12 +127,16 @@ export default (props: { pool: IStakePool; handleFlipper: () => void }) => {
                                 loading={submitting}
                                 disabled={redeemableReward === 0 || !account}
                             >
-                                {intl.formatMessage({ id: 'harvest' })}
+                                {!submitting
+                                    ? intl.formatMessage({ id: 'harvest' })
+                                    : ''}
                             </Button>
                         </div>
                     </div>
                     <div className="user-info-item">
-                        <p className="label">{name} {intl.formatMessage({ id: 'STAKED' })}</p>
+                        <p className="label">
+                            {name} {intl.formatMessage({ id: 'STAKED' })}
+                        </p>
                         <div className="value">
                             {account && (
                                 <>

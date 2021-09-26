@@ -246,7 +246,9 @@ export default () => {
                 maxCanbuild =
                     (fromPrice * collateralAmount) / (toPrice * initialRatio);
             }
-            setToAmount(toFixedWithoutRound(maxCanbuild, 6));
+            if (maxCanbuild) {
+                setToAmount(toFixedWithoutRound(maxCanbuild, 6));
+            }
         }, 500)();
     }, [
         collateralToken,
@@ -467,8 +469,10 @@ export default () => {
                 console.log(err);
                 if (err && err.code === 4001) {
                     message.error({
-                        message: 'Transaction rejected',
-                        description: 'Rejected by user',
+                        message: intl.formatMessage({ id: 'txRejected' }),
+                        description: intl.formatMessage({
+                            id: 'rejectedByUser',
+                        }),
                     });
                     return;
                 }

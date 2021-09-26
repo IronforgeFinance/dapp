@@ -169,4 +169,6 @@ export default {
         'IronForge provides two types of synthetic assets: perpetual and delivery. After the delivery date of the delivery synthetic asset expires, the asset price will be locked, and the debt behind it will also be frozen and no longer follow changes in the public debt pool; perpetual There is no date limit for assets, and the price will always follow the market changes, so the debts that users have not destroyed will always follow the changes in the public debt pool.',
     'npc.mntRatio':
         'The higher the proportion of BS locked in the pledge, the lower the pledge rate F-Ratio, which can be as low as 350%',
+    txRejected: 'Transaction rejected',
+    rejectedByUser: 'Rejected by user',
 };
