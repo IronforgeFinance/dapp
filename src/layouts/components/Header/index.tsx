@@ -2,7 +2,7 @@ import './pc.less';
 import './mobile.less';
 
 import 'react';
-import { NavLink, useIntl } from 'umi';
+import { NavLink, useIntl, history } from 'umi';
 import WalletStatus from '../WalletStatus';
 import MobileNavigation from './components/MobileNavigation';
 import Logo from '@/assets/images/header-logo.png';
@@ -18,7 +18,11 @@ export default () => {
     return (
         <div className="header-nav">
             <div className="left-box">
-                <img className="logo" src={Logo} />
+                <img
+                    className="logo"
+                    src={Logo}
+                    onClick={() => history.push('/')}
+                />
             </div>
             {!isMobile && (
                 <div className="mid-box">
