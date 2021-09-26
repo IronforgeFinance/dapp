@@ -241,7 +241,10 @@ export default () => {
                     <div className="input-item-content receive-tokens">
                         {receiveTokens.map((item) => (
                             <div className="receive-token-item">
-                                <p className="token">{item.token}</p>
+                                <p className="token">
+                                    <TokenIcon name={item.token} />
+                                    {item.token}
+                                </p>
                                 <p className="value">{item.amount}</p>
                             </div>
                         ))}
