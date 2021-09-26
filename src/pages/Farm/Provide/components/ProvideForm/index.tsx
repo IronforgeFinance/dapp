@@ -433,12 +433,12 @@ export default () => {
 
     const openFromTokenList = useCallback(
         () => open(TOKENS, { callback: token1SelectHandler.bind(this) }),
-        [],
+        [token1Amount, token2, token2Amount],
     );
 
     const openToTokenList = useCallback(
         () => open(TOKENS, { callback: token2SelectHandler.bind(this) }),
-        [],
+        [token2Amount, token1, token1Amount],
     );
 
     return (
