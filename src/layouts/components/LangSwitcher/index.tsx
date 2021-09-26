@@ -1,32 +1,25 @@
 import './pc.less';
 import './mobile.less';
 
-import React from 'react';
 import classNames from 'classnames';
-import { useState } from 'react';
-import { useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import { setLocale } from 'umi';
+import {
+    LangContext,
+    LangMap,
+    LANG_CACHE_KEY,
+    LocaleMap,
+    LangType,
+    LocaleType,
+} from './provider';
 
-export type LangType = 'EN' | 'CN';
-export type LocaleType = 'en-US' | 'zh-CN';
-
-export const LangMap = {
-    EN: 'English',
-    ZH: '中文',
+export const useLang = () => {
+    return useContext(LangContext);
 };
-
-export const LocaleMap = {
-    EN: 'en-US',
-    ZH: 'zh-CN',
-};
-
-export const LANG_CACHE_KEY = 'lang';
 
 export default () => {
-    const [lang, setLang] = useState(
-        localStorage.getItem(LANG_CACHE_KEY) ?? ('EN' as keyof typeof LangMap),
-    );
     const [show, setShow] = useState(false);
+    const { lang, setLang } = useContext(LangContext);
 
     useEffect(() => {
         setShow(false);

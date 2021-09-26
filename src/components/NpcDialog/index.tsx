@@ -17,6 +17,7 @@ import classNames from 'classnames';
 import { history } from 'umi';
 import useEnv from '@/hooks/useEnv';
 import { NpcDialogContext } from './provider';
+import { useLang } from '@/layouts/components/LangSwitcher';
 
 interface NpcDialog {
     children?: ReactNode;
@@ -34,6 +35,7 @@ const NpcDialog = (props: NpcDialog) => {
     const [slowWords, setSlowWords] = useState('');
     const [pathname, setPathname] = useState('/mint');
     const tmKeys = useRef([]);
+    const { lang } = useLang();
     const delayKey = useRef(null);
     // const totalTm = useRef(0);
     /**
@@ -42,13 +44,15 @@ const NpcDialog = (props: NpcDialog) => {
      */
     const appearSlowly = useCallback(() => {
         // 执行len个文字输出的update任务
-        /**@todo 递归 */
         const wordsArray = words.split('');
         wordsArray.forEach((word, index) => {
             const newWords = words.slice(0, index + 1);
             // console.log('>> alloc words to array -> %s', word);
             tmKeys.current.push(
-                setTimeout(() => setSlowWords(newWords), index * 100),
+                setTimeout(
+                    () => setSlowWords(newWords),
+                    index * (lang === 'EN' ? 30 : 100),
+                ),
             );
         });
 
