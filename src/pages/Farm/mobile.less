@@ -1,78 +1,84 @@
-@media (max-width: 750px) {
-    @import '~@/assets/styles/iron.less';
+@import '~@/assets/styles/iron.less';
 
-    .farm-container {
-        .page-container('~@/assets/images/mobile-farm-bg.jpg');
-        align-items: center;
-        min-height: 120vh;
+.mobile( {
 
-        .btn-mint {
-            margin: 0 auto;
-        }
+        .farm-container {
+            .page-container('~@/assets/images/mobile-farm-bg.jpg');
+            align-items: center;
+            min-height: 120vh;
 
-        .add-liquidity-btn.ant-btn {
-            margin: 0;
-            width: 236px;
-            height: 70px;
-            float: right;
-        }
+            .btn-mint {
+                margin: 0 auto;
+            }
 
-        .harvest-btn.ant-btn,
-        .stake-lp-btn.ant-btn {
-            width: 178px;
-            height: 70px;
-            margin: 0;
-        }
+            .add-liquidity-btn.ant-btn {
+                margin: 0;
+                width: 236px;
+                height: 70px;
+                float: right;
+                margin-top: 10px;
+            }
 
-        .farm-header {
-            #image.background('~@/assets/images/mobile-farm-header-bg.png');
-            background-color: transparent;
-            width: 736.84px;
-            height: 265px;
-            padding: 35px 37px;
+            .harvest-btn.ant-btn,
+            .stake-lp-btn.ant-btn {
+                width: 178px;
+                height: 70px;
+                margin: 0;
+            }
 
-            .info-item {
-                width: 100%;
-                display: flex;
-                flex-direction: row-reverse;
-                text-align: center;
-                justify-content: space-between;
+            .farm-header {
+                #image.background('~@/assets/images/mobile-farm-header-bg.png');
+                background-color: transparent;
+                width: 736.84px;
+                height: 265px;
+                padding: 35px 37px;
 
-                &:nth-child(n + 2) {
-                    margin-top: 10px;
-                }
-
-                .value {
-                    font-style: normal;
-                    font-weight: bold;
-                    font-size: 28px;
-                    line-height: 42px;
+                .info-item {
+                    width: 100%;
+                    display: flex;
+                    flex-direction: row-reverse;
                     text-align: center;
-                    color: #ffffff;
-                    word-break: break-all;
-                }
+                    justify-content: space-between;
 
-                .label {
-                    font-weight: 300;
-                    font-size: 22px;
-                    line-height: 33px;
-                    text-align: center;
-                    color: rgba(73, 40, 9, 0.6);
+                    // &:nth-child(n + 2) {
+                    //     margin-top: 10px;
+                    // }
+
+                    .value {
+                        font-style: normal;
+                        font-weight: bold;
+                        font-size: 28px;
+                        line-height: 42px;
+                        text-align: center;
+                        color: #ffffff;
+                        word-break: break-all;
+                        margin: 0;
+                    }
+
+                    .label {
+                        font-weight: 300;
+                        font-size: 22px;
+                        line-height: 33px;
+                        text-align: center;
+                        color: rgba(73, 40, 9, 0.6);
+                        margin: 0;
+                    }
                 }
             }
-        }
 
-        .farm-tabs {
-            margin: 20px 0;
-        }
+            .farm-tabs {
+                margin: 20px 0;
+            }
 
-        .farm-pool {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: space-between;
-            width: 694.24px * 2;
-            margin: 50px auto;
-            margin-top: 0px;
+            .farm-pool {
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: space-between;
+                width: 694.24px * 2;
+                margin: 50px auto;
+                margin-top: 0px;
+            }
         }
     }
-}
+
+);

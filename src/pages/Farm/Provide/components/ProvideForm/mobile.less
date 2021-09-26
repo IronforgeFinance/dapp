@@ -1,142 +1,149 @@
-@media (max-width: 750px) {
-    .provide-container {
-        .tab-group {
-            width: 662.14px;
+@import url('~@/assets/styles/iron.less');
 
-            .tab-btn {
-                width: 328px;
+.mobile( {
+        .provide-container {
+            .page-container('~@/assets/images/mobile-farm-bg.jpg');
+            min-height: 140vh;
+
+            .tab-group {
+                width: 662.14px;
+
+                .tab-btn {
+                    width: 328px;
+                }
             }
         }
-    }
 
-    .provide-form {
-        min-height: 755px;
-        width: 706px;
-        padding: 71px 42px 110px 42px;
-    }
-
-    .provide-btn-footer {
-        margin-top: 60px;
-
-        button {
-            width: 340px;
-            height: 90px;
-            font-size: 32px;
-            line-height: 163%;
-            margin: 0 auto;
+        .provide-form {
+            min-height: 755px;
+            width: 706px;
+            padding: 71px 42px 110px 42px;
         }
-    }
 
-    .icon-back {
-        position: absolute;
-        top: 40px;
-        left: -20px;
-        width: 45px;
-        height: 33px;
-        cursor: pointer;
-    }
+        .provide-btn-footer {
+            margin-top: 60px;
 
-    .provide-prices {
-        margin: 26px auto;
-        margin-bottom: 0;
-        display: flex;
-        align-items: center;
-        flex-direction: column;
+            button {
+                width: 340px;
+                height: 90px;
+                font-size: 32px;
+                line-height: 163%;
+                margin: 0 auto;
+            }
+        }
 
-        .title {
-            font-style: normal;
-            font-weight: bold;
-            font-size: 15px;
-            line-height: 22px;
+        .icon-back {
+            position: absolute;
+            top: 40px;
+            left: -20px;
+            width: 45px;
+            height: 33px;
+            cursor: pointer;
+        }
+
+        .provide-prices {
+            margin: 26px auto;
+            margin-bottom: 0;
             display: flex;
-            color: #ffffff;
-        }
-
-        .prices-bg {
-            width: 380px;
-            min-height: 100px;
-            background: url(~@/assets/images/lp-prices-bg.png) center center
-                no-repeat;
-            background-size: cover;
-        }
-    }
-
-    .prices-and-share {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        height: 100px;
-        padding: 0 20px;
-
-        .price-item {
-            display: flex;
+            align-items: center;
             flex-direction: column;
+
+            .title {
+                font-style: normal;
+                font-weight: bold;
+                font-size: 22px;
+                line-height: 33px;
+                display: flex;
+                color: #ffffff;
+            }
+
+            .prices-bg {
+                width: 623px;
+                height: 230px;
+                #image.background('~@/assets/images/lp-prices-bg.png');
+                background-size: 100% 100%;
+            }
+        }
+
+        .prices-and-share {
+            display: flex;
             justify-content: space-between;
             align-items: center;
+            height: 100px;
+            padding: 0 20px;
 
-            .token {
-                font-style: normal;
-                font-weight: normal;
-                font-size: 15px;
-                line-height: 22px;
-                color: #292725;
+            .price-item {
+                display: flex;
+                flex-direction: column;
+                justify-content: space-between;
+                align-items: center;
+
+                .token {
+                    font-style: normal;
+                    font-weight: normal;
+                    font-size: 15px;
+                    line-height: 22px;
+                    color: #292725;
+                }
+
+                .price {
+                    font-style: normal;
+                    font-weight: bold;
+                    font-size: 15px;
+                    line-height: 22px;
+                    color: #292725;
+                }
+            }
+        }
+
+        .lp-list {
+            #image.background('~@/assets/images/lp-list-bg.png');
+            background-size: 100% 100%;
+            width: 659px;
+            height: 735.15px;
+            padding: 39px 45px;
+            position: relative;
+
+            .header {
+                > p:first-child {
+                    font-style: normal;
+                    font-weight: bold;
+                    font-size: 24px;
+                    line-height: 36px;
+                    color: #e1ab3b;
+                    margin-bottom: 4px;
+                }
+
+                > p:last-child {
+                    font-style: normal;
+                    font-weight: 300;
+                    font-size: 24px;
+                    line-height: 36px;
+                    text-align: justify;
+                    letter-spacing: -0.01em;
+                    color: #e1ab3b;
+                    margin-bottom: 4px;
+                }
             }
 
-            .price {
-                font-style: normal;
-                font-weight: bold;
-                font-size: 15px;
-                line-height: 22px;
-                color: #292725;
+            .lp-list-content {
+                overflow: auto;
+                margin-top: 20px;
+                max-height: 480px;
+            }
+        }
+
+        .provide-outer-container {
+            .iron-folder {
+                top: 0;
+                right: 0;
+                top: 900px;
+
+                .btn-toggle {
+                    top: 10px;
+                }
             }
         }
     }
 
-    .lp-list {
-        width: 382px;
-        height: 382px;
-        background: url(~@/assets/images/lp-list-bg.png) center center no-repeat;
-        background-size: cover;
-        padding: 18px 28px;
-        position: relative;
-
-        .header {
-            > p:first-child {
-                font-style: normal;
-                font-weight: bold;
-                font-size: 16px;
-                line-height: 24px;
-                color: #e1ab3b;
-                margin-bottom: 4px;
-            }
-
-            > p:last-child {
-                font-style: normal;
-                font-weight: 300;
-                font-size: 15px;
-                line-height: 24px;
-                text-align: justify;
-                letter-spacing: -0.01em;
-                color: #e1ab3b;
-                margin-bottom: 4px;
-            }
-        }
-
-        .lp-list-content {
-            overflow: auto;
-            height: 220px;
-        }
-    }
-
-    .provide-outer-container {
-        .iron-folder {
-            top: 0;
-            right: 0;
-            top: 1200px;
-
-            .btn-toggle {
-                top: 180px;
-            }
-        }
-    }
-}
+);
