@@ -412,7 +412,6 @@ const HistoryView = () => {
             for (let i = 0; i < data.operations.length; i++) {
                 const item = data.operations[i];
                 if (item.type === 'Exchange' && item.status === 'pending') {
-                    debugger;
                     const res = await fetchIfCanRevert(item.id);
                     console.log('canRevertRes: ', res);
                     item.canRevert = res;

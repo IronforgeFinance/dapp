@@ -13,6 +13,7 @@ import { Button } from 'antd';
 import { TokenIcon } from '../Icon';
 import { useRef } from 'react';
 import { loading } from '../Notification';
+import Loading from '@/components/Loading';
 
 export type ViewType = 'mint' | 'burn' | 'loading' | 'trade';
 
@@ -354,7 +355,7 @@ export default (props: TransitionConfirmProps) => {
             case 'loading': {
                 return (
                     <section className="i-loading-view">
-                        <i className="transaction-confirm-loading" />
+                        <Loading />
                         <div className="details">
                             <p className="summary">
                                 Waiting for Transaction Submitted...

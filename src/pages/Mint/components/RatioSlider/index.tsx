@@ -67,6 +67,7 @@ const RatioSlider = (props: IRatioSliderProps) => {
                     'iron-progress': true,
                     'iron-progress-low': value <= 20,
                     'iron-progress-safe': value >= 50,
+                    'iron-progress-faraway-safe': value >= 80,
                 })}
                 tooltipVisible={true}
                 tooltipPlacement="bottom"
