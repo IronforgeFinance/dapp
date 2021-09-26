@@ -6,6 +6,15 @@ import React, { useState } from 'react';
 import IconDown from '@/assets/images/down.svg';
 import { useModel } from 'umi';
 import { TokenIcon } from '@/components/Icon';
+import { DEADLINE } from '@/config/constants/constant';
+import Tokens from '@/config/constants/tokens';
+import Contracts from '@/config/constants/contracts';
+import { useRouter } from '@/hooks/useContract';
+import {
+    useCheckERC20ApprovalStatus,
+    useERC20Approve,
+} from '@/hooks/useApprove';
+import { ethers } from 'ethers';
 
 interface IProps {
     data: ILpDataProps;
@@ -13,15 +22,34 @@ interface IProps {
 export default (props: IProps) => {
     const { data } = props;
     const [showDetail, setShowDetail] = useState(false);
-    const { setCurrentLpData } = useModel('lpData', (model) => ({
-        setCurrentLpData: model.setCurrentLpData,
-    }));
+    const [submitting, setSubmitting] = useState(false);
+    const { setCurrentLpData, setLpDataToRemove } = useModel(
+        'lpData',
+        (model) => ({
+            setCurrentLpData: model.setCurrentLpData,
+            setLpDataToRemove: model.setLpDataToRemove,
+        }),
+    );
+
+    const routerContract = useRouter();
+    const pancakeRouter = Contracts.PancakeRouter[process.env.APP_CHAIN_ID];
+
+    const { isApproved, setLastUpdated } = useCheckERC20ApprovalStatus(
+        Tokens[data.symbol].address[process.env.APP_CHAIN_ID],
+        pancakeRouter,
+    );
+
+    const { handleApprove, requestedApproval } = useERC20Approve(
+        Tokens[data.symbol].address[process.env.APP_CHAIN_ID],
+        pancakeRouter,
+        setLastUpdated,
+    );
 
     const handleAddLiquidity = () => {
         setCurrentLpData({ ...data });
     };
-    const handleRemove = () => {
-        //TODO
+    const handleRemove = async () => {
+        setLpDataToRemove({ ...data });
     };
     const tokens = data.symbol.split('-');
     return (

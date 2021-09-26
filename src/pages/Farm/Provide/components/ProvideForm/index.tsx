@@ -199,29 +199,28 @@ export default () => {
         }
     }, [token1Amount, token2Amount, currentLpData]);
 
-    const getCurrentLpData = (token1, token2) => {
-        if (isValidLp(token1, token2)) {
-            return lpDataList.find(
-                (item) =>
-                    item.symbol === `${token1}-${token2}` ||
-                    item.symbol === `${token2}-${token1}`,
-            );
+    const getCurrentLpData = async (token1, token2) => {
+        const data = lpDataList.find(
+            (item) =>
+                item.symbol === `${token1}-${token2}` ||
+                item.symbol === `${token2}-${token1}`,
+        );
+        if (data) {
+            setCurrentLpData(data);
         } else {
-            return Object.assign({}, NO_LIQUIDITY_LP, {
-                symbol: `${token1}-${token2}`,
-                token1,
-                token2,
-            });
+            const info = await fetchLpDataInfo(`${token1}-${token2}`, account);
+            setLpDataList(lpDataList.concat(info));
+            setCurrentLpData(info);
         }
     };
 
     const updateToken2Amount = (token1Amount) => {
         if (token1Amount && token1 && token2) {
-            const token2Price =
+            const token1Price =
                 currentLpData.token1 === token1
-                    ? currentLpData.token2Price
-                    : currentLpData.token1Price;
-            const token2Amount = token2Price * token1Amount;
+                    ? currentLpData.token1Price
+                    : currentLpData.token2Price;
+            const token2Amount = token1Price * token1Amount;
             setToken2Amount(token2Amount);
         } else {
             setToken2Amount(undefined);
@@ -230,11 +229,11 @@ export default () => {
 
     const updateToken1Amount = (token2Amount) => {
         if (token2Amount && token2 && token1) {
-            const token1Price =
+            const token2Price =
                 currentLpData.token2 === token2
-                    ? currentLpData.token1Price
-                    : currentLpData.token2Price;
-            const token1Amount = token1Price * token2Amount;
+                    ? currentLpData.token2Price
+                    : currentLpData.token1Price;
+            const token1Amount = token2Price * token2Amount;
             setToken1Amount(token1Amount);
         } else {
             setToken1Amount(undefined);
@@ -243,23 +242,14 @@ export default () => {
 
     const token1AmountHandler = (v) => {
         setToken1Amount(v);
-        if (isValidLp(token1, token2)) {
-            updateToken2Amount(v);
-        } else {
-            setToken1Price(v);
-        }
+        updateToken2Amount(v);
     };
 
     const token2AmountHandler = (v) => {
         setToken2Amount(v);
-        if (isValidLp(token1, token2)) {
-            updateToken1Amount(v);
-        } else {
-            setToken2Price(v);
-        }
+        updateToken1Amount(v);
     };
 
-    //TODO 只支持预先设定的lp pair。
     const token1SelectHandler = (v) => {
         console.log('tokens: ', token1, token2);
         if (token2 === v) {
@@ -275,8 +265,7 @@ export default () => {
 
     useEffect(() => {
         if (token1 && token2) {
-            const data = getCurrentLpData(token1, token2);
-            setCurrentLpData(data);
+            getCurrentLpData(token1, token2);
         }
     }, [token1, token2]);
 
@@ -555,13 +544,13 @@ export default () => {
                         <div className="prices-bg">
                             <div className="prices-and-share">
                                 <div className="price-item">
-                                    <p className="price">{token1Price}</p>
+                                    <p className="price">{token2Price}</p>
                                     <p className="token">
                                         {token1} per {token2}
                                     </p>
                                 </div>
                                 <div className="price-item">
-                                    <p className="price">{token2Price}</p>
+                                    <p className="price">{token1Price}</p>
                                     <p className="token">
                                         {token2} per {token1}
                                     </p>
