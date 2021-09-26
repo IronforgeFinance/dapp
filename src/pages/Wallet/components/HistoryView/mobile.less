@@ -1,0 +1,175 @@
+@import url('~@/assets/styles/iron.less');
+
+.mobile( {
+        .history-view {
+            .iron-switch {
+                margin-bottom: 20px;
+                margin-left: 80%;
+                display: none;
+            }
+
+            .custom-tabs.ant-tabs {
+                .ant-tabs-tab-btn {
+                    font-size: 24px;
+                    line-height: 36px;
+                }
+
+                .ant-table-cell {
+                    max-width: 100%;
+
+                    &:first-child {
+                        padding-left: 53px;
+                    }
+                }
+
+                .ant-tabs-tab {
+                    &:nth-child(2) {
+                        margin-left: 114px;
+                    }
+
+                    &:nth-child(n + 3) {
+                        margin-left: 90px;
+                    }
+                }
+
+                .ant-tabs-nav-wrap {
+                    padding-left: 53px;
+                }
+
+                .ant-tabs-content-holder {
+                    overflow-y: scroll;
+                }
+            }
+
+            .history {
+                display: flex;
+                align-items: center;
+                // width: 90%;
+
+                .operation {
+                    display: flex;
+                    align-items: center;
+                    // width: 230px;
+                    // max-width: 230px;
+
+                    .icon {
+                        @size: 48px;
+
+                        &.mint {
+                            #image.icon(@size, '~@/assets/images/wallet-history-icon-mint.png');
+                        }
+
+                        &.burn {
+                            #image.icon(@size, '~@/assets/images/wallet-history-icon-burn.png');
+                        }
+
+                        &.trade {
+                            #image.icon(@size, '~@/assets/images/wallet-history-icon-trade.png');
+                        }
+
+                        &.pool-burn {
+                            #image.icon(@size, '~@/assets/images/wallet-history-icon-pool-burn.svg');
+                        }
+
+                        &.pool-mint {
+                            #image.icon(@size, '~@/assets/images/wallet-history-icon-pool-mint.svg');
+                        }
+
+                        &.farm {
+                            #image.icon(@size, '~@/assets/images/wallet-history-icon-farm.svg');
+                        }
+                    }
+
+                    .info {
+                        display: flex;
+                        flex-direction: column;
+                        margin-left: 8px;
+                        // width: 230px;
+
+                        span {
+                            font-style: normal;
+                            font-weight: bold;
+                            font-size: 24px;
+                            line-height: 36px;
+                            display: flex;
+                            align-items: center;
+                            color: #292725;
+                        }
+
+                        .time-view {
+                            align-items: flex-start;
+
+                            .pure-view {
+                                font-style: normal;
+                                font-weight: 300;
+                                font-size: 24px;
+                                line-height: 36px;
+                                color: #6f4123;
+                            }
+                        }
+                    }
+                }
+
+                > p {
+                    white-space: nowrap;
+                    font-style: normal;
+                    font-weight: 300;
+                    font-size: 24px;
+                    line-height: 36px;
+                    color: #292725;
+                    width: 412px;
+                    max-width: 412px;
+                    display: flex;
+                    flex-wrap: wrap;
+                    margin-left: 20px;
+
+                    b {
+                        color: #ac4c06;
+                        font-weight: bold;
+                        margin: 0 4px;
+                    }
+                }
+
+                .last-wraper {
+                    // flex: 1;
+                    display: flex;
+                    justify-content: flex-end;
+                    align-items: center;
+
+                    .skip {
+                        #image.icon(28px, '~@/assets/images/wallet-history-skip.svg');
+                    }
+
+                    .loading,
+                    .icon-success-green {
+                        margin-left: 57px;
+                        width: 28px;
+                        height: 28px;
+                    }
+
+                    .icon-question {
+                        width: 28px;
+                        height: 28px;
+                    }
+
+                    .revert-btn {
+                        height: 80px;
+                        width: 196px;
+                        font-family: Poppins;
+                        font-style: normal;
+                        font-weight: bold;
+                        font-size: 24px;
+                        line-height: 36px;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        color: #ffffff;
+                        margin-left: 26px;
+                        margin-top: 0
+                    }
+                }
+            }
+        }
+    }
+
+);
