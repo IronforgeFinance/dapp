@@ -45,6 +45,13 @@ export default (props: { pool: IStakePool; handleFlipper: () => void }) => {
         } catch (err) {
             console.log(err);
             setSubmitting(false);
+            if (err && err.code === 4001) {
+                message.error({
+                    message: intl.formatMessage({ id: 'txRejected' }),
+                    description: intl.formatMessage({ id: 'rejectedByUser' }),
+                });
+                return;
+            }
         }
     };
     return (
@@ -121,7 +128,9 @@ export default (props: { pool: IStakePool; handleFlipper: () => void }) => {
                                 loading={submitting}
                                 disabled={redeemableReward === 0 || !account}
                             >
-                                {intl.formatMessage({ id: 'harvest' })}
+                                {!submitting
+                                    ? intl.formatMessage({ id: 'harvest' })
+                                    : ''}
                             </Button>
                         </div>
                     </div>
