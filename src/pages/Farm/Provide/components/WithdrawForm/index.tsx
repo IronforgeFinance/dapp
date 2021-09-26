@@ -34,7 +34,7 @@ export default () => {
     const { account } = useWeb3React();
     const { open } = useContext(TokenSelectorContext);
 
-    const { lpDataList } = useModel('lpData', (model) => ({
+    const { lpDataList, lpDataToRemove } = useModel('lpData', (model) => ({
         ...model,
     }));
 
@@ -60,6 +60,15 @@ export default () => {
     const lpAmountHandler = (v) => {
         setLpAmount(v);
     };
+
+    useEffect(() => {
+        if (lpDataToRemove) {
+            const lpAmount = lpDataToRemove.balance;
+            const lp = lpDataToRemove.symbol;
+            setLpAmount(lpAmount);
+            setLp(lp);
+        }
+    }, [lpDataToRemove]);
 
     useEffect(() => {
         const handleReceiveTokens = debounce(() => {

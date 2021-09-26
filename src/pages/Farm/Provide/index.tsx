@@ -1,7 +1,7 @@
 import './pc.less';
 import './mobile.less';
 
-import React, { useState, useMemo, Fragment } from 'react';
+import React, { useState, useEffect, useMemo, Fragment } from 'react';
 import TabGroup from '@/components/TabGroup';
 import ProvideForm from './components/ProvideForm';
 import WithdrawForm from './components/WithdrawForm';
@@ -11,7 +11,7 @@ import { history } from 'umi';
 import { Tabs } from 'antd';
 import IsShow from '@/components/IsShow';
 const { TabPane } = Tabs;
-import { useIntl } from 'umi';
+import { useIntl, useModel } from 'umi';
 
 export const ITabKeyContext = React.createContext<string>('');
 
@@ -28,6 +28,14 @@ export default (props) => {
     const provideTitle = intl.formatMessage({ id: 'liquidity.tab.provide' });
     const withdrawTitle = intl.formatMessage({ id: 'liquidity.tab.withdraw' });
 
+    const { lpDataToRemove } = useModel('lpData', (model) => ({
+        ...model,
+    }));
+    useEffect(() => {
+        if (lpDataToRemove) {
+            setTabKey('2');
+        }
+    }, [lpDataToRemove]);
     const tabItems = useMemo(
         () => [
             {

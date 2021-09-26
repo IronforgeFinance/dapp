@@ -15,11 +15,11 @@ export default [
                 path: '/farm/provide',
                 component: '@/pages/Farm/Provide',
             },
-            {
-                exact: true,
-                path: '/farm/stake',
-                component: '@/pages/Farm/Stake',
-            },
+            // {
+            //     exact: true,
+            //     path: '/farm/stake',
+            //     component: '@/pages/Farm/Stake',
+            // },
             { exact: true, path: '/wallet', component: '@/pages/Wallet' },
         ],
     },
