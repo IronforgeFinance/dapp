@@ -46,16 +46,23 @@ export default (props: IProps) => {
             {showDetail && (
                 <div className="detail-info">
                     <div className="info-item">
-                        <p className="title">pooled {data.token1} </p>
+                        <p className="title">
+                            <TokenIcon name={data.token1} />
+                            pooled {data.token1}{' '}
+                        </p>
                         <p className="value">{data.token1Balance}</p>
                     </div>
                     <div className="info-item">
-                        <p className="title">pooled {data.token2} </p>
+                        <p className="title">
+                            <TokenIcon name={data.token2} />
+                            pooled {data.token2}{' '}
+                        </p>
                         <p className="value"> {data.token2Balance}</p>
                     </div>
                     <div className="info-item">
                         <p className="title">share of pool </p>
                         <p className="value">
+                            {'> '}
                             {data.share < 0.00001
                                 ? '<0.01%'
                                 : (data.share * 100).toFixed(2) + '%'}
