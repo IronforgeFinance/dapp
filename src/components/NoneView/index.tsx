@@ -7,6 +7,7 @@ import { TabRecordBoardContext } from '@/components/TabRecordBoard';
 import { useCallback } from 'react';
 import { MyDebtsContext } from '@/components/MyDebts/provider';
 import { LoadingContext } from '@/contexts/LoadingContext';
+import Loading from '../Loading';
 
 export type NoneTypes = 'noAssets' | 'noConnection' | 'noRecords' | undefined;
 export interface NoneViewProps {
@@ -71,12 +72,7 @@ const NoneView = (props: NoneViewProps) => {
                     )}
                 </Fragment>
             )}
-            {loading && (
-                <i
-                    className="transaction-confirm-loading"
-                    style={{ zIndex: 1 }}
-                />
-            )}
+            {loading && <Loading />}
         </div>
     );
 };

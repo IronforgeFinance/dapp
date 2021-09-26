@@ -5,6 +5,7 @@ import message from '@iron/Notification';
 import WalletModal from '@/layouts/components/WalletModal';
 import { BSCSCAN_EXPLORER } from '@/config/constants/constant';
 import ISwitch from '@/components/Switch';
+import Loading from '@/components/Loading';
 
 export default () => {
     // * 选择token演示
@@ -121,6 +122,10 @@ export default () => {
                         checkedChildren="Live"
                         unCheckedChildren="Finished"
                     />
+                </li>
+                <li>
+                    <h3>10. loading</h3>
+                    <Loading />
                 </li>
             </ul>
         </div>

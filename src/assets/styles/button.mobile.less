@@ -27,6 +27,15 @@
             padding-left: 0;
             padding-right: 0;
 
+            &:hover,
+            &:focus,
+            &:active {
+                text-decoration: none;
+                background: transparent;
+                color: #e1ab3b;
+                filter: brightness(200%);
+            }
+
             >span {
                 padding-right: 4px;
                 padding-left: 6px;
@@ -56,6 +65,10 @@
                 font-size: 22px;
                 line-height: 33px;
                 color: #fffefe;
+            }
+
+            &.ant-btn-loading::before {
+                display: none;
             }
 
             &.common-btn-red,

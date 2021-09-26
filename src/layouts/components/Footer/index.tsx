@@ -40,7 +40,7 @@ export default () => {
         () =>
             isMobile
                 ? []
-                : ['/', '/trade', '/farm', '/farm/provide', '/wallet'],
+                : ['/', '/trade', '/farm', '/farm/provide', '/wallet', '/demo'],
         [isMobile],
     );
 
