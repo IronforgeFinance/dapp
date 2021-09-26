@@ -31,6 +31,7 @@ const NpcDialog = (props: NpcDialog) => {
     const { children } = props;
     const isMobile = useEnv();
     const [visable, setVisable] = useState(false);
+    const [showISee, setShowISee] = useState(false);
     const { words, setWords } = useContext(NpcDialogContext);
     const [slowWords, setSlowWords] = useState('');
     const [pathname, setPathname] = useState('/mint');
@@ -38,6 +39,10 @@ const NpcDialog = (props: NpcDialog) => {
     const { lang } = useLang();
     const delayKey = useRef(null);
     // const totalTm = useRef(0);
+
+    /**@type {number} outputGap 输出时间的间隔 */
+    const outputGap = useMemo(() => (lang === 'EN' ? 30 : 100), [lang]);
+
     /**
      * @function appearSlowly
      * @description 逐渐输出文字的效果
@@ -49,12 +54,14 @@ const NpcDialog = (props: NpcDialog) => {
             const newWords = words.slice(0, index + 1);
             // console.log('>> alloc words to array -> %s', word);
             tmKeys.current.push(
-                setTimeout(
-                    () => setSlowWords(newWords),
-                    index * (lang === 'EN' ? 30 : 100),
-                ),
+                setTimeout(() => setSlowWords(newWords), index * outputGap),
             );
         });
+
+        // I see...
+        tmKeys.current.push(
+            setTimeout(() => setShowISee(true), wordsArray.length * outputGap),
+        );
 
         // 5s后自动隐藏
         // delayKey.current = setTimeout(close, wordsArray.length * 100 + 5000);
@@ -64,6 +71,7 @@ const NpcDialog = (props: NpcDialog) => {
         clearTimeout(delayKey.current);
         clearTms();
         setVisable(false);
+        setShowISee(false);
 
         /**@description 关闭后清空文字，以便下次触发 */
         setWords('');
@@ -73,6 +81,7 @@ const NpcDialog = (props: NpcDialog) => {
         clearTimeout(delayKey.current);
         clearTms();
         setVisable(true);
+        setShowISee(false);
 
         // 弹出需要一些时间，延迟输出文字的时间
         appearSlowly();
@@ -119,7 +128,7 @@ const NpcDialog = (props: NpcDialog) => {
                         />
                         <p className="words">
                             <span>{slowWords}</span>
-                            <a onClick={close}>我知道了</a>
+                            {showISee && <a onClick={close}>我知道了</a>}
                         </p>
                     </div>
                 </section>
