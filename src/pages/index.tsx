@@ -1,6 +1,4 @@
-import styles from './less/index.less';
-
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import useAuth from '@/hooks/useAuth';
 import { ConnectorNames } from '@/utils/web3';
 import { useWeb3React } from '@web3-react/core';
@@ -52,7 +50,7 @@ export default function IndexPage() {
     };
     return (
         <div>
-            <h1 className={styles.title}>
+            <h1 className="title">
                 <p>Is mobile: {isMobile ? '是' : '否'}</p>
                 <button
                     onClick={() => {
@@ -69,7 +67,7 @@ export default function IndexPage() {
                     English
                 </button>
             </h1>
-            <p className={styles.title}>
+            <p className="title">
                 {intl.formatMessage({ id: 'WELCOME' }, { account: account })}
             </p>
             <p>

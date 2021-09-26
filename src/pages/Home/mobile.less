@@ -1,0 +1,222 @@
+@import url('~@/assets/styles/iron.less');
+
+.mobile( {
+        .home-container {
+            .page-container('~@/assets/images/mobile-home-bg.jpg');
+            padding-bottom: 0;
+            align-items: center;
+
+            .data-box {
+                margin-top: 32px;
+
+                >div {
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    justify-content: center;
+
+                    >span {
+                        word-break: break-all;
+                    }
+                }
+
+                .rewards-card {
+                    min-width: 330px;
+                    max-width: 380px;
+                    background: linear-gradient(23.5deg,
+                        rgba(56, 25, 19, 0.8) 2.6%,
+                        rgba(55, 25, 18, 0) 87.73%);
+                    backdrop-filter: blur(20px);
+                    border-radius: 8px;
+                    margin: 0 auto;
+                    padding: 48px 24px;
+                    box-sizing: border-box;
+
+                    span {
+                        font-family: Poppins;
+                        font-style: normal;
+                        font-weight: bold;
+                        font-size: 44px;
+                        line-height: 66px;
+                        display: flex;
+                        align-items: center;
+                        text-align: center;
+                        color: #e1ab3b;
+                    }
+
+                    h3 {
+                        font-family: Poppins;
+                        font-style: normal;
+                        font-weight: normal;
+                        font-size: 20px;
+                        line-height: 30px;
+                        display: flex;
+                        align-items: center;
+                        text-align: center;
+                        color: #a005ff;
+                    }
+                }
+
+                .staked-card {
+                    width: 175px;
+                    background: linear-gradient(264.3deg,
+                        rgba(50, 15, 9, 0.3) 2.71%,
+                        rgba(57, 12, 10, 0) 98.83%);
+                    mix-blend-mode: normal;
+                    backdrop-filter: blur(20px);
+                    border-radius: 8px;
+                    float: left;
+                    padding: 14px;
+                    box-sizing: border-box;
+
+                    span {
+                        font-family: Poppins;
+                        font-style: normal;
+                        font-weight: bold;
+                        font-size: 28px;
+                        line-height: 42px;
+                        display: flex;
+                        align-items: center;
+                        text-align: center;
+                        color: #ffffff;
+                    }
+
+                    h3 {
+                        font-family: Poppins;
+                        font-style: normal;
+                        font-weight: bold;
+                        font-size: 22px;
+                        line-height: 33px;
+                        display: flex;
+                        align-items: center;
+                        text-align: center;
+                        color: rgba(255, 255, 255, 0.8);
+                    }
+                }
+
+                .collateral-card {
+                    width: 175px;
+                    background: linear-gradient(264.3deg,
+                        rgba(50, 15, 9, 0.3) 2.71%,
+                        rgba(57, 12, 10, 0) 98.83%);
+                    mix-blend-mode: normal;
+                    backdrop-filter: blur(20px);
+                    border-radius: 8px;
+                    float: left;
+                    margin-left: 81px;
+                    padding: 14px;
+                    box-sizing: border-box;
+
+                    h3 {
+                        font-family: Poppins;
+                        font-style: normal;
+                        font-weight: bold;
+                        font-size: 22px;
+                        line-height: 33px;
+                        display: flex;
+                        align-items: center;
+                        text-align: center;
+                        color: rgba(255, 255, 255, 0.8);
+                    }
+
+                    .callterals {
+                        display: flex;
+                        flex-wrap: wrap;
+
+                        >button {
+                            display: flex;
+                            justify-content: center;
+                            align-items: center;
+                            margin-right: 8px;
+
+                            &:nth-child(3n) {
+                                margin-right: 0;
+                            }
+
+                            &:nth-child(n + 4) {
+                                margin-top: 8px;
+                            }
+
+                            >.token-icon {
+                                width: 32px !important;
+                                height: 32px !important;
+                            }
+                        }
+                    }
+                }
+
+                .debt-card {
+                    width: 175px;
+                    background: linear-gradient(264.3deg,
+                        rgba(50, 15, 9, 0.3) 2.71%,
+                        rgba(57, 12, 10, 0) 98.83%);
+                    mix-blend-mode: normal;
+                    backdrop-filter: blur(20px);
+                    border-radius: 8px;
+                    float: left;
+                    margin-left: 81px;
+                    padding: 14px;
+                    box-sizing: border-box;
+
+                    span {
+                        font-family: Poppins;
+                        font-style: normal;
+                        font-weight: bold;
+                        font-size: 28px;
+                        line-height: 42px;
+                        display: flex;
+                        align-items: center;
+                        text-align: center;
+                        color: #e1ab3b;
+                    }
+
+                    h3 {
+                        font-family: Poppins;
+                        font-style: normal;
+                        font-weight: bold;
+                        font-size: 22px;
+                        line-height: 33px;
+                        display: flex;
+                        align-items: center;
+                        text-align: center;
+                        color: #a762ff;
+                    }
+                }
+            }
+
+            .slogan-box {
+                width: 654px;
+                height: 142px;
+                margin: 70px auto 0 auto;
+                position: relative;
+                z-index: 2;
+
+                p {
+                    font-family: Poppins;
+                    font-style: normal;
+                    font-weight: bold;
+                    font-size: 54px;
+                    line-height: 132%;
+                    /* or 71px */
+
+                    text-align: center;
+                    letter-spacing: 0.02em;
+                    color: white;
+
+                    b {
+                        color: #e96013;
+                    }
+                }
+            }
+
+            .blacksmith {
+                width: 130vw;
+                object-fit: contain;
+                margin-top: -170px;
+                position: relative;
+                z-index: 1;
+            }
+        }
+    }
+
+);

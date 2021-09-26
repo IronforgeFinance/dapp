@@ -1,4 +1,5 @@
-import './less/index.less';
+import './pc.less';
+import './mobile.less';
 
 import { useState, useContext } from 'react';
 import { Button, Popover } from 'antd';

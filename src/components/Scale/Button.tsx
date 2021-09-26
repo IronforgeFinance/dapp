@@ -1,4 +1,5 @@
-import './less/Button/index.less';
+import './Button.pc.less';
+import './Button.mobile.less';
 
 import React from 'react';
 import classNames from 'classnames';

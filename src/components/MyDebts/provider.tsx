@@ -1,5 +1,3 @@
-import './less/index.less';
-
 import { useCallback, useState, createContext, ReactNode } from 'react';
 
 interface MyDebtsContextProps {

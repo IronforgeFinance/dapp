@@ -1,0 +1,212 @@
+@media (max-width: 750px) {
+    .pool-item {
+        position: relative;
+        margin-bottom: 30px;
+    }
+
+    .lp-token {
+        position: absolute;
+        width: 104px;
+        height: 140px;
+        z-index: 100;
+
+        > i {
+            display: block;
+            // margin: 12px 15px;
+            width: 42px !important;
+            height: 42px !important;
+            margin: 28px auto 0 auto;
+        }
+    }
+
+    .lp-token-left {
+        top: 0;
+        left: 10px;
+        background: url(~@/assets/images/gem-yellow.png) top center no-repeat;
+        background-size: cover;
+        filter: drop-s dow(-3px 2px 5px rgba(22, 6, 0, 0.7))
+            drop-shadow(-3px -3px 4px #2d0202)
+            drop-shadow(3px 4px 3px rgba(66, 30, 7, 0.9))
+            drop-shadow(14px 14px 44px #ffd057);
+    }
+
+    .lp-token-right {
+        top: 0;
+        right: 10px;
+        background: url(~@/assets/images/gem-red.png) top center no-repeat;
+        background-size: cover;
+        filter: drop-shadow(3px 2px 5px rgba(22, 6, 0, 0.7))
+            drop-shadow(3px -3px 4px #2d0202)
+            drop-shadow(-3px 4px 3px rgba(66, 30, 7, 0.9))
+            drop-shadow(14px 14px 44px #ff57b0);
+    }
+
+    .pool-item-container {
+        width: 694.43px;
+        height: 948.16px;
+        overflow: auto;
+        background-image: url(~@/assets/images/pool-item-bg.png);
+        background-repeat: no-repeat;
+        background-position: center;
+        background-size: cover;
+        position: relative;
+        margin: 25px 27.5px;
+        filter: drop-shadow(3px 3px 8px rgba(255, 216, 86, 0.9))
+            drop-shadow(2px 2px 44px #e36a14);
+
+        .pool-item-title {
+            height: 194px;
+            width: 512px;
+            background: url(~@/assets/images/pool-item-title.png) center center
+                no-repeat;
+            background-size: cover;
+            margin: 0 auto;
+            padding-top: 68px;
+
+            > p {
+                font-family: Philosopher;
+                font-style: italic;
+                font-weight: bold;
+                font-size: 32px;
+                line-height: 36px;
+                text-align: center;
+                letter-spacing: 0.08em;
+                color: #ffffff;
+                text-align: center;
+            }
+        }
+
+        .pool-total-staked {
+            position: relative;
+            top: -30px;
+            margin: 0 auto;
+            text-align: center;
+
+            > p:first-child {
+                font-family: Poppins;
+                font-style: normal;
+                font-weight: normal;
+                font-size: 32px;
+                line-height: 48px;
+                text-align: center;
+                color: #ac4c06;
+                margin: 0;
+            }
+
+            > p:last-child {
+                font-family: Poppins;
+                font-style: normal;
+                font-weight: normal;
+                font-size: 24px;
+                line-height: 36px;
+                text-align: center;
+                color: rgba(255, 255, 255, 0.5);
+                margin: 0;
+            }
+        }
+
+        .total-info {
+            max-width: 553px;
+            margin: 0 auto;
+            margin-top: -20px;
+
+            .total-info-item {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                margin-bottom: 4px;
+
+                .label {
+                    font-style: normal;
+                    font-weight: normal;
+                    font-size: 20px;
+                    line-height: 30px;
+                    color: #ffffff;
+                    margin: 0;
+                }
+
+                .value {
+                    font-style: normal;
+                    font-weight: bold;
+                    font-size: 28px;
+                    line-height: 42px;
+                    text-align: right;
+                    color: #e1ab3b;
+                    margin: 0;
+
+                    .icon-question {
+                        height: 24px;
+                        width: 24px;
+                    }
+                }
+            }
+        }
+
+        .user-info {
+            height: 297px;
+            width: 436px;
+            position: absolute;
+            bottom: 120px;
+            right: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: column;
+
+            .user-info-item {
+                &:nth-child(n + 2) {
+                    margin-top: 51px;
+                }
+
+                .label-item {
+                    display: flex;
+                    justify-content: space-between;
+                }
+
+                .label {
+                    font-style: normal;
+                    font-weight: normal;
+                    font-size: 22px;
+                    line-height: 33px;
+                    text-transform: uppercase;
+                    color: rgba(255, 255, 255, 0.66);
+                }
+
+                .value {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+
+                    margin-top: 32px;
+
+                    > p {
+                        font-style: normal;
+                        font-weight: bold;
+                        font-size: 28px;
+                        line-height: 42px;
+                        color: #e1ab3b;
+
+                        .icon-question {
+                            width: 24px !important;
+                            height: 24px !important;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    .value-zero {
+        color: rgba(255, 255, 255, 0.5) !important;
+    }
+
+    .lp-token-fUSD {
+        background: url(~@/assets/images/icon-busd.png) center center no-repeat;
+        background-size: cover;
+    }
+
+    .lp-token-FTSLA {
+        background: url(~@/assets/images/icon-tsla.png) center center no-repeat;
+        background-size: cover;
+    }
+}

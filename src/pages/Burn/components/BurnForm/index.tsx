@@ -1,4 +1,5 @@
-import './less/index.less';
+import './pc.less';
+import './mobile.less';
 
 import { useState, useEffect, useCallback, useContext } from 'react';
 import { useWeb3React } from '@web3-react/core';

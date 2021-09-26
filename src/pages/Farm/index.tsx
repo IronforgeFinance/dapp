@@ -1,4 +1,5 @@
-import './less/index.less';
+import './pc.less';
+import './mobile.less';
 
 import React, { useState, useEffect } from 'react';
 import { history, useModel } from 'umi';
@@ -93,7 +94,9 @@ export default () => {
                 <div className="info-item">
                     <p className="value">${circulatinVal}</p>
                     <p className="label">
-                        {intl.formatMessage({ id: 'liquidity.bs.circulatingVal' })}
+                        {intl.formatMessage({
+                            id: 'liquidity.bs.circulatingVal',
+                        })}
                     </p>
                 </div>
                 <div className="info-item">

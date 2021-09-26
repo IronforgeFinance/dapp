@@ -1,4 +1,5 @@
-import './less/index.less';
+import './pc.less';
+import './mobile.less';
 
 import React, {
     useState,
@@ -30,6 +31,7 @@ import {
 import { TokenIcon } from '@/components/Icon';
 import Folder from '@/components/Folder';
 import { PROVIDED_LP_TOKENS } from '@/config';
+import useEnv from '@/hooks/useEnv';
 
 const TOKENS = Array.from(
     new Set(
@@ -68,6 +70,7 @@ export default () => {
     const [token2Price, setToken2Price] = useState(1);
     const [share, setShare] = useState(1);
     const [submitting, setSubmitting] = useState(false);
+    const isMobile = useEnv();
     const {
         lpDataList,
         currentLpData,
@@ -441,7 +444,7 @@ export default () => {
     return (
         <div className="provide-outer-container">
             <Folder
-                placement="left"
+                placement={isMobile ? 'right' : 'left'}
                 foldingOffest={95}
                 value={!isCurrentTab || !hasLpList}
             >

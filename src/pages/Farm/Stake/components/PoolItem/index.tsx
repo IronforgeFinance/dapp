@@ -1,4 +1,5 @@
-import './less/index.less';
+import './pc.less';
+import './mobile.less';
 
 import React, { useState } from 'react';
 import { history, useIntl } from 'umi';

@@ -1,4 +1,5 @@
-import './less/WalletIcon/index.less';
+import './WalletIcon.pc.less';
+import './WalletIcon.mobile.less';
 
 import React from 'react';
 import { IconProps } from './index';

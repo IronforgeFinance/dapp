@@ -1,5 +1,3 @@
-import './less/index.less';
-
 import { createContext, useCallback, useState, ReactNode } from 'react';
 
 interface ClaimRewardsContextProps {

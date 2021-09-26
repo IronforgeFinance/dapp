@@ -1,0 +1,197 @@
+@import '~@/assets/styles/iron.less';
+
+.pc( {
+
+        .burn-container {
+            display: flex;
+            justify-content: space-between;
+            flex-direction: row;
+            // margin: 30px 50px;
+
+            .burn-form-container {
+                width: 450px;
+                background: rgba(51, 39, 30, 0.8);
+                border: 1px solid rgba(178, 178, 181, 0.5);
+                box-sizing: border-box;
+                -webkit-backdrop-filter: blur(20px);
+                backdrop-filter: blur(20px);
+                border-radius: 6px;
+                margin-bottom: 10px;
+                padding: 10px;
+            }
+
+            .burn-box {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                position: relative;
+
+                margin: 58.21px 3% 0 auto;
+
+                .form-view {
+                    height: 568.9771728515625px;
+                    width: 446.8630065917969px;
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    padding-top: 49.54px;
+
+                    .group-scale {
+                        margin: 0;
+                        padding: 0;
+                    }
+
+                    .debt {
+                        font-family: Poppins;
+                        font-style: normal;
+                        font-weight: bold;
+                        font-size: 15px;
+                        line-height: 22px;
+                        display: flex;
+                        align-items: center;
+                        color: rgba(255, 255, 255, 0.5);
+                    }
+
+                    .input-item.from-input {
+                        margin-top: 20px;
+
+                        .from-content.input-item-content {
+                            padding: 12px 9px;
+
+                            .ftoken {
+                                display: flex;
+                                align-items: center;
+                            }
+                        }
+                    }
+
+                    .btn-burn {
+                        margin-top: 30px;
+
+                        .ant-btn.btn-mint {
+                            margin-top: 0;
+                            width: 236px;
+                            height: 70px;
+                        }
+                    }
+
+                    .my-debt {
+                        display: flex;
+                        // align-items: center;
+
+                        > .ratio {
+                            width: 24px;
+                            height: 24px;
+                            flex-shrink: 0;
+                            #image.icon(24px, '~@/assets/images/common-radio.png', transparent, false);
+
+                            &.active {
+                                #image.icon(24px, '~@/assets/images/common-radio-active.png', transparent, false);
+                            }
+
+                            margin-top: 40px;
+                            margin-right: 6px;
+                        }
+                    }
+                }
+            }
+        }
+
+        .no-assets-view {
+            padding: 83px 0 70px 0;
+            box-sizing: border-box;
+            width: 446.91px;
+            height: 300.98px;
+
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+
+            > .tip {
+                font-style: normal;
+                font-weight: bold;
+                font-size: 20px;
+                line-height: 123.01%;
+                display: flex;
+                align-items: center;
+                text-align: center;
+                letter-spacing: 0.01em;
+                color: #ffffff;
+            }
+        }
+
+        .btn-mint {
+            margin-top: 58px;
+            height: 70px;
+            width: 236px;
+            flex-shrink: 0;
+        }
+
+        .debt-list {
+            height: 386px;
+            overflow-y: auto;
+
+            > .debt-item-wrapper {
+                display: flex;
+            }
+        }
+
+        .btn-back {
+            position: absolute;
+            width: 48px;
+            height: 36px;
+            left: 0;
+            top: 175.26999999999998px;
+            transform: translateX(-50%);
+            cursor: pointer;
+        }
+
+        .search-debts {
+            display: flex;
+            align-items: center;
+            width: 418.02px;
+            height: 36px;
+            position: absolute;
+            top: -7px;
+            right: -10px;
+
+            .search-input-wrapper {
+                width: 373px;
+                height: 36px;
+                background: #61191f;
+                box-shadow: 0px 2px 0.5px rgba(51, 6, 6, 0.77);
+                border-radius: 18px 2px 2px 18px;
+                padding: 0 10px 0 30px;
+                box-sizing: border-box;
+                display: flex;
+                align-items: center;
+
+                > input {
+                    width: 100%;
+                    font-style: normal;
+                    font-weight: normal;
+                    font-size: 16px;
+                    line-height: 24px;
+                    display: flex;
+                    align-items: center;
+                    background-color: transparent;
+                    border: none;
+                    outline: none;
+                    color: #fff;
+
+                    &::placeholder {
+                        color: rgba(255, 255, 255, 0.8);
+                    }
+                }
+            }
+
+            .search-btn {
+                width: 47.02px;
+                height: 36px;
+                // transform: matrix(-1, 0, 0, 1, 0, 0);
+                #image.button('~@/assets/images/icon-search.png');
+            }
+        }
+    }
+
+);

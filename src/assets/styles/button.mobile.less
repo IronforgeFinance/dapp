@@ -1,0 +1,103 @@
+@import './iron.less';
+
+.mobile( {
+        button {
+            transition: 0.2s all;
+            border: none;
+            outline: none;
+            background-color: transparent;
+            cursor: pointer;
+
+            &:disabled {
+                cursor: no-drop;
+            }
+        }
+
+        .select-token-btn.ant-btn {
+            font-style: normal;
+            font-weight: normal;
+            font-size: 24px;
+            line-height: 36px;
+            display: flex;
+            align-items: center;
+            text-align: right;
+            color: #e1ab3b;
+            background: transparent;
+            border: none;
+            padding-left: 0;
+            padding-right: 0;
+
+            >span {
+                padding-right: 4px;
+                padding-left: 6px;
+            }
+        }
+
+        .common-btn,
+        .common-btn.ant-btn {
+            height: 90px;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fffefe;
+            display: block;
+            cursor: pointer;
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 30px auto 0 auto;
+
+            >span {
+                font-family: Poppins;
+                font-style: normal;
+                font-weight: bold;
+                font-size: 22px;
+                line-height: 33px;
+                color: #fffefe;
+            }
+
+            &.common-btn-red,
+            &.common-btn-red:focus {
+                background: url(~@/assets/images/common-btn-red.png) no-repeat;
+                background-size: 100% 100%;
+                color: rgba(255, 254, 254, 1);
+            }
+
+            &.common-btn-red:hover {
+                background: url(~@/assets/images/common-btn-red-hover.png) no-repeat;
+                background-size: 100% 100%;
+                color: rgba(41, 39, 37, 1);
+            }
+
+            &.common-btn-red:disabled,
+            &.common-btn-red:hover:disabled {
+                background: url(~@/assets/images/common-btn-red-disabled.png) no-repeat;
+                background-size: 100% 100%;
+                color: rgba(255, 254, 254, 0.7);
+            }
+
+            &.common-btn-yellow,
+            &.common-btn-yellow:focus {
+                background: url(~@/assets/images/common-btn-yellow.png) no-repeat;
+                background-size: 100% 100%;
+                color: rgba(255, 254, 254, 1);
+            }
+
+            &.common-btn-yellow:hover {
+                background: url(~@/assets/images/common-btn-yellow-hover.png) no-repeat;
+                background-size: 100% 100%;
+                color: rgba(41, 39, 37, 1);
+            }
+
+            &.common-btn-yellow:disabled,
+            &.common-btn-yellow:hover:disabled {
+                background: url(~@/assets/images/common-btn-yellow-disabped.png) no-repeat;
+                background-size: 100% 100%;
+                color: rgba(255, 254, 254, 0.7);
+            }
+        }
+    }
+
+);

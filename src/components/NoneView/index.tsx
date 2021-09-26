@@ -1,10 +1,11 @@
-import './less/index.less';
+import './pc.less';
+import './mobile.less';
 
 import { Fragment, useContext } from 'react';
 import { useModel, useIntl, history } from 'umi';
 import { TabRecordBoardContext } from '@/components/TabRecordBoard';
 import { useCallback } from 'react';
-import { MyDebtsContext } from '../MyDebts';
+import { MyDebtsContext } from '@/components/MyDebts/provider';
 import { LoadingContext } from '@/contexts/LoadingContext';
 
 export type NoneTypes = 'noAssets' | 'noConnection' | 'noRecords' | undefined;

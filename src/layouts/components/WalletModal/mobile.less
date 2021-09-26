@@ -1,0 +1,109 @@
+@media (max-width: 750px) {
+    @import '~@/assets/styles/iron.less';
+
+    .custom-board.board-box {
+        .content {
+            max-height: unset;
+        }
+    }
+
+    .wallet-modal {
+        padding: 24px 0 12px 0;
+    }
+
+    .connectors {
+        width: 453.36px;
+        max-height: 420px;
+        overflow-y: auto;
+
+        .connector {
+            cursor: pointer;
+            background: rgba(255, 225, 187, 0.04);
+            border: 1px solid rgba(84, 51, 20, 0.04);
+            box-sizing: border-box;
+            // box-shadow: 0px 3px 4px rgba(106, 77, 25, 0.3);
+            border-radius: 4px;
+
+            height: 80px;
+            width: 453.36px;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            padding: 16px 12px;
+            box-sizing: border-box;
+
+            transition: all 0.2s;
+
+            &:nth-child(n + 2) {
+                margin-top: 12px;
+            }
+
+            &.active,
+            &:hover {
+                background: #ffe1bb;
+                border: 1px solid #543314;
+                box-sizing: border-box;
+                box-shadow: 0px 3px 4px rgba(106, 77, 25, 0.3);
+                border-radius: 4px;
+            }
+
+            &.active {
+                .connect-success {
+                    display: inline-block;
+                }
+            }
+
+            .connect-success {
+                #image.icon(20px, '~@/assets/images/connect-success.svg');
+                display: none;
+            }
+
+            .wallet-icon {
+                border-radius: 10px;
+                margin-right: 15px;
+            }
+
+            .title {
+                font-style: normal;
+                font-weight: 500;
+                font-size: 20px;
+                line-height: 30px;
+                color: #292725;
+                flex: 1;
+            }
+        }
+    }
+
+    .unconnected {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-top: 30px;
+
+        .tip {
+            font-style: normal;
+            font-weight: 300;
+            font-size: 20px;
+            line-height: 30px;
+            text-align: center;
+            color: #ac4c06;
+        }
+
+        .learn-connect-btn {
+            margin-top: 30px;
+
+            height: 90px * 1.3;
+            width: 340px * 1.3;
+
+            font-family: Poppins;
+            font-style: normal;
+            font-weight: bold;
+            font-size: 32px;
+            line-height: 163%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fffefe;
+        }
+    }
+}

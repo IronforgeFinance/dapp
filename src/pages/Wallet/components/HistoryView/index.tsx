@@ -1,4 +1,5 @@
-import './less/index.less';
+import './pc.less';
+import './mobile.less';
 
 import { Tabs, Table, Button, Popover } from 'antd';
 import {

@@ -1,4 +1,5 @@
-import './less/index.less';
+import './pc.less';
+import './mobile.less';
 
 import React, { useMemo, useState } from 'react';
 import { ProgressBarType } from '@/config/constants/types';
