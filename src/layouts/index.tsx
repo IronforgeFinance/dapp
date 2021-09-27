@@ -30,7 +30,7 @@ export default function Layout({
     history,
     match,
 }: IRouteComponentProps) {
-    const isMobile = useEnv();
+    const { isMobile, path } = useEnv();
     const { account } = useWeb3React();
     const { clearDataView } = useModel('dataView', (model) => ({
         clearDataView: model.clearDataView,
@@ -99,7 +99,6 @@ export default function Layout({
                                     <ClaimRewardsContextProvider>
                                         {/* 多为弹窗组件，优势：复用、防止包含块、单例（避免多实例造成内存浪费）、支持跨层（调用灵活）。相关操作方法由provider提供 */}
                                         <Fragment>
-                                            <NpcDialog />
                                             <HistoryBoard />
                                             <MyDebts />
                                             <ClaimRewards />
@@ -111,7 +110,19 @@ export default function Layout({
 
                                             <TransactionConfirm>
                                                 <TokenSelector>
-                                                    {children}
+                                                    <section
+                                                        className={`${
+                                                            path
+                                                                .slice(1)
+                                                                .replace(
+                                                                    '/',
+                                                                    '-',
+                                                                ) || 'home'
+                                                        }-container`}
+                                                    >
+                                                        <NpcDialog />
+                                                        {children}
+                                                    </section>
                                                 </TokenSelector>
                                             </TransactionConfirm>
                                             {!isMobile && <CommonFooter />}

@@ -11,7 +11,7 @@ import LangSwitcher from '../LangSwitcher';
 import useEnv from '@/hooks/useEnv';
 
 export default () => {
-    const isMobile = useEnv();
+    const { isMobile } = useEnv();
     const intl = useIntl();
     useEagerConnect();
 

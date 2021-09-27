@@ -21,7 +21,7 @@ const DEFAULT_MARKS = {
 };
 const RatioSlider = (props: IRatioSliderProps) => {
     const { value, onChange, safeRatio } = props;
-    const isMobile = useEnv();
+    const { isMobile } = useEnv();
     const ref = useRef<HTMLDivElement>(null);
     const [marks, setMarks] = useState<any>(DEFAULT_MARKS);
 

@@ -71,7 +71,7 @@ export default () => {
     const [token2Price, setToken2Price] = useState(1);
     const [share, setShare] = useState(1);
     const [submitting, setSubmitting] = useState(false);
-    const isMobile = useEnv();
+    const { isMobile } = useEnv();
     const {
         lpDataList,
         currentLpData,

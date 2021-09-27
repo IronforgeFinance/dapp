@@ -242,152 +242,150 @@ export default () => {
                     'http://172.28.10.91:8000/static/trade-swap-roof-ceiling.ea6c8001.png'
                 ]}
             /> */}
-            <div className="trade-container">
-                <div className="shop common-box">
-                    <div className="roof" />
-                    <div
-                        className={classNames({
-                            sign: true,
-                            active: hasInputtedAmount,
-                        })}
-                    />
-                    <div className="form">
-                        <div className="input-item">
-                            <p className="label">
-                                {intl.formatMessage({ id: 'trade.from' })}
-                            </p>
-                            <div className="input-item-content">
-                                <div className="content-label">
-                                    <p className="left"></p>
-                                    <p className="right">
-                                        {intl.formatMessage({
-                                            id: 'balance:',
-                                        })}{' '}
-                                        <span className="balance">
-                                            {fromTokenBalance}
-                                        </span>
-                                    </p>
-                                </div>
-                                <div className="input">
-                                    <InputNumber
-                                        value={fromAmount}
-                                        onChange={fromAmountHandler}
-                                        placeholder="0.00"
-                                        className="custom-input"
-                                        min={0}
-                                        type="number"
+            <div className="shop common-box">
+                <div className="roof" />
+                <div
+                    className={classNames({
+                        sign: true,
+                        active: hasInputtedAmount,
+                    })}
+                />
+                <div className="form">
+                    <div className="input-item">
+                        <p className="label">
+                            {intl.formatMessage({ id: 'trade.from' })}
+                        </p>
+                        <div className="input-item-content">
+                            <div className="content-label">
+                                <p className="left"></p>
+                                <p className="right">
+                                    {intl.formatMessage({
+                                        id: 'balance:',
+                                    })}{' '}
+                                    <span className="balance">
+                                        {fromTokenBalance}
+                                    </span>
+                                </p>
+                            </div>
+                            <div className="input">
+                                <InputNumber
+                                    value={fromAmount}
+                                    onChange={fromAmountHandler}
+                                    placeholder="0.00"
+                                    className="custom-input"
+                                    min={0}
+                                    type="number"
+                                />
+                                <div className="token">
+                                    <TokenIcon
+                                        size={24}
+                                        name={fromToken}
+                                        style={{ marginRight: 8 }}
                                     />
-                                    <div className="token">
-                                        <TokenIcon
-                                            size={24}
-                                            name={fromToken}
-                                            style={{ marginRight: 8 }}
-                                        />
-                                        <Button
-                                            className="select-token-btn"
-                                            onClick={openFromTokenList}
-                                        >
-                                            {fromToken}
-                                            <i className="icon-down size-24" />
-                                        </Button>
-                                    </div>
+                                    <Button
+                                        className="select-token-btn"
+                                        onClick={openFromTokenList}
+                                    >
+                                        {fromToken}
+                                        <i className="icon-down size-24" />
+                                    </Button>
                                 </div>
                             </div>
                         </div>
-                        <i className="icon-arrow-down size-18" />
-                        <div className="input-item">
-                            <p className="label">
-                                {intl.formatMessage({ id: 'trade.to' })}
-                            </p>
-                            <div className="input-item-content">
-                                <div className="content-label">
-                                    <p className="left"></p>
-                                    <p className="right">
-                                        {intl.formatMessage({
-                                            id: 'balance:',
-                                        })}
-                                        <span className="balance">
-                                            {toTokenBalance}
-                                        </span>
-                                    </p>
-                                </div>
-                                <div className="input">
-                                    <InputNumber
-                                        value={toAmount}
-                                        onChange={toAmountHandler}
-                                        placeholder="0.00"
-                                        className="custom-input"
-                                        disabled={!toToken}
-                                        min={0}
-                                        type="number"
-                                    />
-                                    <div className="token">
-                                        <TokenIcon
-                                            size={24}
-                                            name={toToken}
-                                            style={{ marginRight: 8 }}
-                                        />
-                                        <Button
-                                            className="select-token-btn"
-                                            onClick={openToTokenList}
-                                        >
-                                            {toToken}
-                                            <i className="icon-down size-24" />
-                                        </Button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        {account && !fromApproved && (
-                            <Button
-                                className="btn-trade common-btn common-btn-red"
-                                onClick={handleFromApprove}
-                                loading={requestFromApproval}
-                            >
-                                {intl.formatMessage({ id: 'trade.approve' })}
-                            </Button>
-                        )}
-                        {account && fromApproved && !toApproved && (
-                            <Button
-                                className="btn-trade common-btn common-btn-red"
-                                onClick={handleToApprove}
-                                loading={requestToApproval}
-                            >
-                                {intl.formatMessage({ id: 'trade.approve' })}
-                            </Button>
-                        )}
-                        {account && fromApproved && toApproved && (
-                            <Button
-                                className="btn-trade common-btn common-btn-red"
-                                disabled={!canTrade}
-                                onClick={openMintConfirm}
-                                loading={submitting}
-                            >
-                                {intl.formatMessage({
-                                    id: 'trade.button',
-                                })}
-                            </Button>
-                        )}
-                        {!account && (
-                            <Button
-                                className="disaconnect-btn common-btn common-btn-yellow"
-                                onClick={() => {
-                                    requestConnectWallet();
-                                }}
-                            >
-                                {intl.formatMessage({
-                                    id: 'app.unlockWallet',
-                                })}
-                            </Button>
-                        )}
-                        <span className="fee-cost">
-                            {intl.formatMessage({ id: 'trade.feecost' })}
-                            {feeRate * 100 + '%'}
-                        </span>
                     </div>
+                    <i className="icon-arrow-down size-18" />
+                    <div className="input-item">
+                        <p className="label">
+                            {intl.formatMessage({ id: 'trade.to' })}
+                        </p>
+                        <div className="input-item-content">
+                            <div className="content-label">
+                                <p className="left"></p>
+                                <p className="right">
+                                    {intl.formatMessage({
+                                        id: 'balance:',
+                                    })}
+                                    <span className="balance">
+                                        {toTokenBalance}
+                                    </span>
+                                </p>
+                            </div>
+                            <div className="input">
+                                <InputNumber
+                                    value={toAmount}
+                                    onChange={toAmountHandler}
+                                    placeholder="0.00"
+                                    className="custom-input"
+                                    disabled={!toToken}
+                                    min={0}
+                                    type="number"
+                                />
+                                <div className="token">
+                                    <TokenIcon
+                                        size={24}
+                                        name={toToken}
+                                        style={{ marginRight: 8 }}
+                                    />
+                                    <Button
+                                        className="select-token-btn"
+                                        onClick={openToTokenList}
+                                    >
+                                        {toToken}
+                                        <i className="icon-down size-24" />
+                                    </Button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {account && !fromApproved && (
+                        <Button
+                            className="btn-trade common-btn common-btn-red"
+                            onClick={handleFromApprove}
+                            loading={requestFromApproval}
+                        >
+                            {intl.formatMessage({ id: 'trade.approve' })}
+                        </Button>
+                    )}
+                    {account && fromApproved && !toApproved && (
+                        <Button
+                            className="btn-trade common-btn common-btn-red"
+                            onClick={handleToApprove}
+                            loading={requestToApproval}
+                        >
+                            {intl.formatMessage({ id: 'trade.approve' })}
+                        </Button>
+                    )}
+                    {account && fromApproved && toApproved && (
+                        <Button
+                            className="btn-trade common-btn common-btn-red"
+                            disabled={!canTrade}
+                            onClick={openMintConfirm}
+                            loading={submitting}
+                        >
+                            {intl.formatMessage({
+                                id: 'trade.button',
+                            })}
+                        </Button>
+                    )}
+                    {!account && (
+                        <Button
+                            className="disaconnect-btn common-btn common-btn-yellow"
+                            onClick={() => {
+                                requestConnectWallet();
+                            }}
+                        >
+                            {intl.formatMessage({
+                                id: 'app.unlockWallet',
+                            })}
+                        </Button>
+                    )}
+                    <span className="fee-cost">
+                        {intl.formatMessage({ id: 'trade.feecost' })}
+                        {feeRate * 100 + '%'}
+                    </span>
                 </div>
-                <MarketDetail token0={fromToken} token1={toToken} />
             </div>
+            <MarketDetail token0={fromToken} token1={toToken} />
         </PreloadAssetsSuspense>
     );
 };

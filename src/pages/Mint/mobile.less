@@ -1,146 +1,148 @@
-@media (max-width: 750px) {
-    @import '~@/assets/styles/iron.less';
-    @import '~@/layouts/components/Header/mobile.less';
+@import '~@/assets/styles/iron.less';
 
-    @commentary-card-title-h: 22px - 10px;
+.mobile( {
 
-    .mint-container {
-        .page-container('~@/assets/images/mobile-mint-bg.png');
-        align-items: center;
-    }
+        @commentary-card-title-h: 22px - 10px;
 
-    .mint-form-box {
-        min-height: 972px;
-        width: 706px;
-        padding: 71px 40px 94px 42px;
-        border-radius: 25px;
-        position: relative;
-    }
-
-    .input-locked-amount {
-        flex: 1;
-        width: 100%;
-        min-width: auto !important;
-    }
-
-    .btn-mint {
-        cursor: pointer;
-        display: block;
-        font-size: 18px;
-        border: none;
-        margin: 10px auto 0 auto;
-        width: 236px;
-        height: 70px;
-
-        span {
-            color: white;
+        .mint-container {
+            .page-container('~@/assets/images/mobile-mint-bg.png');
+            align-items: center;
         }
-    }
 
-    .commentary-card {
-        margin-bottom: 14.89px;
-    }
-
-    .btn-setting {
-        width: 48px;
-        height: 36px;
-        #image.button('~@/assets/images/mint-setting.png');
-
-        position: absolute;
-        right: 0;
-        top: 0;
-
-        transform: translate(33.3%, -20%);
-    }
-
-    .btn-mint-form {
-        font-family: Poppins;
-        font-style: normal;
-        font-weight: normal;
-        font-size: 24px;
-        line-height: 36px;
-        display: flex;
-        align-items: center;
-        text-align: right;
-        color: #e1ab3b;
-
-        > span {
-            padding-right: 4px;
-            padding-left: 6px;
+        .mint-form-box {
+            min-height: 972px;
+            width: 706px;
+            padding: 71px 40px 94px 42px;
+            border-radius: 25px;
+            position: relative;
         }
-    }
 
-    .label {
-        display: flex;
-        align-items: center;
-        font-family: Poppins;
-        font-style: normal;
-        font-weight: bold;
-        font-size: 22px;
-        line-height: 33px;
-        display: flex;
-        align-items: center;
-        color: #ffffff;
+        .input-locked-amount {
+            flex: 1;
+            width: 100%;
+            min-width: auto !important;
+        }
 
-        .icon-question {
-            margin-left: 10px;
+        .btn-mint {
             cursor: pointer;
+            display: block;
+            font-size: 18px;
+            border: none;
+            margin: 10px auto 0 auto;
+            width: 236px;
+            height: 70px;
+
+            span {
+                color: white;
+            }
         }
-    }
 
-    .balance {
-        font-weight: bold;
-    }
+        .commentary-card {
+            margin-bottom: 14.89px;
+        }
 
-    .fee-cost {
-        margin-top: 8px;
-    }
+        .btn-setting {
+            width: 48px;
+            height: 36px;
+            #image.button('~@/assets/images/mint-setting.png');
 
-    .stake-ratio {
-        display: flex;
-        align-items: center;
-        justify-content: flex-end;
+            position: absolute;
+            right: 0;
+            top: 0;
 
-        .final {
+            transform: translate(33.3%, -20%);
+        }
+
+        .btn-mint-form {
             font-family: Poppins;
             font-style: normal;
-            font-weight: 500;
+            font-weight: normal;
             font-size: 24px;
             line-height: 36px;
             display: flex;
             align-items: center;
             text-align: right;
+            color: #e1ab3b;
+
+            > span {
+                padding-right: 4px;
+                padding-left: 6px;
+            }
+        }
+
+        .label {
+            display: flex;
+            align-items: center;
+            font-family: Poppins;
+            font-style: normal;
+            font-weight: bold;
+            font-size: 22px;
+            line-height: 33px;
+            display: flex;
+            align-items: center;
             color: #ffffff;
+
+            .icon-question {
+                margin-left: 10px;
+                cursor: pointer;
+            }
         }
 
-        .initial {
-            font-family: Poppins;
-            font-style: normal;
-            font-weight: 300;
-            font-size: 24px;
-            line-height: 36px;
+        .balance {
+            font-weight: bold;
+        }
+
+        .fee-cost {
+            margin-top: 8px;
+        }
+
+        .stake-ratio {
             display: flex;
             align-items: center;
-            text-align: right;
-            color: rgba(99, 12, 12, 0.3);
-        }
+            justify-content: flex-end;
 
-        .icon-arrow-white {
-            margin: 0 30px;
-        }
-    }
-
-    .input-item {
-        .input-item-content {
-            .mint-locked-input.input {
+            .final {
+                font-family: Poppins;
+                font-style: normal;
+                font-weight: 500;
+                font-size: 24px;
+                line-height: 36px;
                 display: flex;
-                flex-direction: column;
-                align-items: flex-start;
+                align-items: center;
+                text-align: right;
+                color: #ffffff;
+            }
 
-                .group-scale {
-                    margin-top: 10px;
+            .initial {
+                font-family: Poppins;
+                font-style: normal;
+                font-weight: 300;
+                font-size: 24px;
+                line-height: 36px;
+                display: flex;
+                align-items: center;
+                text-align: right;
+                color: rgba(99, 12, 12, 0.3);
+            }
+
+            .icon-arrow-white {
+                margin: 0 30px;
+            }
+        }
+
+        .input-item {
+            .input-item-content {
+                .mint-locked-input.input {
+                    display: flex;
+                    flex-direction: column;
+                    align-items: flex-start;
+
+                    .group-scale {
+                        margin-top: 10px;
+                    }
                 }
             }
         }
     }
-}
+
+);

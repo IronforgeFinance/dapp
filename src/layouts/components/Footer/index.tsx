@@ -32,7 +32,7 @@ export default () => {
     const { setVisible: setMobileNavigationVisible } = useContext(
         MobileNavigationContext,
     );
-    const isMobile = useEnv();
+    const { isMobile } = useEnv();
     const [rate] = useState('0.00%');
     const [showWholeView, setShowWholeView] = useState(false);
 

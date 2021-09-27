@@ -38,7 +38,7 @@ export default () => {
     const [currentDebt, setCurrentDebt] = useState(0);
     const { balance: fusdBalance } = useBep20Balance('FUSD');
     const provider = useWeb3Provider();
-    const isMobile = useEnv();
+    const { isMobile } = useEnv();
 
     const { requestConnectWallet } = useModel('app', (model) => ({
         requestConnectWallet: model.requestConnectWallet,
@@ -168,7 +168,7 @@ export default () => {
     };
 
     return (
-        <div className="burn-container">
+        <Fragment>
             {!isMobile && <DataView />}
             <div className="burn-box">
                 {!isMobile && (
@@ -180,6 +180,6 @@ export default () => {
                 <BurnForm onSubmitSuccess={onSubmitSuccess} />
             </div>
             {isMobile && <DataView />}
-        </div>
+        </Fragment>
     );
 };

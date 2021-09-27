@@ -53,27 +53,25 @@ export default (props) => {
     return (
         <Fragment>
             <button className="back-btn" onClick={() => history.goBack()} />
-            <div className="provide-container">
-                <div className="custom-tabs">
-                    {/* <Tabs onChange={onTabChange} type="card">
+            <div className="custom-tabs">
+                {/* <Tabs onChange={onTabChange} type="card">
                     <TabPane tab="Provide" key="1"></TabPane>
                     <TabPane tab="Withdraw" key="2"></TabPane>
                 </Tabs> */}
-                    <TabGroup
-                        items={tabItems}
-                        value={tabKey}
-                        onChange={onTabChange}
-                    />
-                    <div className="tab-content">
-                        <ITabKeyContext.Provider value={tabKey}>
-                            <IsShow condition={tabKey === '1'}>
-                                <ProvideForm />
-                            </IsShow>
-                            <IsShow condition={tabKey === '2'}>
-                                <WithdrawForm />
-                            </IsShow>
-                        </ITabKeyContext.Provider>
-                    </div>
+                <TabGroup
+                    items={tabItems}
+                    value={tabKey}
+                    onChange={onTabChange}
+                />
+                <div className="tab-content">
+                    <ITabKeyContext.Provider value={tabKey}>
+                        <IsShow condition={tabKey === '1'}>
+                            <ProvideForm />
+                        </IsShow>
+                        <IsShow condition={tabKey === '2'}>
+                            <WithdrawForm />
+                        </IsShow>
+                    </ITabKeyContext.Provider>
                 </div>
             </div>
         </Fragment>

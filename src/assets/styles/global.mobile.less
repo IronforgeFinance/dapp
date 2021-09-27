@@ -243,43 +243,10 @@
         }
 
         .common-box {
-            background-image: url('~@/assets/images/mobile-form-box-bg.png');
-            background-repeat: no-repeat;
-            background-position: center;
-            background-size: 100% 100%;
-            position: relative;
-            filter: drop-shadow(12px 12px 70px #e78231);
+            #image.dinamicBg('~@/assets/images/mobile-form-box-bg.png', 50%, 'vertical');
 
             > * {
                 position: relative;
-            }
-
-            &:before {
-                content: '';
-                position: absolute;
-                width: 100%;
-                height: 10%;
-                left: 50%;
-                top: 4px;
-                transform: translateX(-50%);
-                background: url('~@/assets/images/mobile-form-box-corner.png') no-repeat;
-                background-size: cover;
-                background-position: center top;
-                pointer-events: none;
-            }
-
-            &:after {
-                content: '';
-                position: absolute;
-                width: 100%;
-                height: 10%;
-                left: 50%;
-                bottom: 0;
-                transform: translateX(-50%);
-                background: url('~@/assets/images/mobile-form-box-corner.png') no-repeat;
-                background-size: cover;
-                background-position: center bottom;
-                pointer-events: none;
             }
         }
 
@@ -771,4 +738,4 @@
         }
     }
 
-);;
+);; ;

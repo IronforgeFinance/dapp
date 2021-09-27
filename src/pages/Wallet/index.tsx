@@ -53,18 +53,16 @@ export default () => {
     }, [tabKey]);
 
     return (
-        <div className="wallet-container">
-            <TabRecordBoard
-                title={intl.formatMessage({ id: 'wallet.title' })}
-                tabItems={tabItems.map((item) => ({
-                    ...item,
-                    name: intl.formatMessage({ id: item.name }),
-                }))}
-                tabKey={tabKey}
-                onChange={(key) => setTabKey(key)}
-            >
-                {CurrentView}
-            </TabRecordBoard>
-        </div>
+        <TabRecordBoard
+            title={intl.formatMessage({ id: 'wallet.title' })}
+            tabItems={tabItems.map((item) => ({
+                ...item,
+                name: intl.formatMessage({ id: item.name }),
+            }))}
+            tabKey={tabKey}
+            onChange={(key) => setTabKey(key)}
+        >
+            {CurrentView}
+        </TabRecordBoard>
     );
 };
