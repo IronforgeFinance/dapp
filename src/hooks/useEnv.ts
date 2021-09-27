@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { history } from 'umi';
 import debounce from 'lodash.debounce';
 
 /**
@@ -6,6 +7,7 @@ import debounce from 'lodash.debounce';
  */
 export const useEnv = () => {
     const [isMobile, setIsMobile] = useState(false);
+    const [path, setPath] = useState('');
 
     useEffect(() => {
         const handleResize = debounce(() => {
@@ -31,7 +33,15 @@ export const useEnv = () => {
         return () => window.removeEventListener('resize', handleResize);
     }, []);
 
-    return isMobile;
+    useEffect(() => {
+        setPath(window.location!.pathname);
+
+        return history.listen((location) => {
+            setPath(location!.pathname);
+        });
+    }, []);
+
+    return { isMobile, path };
 };
 
 export default useEnv;

@@ -19,7 +19,7 @@ import useEnv from '@/hooks/useEnv';
 
 export default () => {
     const intl = useIntl();
-    const isMobile = useEnv();
+    const { isMobile } = useEnv();
     const { account } = useWeb3React();
     const { login, logout } = useAuth();
     const [showDropdown, setShowDropdown] = useState(false);

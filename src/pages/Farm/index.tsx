@@ -1,7 +1,7 @@
 import './pc.less';
 import './mobile.less';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Fragment } from 'react';
 import { history, useModel } from 'umi';
 import { Button } from 'antd';
 import StakeItem from './Stake';
@@ -83,7 +83,7 @@ export default () => {
     }, [provider, slowRefresh]);
 
     return (
-        <div className="farm-container">
+        <Fragment>
             <div className="farm-header">
                 <div className="info-item">
                     <p className="value">${tvl}</p>
@@ -150,6 +150,6 @@ export default () => {
                     <StakeItem key={index} {...item} />
                 ))}
             </div>
-        </div>
+        </Fragment>
     );
 };

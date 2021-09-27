@@ -53,7 +53,7 @@ export default () => {
         return process.env.NODE_ENV === 'development';
     };
     const intl = useIntl();
-    const isMobile = useEnv();
+    const { isMobile } = useEnv();
     const { open: openClaimRewards } = useClaimRewards();
     const [tabKey, setTabKey] = useState(tabItems[0].key);
     const [showSelectFromToken, setShowSelectFromToken] = useState(false);
@@ -168,157 +168,151 @@ export default () => {
                     'http://zoneccc.nat300.top/static/blacksmith.0d9279a9.png',
                 ]}
             /> */}
-            <div className="home-container">
-                {!isMobile && (
-                    <Fragment>
-                        <video
-                            loop
-                            autoPlay
-                            muted
-                            className="video-bg-left"
-                            poster={Blacksmith}
-                        >
-                            <source
-                                src={
-                                    isDev()
-                                        ? 'http://localhost:5000/files/blacksmith.webm'
-                                        : './static/blacksmith.webm'
-                                }
-                                type="video/webm"
-                            />
-                        </video>
-                        <video
-                            loop
-                            autoPlay
-                            muted
-                            className="video-bg-right"
-                            poster={Merchant}
-                        >
-                            <source
-                                src={
-                                    isDev()
-                                        ? 'http://localhost:5000/files/merchant.webm'
-                                        : './static/merchant.webm'
-                                }
-                                type="video/webm"
-                            />
-                        </video>
-                    </Fragment>
-                )}
+            {!isMobile && (
+                <Fragment>
+                    <video
+                        loop
+                        autoPlay
+                        muted
+                        className="video-bg-left"
+                        poster={Blacksmith}
+                    >
+                        <source
+                            src={
+                                isDev()
+                                    ? 'http://localhost:5000/files/blacksmith.webm'
+                                    : './static/blacksmith.webm'
+                            }
+                            type="video/webm"
+                        />
+                    </video>
+                    <video
+                        loop
+                        autoPlay
+                        muted
+                        className="video-bg-right"
+                        poster={Merchant}
+                    >
+                        <source
+                            src={
+                                isDev()
+                                    ? 'http://localhost:5000/files/merchant.webm'
+                                    : './static/merchant.webm'
+                            }
+                            type="video/webm"
+                        />
+                    </video>
+                </Fragment>
+            )}
 
-                {isMobile && (
-                    <section className="data-box">
-                        <div className="rewards-card">
-                            <span>
-                                {account
-                                    ? stakeDataList[0]?.totalPendingReward +
-                                      ' BS'
-                                    : '--'}
-                            </span>
-                            <h3>Reward</h3>
-                        </div>
-                        <br />
-                        <div className="staked-card">
-                            <h3>Total Staked</h3>
-                            <span>
-                                {account ? `${totalStaked} FUSD` : '--'}
-                            </span>
-                        </div>
-                        <div className="collateral-card">
-                            <h3>Collateria</h3>
-                            <div className="callterals">
-                                {collaterals.map((item) => (
-                                    <Popover
-                                        content={item.valueInUSD}
-                                        trigger="hover"
-                                        placement="topRight"
-                                        key={item.token}
-                                    >
-                                        <button>
-                                            <TokenIcon name={item.token} />
-                                        </button>
-                                    </Popover>
-                                ))}
-                            </div>
-                        </div>
-                        <div className="debt-card">
-                            <span>{account ? `$${totalDebtInUSD}` : '--'}</span>
-                            <h3>Active Debt</h3>
-                        </div>
-                    </section>
-                )}
-
-                <section className="slogan-box">
-                    <p>
-                        <b>Forging</b> the Future of Crypto Finance.
-                    </p>
-                </section>
-
-                {isMobile && <img src={Blacksmith} className="blacksmith" />}
-
-                {!isMobile && (
-                    <div className="data-box">
-                        <div className="staked-and-collateral-box">
-                            <TabGroup
-                                items={tabItems}
-                                value={tabKey}
-                                onChange={(v) => setTabKey(v)}
-                                className="custom-tabs-group"
-                            />
-
-                            <div className="pannel-content">
-                                {tabKey === 'total-staked' && (
-                                    <Fragment>
-                                        {account ? `$${totalStaked}` : '--'}
-                                    </Fragment>
-                                )}
-                                {tabKey === 'collateral' && (
-                                    <div className="callterals">
-                                        {collaterals.map((item) => (
-                                            <Popover
-                                                content={item.valueInUSD}
-                                                trigger="hover"
-                                                placement="topRight"
-                                                key={item.token}
-                                            >
-                                                <button>
-                                                    <TokenIcon
-                                                        name={item.token}
-                                                        size={36}
-                                                    />
-                                                </button>
-                                            </Popover>
-                                        ))}
-                                    </div>
-                                )}
-                            </div>
-                        </div>
-                        <div className="rewards-box">
-                            <span className="amount">
-                                {account
-                                    ? stakeDataList[0]?.totalPendingReward +
-                                      ' BS'
-                                    : '--'}
-                            </span>
-                            <span className="label">Rewards</span>
-                            <Button
-                                className="see-rewards-btn common-btn common-btn-red"
-                                onClick={openClaimRewards}
-                            >
-                                Detail
-                            </Button>
-                        </div>
-                        <div className="amount-box">
-                            <span className="amount">
-                                {account ? `$${totalDebtInUSD}` : '--'}
-                            </span>
-                            <span className="desc">
-                                {intl.formatMessage({ id: 'data.activedebt' })}
-                            </span>
+            {isMobile && (
+                <section className="data-box">
+                    <div className="rewards-card">
+                        <span>
+                            {account
+                                ? stakeDataList[0]?.totalPendingReward + ' BS'
+                                : '--'}
+                        </span>
+                        <h3>Reward</h3>
+                    </div>
+                    <br />
+                    <div className="staked-card">
+                        <h3>Total Staked</h3>
+                        <span>{account ? `${totalStaked} FUSD` : '--'}</span>
+                    </div>
+                    <div className="collateral-card">
+                        <h3>Collateria</h3>
+                        <div className="callterals">
+                            {collaterals.map((item) => (
+                                <Popover
+                                    content={item.valueInUSD}
+                                    trigger="hover"
+                                    placement="topRight"
+                                    key={item.token}
+                                >
+                                    <button>
+                                        <TokenIcon name={item.token} />
+                                    </button>
+                                </Popover>
+                            ))}
                         </div>
                     </div>
-                )}
-            </div>
+                    <div className="debt-card">
+                        <span>{account ? `$${totalDebtInUSD}` : '--'}</span>
+                        <h3>Active Debt</h3>
+                    </div>
+                </section>
+            )}
+
+            <section className="slogan-box">
+                <p>
+                    <b>Forging</b> the Future of Crypto Finance.
+                </p>
+            </section>
+
+            {isMobile && <img src={Blacksmith} className="blacksmith" />}
+
+            {!isMobile && (
+                <div className="data-box">
+                    <div className="staked-and-collateral-box">
+                        <TabGroup
+                            items={tabItems}
+                            value={tabKey}
+                            onChange={(v) => setTabKey(v)}
+                            className="custom-tabs-group"
+                        />
+
+                        <div className="pannel-content">
+                            {tabKey === 'total-staked' && (
+                                <Fragment>
+                                    {account ? `$${totalStaked}` : '--'}
+                                </Fragment>
+                            )}
+                            {tabKey === 'collateral' && (
+                                <div className="callterals">
+                                    {collaterals.map((item) => (
+                                        <Popover
+                                            content={item.valueInUSD}
+                                            trigger="hover"
+                                            placement="topRight"
+                                            key={item.token}
+                                        >
+                                            <button>
+                                                <TokenIcon
+                                                    name={item.token}
+                                                    size={36}
+                                                />
+                                            </button>
+                                        </Popover>
+                                    ))}
+                                </div>
+                            )}
+                        </div>
+                    </div>
+                    <div className="rewards-box">
+                        <span className="amount">
+                            {account
+                                ? stakeDataList[0]?.totalPendingReward + ' BS'
+                                : '--'}
+                        </span>
+                        <span className="label">Rewards</span>
+                        <Button
+                            className="see-rewards-btn common-btn common-btn-red"
+                            onClick={openClaimRewards}
+                        >
+                            Detail
+                        </Button>
+                    </div>
+                    <div className="amount-box">
+                        <span className="amount">
+                            {account ? `$${totalDebtInUSD}` : '--'}
+                        </span>
+                        <span className="desc">
+                            {intl.formatMessage({ id: 'data.activedebt' })}
+                        </span>
+                    </div>
+                </div>
+            )}
         </PreloadAssetsSuspense>
     );
 };

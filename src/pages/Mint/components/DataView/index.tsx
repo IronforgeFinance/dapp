@@ -14,7 +14,7 @@ interface DataViewProps {
 
 export default (props: DataViewProps) => {
     const intl = useIntl();
-    const isMobile = useEnv();
+    const { isMobile } = useEnv();
     const { stakedData, lockedData, debtData, fRatioData } = useModel(
         'dataView',
         (model) => ({

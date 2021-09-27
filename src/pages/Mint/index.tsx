@@ -1,7 +1,14 @@
 import './pc.less';
 import './mobile.less';
 
-import React, { useState, useEffect, useMemo, useContext, useRef } from 'react';
+import React, {
+    useState,
+    useEffect,
+    useMemo,
+    useContext,
+    useRef,
+    Fragment,
+} from 'react';
 import { InputNumber, Select, Progress, Button, Popover, Slider } from 'antd';
 import * as message from '@/components/Notification';
 import { request, useIntl, useModel } from 'umi';
@@ -58,7 +65,7 @@ const RATIO_MAX_MINT = 800;
 
 export default () => {
     const intl = useIntl();
-    const isMobile = useEnv();
+    const { isMobile } = useEnv();
     const { setWords } = useNpcDialog();
     const { account } = useWeb3React();
     const provider = useProvider();
@@ -547,7 +554,7 @@ export default () => {
     // }, [computedRatio]);
 
     return (
-        <div className="mint-container">
+        <Fragment>
             {!isMobile && <DataView />}
             <div className="right-box">
                 {!isMobile && (
@@ -753,6 +760,6 @@ export default () => {
                 </div>
             </div>
             {isMobile && <DataView />}
-        </div>
+        </Fragment>
     );
 };
