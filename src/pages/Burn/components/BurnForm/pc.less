@@ -1,136 +1,139 @@
-@media (min-width: 751px) {
-    @import '~@/assets/styles/iron.less';
+@import '~@/assets/styles/iron.less';
 
-    button.checkout-debt-btn {
-        width: 64.46px;
-        height: 38.98px;
-        #image.background('~@/assets/images/icon-money.png');
-        position: absolute;
-        right: 30px;
-        top: 30px;
-        filter: drop-shadow(2px -3px 22px rgba(252, 134, 68, 0.8));
-        z-index: 10;
-        animation: blink-coin 1.5s ease-in-out infinite;
-    }
+.pc( {
 
-    .burn-type {
-        margin: 20px 0;
-
-        p {
-            font-style: normal;
-            font-weight: normal;
-            font-size: 15px;
-            line-height: 22px;
-            color: rgba(255, 255, 255, 0.4);
-            margin-bottom: 10px;
+        button.checkout-debt-btn {
+            width: 64.46px;
+            height: 38.98px;
+            #image.background('~@/assets/images/icon-money.png');
+            position: absolute;
+            right: 30px;
+            top: 30px;
+            filter: drop-shadow(2px -3px 22px rgba(252, 134, 68, 0.8));
+            z-index: 10;
+            animation: blink-coin 1.5s ease-in-out infinite;
         }
 
-        .btns {
-            > button {
-                border: 1px solid rgba(255, 255, 255, 0.4);
-                box-sizing: border-box;
-                border-radius: 4px;
+        .burn-type {
+            margin: 20px 0;
 
+            p {
                 font-style: normal;
                 font-weight: normal;
                 font-size: 15px;
+                line-height: 22px;
                 color: rgba(255, 255, 255, 0.4);
-                margin-right: 15px;
-                background: none;
+                margin-bottom: 10px;
             }
-        }
-    }
 
-    .form-view {
-        position: relative;
+            .btns {
+                > button {
+                    border: 1px solid rgba(255, 255, 255, 0.4);
+                    box-sizing: border-box;
+                    border-radius: 4px;
 
-        .icon-arrow-down {
-            #image.icon(18px, '~@/assets/images/icon-arrow-yellow.svg');
-        }
-
-        > .from-input {
-            margin-top: 24px;
-        }
-
-        .group-scale {
-            width: 374px;
-            margin: 0 auto;
-            padding-left: 10px;
-
-            .btn-scale {
-                &:nth-child(n + 2) {
-                    margin-left: 27px;
+                    font-style: normal;
+                    font-weight: normal;
+                    font-size: 15px;
+                    color: rgba(255, 255, 255, 0.4);
+                    margin-right: 15px;
+                    background: none;
                 }
             }
         }
 
-        .custom-input {
-            margin-right: 10px;
+        .form-view {
+            position: relative;
+
+            .icon-arrow-down {
+                #image.icon(18px, '~@/assets/images/icon-arrow-yellow.svg');
+            }
+
+            > .from-input {
+                margin-top: 24px;
+            }
+
+            .group-scale {
+                width: 374px;
+                margin: 0 auto;
+                padding-left: 10px;
+
+                .btn-scale {
+                    &:nth-child(n + 2) {
+                        margin-left: 27px;
+                    }
+                }
+            }
+
+            .custom-input {
+                margin-right: 10px;
+            }
         }
-    }
 
-    .from-content {
-        width: 374px;
-        // height: 78px;
-        background: rgba(51, 39, 30, 0.8);
-        border: 1px solid rgba(178, 178, 181, 0.5);
-        box-sizing: border-box;
-        // backdrop-filter: blur(20px);
-        border-radius: 6px;
-        padding: 9px 12px;
-        box-sizing: border-box;
-    }
+        .from-content {
+            width: 374px;
+            // height: 78px;
+            background: rgba(51, 39, 30, 0.8);
+            border: 1px solid rgba(178, 178, 181, 0.5);
+            box-sizing: border-box;
+            // backdrop-filter: blur(20px);
+            border-radius: 6px;
+            padding: 9px 12px;
+            box-sizing: border-box;
+        }
 
-    .debt {
-        font-style: normal;
-        font-weight: bold;
-        font-size: 15px;
-        line-height: 22px;
-        display: flex;
-        align-items: center;
-
-        color: rgba(255, 255, 255, 0.5);
-    }
-
-    .to-content {
-        width: 374px;
-        // height: 78px;
-        background: rgba(51, 39, 30, 0.8);
-        border: 1px solid rgba(178, 178, 181, 0.5);
-        box-sizing: border-box;
-        // backdrop-filter: blur(20px);
-        border-radius: 6px;
-        padding: 9px 12px;
-        box-sizing: border-box;
-    }
-
-    .ftoken {
-        display: flex;
-        align-items: center;
-
-        > span {
+        .debt {
             font-style: normal;
-            font-weight: normal;
+            font-weight: bold;
             font-size: 15px;
             line-height: 22px;
             display: flex;
             align-items: center;
-            text-align: right;
-            color: #e1ab3b;
+
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .to-content {
+            width: 374px;
+            // height: 78px;
+            background: rgba(51, 39, 30, 0.8);
+            border: 1px solid rgba(178, 178, 181, 0.5);
+            box-sizing: border-box;
+            // backdrop-filter: blur(20px);
+            border-radius: 6px;
+            padding: 9px 12px;
+            box-sizing: border-box;
+        }
+
+        .ftoken {
+            display: flex;
+            align-items: center;
+
+            > span {
+                font-style: normal;
+                font-weight: normal;
+                font-size: 15px;
+                line-height: 22px;
+                display: flex;
+                align-items: center;
+                text-align: right;
+                color: #e1ab3b;
+            }
+        }
+
+        @keyframes blink-coin {
+            0% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.2);
+            }
+
+            100% {
+                transform: scale(1);
+            }
         }
     }
 
-    @keyframes blink-coin {
-        0% {
-            transform: scale(1);
-        }
-
-        50% {
-            transform: scale(1.2);
-        }
-
-        100% {
-            transform: scale(1);
-        }
-    }
-}
+);

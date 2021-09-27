@@ -1,0 +1,32 @@
+@import '~@/assets/styles/iron.less';
+
+.mobile( {
+
+        @keyframes blink-coin {
+            0% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.2);
+            }
+
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        button.checkout-debt-btn {
+            width: 128px;
+            height: 76px;
+            #image.background('~@/assets/images/icon-money.png');
+            position: absolute;
+            right: 60px;
+            top: 60px;
+            filter: drop-shadow(2px -3px 22px rgba(252, 134, 68, 0.8));
+            z-index: 10;
+            animation: blink-coin 1.5s ease-in-out infinite;
+        }
+    }
+
+);

@@ -6,6 +6,7 @@ import {
     useRef,
     useLayoutEffect,
     useContext,
+    ReactNode,
 } from 'react';
 import { ourClient } from '@/subgraph/clientManager';
 import {
@@ -26,6 +27,7 @@ interface PaginationProps {
     size?: number;
     listGql?: DocumentNode;
     totalGql?: DocumentNode;
+    none?: NoneTypes;
     /**@param {function} parser 转换器  */
     parser?(any): any;
     key: string;
@@ -45,6 +47,7 @@ const usePagination = (props: PaginationProps) => {
         parser,
         extVars = {},
         customFetch,
+        none,
     } = props;
     const { account } = useWeb3React();
     const [list, setList] = useState([]);
@@ -118,7 +121,10 @@ const usePagination = (props: PaginationProps) => {
         isClear.current = true;
     }, [pagination, list]);
 
-    useLayoutEffect(() => setLoading(true), []);
+    useLayoutEffect(() => {
+        if (!mounted.current) return;
+        setLoading(true);
+    }, []);
 
     useEffect(() => {
         if (!mounted.current) return;
@@ -143,7 +149,7 @@ const usePagination = (props: PaginationProps) => {
             return 'noConnection';
         }
         if (!list?.length) {
-            return 'noAssets';
+            return none || 'noAssets';
         }
     }, [account, list]);
 

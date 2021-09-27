@@ -88,6 +88,7 @@ const MintView = () => {
         listGql: GET_MINTS,
         totalGql: GET_MINTS_TOTAL,
         key: 'mints',
+        none: 'noRecords',
     });
 
     return (
