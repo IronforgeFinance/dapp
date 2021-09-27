@@ -32,6 +32,7 @@ import { TokenIcon } from '@/components/Icon';
 import Folder from '@/components/Folder';
 import { PROVIDED_LP_TOKENS } from '@/config';
 import useEnv from '@/hooks/useEnv';
+import { handleTxSent } from '@/utils';
 
 const TOKENS = Array.from(
     new Set(
@@ -388,11 +389,7 @@ export default () => {
                 account,
                 deadline,
             );
-            message.info(
-                'Provide tx sent out successfully. Pls wait for a while......',
-            );
-            const receipt = await tx.wait();
-            console.log(receipt);
+            await handleTxSent(tx, intl);
             setSubmitting(false);
             message.success('Provide successfully. Pls check your balance.');
             //更新数据

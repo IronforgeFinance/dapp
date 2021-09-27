@@ -45,7 +45,7 @@ import { TokenSelectorContext } from '@/components/TokenSelector';
 import { TransitionConfirmContext } from '@/components/TransactionConfirm';
 import CommentaryCard from '@/components/CommentaryCard';
 import { useCallback } from 'react';
-import { isDeliveryAsset } from '@/utils';
+import { handleTxSent, isDeliveryAsset } from '@/utils';
 // import Popover from '@/components/Popover';
 import { TokenIcon } from '@/components/Icon';
 import { StatusType } from '@/components/ProgressBar';
@@ -431,41 +431,44 @@ export default () => {
         if (isApproved && isIFTApproved) {
             try {
                 setSubmitting(true);
+                let tx;
                 if (toToken !== 'FUSD') {
-                    const tx1 = await collateralSystem.stakeAndBuildNonFUSD(
+                    tx = await collateralSystem.stakeAndBuildNonFUSD(
                         ethers.utils.formatBytes32String(collateralToken), // stakeCurrency
                         expandTo18Decimals(collateralAmount), // stakeAmount
                         ethers.utils.formatBytes32String(toToken), // buildToken
                         expandTo18Decimals(toAmount), // buildAmount
                         expandTo18Decimals(lockedAmount || 0),
                     );
-                    const receipt1 = await tx1.wait();
-                    console.log(receipt1);
-                    refreshBalance();
-                    setSubmitting(false);
-                    // fetchCollateralBalance();
-                    message.success(
-                        'Mint tx sent out successfully. Pls wait for settle.',
-                    );
                 } else {
-                    const tx0 = await collateralSystem.stakeAndBuild(
+                    tx = await collateralSystem.stakeAndBuild(
                         ethers.utils.formatBytes32String(collateralToken), // stakeCurrency
                         expandTo18Decimals(collateralAmount!), // stakeAmount
                         expandTo18Decimals(toAmount!), // buildAmount
                         expandTo18Decimals(lockedAmount || 0),
                     );
-                    message.info(
-                        'Mint tx sent out successfully. Pls wait for a while......',
-                    );
-                    const receipt = await tx0.wait();
-                    console.log(receipt);
-                    setSubmitting(false);
-                    // fetchCollateralBalance();
-                    message.success(
-                        'Mint successfully. Pls check your balance.',
-                    );
-                    refreshBalance();
                 }
+                await handleTxSent(tx, intl);
+                // message.success({
+                //     message: intl.formatMessage({ id: 'txSent' }),
+                //     description: intl.formatMessage({
+                //         id: 'txSentSuccess',
+                //     }),
+                //     scanHref: `${process.env.BSC_SCAN_URL}/tx/${tx.hash}`,
+                // });
+                // const receipt1 = await tx.wait();
+                // console.log(receipt1);
+
+                // // fetchCollateralBalance();
+                // message.success({
+                //     message: intl.formatMessage({ id: 'txReceived' }),
+                //     description: intl.formatMessage({
+                //         id: 'txReceivedSuccess',
+                //     }),
+                //     scanHref: `${process.env.BSC_SCAN_URL}/tx/${tx.hash}`,
+                // });
+                refreshBalance();
+                setSubmitting(false);
             } catch (err) {
                 console.log(err);
                 if (err && err.code === 4001) {
@@ -482,7 +485,7 @@ export default () => {
     };
 
     /**@description 交易前的确认 */
-    const openMintConfirm = useCallback(async () => {
+    const openMintConfirm = async () => {
         setSubmitting(true);
         if (sliderRatio && sliderRatio < computedRatio) {
             message.warning('F-ratio is too low. Can not mint now.');
@@ -536,7 +539,7 @@ export default () => {
             confirm: onSubmit,
             final: () => setSubmitting(false),
         });
-    }, [collateralToken, collateralAmount, toToken, toAmount, lockedAmount]);
+    };
 
     // /**@type 质押率进度百分比 */
     // const sliderRatio = useMemo(() => {

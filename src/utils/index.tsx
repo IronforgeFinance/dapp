@@ -4,6 +4,7 @@ import { getPricesContract } from '@/utils/contractHelper';
 import { simpleRpcProvider } from '@/utils/providers';
 import { ethers } from 'ethers';
 import { PLATFORM_TOKEN } from '@/config';
+import * as message from '@/components/Notification';
 dayjs.extend(arraySupport);
 //quarter is like 202112
 export const getRemainDaysOfQuarterAsset = (quarter: string) => {
@@ -68,4 +69,22 @@ export const getTokenPrice = async (token: string) => {
         console.log('getTokenPrice error:', token);
         return 0;
     }
+};
+
+export const handleTxSent = async (tx: any, intl: any) => {
+    console.log(tx);
+    message.success({
+        message: intl.formatMessage({ id: 'txSent' }),
+        description: intl.formatMessage({ id: 'txSentSuccess' }),
+    });
+
+    const receipt = await tx.wait();
+    console.log(receipt);
+    message.success({
+        message: intl.formatMessage({ id: 'txReceived' }),
+        description: intl.formatMessage({
+            id: 'txReceivedSuccess',
+        }),
+        scanHref: `${process.env.BSC_SCAN_URL}/tx/${tx.hash}`,
+    });
 };

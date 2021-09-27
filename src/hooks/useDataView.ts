@@ -18,6 +18,7 @@ import { COLLATERAL_TOKENS } from '@/config';
 import { useModel } from 'umi';
 import { useInitialRatio } from '@/hooks/useConfig';
 import { getTokenPrice } from '@/utils';
+import useLastUpdated from './useLastUpdated';
 const testData = [
     {
         type: ProgressBarType.staked,
@@ -226,6 +227,7 @@ export const useSelectedDebtInUSD = (currency: string) => {
     const debtSystem = useDebtSystem();
     const { account } = useWeb3React();
     const provider = useWeb3Provider();
+    const { lastUpdated, setLastUpdated } = useLastUpdated();
 
     useEffect(() => {
         if (currency && account) {
@@ -253,7 +255,7 @@ export const useSelectedDebtInUSD = (currency: string) => {
             })();
         }
     }, [currency, account, provider]);
-    return debt;
+    return { debt, setLastUpdated };
 };
 
 export default useDataView;

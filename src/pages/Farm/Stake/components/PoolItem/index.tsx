@@ -9,6 +9,7 @@ import { Button, Popover } from 'antd';
 import { useModel } from 'umi';
 import { useWeb3React } from '@web3-react/core';
 import * as message from '@/components/Notification';
+import { handleTxSent } from '@/utils';
 
 export default (props: { pool: IStakePool; handleFlipper: () => void }) => {
     const {
@@ -37,8 +38,7 @@ export default (props: { pool: IStakePool; handleFlipper: () => void }) => {
         try {
             setSubmitting(true);
             const tx = await MinerReward.harvest(poolId);
-            const receipt = await tx.wait();
-            console.log(receipt);
+            await handleTxSent(tx, intl);
             setSubmitting(false);
             updateStakePoolItem({ poolId, poolName: name }, account);
             message.success('Harvest successfully. Pls check your balance.');

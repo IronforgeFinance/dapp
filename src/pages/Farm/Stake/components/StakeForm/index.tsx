@@ -19,6 +19,7 @@ import { expandTo18Decimals } from '@/utils/bigNumber';
 import { ethers } from 'ethers';
 import TabGroup from '@/components/TabGroup';
 import { useModel, useIntl } from 'umi';
+import { handleTxSent } from '@/utils';
 const STAKE_TOKENS = [...LP_TOKENS, ...POOL_TOKENS];
 enum STAKE_TABS {
     stake = 'stake',
@@ -106,11 +107,7 @@ export default (props: {
                     poolId,
                     expandTo18Decimals(lpAmount),
                 );
-                message.info(
-                    'Stake tx sent out successfully. Pls wait for a while......',
-                );
-                const receipt = await tx.wait();
-                console.log(receipt);
+                await handleTxSent(tx, intl);
                 setSubmitting(false);
                 message.success('Stake successfully. Pls check your balance.');
                 refreshBalance();
@@ -120,11 +117,7 @@ export default (props: {
                     poolId,
                     expandTo18Decimals(lpAmount),
                 );
-                message.info(
-                    'Unstake tx sent out successfully. Pls wait for a while......',
-                );
-                const receipt = await tx.wait();
-                console.log(receipt);
+                await handleTxSent(tx, intl);
                 setSubmitting(false);
                 message.success(
                     'Unstake successfully. Pls check your balance.',
@@ -220,7 +213,7 @@ export default (props: {
                         onClick={handleApprove}
                         loading={requestedApproval}
                     >
-                        {intl.formatMessage({ id: 'Approve' })}
+                        {intl.formatMessage({ id: 'approve' })}
                     </Button>
                 )}
             </div>

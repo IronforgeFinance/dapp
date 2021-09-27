@@ -143,6 +143,7 @@ export default () => {
 
     const onSubmitSuccess = () => {
         setShowForm(false);
+        refreshData();
     };
 
     const NoAssetsView = () => {
