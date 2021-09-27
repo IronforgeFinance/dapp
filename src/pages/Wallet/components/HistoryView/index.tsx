@@ -494,27 +494,27 @@ const HistoryView = () => {
 
     return (
         <div className="history-view">
-            {!noneStatus && (
-                <Tabs
-                    className="custom-tabs"
-                    defaultActiveKey={tabKey}
-                    onChange={changeTab}
-                >
-                    {tabItems.map((tabKey) => (
-                        <TabPane
-                            tab={intl.formatMessage({
-                                id: `wallet.tab.${(
-                                    tabKey as string
-                                ).toLowerCase()}`,
-                            })}
-                            key={tabKey}
-                        >
-                            <ISwitch
-                                checkedChildren="Live"
-                                unCheckedChildren="Finished"
-                                onChange={setChecked}
-                                checked={checked}
-                            />
+            <Tabs
+                className="custom-tabs"
+                defaultActiveKey={tabKey}
+                onChange={changeTab}
+            >
+                {tabItems.map((tabKey) => (
+                    <TabPane
+                        tab={intl.formatMessage({
+                            id: `wallet.tab.${(
+                                tabKey as string
+                            ).toLowerCase()}`,
+                        })}
+                        key={tabKey}
+                    >
+                        <ISwitch
+                            checkedChildren="Live"
+                            unCheckedChildren="Finished"
+                            onChange={setChecked}
+                            checked={checked}
+                        />
+                        {!noneStatus && (
                             <Table
                                 className="custom-table"
                                 columns={columns}
@@ -522,10 +522,10 @@ const HistoryView = () => {
                                 dataSource={records}
                                 pagination={false}
                             />
-                        </TabPane>
-                    ))}
-                </Tabs>
-            )}
+                        )}
+                    </TabPane>
+                ))}
+            </Tabs>
             {noneStatus && <NoneView type={noneStatus} />}
         </div>
     );

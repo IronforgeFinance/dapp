@@ -1,9 +1,8 @@
 import './pc.less';
 import './mobile.less';
 
-import React from 'react';
+import { useLayoutEffect } from 'react';
 import { CSSTransition } from 'react-transition-group';
-import { useCallback } from 'react';
 
 interface IOverlayProps {
     visable: Boolean;
@@ -13,6 +12,13 @@ interface IOverlayProps {
 
 const Overlay = (props: IOverlayProps) => {
     const { visable, onClose, children } = props;
+
+    useLayoutEffect(() => {
+        const body = document.querySelector('body');
+        visable
+            ? (body.style.position = 'fixed')
+            : (body.style.position = 'unset');
+    }, [visable]);
 
     return (
         <CSSTransition

@@ -80,6 +80,7 @@ const BurnView = () => {
         listGql: GET_BURNS,
         totalGql: GET_BURNS_TOTAL,
         key: 'burns',
+        none: 'noRecords',
     });
 
     return (

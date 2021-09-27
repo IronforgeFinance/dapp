@@ -99,6 +99,7 @@ const DeliveryView = () => {
         listGql: GET_MINTS_BY_COLLATERAL,
         totalGql: GET_MINTS_BY_COLLATERAL_TOTAL,
         key: 'mints',
+        none: 'noRecords',
     });
 
     return (
