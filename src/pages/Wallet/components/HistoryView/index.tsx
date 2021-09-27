@@ -10,7 +10,7 @@ import {
     useEffect,
     useContext,
 } from 'react';
-import { parseEnumToArray } from '@/utils';
+import { handleTxSent, parseEnumToArray } from '@/utils';
 import {
     ConjType,
     HistoryViewProps,
@@ -347,7 +347,7 @@ const HistoryView = () => {
         if (account) {
             try {
                 const tx = await exchangeSystem.rollback(entryId);
-                const receipt = await tx.wait();
+                await handleTxSent(tx, intl);
                 message.success('Revert successfully.');
                 // revert之后需要更新这一条数据。
                 const _operations = operations.slice();

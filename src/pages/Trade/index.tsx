@@ -28,7 +28,7 @@ import { debounce } from 'lodash';
 import classNames from 'classnames';
 import { TokenIcon } from '@/components/Icon';
 import { useIntl, useModel } from 'umi';
-import { getTokenPrice } from '@/utils';
+import { getTokenPrice, handleTxSent } from '@/utils';
 import { TokenSelectorContext } from '@/components/TokenSelector';
 import { TransitionConfirmContext } from '@/components/TransactionConfirm';
 import {
@@ -158,11 +158,7 @@ export default () => {
                 account, // destAddr
                 ethers.utils.formatBytes32String(toToken), // destKey
             );
-            message.info(
-                'Trade tx sent out successfully. Pls wait for a while......',
-            );
-            const receipt = await tx.wait();
-            console.log(receipt);
+            await handleTxSent(tx, intl);
             setSubmitting(false);
         } catch (err) {
             setSubmitting(false);

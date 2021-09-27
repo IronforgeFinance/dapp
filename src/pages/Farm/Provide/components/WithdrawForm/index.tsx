@@ -20,6 +20,7 @@ import {
 import { TokenIcon } from '@/components/Icon';
 import { toFixedWithoutRound } from '@/utils/bigNumber';
 import { TokenSelectorContext } from '@/components/TokenSelector';
+import { handleTxSent } from '@/utils';
 
 export default () => {
     const intl = useIntl();
@@ -165,11 +166,7 @@ export default () => {
                 account,
                 deadline,
             );
-            message.info(
-                'Withdraw tx sent out successfully. Pls wait for a while......',
-            );
-            const receipt = await tx.wait();
-            console.log(receipt);
+            await handleTxSent(tx, intl);
             setSubmitting(false);
             message.success('Withdraw successfully. Pls check your balance.');
             //更新数据

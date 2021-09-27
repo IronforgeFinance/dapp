@@ -212,4 +212,8 @@ export default {
         '质押物中BS锁仓量的占比越高，质押率F-Ratio越低, 最低可至350%',
     txRejected: '交易已取消',
     rejectedByUser: '用户取消了交易',
+    txSent: '交易已发送',
+    txSentSuccess: '交易已成功发送.',
+    txReceived: '交易已上链',
+    txReceivedSuccess: '交易已成功上链.',
 };

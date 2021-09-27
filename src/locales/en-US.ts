@@ -171,4 +171,8 @@ export default {
         'The higher the proportion of BS locked in the pledge, the lower the pledge rate F-Ratio, which can be as low as 350%',
     txRejected: 'Transaction rejected',
     rejectedByUser: 'Rejected by user',
+    txSent: 'Transaction sent',
+    txSentSuccess: 'Transaction sent out successfully.',
+    txReceived: 'Transaction received',
+    txReceivedSuccess: 'Transaction received successfully.',
 };

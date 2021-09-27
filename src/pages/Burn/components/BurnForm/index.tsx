@@ -21,7 +21,7 @@ import { useInitialRatio } from '@/hooks/useConfig';
 import BigNumber from 'bignumber.js';
 import { debounce } from 'lodash';
 import { Group as ScaleGroup, Button as ScaleOption } from '@/components/Scale';
-import { isDeliveryAsset } from '@/utils';
+import { handleTxSent, isDeliveryAsset } from '@/utils';
 import { TokenIcon } from '@/components/Icon';
 import { useIntl } from 'umi';
 import { getTokenPrice } from '@/utils';
@@ -33,6 +33,7 @@ import Contracts from '@/config/constants/contracts';
 import { TokenSelectorContext } from '@/components/TokenSelector';
 import { TransitionConfirmContext as TransactionConfirmContext } from '@/components/TransactionConfirm';
 import { useMyDebts } from '@/components/MyDebts';
+import { BSCSCAN_EXPLORER } from '@/config/constants/constant';
 
 const TO_TOKENS = ['BTC'];
 interface IProps {
@@ -62,7 +63,8 @@ export default (props: IProps) => {
 
     const { currencyRatio } = useDataView(toToken);
 
-    const toTokenDebtInUsd = useSelectedDebtInUSD(toToken);
+    const { debt: toTokenDebtInUsd, setLastUpdated: setDebtUpdated } =
+        useSelectedDebtInUSD(toToken);
 
     const initialRatio = useInitialRatio(toToken);
 
@@ -369,44 +371,33 @@ export default (props: IProps) => {
     const onSubmit = async () => {
         try {
             setSubmitting(true);
+            let tx;
             if (burnType === 'max' && fromToken === 'FUSD') {
-                const _tx = await collateralSystem.burnAndUnstakeMax(
+                tx = await collateralSystem.burnAndUnstakeMax(
                     expandTo18Decimals(burnAmount), // burnAmount
                     ethers.utils.formatBytes32String(toToken!), // unstakeCurrency
                 );
-                message.info(
-                    'Burn _tx sent out successfully. Pls wait for a while......',
-                );
-                const receipt = await _tx.wait();
-                console.log(receipt);
             } else {
                 if (fromToken === 'FUSD') {
-                    const _tx = await collateralSystem.burnAndUnstake(
+                    tx = await collateralSystem.burnAndUnstake(
                         expandTo18Decimals(burnAmount), // burnAmount
                         ethers.utils.formatBytes32String(toToken!), // unstakeCurrency
                         expandTo18Decimals(unstakeAmount), // unstakeAmount
                     );
-                    message.info(
-                        'Burn tx sent out successfully. Pls wait for a while......',
-                    );
-                    const receipt = await _tx.wait();
-                    console.log(receipt);
                 } else {
-                    const tx = await collateralSystem.burnNonFUSDAndUnstake(
+                    tx = await collateralSystem.burnNonFUSDAndUnstake(
                         ethers.utils.formatBytes32String(fromToken), // burnCurrency
                         expandTo18Decimals(burnAmount), // burnAmount
                         ethers.utils.formatBytes32String(toToken), // unstakeCurrency
                         expandTo18Decimals(unstakeAmount), // unstakeAmount.
                     );
-                    message.info(
-                        'Burn tx sent out successfully. Pls wait for the settle.....',
-                    );
-                    const receipt = await tx.wait();
-                    console.log(receipt);
                 }
             }
 
+            await handleTxSent(tx, intl);
+
             setSubmitting(false);
+            setDebtUpdated();
             onSubmitSuccess();
             //更新dataView
             // clearDataView();

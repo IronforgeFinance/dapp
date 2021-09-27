@@ -7,6 +7,7 @@ import useLastUpdated from '@/hooks/useLastUpdated';
 // import { message } from 'antd';
 import * as message from '@/components/Notification';
 import Token from '@/config/constants/tokens';
+import useProvider from '@/hooks/useWeb3Provider';
 
 // Approve erc20
 export const useERC20Approve = (
@@ -46,6 +47,7 @@ export const useCheckERC20ApprovalStatus = (
 ) => {
     const [isApproved, setIsApproved] = useState(false);
     const { account } = useWeb3React();
+    const provider = useProvider();
     const { lastUpdated, setLastUpdated } = useLastUpdated();
     if (!address.startsWith('0x') && Token[address]) {
         const token = Token[address];
@@ -59,13 +61,14 @@ export const useCheckERC20ApprovalStatus = (
                 const currentAllowance = new BigNumber(response.toString());
                 setIsApproved(currentAllowance.gt(0));
             } catch (error) {
+                console.log('checkApprovalStatus: ', error, account, address);
                 setIsApproved(false);
             }
         };
         if (account) {
             checkApprovalStatus();
         }
-    }, [account, erc20, spender, address, lastUpdated]);
+    }, [account, erc20, spender, address, lastUpdated, provider]);
 
     return { isApproved, setLastUpdated };
 };
