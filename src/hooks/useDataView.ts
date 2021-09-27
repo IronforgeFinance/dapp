@@ -225,24 +225,34 @@ export const useSelectedDebtInUSD = (currency: string) => {
     const [debt, setDebt] = useState(0);
     const debtSystem = useDebtSystem();
     const { account } = useWeb3React();
+    const provider = useWeb3Provider();
 
     useEffect(() => {
         if (currency && account) {
             (async () => {
-                const res = await debtSystem.GetUserDebtBalanceInUsd(
-                    account,
-                    ethers.utils.formatBytes32String(currency),
-                );
-                if (res && res[0]) {
-                    const val = parseFloat(
-                        ethers.utils.formatUnits(res[0], 18),
+                try {
+                    const res = await debtSystem.GetUserDebtBalanceInUsd(
+                        account,
+                        ethers.utils.formatBytes32String(currency),
                     );
-                    setDebt(val);
-                    console.log('useSelectedDebtInUSD: ', val);
+                    if (res && res[0]) {
+                        const val = parseFloat(
+                            ethers.utils.formatUnits(res[0], 18),
+                        );
+                        setDebt(val);
+                        console.log('useSelectedDebtInUSD: ', val);
+                    }
+                } catch (err) {
+                    console.log(
+                        'useSelectedDebtInUSD: ',
+                        err,
+                        account,
+                        currency,
+                    );
                 }
             })();
         }
-    }, [currency, account]);
+    }, [currency, account, provider]);
     return debt;
 };
 

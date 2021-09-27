@@ -494,7 +494,7 @@ export default (props: IProps) => {
             confirm: onSubmit,
             final: () => setSubmitting(false),
         });
-    }, [toToken, unstakeAmount, burnAmount]);
+    }, [toToken, unstakeAmount, burnAmount, lockedData, stakedData]);
 
     return (
         <div className="common-box form-view">

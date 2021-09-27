@@ -63,8 +63,8 @@ export default {
         symbol: 'FUSD',
         address: {
             56: '',
-            97: testnetOutput.FUSD,
-            1337: localOutput.FUSD,
+            97: testnetOutput.synths.FUSD,
+            1337: localOutput.synths.FUSD,
         },
         decimals: 18,
     },
@@ -72,8 +72,17 @@ export default {
         symbol: 'lBTC',
         address: {
             56: '',
-            97: testnetOutput.lBTC,
-            1337: localOutput.lBTC,
+            97: testnetOutput.synths.lBTC,
+            1337: localOutput.synths.lBTC,
+        },
+        decimals: 18,
+    },
+    lETH: {
+        symbol: 'lETH',
+        address: {
+            56: '',
+            97: testnetOutput.synths.lETH,
+            1337: localOutput.synths.lETH,
         },
         decimals: 18,
     },
@@ -99,8 +108,8 @@ export default {
         symbol: 'lBTCUSD_210924',
         address: {
             56: '',
-            97: testnetOutput.quarterlyContracts.lBTCUSD_210924,
-            1337: localOutput.quarterlyContracts.lBTCUSD_210924,
+            97: testnetOutput.synths.lBTCUSD_210924,
+            1337: localOutput.synths.lBTCUSD_210924,
         },
         decimals: 18,
     },
@@ -108,8 +117,8 @@ export default {
         symbol: 'lBTCUSD_211231',
         address: {
             56: '',
-            97: testnetOutput.quarterlyContracts.lBTCUSD_211231,
-            1337: localOutput.quarterlyContracts.lBTCUSD_211231,
+            97: testnetOutput.synths.lBTCUSD_211231,
+            1337: localOutput.synths.lBTCUSD_211231,
         },
         decimals: 18,
     },
