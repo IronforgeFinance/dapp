@@ -23,7 +23,7 @@ interface TokenOption {
 
 interface OpenOptions {
     placeholder?: string;
-    callback?(token: string): void;
+    callback?(token: string, remainDays?: number): void;
 }
 
 interface TokenSelectorContextProps {
@@ -55,9 +55,12 @@ export default (props: TokenSelectorProps) => {
         setVisible(true);
     }, []);
     const makeChoice = useCallback(
-        (token) => {
+        (token, remainDays) => {
+            if (isDeliveryAsset(token) && remainDays === undefined) {
+                return;
+            }
             setChoosedToken(token);
-            openOption?.callback(token);
+            openOption?.callback(token, remainDays);
             close();
         },
         [tokenList, openOption],
@@ -121,7 +124,11 @@ export default (props: TokenSelectorProps) => {
                                 token: true,
                                 active: choosedToken === token.name,
                             })}
-                            onClick={makeChoice.bind(this, token.name)}
+                            onClick={makeChoice.bind(
+                                this,
+                                token.name,
+                                token.remainDays,
+                            )}
                         >
                             <TokenIcon
                                 name={token.name.toLowerCase()}

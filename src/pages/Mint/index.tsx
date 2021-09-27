@@ -405,7 +405,13 @@ export default () => {
         setToAmount(0);
     };
 
-    const toTokenHandler = (v) => {
+    const toTokenHandler = (v, remainDays) => {
+        if (remainDays !== undefined && remainDays <= 0) {
+            message.info(
+                `The price of ${v} is expired. Pls select other tokens.`,
+            );
+            return;
+        }
         setToToken(v);
         setToAmount(0);
     };
@@ -509,14 +515,14 @@ export default () => {
         const collateralTokenPrice = await getTokenPrice(collateralToken);
         const toTokenPrice = await getTokenPrice(toToken);
         const lockedPrice = await getTokenPrice(PLATFORM_TOKEN); // TODO change name
-
+        const _lockedAmount = lockedAmount || 0;
         console.log(
             '>> collateral price: ',
             (collateralAmount * collateralTokenPrice).toFixed(2),
         );
         console.log(
             '>> locked price: ',
-            (lockedPrice * lockedAmount).toFixed(2),
+            (lockedPrice * _lockedAmount).toFixed(2),
         );
         console.log(
             '>> fassets price: ',
@@ -539,8 +545,8 @@ export default () => {
             },
             bsToken: {
                 name: 'BS',
-                price: Number((lockedPrice * lockedAmount).toFixed(2)),
-                amount: lockedAmount,
+                price: Number((lockedPrice * _lockedAmount).toFixed(2)),
+                amount: _lockedAmount,
             },
             type: isDeliveryAsset(toToken) ? 'Delivery' : 'Perpetuation',
             confirm: onSubmit,

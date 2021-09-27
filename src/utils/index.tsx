@@ -21,7 +21,8 @@ export const getRemainDaysOfQuarterAsset = (quarter: string) => {
         }
         const days = date.diff(new Date(), 'days');
         if (date.isBefore(new Date())) {
-            return -1 * days;
+            // return -1 * days;
+            return 0;
         }
         console.log('remain days: ', days);
         return days;
