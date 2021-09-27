@@ -129,7 +129,7 @@ export const fail = (props: string | FailProps, duration?: number) => {
                     <div className="description">
                         <p>{props}</p>
                     </div>
-                    <TimerBar duration={DEFAULT_DURATION} />
+                    <TimerBar duration={duration || DEFAULT_DURATION} />
                 </React.Fragment>
             ),
             icon: <img className="icon-status" src={NotifyFailSvg} />,
