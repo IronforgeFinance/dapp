@@ -167,7 +167,7 @@ export let loading = (props: string | LoadingProps) => {
         notification.error({
             key,
             duration: 0,
-            className: 'iron-notification loading',
+            className: 'iron-notification waiting',
             message: <h3>{message || DEFAULT_LOADING_MESSAGE}</h3>,
             description: (
                 <React.Fragment>
