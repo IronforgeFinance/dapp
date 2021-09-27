@@ -4,7 +4,7 @@ import './mobile.less';
 import {
     useCallback,
     useState,
-    useEffect,
+    useLayoutEffect,
     useContext,
     ReactNode,
     useMemo,
@@ -30,6 +30,7 @@ export const useNpcDialog = () => {
 const NpcDialog = (props: NpcDialog) => {
     const { children } = props;
     const [visable, setVisable] = useState(false);
+    const [loaded, setLoaded] = useState(false);
     const [showISee, setShowISee] = useState(false);
     const { words, setWords } = useContext(NpcDialogContext);
     const [slowWords, setSlowWords] = useState('');
@@ -73,8 +74,10 @@ const NpcDialog = (props: NpcDialog) => {
         setShowISee(false);
 
         /**@description 关闭后清空文字，以便下次触发 */
-        setWords('');
-        setSlowWords('');
+        setTimeout(() => {
+            setWords('');
+            setSlowWords('');
+        }, 200);
     }, [words]);
     const open = useCallback(() => {
         clearTimeout(delayKey.current);
@@ -94,45 +97,57 @@ const NpcDialog = (props: NpcDialog) => {
     );
 
     /**@description 若关闭，清空文字；反之打开窗口 */
-    useEffect(() => (words?.length > 0 ? open() : close()), [words]);
+    useLayoutEffect(() => {
+        words?.length > 0 ? open() : close();
+    }, [words]);
 
-    /**@description 清除所有timeout */
-    useEffect(() => clearTms, []);
+    useLayoutEffect(() => {
+        // 延迟加载
+        setTimeout(() => setLoaded(true), 200);
+
+        return () => {
+            // all clear
+            setLoaded(false);
+            close();
+        };
+    }, [path]);
 
     return (
         <Fragment>
-            <section
-                className={classNames({
-                    'npc-dilaog': true,
-                    show: visable,
-                    hide: !visable,
-                    'is-right': isRightNpc,
-                })}
-            >
-                <div
+            {loaded && (
+                <section
                     className={classNames({
-                        'dialog-box': true,
+                        'npc-dilaog': true,
+                        show: visable,
+                        hide: !visable,
                         'is-right': isRightNpc,
                     })}
                 >
-                    <img
+                    <div
                         className={classNames({
-                            npc: true,
-                            'is-right': isRightNpc,
-                        })}
-                        src={isRightNpc ? RightNpcPng : LeftNpcPng}
-                    />
-                    <p
-                        className={classNames({
-                            words,
+                            'dialog-box': true,
                             'is-right': isRightNpc,
                         })}
                     >
-                        <span>{slowWords}</span>
-                        {showISee && <a onClick={close}>我知道了</a>}
-                    </p>
-                </div>
-            </section>
+                        <img
+                            className={classNames({
+                                npc: true,
+                                'is-right': isRightNpc,
+                            })}
+                            src={isRightNpc ? RightNpcPng : LeftNpcPng}
+                        />
+                        <p
+                            className={classNames({
+                                words,
+                                'is-right': isRightNpc,
+                            })}
+                        >
+                            <span>{slowWords}</span>
+                            {showISee && <a onClick={close}>我知道了</a>}
+                        </p>
+                    </div>
+                </section>
+            )}
             {children}
         </Fragment>
     );
