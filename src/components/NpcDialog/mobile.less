@@ -17,9 +17,17 @@
                 left: 0;
                 z-index: 3000;
 
-                &.show {
+                &.show, &.hide {
                     top: unset;
                     height: 0;
+                }
+
+                &.hide {
+                    margin-bottom: -90px;
+
+                    &.is-right {
+                        margin-bottom: -70px;
+                    }
                 }
             }
 
