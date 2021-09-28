@@ -25,6 +25,16 @@
             outline: none;
             border: none;
         }
+
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        p,
+        span {
+            word-break: break-all;
+        }
     }
 
     // scroll bar
@@ -51,11 +61,33 @@
         z-index: 1;
     }
 
-    #root ~ div {
+    // 同级多有可能是弹窗一类组件，尽量给高层级
+    #root ~ div,
+    #root ~ section {
         position: relative;
         z-index: 10;
     }
 
+    .container {
+        overflow-x: hidden;
+        display: flex;
+        flex-direction: column;
+
+        .pc( {
+                max-width: 100vw;
+                min-height: 100vh;
+            }
+
+        );
+
+        .mobile( {
+                max-width: 750px;
+            }
+
+        );
+    }
+
+    // 页面级容器
     // 必须加标签，否则mix-blend-mode失效
     section[class$='-container'] {
         z-index: 0;
@@ -311,7 +343,7 @@
     }
 }
 
-.page-container(@image: '') {
+.mobile-container(@image: '') {
     #bgImage.background(@image);
     padding-top: @mobileNavHeight;
     display: flex;
