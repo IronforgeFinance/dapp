@@ -34,7 +34,7 @@ const MobileNavigation = (props: MobileNavigationProps) => {
     const close = () => setVisible(false);
     const changeLink = useCallback((path) => {
         close();
-        setTimeout(() => history.push(path), 100);
+        setTimeout(() => history.push(path), 300);
     }, []);
 
     useEffect(() => {

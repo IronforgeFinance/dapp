@@ -102,6 +102,7 @@ export default function Layout({
                                             <HistoryBoard />
                                             <MyDebts />
                                             <ClaimRewards />
+                                            {!isMobile && <NpcDialog />}
                                         </Fragment>
 
                                         {/* 页面内容 */}
@@ -120,7 +121,9 @@ export default function Layout({
                                                                 ) || 'home'
                                                         }-container`}
                                                     >
-                                                        <NpcDialog />
+                                                        {isMobile && (
+                                                            <NpcDialog />
+                                                        )}
                                                         {children}
                                                     </section>
                                                 </TokenSelector>

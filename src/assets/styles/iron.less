@@ -6,6 +6,63 @@
 @btc: linear-gradient(116.98deg, #f6911b 31.39%, #ffcb44 83.13%);
 @eth: linear-gradient(116.98deg, #c4c3c7 31.39%, #72727a 83.13%);
 
+.global {
+    // clear all of gap, it could be outer or inner
+    *,
+    *:before,
+    *:after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+    }
+
+    // scroll bar
+    *::-webkit-scrollbar {
+        display: none;
+    }
+
+    * {
+        -ms-overflow-style: none;
+        /* IE 10+ */
+        scrollbar-width: none;
+        /* Firefox */
+    }
+
+    // font
+    body {
+        font-family: Poppins, sans-serif;
+    }
+
+    // root
+    #root {
+        overflow-x: hidden;
+        position: relative;
+        z-index: 1;
+    }
+
+    #root ~ div {
+        position: relative;
+        z-index: 10;
+    }
+
+    [class$='-container'] {
+        z-index: 0;
+    }
+}
+
+.fill {
+    display: flex;
+    width: 100%;
+
+    &::before {
+        content: '';
+        display: inline-block;
+        flex: 1;
+        height: 100%;
+        width: 100%;
+    }
+}
+
 .mobile(@class) {
     @media (max-width: 750px) {
         @class();
@@ -80,16 +137,6 @@
     }
 }
 
-.image {
-    background-position: center;
-    background-repeat: no-repeat;
-    background-color: transparent;
-    background-size: contain;
-    display: inline-block;
-    flex-shrink: 0;
-    flex-grow: 0;
-}
-
 .dot(@size: 16px, @marginRight: 0px, @bgColor: transparent) {
     display: flex;
     align-items: center;
@@ -110,7 +157,17 @@
     }
 }
 
-#image {
+.bgImage {
+    background-position: center;
+    background-repeat: no-repeat;
+    background-color: transparent;
+    background-size: contain;
+    display: inline-block;
+    flex-shrink: 0;
+    flex-grow: 0;
+}
+
+#bgImage {
     .background(@bgImage, @bgColor: transparent) {
         background-position: center;
         background-repeat: no-repeat;
@@ -184,7 +241,7 @@
     }
 
     .icon(@size, @bgImage, @bgColor: transparent, @pure: true) {
-        #image.background(@bgImage, @bgColor);
+        #bgImage.background(@bgImage, @bgColor);
 
         width: @size;
         height: @size;
@@ -199,7 +256,7 @@
     }
 
     .button(@bgImage, @bgColor: transparent) {
-        #image.background(@bgImage, @bgColor);
+        #bgImage.background(@bgImage, @bgColor);
 
         border: none;
         outline: none;
@@ -243,7 +300,7 @@
 }
 
 .page-container(@image: '') {
-    #image.background(@image);
+    #bgImage.background(@image);
     padding-top: @mobileNavHeight;
     display: flex;
     flex-direction: column;

@@ -60,7 +60,6 @@ export default () => {
                     </ul>
                 </div>
             )}
-            {isMobile && <div className="fill" />}
             <div className="right-box">
                 <WalletStatus />
                 <LangSwitcher />

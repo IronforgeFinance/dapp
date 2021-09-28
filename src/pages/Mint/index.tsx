@@ -146,18 +146,17 @@ export default () => {
 
     // const { stakedData, setStakedData } = useStakedData();
 
-    const openCollateralTokenList = useCallback(
-        () => open(COLLATERAL_TOKENS, { callback: collateralTokenHandler }),
-        [],
-    );
-    const openToTokenList = useCallback(
-        () =>
-            open(
-                MINT_TOKENS.map((name) => ({ name })),
-                { callback: toTokenHandler },
-            ),
-        [],
-    );
+    const openCollateralTokenList = useCallback(() => {
+        setWords(collateralToken ? 'collateralToken' : '');
+        open(COLLATERAL_TOKENS, { callback: collateralTokenHandler });
+    }, []);
+    const openToTokenList = useCallback(() => {
+        setWords(toToken ? intl.formatMessage({ id: 'npc.mintAssets' }) : '');
+        open(
+            MINT_TOKENS.map((name) => ({ name })),
+            { callback: toTokenHandler },
+        );
+    }, []);
 
     const {
         stakedData,
@@ -269,24 +268,8 @@ export default () => {
 
     /**@description 弹出npc */
     useEffect(
-        () =>
-            setWords(
-                lockedAmount > 0
-                    ? intl.formatMessage({ id: 'npc.mintRatio' })
-                    : '',
-            ),
-        [lockedAmount],
-    );
-    useEffect(
-        () => setWords(collateralToken ? 'collateralToken' : ''),
-        [collateralToken],
-    );
-    useEffect(
-        () =>
-            setWords(
-                toToken ? intl.formatMessage({ id: 'npc.mintAssets' }) : '',
-            ),
-        [toToken],
+        () => setWords(intl.formatMessage({ id: 'npc.mintRatio' })),
+        [lockedScale],
     );
     useEffect(() => {
         return () => {

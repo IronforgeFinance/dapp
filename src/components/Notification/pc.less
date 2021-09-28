@@ -40,7 +40,7 @@
         }
 
         &.success {
-            // #image.background('~@/assets/images/notify-success-bg.png');
+            // #bgImage.background('~@/assets/images/notify-success-bg.png');
             background-color: transparent;
 
             > div {
@@ -53,15 +53,15 @@
                 z-index: 2;
             }
 
-            #image.dinamicBg('~@/assets/images/notify-success-bg.png', 50%, 'vertical');
+            #bgImage.dinamicBg('~@/assets/images/notify-success-bg.png', 50%, 'vertical');
         }
 
         &.fail {
-            #image.dinamicBg('~@/assets/images/notify-fail-bg.png', 50%, 'vertical');
+            #bgImage.dinamicBg('~@/assets/images/notify-fail-bg.png', 50%, 'vertical');
         }
 
         &.waiting {
-            #image.dinamicBg('~@/assets/images/notify-loading-bg.svg', 50%, 'vertical');
+            #bgImage.dinamicBg('~@/assets/images/notify-loading-bg.svg', 50%, 'vertical');
             background-color: transparent;
 
             .ant-notification-notice-close {
@@ -86,7 +86,7 @@
         }
 
         .scale-btn {
-            #image.icon(18px, '~@/assets/images/notify-scale.svg');
+            #bgImage.icon(18px, '~@/assets/images/notify-scale.svg');
             position: absolute;
             right: 14px;
             bottom: 15px;
@@ -182,7 +182,7 @@
         }
 
         .icon-close {
-            #image.icon(36px, '~@/assets/images/icon-close.png');
+            #bgImage.icon(36px, '~@/assets/images/icon-close.png');
         }
     }
 }

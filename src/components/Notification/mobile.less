@@ -38,11 +38,11 @@
                 z-index: 2;
             }
 
-            #image.dinamicBg('~@/assets/images/notify-success-bg.png', 50%, 'vertical');
+            #bgImage.dinamicBg('~@/assets/images/notify-success-bg.png', 50%, 'vertical');
         }
 
         &.loading {
-            #image.dinamicBg('~@/assets/images/notify-loading-bg.svg', 50%, 'vertical');
+            #bgImage.dinamicBg('~@/assets/images/notify-loading-bg.svg', 50%, 'vertical');
             background-color: transparent;
 
             .ant-notification-notice-close {
@@ -57,7 +57,7 @@
         }
 
         &.fail {
-            #image.dinamicBg('~@/assets/images/notify-fail-bg.png', 50%, 'vertical');
+            #bgImage.dinamicBg('~@/assets/images/notify-fail-bg.png', 50%, 'vertical');
         }
 
         h3 {
@@ -133,7 +133,7 @@
         }
 
         .icon-close {
-            #image.icon(64px, '~@/assets/images/icon-close.png');
+            #bgImage.icon(64px, '~@/assets/images/icon-close.png');
         }
     }
 }

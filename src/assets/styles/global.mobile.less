@@ -18,56 +18,7 @@
         @lightBlue: #f1f7ff;
         @yellow: #fcd144;
 
-        *,
-        *:before,
-        *:after {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-
-        //   消除滚动条
-        *::-webkit-scrollbar {
-            display: none;
-        }
-
-        * {
-            -ms-overflow-style: none;
-            /* IE 10+ */
-            scrollbar-width: none;
-            /* Firefox */
-        }
-
-        body {
-            font-family: Poppins, sans-serif;
-        }
-
-        img {
-            vertical-align: middle;
-        }
-
-        p,
-        ul {
-            margin: 0;
-        }
-
-        ol,
-        ul,
-        dl {
-            margin-top: 0;
-            margin-bottom: 0 !important;
-        }
-
-        #root {
-            position: relative;
-            z-index: 1;
-            overflow-x: hidden;
-        }
-
-        #root ~ div {
-            position: relative;
-            z-index: 10;
-        }
+        .global();
 
         .input-item {
             margin-bottom: 10px;
@@ -243,7 +194,7 @@
         }
 
         .common-box {
-            #image.dinamicBg('~@/assets/images/mobile-form-box-bg.png', 50%, 'vertical');
+            #bgImage.dinamicBg('~@/assets/images/mobile-form-box-bg.png', 50%, 'vertical');
 
             > * {
                 position: relative;
@@ -690,7 +641,7 @@
 
             animation: rotate 3s linear infinite;
 
-            #image.icon(24px, '~@/assets/images/notify-loading.svg');
+            #bgImage.icon(24px, '~@/assets/images/notify-loading.svg');
         }
 
         .ant-pagination {
@@ -739,3 +690,4 @@
     }
 
 );; ;
+;

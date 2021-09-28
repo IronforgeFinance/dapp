@@ -85,7 +85,7 @@ export default () => {
             </p>
             <p>
                 <button
-                    className="btn-disconnect common-btn-red"
+                    className="btn-disconnect common-btn common-btn-red"
                     onClick={handleLogout}
                 >
                     {intl.formatMessage({ id: 'disconnect' })}

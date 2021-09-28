@@ -12,6 +12,7 @@
             align-items: flex-end;
             justify-content: flex-start;
             transition: all 0.37s;
+            z-index: 2000;
 
             &.show {
                 transform: translateX(0);
@@ -51,7 +52,7 @@
                 }
 
                 .words {
-                    #image.dinamicBg('~@/assets/images/npc-dialog-words-bg.png', 50%, 'vertical');
+                    #bgImage.dinamicBg('~@/assets/images/npc-dialog-words-bg.png', 50%, 'vertical');
 
                     &:before {
                         background-size: 100% 170%;
