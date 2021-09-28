@@ -30,7 +30,7 @@ import {
     useERC20Approve,
 } from '@/hooks/useApprove';
 import Contracts from '@/config/constants/contracts';
-import { TokenSelectorContext } from '@/components/TokenSelector';
+import { useTokenSelector } from '@/components/TokenSelector';
 import { TransitionConfirmContext as TransactionConfirmContext } from '@/components/TransactionConfirm';
 import { useMyDebts } from '@/components/MyDebts';
 import { BSCSCAN_EXPLORER } from '@/config/constants/constant';
@@ -53,7 +53,7 @@ export default (props: IProps) => {
     const [submitting, setSubmitting] = useState(false);
     const [burnInitialAvailable, setBurnInitialAvailable] = useState(true);
     const [burnMaxAvailable, setBurnMaxAvailable] = useState(false);
-    const { open } = useContext(TokenSelectorContext);
+    const { open } = useTokenSelector();
     const { open: openConfirmModal } = useContext(TransactionConfirmContext);
     const { open: checkoutMyDebts } = useMyDebts();
 

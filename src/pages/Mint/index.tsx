@@ -48,7 +48,7 @@ import { useTokenPrice } from '@/hooks/useTokenPrice';
 import Scale from '@/components/Scale';
 // import SettingView from './SettingView';
 import classNames from 'classnames';
-import { TokenSelectorContext } from '@/components/TokenSelector';
+import { useTokenSelector } from '@/components/TokenSelector';
 import { TransitionConfirmContext } from '@/components/TransactionConfirm';
 import CommentaryCard from '@/components/CommentaryCard';
 import { useCallback } from 'react';
@@ -73,7 +73,7 @@ export default () => {
     const [collateralAmount, setCollateralAmount] = useState<
         undefined | number
     >();
-    const { open } = useContext(TokenSelectorContext);
+    const { open } = useTokenSelector();
     const { open: openConfirmModal } = useContext(TransitionConfirmContext);
     const [lockedAmount, setLockedAmount] = useState<undefined | number>();
     const [toAmount, setToAmount] = useState<undefined | number>();

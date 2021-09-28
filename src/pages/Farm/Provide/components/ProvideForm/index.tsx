@@ -22,7 +22,7 @@ import { ILpDataProps } from '@/models/lpData';
 import { ethers } from 'ethers';
 import { registerToken } from '@/utils/wallet';
 import { DEADLINE } from '@/config/constants/constant';
-import { TokenSelectorContext } from '@/components/TokenSelector';
+import { useTokenSelector } from '@/components/TokenSelector';
 import { ITabKeyContext } from '../../index';
 import {
     useCheckERC20ApprovalStatus,
@@ -84,7 +84,7 @@ export default () => {
     const { requestConnectWallet } = useModel('app', (model) => ({
         requestConnectWallet: model.requestConnectWallet,
     }));
-    const { open } = useContext(TokenSelectorContext);
+    const { open } = useTokenSelector();
 
     const routerContract = useRouter();
 

@@ -29,7 +29,7 @@ import classNames from 'classnames';
 import { TokenIcon } from '@/components/Icon';
 import { useIntl, useModel } from 'umi';
 import { getTokenPrice, handleTxSent } from '@/utils';
-import { TokenSelectorContext } from '@/components/TokenSelector';
+import { useTokenSelector } from '@/components/TokenSelector';
 import { TransitionConfirmContext } from '@/components/TransactionConfirm';
 import {
     useCheckERC20ApprovalStatus,
@@ -44,7 +44,7 @@ export default () => {
     const intl = useIntl();
     const configContract = useConfig();
     const exchangeSystem = useExchangeSystem();
-    const { open } = useContext(TokenSelectorContext);
+    const { open } = useTokenSelector();
     const { open: openConfirmModal } = useContext(TransitionConfirmContext);
     const { account } = useWeb3React();
     const [fromToken, setFromToken] = useState(TOKEN_OPTIONS[0].name);

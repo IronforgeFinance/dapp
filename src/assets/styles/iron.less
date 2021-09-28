@@ -56,7 +56,8 @@
         z-index: 10;
     }
 
-    [class$='-container'] {
+    // 必须加标签，否则mix-blend-mode失效
+    section[class$='-container'] {
         z-index: 0;
     }
 }

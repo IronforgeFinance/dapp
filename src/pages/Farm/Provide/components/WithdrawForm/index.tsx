@@ -19,7 +19,7 @@ import {
 } from '@/hooks/useApprove';
 import { TokenIcon } from '@/components/Icon';
 import { toFixedWithoutRound } from '@/utils/bigNumber';
-import { TokenSelectorContext } from '@/components/TokenSelector';
+import { useTokenSelector } from '@/components/TokenSelector';
 import { handleTxSent } from '@/utils';
 
 export default () => {
@@ -33,7 +33,7 @@ export default () => {
     const [showSelectFromToken, setShowSelectFromToken] = useState(false);
     const routerContract = useRouter();
     const { account } = useWeb3React();
-    const { open } = useContext(TokenSelectorContext);
+    const { open } = useTokenSelector();
 
     const { lpDataList, lpDataToRemove } = useModel('lpData', (model) => ({
         ...model,

@@ -22,6 +22,7 @@ import NpcDialogContextProvider from '@/components/NpcDialog/provider';
 import MyDebtsContextProvider from '@/components/MyDebts/provider';
 import ClaimRewardsContextProvider from '@/components/ClaimRewards/provider';
 import LangContextProvider from './components/LangSwitcher/provider';
+import TokenSelectorProvider from '@/components/TokenSelector/provider';
 
 export default function Layout({
     children,
@@ -91,26 +92,31 @@ export default function Layout({
                 </video>
             )}
             <LangContextProvider>
-                <LoadingContextProvider>
-                    <MobileNavigationContextProvider>
-                        <HistoryBoardContextProvider>
-                            <NpcDialogContextProvider>
-                                <MyDebtsContextProvider>
-                                    <ClaimRewardsContextProvider>
-                                        {/* 多为弹窗组件，优势：复用、防止包含块、单例（避免多实例造成内存浪费）、支持跨层（调用灵活）。相关操作方法由provider提供 */}
-                                        <Fragment>
-                                            <HistoryBoard />
-                                            <MyDebts />
-                                            <ClaimRewards />
-                                            {!isMobile && <NpcDialog />}
-                                        </Fragment>
+                <TokenSelectorProvider>
+                    <LoadingContextProvider>
+                        <MobileNavigationContextProvider>
+                            <HistoryBoardContextProvider>
+                                <NpcDialogContextProvider>
+                                    <MyDebtsContextProvider>
+                                        <ClaimRewardsContextProvider>
+                                            {/* 多为弹窗组件，优势：复用、防止包含块、单例（避免多实例造成内存浪费）、支持跨层（调用灵活）。相关操作方法由provider提供 */}
+                                            <Fragment>
+                                                <HistoryBoard />
+                                                <MyDebts />
+                                                <ClaimRewards />
+                                                {!isMobile && (
+                                                    <Fragment>
+                                                        <TokenSelector />
+                                                        <NpcDialog />
+                                                    </Fragment>
+                                                )}
+                                            </Fragment>
 
-                                        {/* 页面内容 */}
-                                        <Fragment>
-                                            <CommonHeader />
+                                            {/* 页面内容 */}
+                                            <Fragment>
+                                                <CommonHeader />
 
-                                            <TransactionConfirm>
-                                                <TokenSelector>
+                                                <TransactionConfirm>
                                                     <section
                                                         className={`${
                                                             path
@@ -122,20 +128,23 @@ export default function Layout({
                                                         }-container`}
                                                     >
                                                         {isMobile && (
-                                                            <NpcDialog />
+                                                            <Fragment>
+                                                                <TokenSelector />
+                                                                <NpcDialog />
+                                                            </Fragment>
                                                         )}
                                                         {children}
                                                     </section>
-                                                </TokenSelector>
-                                            </TransactionConfirm>
-                                            {!isMobile && <CommonFooter />}
-                                        </Fragment>
-                                    </ClaimRewardsContextProvider>
-                                </MyDebtsContextProvider>
-                            </NpcDialogContextProvider>
-                        </HistoryBoardContextProvider>
-                    </MobileNavigationContextProvider>
-                </LoadingContextProvider>
+                                                </TransactionConfirm>
+                                                {!isMobile && <CommonFooter />}
+                                            </Fragment>
+                                        </ClaimRewardsContextProvider>
+                                    </MyDebtsContextProvider>
+                                </NpcDialogContextProvider>
+                            </HistoryBoardContextProvider>
+                        </MobileNavigationContextProvider>
+                    </LoadingContextProvider>
+                </TokenSelectorProvider>
             </LangContextProvider>
         </div>
     );

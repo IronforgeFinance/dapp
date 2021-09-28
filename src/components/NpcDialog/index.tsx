@@ -14,10 +14,10 @@ import {
 import LeftNpcPng from '@/assets/images/npc-dialog-mint-person.png';
 import RightNpcPng from '@/assets/images/npc-dialog-home-person.png';
 import classNames from 'classnames';
-import { history } from 'umi';
 import { NpcDialogContext } from './provider';
 import { useLang } from '@/layouts/components/LangSwitcher';
 import useEnv from '@/hooks/useEnv';
+import { TokenSelectorContext } from '../TokenSelector/provider';
 
 interface NpcDialog {
     children?: ReactNode;
@@ -38,6 +38,8 @@ const NpcDialog = (props: NpcDialog) => {
     const { lang } = useLang();
     const delayKey = useRef(null);
     const { path } = useEnv();
+    const { visible: tokenSelectorVisible } =
+        useContext(TokenSelectorContext) ?? {};
     // const totalTm = useRef(0);
 
     /**@type {number} outputGap 输出时间的间隔 */
@@ -121,6 +123,7 @@ const NpcDialog = (props: NpcDialog) => {
                         show: visable,
                         hide: !visable,
                         'is-right': isRightNpc,
+                        'fix-bottom': tokenSelectorVisible,
                     })}
                 >
                     <div
