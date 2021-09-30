@@ -21,6 +21,8 @@ import { DEFAULT_PAGE_SIZE } from '@/config/constants/constant';
 import { NoneTypes } from '@/components/NoneView';
 import useMounted from './useMounted';
 import { LoadingContext } from '@/contexts/LoadingContext';
+import { useNpcDialog } from '@/components/NpcDialog';
+import { useIntl } from 'umi';
 
 interface PaginationProps {
     client?: ApolloClient<NormalizedCacheObject>;
@@ -49,12 +51,15 @@ const usePagination = (props: PaginationProps) => {
         customFetch,
         none,
     } = props;
+    const { setWords: say } = useNpcDialog();
     const { account } = useWeb3React();
-    const [list, setList] = useState([]);
+    const [list, setList] = useState(null);
     const { loading, setLoading } = useContext(LoadingContext);
     const { fastRefresh } = useRefresh();
     const mounted = useMounted();
     const isClear = useRef(false);
+    const refreshCount = useRef(0);
+    const intl = useIntl();
     const [pagination, setPagination] = useState<TablePaginationConfig>({
         current: 1,
         pageSize: size || DEFAULT_PAGE_SIZE,
@@ -85,6 +90,7 @@ const usePagination = (props: PaginationProps) => {
                     }
                 }
             } finally {
+                refreshCount.current += 1;
                 loading && setLoading(false);
             }
         }
@@ -115,7 +121,7 @@ const usePagination = (props: PaginationProps) => {
         isClear.current = false;
     }, [pagination, list]);
 
-    /**@description Reset data */
+    /**@description Clear data */
     const clear = useCallback(() => {
         setList([]);
         isClear.current = true;
@@ -148,13 +154,28 @@ const usePagination = (props: PaginationProps) => {
         if (!account) {
             return 'noConnection';
         }
-        if (!list?.length) {
+        if (list && !list?.length) {
             return none || 'noAssets';
         }
     }, [account, list]);
 
+    useEffect(() => {
+        if (!mounted.current) return;
+
+        if (noneStatus === 'noConnection') {
+            say(intl.formatMessage({ id: 'noConnectionTip' }));
+        }
+        if (noneStatus === 'noRecords' || noneStatus === 'noAssets') {
+            if (refreshCount.current === 1) {
+                say(intl.formatMessage({ id: 'noRecordTip' }));
+            }
+        }
+    }, [noneStatus]);
+
     return {
-        list: list.sort((a, b) => Number(b.timestamp) - Number(a.timestamp)),
+        list: (list ?? []).sort(
+            (a, b) => Number(b.timestamp) - Number(a.timestamp),
+        ),
         pagination,
         setPagination,
         position,

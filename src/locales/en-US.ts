@@ -211,4 +211,16 @@ export default {
     butnToInitialTip:
         'Burn a certain amount of fAssets to make F-ratio return to the initial to avoid getting liquidated',
     butnToMaxTip: 'Burn all fAssets to clear debts and unlock your collateral',
+    noConnectionTip:
+        'Connect your wallet to check your history [Connect Wallet] button',
+    noRecordTip:
+        'No history found, Mint fAssets or trade it now ! [Mint] button',
+    activeTip:
+        'Active debts are part of the Public Debt Pool and will fluctuate with changes in the public debt',
+    staticTip:
+        'Static debts are not part of the Public Debt Pool, please burn it to clear your debts',
+    _55daysTip:
+        'Countdown to delivery, the casting cannot be unlocked by burning before the delivery date',
+    apyTip: 'APY includes compounding',
+    bsTip: '50% of the rewards can be withdrawn immediately, and  the rest will be released linearly within 30 days',
 };

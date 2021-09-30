@@ -249,4 +249,11 @@ export default {
     burnCommentaryDesc: '用户可以通过燃烧fAssets来解除债务',
     butnToInitialTip: '燃烧一定数量的fAssets使得F-ratio回到初始值以避免被清算',
     butnToMaxTip: '燃烧全部fAssets清除债务以解锁抵押资产',
+    noConnectionTip: '连接您的钱包以查看您的历史记录',
+    noRecordTip: '找不到交易历史记录，请铸造合成资产并参与交易',
+    activeTip: '参与公共债务池的债务，将随着公共债务的波动而波动',
+    staticTip: '不再参与公共债务池的债务，请燃烧相应数额的fAssets解押',
+    _55daysTip: '交割倒计时，在交割之前该笔铸造物不可通过燃烧来解押',
+    apyTip: 'APY是包含复投的收益',
+    bsTip: '奖励50%可即刻提取,50%将于30天内线性释放',
 };

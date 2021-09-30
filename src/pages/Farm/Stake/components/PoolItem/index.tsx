@@ -72,7 +72,7 @@ export default (props: { pool: IStakePool; handleFlipper: () => void }) => {
                         <p className="value">
                             {(apy * 100).toFixed(2) + '%'}{' '}
                             <Popover
-                                content={intl.formatMessage({ id: 'apyDesc' })}
+                                content={intl.formatMessage({ id: 'apyTip' })}
                                 trigger="hover"
                                 placement="topRight"
                             >
@@ -87,7 +87,7 @@ export default (props: { pool: IStakePool; handleFlipper: () => void }) => {
                         <p className="value">
                             BS{' '}
                             <Popover
-                                content={intl.formatMessage({ id: 'bsDesc' })}
+                                content={intl.formatMessage({ id: 'bsTip' })}
                                 trigger="hover"
                                 placement="topRight"
                             >
@@ -114,7 +114,7 @@ export default (props: { pool: IStakePool; handleFlipper: () => void }) => {
                                 {redeemableReward}{' '}
                                 <Popover
                                     content={intl.formatMessage({
-                                        id: 'bsTotalDesc',
+                                        id: 'bsTip',
                                     })}
                                     trigger="hover"
                                     placement="bottom"

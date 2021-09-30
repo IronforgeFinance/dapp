@@ -81,7 +81,7 @@ export default (props: HistoryBoardProps) => {
                 visible={visible}
                 mode="modal"
             >
-                {CurrentView}
+                {visible && CurrentView}
             </TabRecordBoard>
             {children}
         </Fragment>
