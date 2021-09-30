@@ -147,16 +147,18 @@ export default () => {
     // const { stakedData, setStakedData } = useStakedData();
 
     const openCollateralTokenList = useCallback(() => {
-        setWords(collateralToken ? 'collateralToken' : '');
+        // setWords(
+        //     collateralToken ? intl.formatMessage({ id: 'ftokenTip' }) : '',
+        // );
         open(COLLATERAL_TOKENS, { callback: collateralTokenHandler });
-    }, []);
+    }, [intl]);
     const openToTokenList = useCallback(() => {
-        setWords(toToken ? intl.formatMessage({ id: 'npc.mintAssets' }) : '');
+        setWords(toToken ? intl.formatMessage({ id: 'ftokenTip' }) : '');
         open(
             MINT_TOKENS.map((name) => ({ name })),
             { callback: toTokenHandler },
         );
-    }, []);
+    }, [intl]);
 
     const {
         stakedData,
@@ -268,7 +270,7 @@ export default () => {
 
     /**@description 弹出npc */
     useEffect(
-        () => setWords(intl.formatMessage({ id: 'npc.mintRatio' })),
+        () => setWords(intl.formatMessage({ id: 'lockedDetailTip' })),
         [lockedScale],
     );
     useEffect(() => {
@@ -610,7 +612,9 @@ export default () => {
                         <div className="label">
                             {intl.formatMessage({ id: 'mint.locked' })}
                             <Popover
-                                content={'选择质押物中BS的比例'}
+                                content={intl.formatMessage({
+                                    id: 'lockedTip',
+                                })}
                                 trigger="hover"
                                 placement="topLeft"
                             >

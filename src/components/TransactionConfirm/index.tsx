@@ -10,10 +10,12 @@ import {
 } from 'react';
 import ScrollBoard from '@/components/ScrollBoard';
 import { Button } from 'antd';
+import { useIntl } from 'umi';
 import { TokenIcon } from '../Icon';
 import { useRef } from 'react';
 import { loading } from '../Notification';
 import Loading from '@/components/Loading';
+import { isDeliveryAsset } from '@/utils';
 
 export type ViewType = 'mint' | 'burn' | 'loading' | 'trade';
 
@@ -59,6 +61,7 @@ export default (props: TransitionConfirmProps) => {
     const openOption = useRef<OpenOptions>(null);
     const [view, setView] = useState<OpenOptions>(null);
     const [isBurn, setIsBurn] = useState(false);
+    const { formatMessage } = useIntl();
 
     const open = useCallback((options: OpenOptions) => {
         openOption.current = options;
@@ -137,7 +140,9 @@ export default (props: TransitionConfirmProps) => {
                                     />
                                     {view.fromToken.name}
                                 </span>
-                                <span>Collateral</span>
+                                <span>
+                                    {formatMessage({ id: 'collateral' })}
+                                </span>
                             </div>
                             <div className="right">
                                 <span>{view.fromToken.amount}</span>
@@ -154,7 +159,7 @@ export default (props: TransitionConfirmProps) => {
                                     />
                                     {view.toToken.name}
                                 </span>
-                                <span>Mint</span>
+                                <span>{formatMessage({ id: 'mint' })}</span>
                             </div>
                             <div className="right">
                                 <span>{view.toToken.amount}</span>
@@ -164,19 +169,26 @@ export default (props: TransitionConfirmProps) => {
                         {!approved && (
                             <div className="price-updated">
                                 <i className="icon-question size-16" />
-                                <span>Price Updated</span>
+                                <span>
+                                    {formatMessage({ id: 'priceUpdated' })}
+                                </span>
                                 <Button
                                     className="accept-btn common-btn common-btn-red"
                                     onClick={approve}
                                 >
-                                    Accept
+                                    {formatMessage({ id: 'accept' })}
                                 </Button>
                             </div>
                         )}
                         <p className="tip">
-                            Output is estimated.You will receive at least{' '}
-                            <b>{view.toToken.amount} fUSD</b> or the transaction
-                            will <span className="red">revert</span>.
+                            <div
+                                dangerouslySetInnerHTML={{
+                                    __html: formatMessage(
+                                        { id: 'transactionConfirm' },
+                                        { amount: view.toToken.amount },
+                                    ),
+                                }}
+                            />
                         </p>
                         <div className="token bs">
                             <div className="left">
@@ -187,7 +199,7 @@ export default (props: TransitionConfirmProps) => {
                                     />
                                     {view.bsToken.name}
                                 </span>
-                                <span>Locked</span>
+                                <span>{formatMessage({ id: 'locked' })}</span>
                             </div>
                             <div className="right">
                                 <span>{view.bsToken.amount}</span>
@@ -196,10 +208,16 @@ export default (props: TransitionConfirmProps) => {
                         </div>
                         <div className="type">
                             <div className="left">
-                                <span>Type</span>
+                                <span>{formatMessage({ id: 'type' })}</span>
                             </div>
                             <div className="right">
-                                <span>Delivery</span>
+                                <span>
+                                    {formatMessage({
+                                        id: isDeliveryAsset(view.toToken.name)
+                                            ? 'delivery'
+                                            : 'perpetual',
+                                    })}
+                                </span>
                             </div>
                         </div>
                         <ul className="total" style={{ display: 'none' }}>
@@ -224,7 +242,7 @@ export default (props: TransitionConfirmProps) => {
                                 loading={isConfirming}
                                 onClick={submit}
                             >
-                                Confirm Transaction
+                                {formatMessage({ id: 'txConfirm' })}
                             </Button>
                         )}
                     </section>
@@ -358,24 +376,27 @@ export default (props: TransitionConfirmProps) => {
                         <Loading />
                         <div className="details">
                             <p className="summary">
-                                Waiting for Transaction Submitted...
+                                {formatMessage({ id: 'orderPending' })}
                             </p>
                             <p>
-                                {isBurn ? 'Unstaking' : 'Staking'}{' '}
+                                {isBurn
+                                    ? formatMessage({ id: 'unstaking' })
+                                    : formatMessage({ id: 'staking' })}{' '}
                                 <span>{view.fromToken.amount}</span>{' '}
                                 {view.fromToken.name} and{' '}
-                                {isBurn ? 'Burn' : 'Mint'}{' '}
+                                {isBurn
+                                    ? formatMessage({ id: 'doBurn' })
+                                    : formatMessage({ id: 'doMint' })}{' '}
                                 <span>{view.toToken.amount}</span>{' '}
                                 {view.toToken.name}
                             </p>
                             <div className="q">
-                                <p>
-                                    Once you place the transaction, they will be
-                                    displayed here or history. Live transaction
-                                    can be edited or cancelled.
-                                </p>
+                                <p>{formatMessage({ id: 'afterOrderTip' })}</p>
                                 <div>
-                                    Status:<span>Pending</span>
+                                    {formatMessage({ id: 'status' })}:{' '}
+                                    <span>
+                                        {formatMessage({ id: 'pending' })}
+                                    </span>
                                 </div>
                             </div>
                         </div>

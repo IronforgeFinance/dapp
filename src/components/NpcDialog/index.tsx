@@ -11,6 +11,7 @@ import {
     useRef,
     Fragment,
 } from 'react';
+import { useIntl } from 'umi';
 import LeftNpcPng from '@/assets/images/npc-dialog-mint-person.png';
 import RightNpcPng from '@/assets/images/npc-dialog-home-person.png';
 import classNames from 'classnames';
@@ -29,6 +30,7 @@ export const useNpcDialog = () => {
 
 const NpcDialog = (props: NpcDialog) => {
     const { children } = props;
+    const { formatMessage } = useIntl();
     const [visable, setVisable] = useState(false);
     const [loaded, setLoaded] = useState(false);
     const [showISee, setShowISee] = useState(false);
@@ -146,7 +148,11 @@ const NpcDialog = (props: NpcDialog) => {
                             })}
                         >
                             <span>{slowWords}</span>
-                            {showISee && <a onClick={close}>我知道了</a>}
+                            {showISee && (
+                                <a onClick={close}>
+                                    {formatMessage({ id: 'iSee' })}
+                                </a>
+                            )}
                         </p>
                     </div>
                 </section>

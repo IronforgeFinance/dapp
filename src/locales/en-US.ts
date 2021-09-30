@@ -151,7 +151,7 @@ export default {
     rewardsTip:
         'Rewards come from BS locked in the Mint, 50% can be withdrawn immediately, and 50% will be released linearly within 30 days',
     earningRatio: 'The ratio of Rewards and Total Staked',
-    earningRatioTip: '收益/锁仓',
+    earningRatioTip: 'Earning Ratio',
     'app.unlockWallet': 'Unlock wallet',
     amount: 'Amount',
     stake: 'Stake',
@@ -164,12 +164,9 @@ export default {
     bsTotalEarned: 'BS Total Earned',
     harvest: 'Harvest',
     STAKED: 'STAKED',
-    'npc.mintAssets':
-        'IronForge provides two types of synthetic assets: perpetual and delivery. After the delivery date of the delivery synthetic asset expires, the asset price will be locked, and the debt behind it will also be frozen and no longer follow changes in the public debt pool; perpetual There is no date limit for assets, and the price will always follow the market changes, so the debts that users have not destroyed will always follow the changes in the public debt pool.',
-    'npc.mintRatio':
-        '质押物中BS锁仓量的占比越高，质押率F-Ratio越低, 最低可至350%',
     txRejected: 'Transaction rejected',
     rejectedByUser: 'Rejected by user',
+    txConfirm: 'Confirm Transaction',
     txSent: 'Transaction sent',
     txSentSuccess: 'Transaction sent out successfully.',
     txReceived: 'Transaction received',
@@ -178,4 +175,31 @@ export default {
     collateral: 'Collateral',
     detail: 'Detail',
     claim: 'Claim',
+    status: 'Status',
+    mint: 'Mint',
+    doMint: 'Mint',
+    doBurn: 'Burn',
+    locked: 'Locked',
+    lockedTip: 'Select the proportion of BS in pledge tokens',
+    lockedDetailTip:
+        'The higher the proportion of BS you locked, the lower the F-ratio, which can be as low as 350%',
+    fratioTip:
+        'F-ration may vary due to the type of collateral and  price fluctuations in pledge tokens.',
+    ftokenTip:
+        'Minting your fAssets in the type of Delivery or Perpetual, There is delivery date for fAseets minted in Delivery, their prices will be locked after the delivery date and will no longer fluctuate with changes in the Public Debt Pool. There is no delivery date for fAseets minted in Perpetual, their prices will always fluctuate with changes in the Public Debt Pool before you burn them, ',
+    transactionConfirm:
+        'Output is estimated.You will receive at least <b>{amount}</b>  or the transaction will revert  if there are large fluctuations in prices before it is confirmed.',
+    pending: 'Pending',
+    orderPending: 'Waiting for transaction submited.',
+    stakeToMint: 'Staking {collateral} for Mint {fasset}',
+    afterOrderTip:
+        'Transaction once be placed, you can find them here or history.',
+    txSuccess: 'Transaction receipted',
+    txFail: 'Transaction rejected',
+    iSee: 'I see',
+    accept: 'Accept',
+    priceUpdated: 'Price Updated',
+    type: 'Type',
+    unstaking: 'Unstaking',
+    staking: 'Stake',
 };
