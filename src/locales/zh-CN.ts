@@ -243,4 +243,10 @@ export default {
     type: '类型',
     unstaking: '解压',
     staking: '质押',
+    mintCommentaryTitile: '开始铸造',
+    mintCommentaryDesc: '用户可以通过单币质押或是组合质押来铸造合成资产',
+    burnCommentaryTitile: '怎么销毁',
+    burnCommentaryDesc: '用户可以通过燃烧fAssets来解除债务',
+    butnToInitialTip: '燃烧一定数量的fAssets使得F-ratio回到初始值以避免被清算',
+    butnToMaxTip: '燃烧全部fAssets清除债务以解锁抵押资产',
 };

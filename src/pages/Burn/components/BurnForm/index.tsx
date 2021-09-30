@@ -34,6 +34,7 @@ import { useTokenSelector } from '@/components/TokenSelector';
 import { TransitionConfirmContext as TransactionConfirmContext } from '@/components/TransactionConfirm';
 import { useMyDebts } from '@/components/MyDebts';
 import { BSCSCAN_EXPLORER } from '@/config/constants/constant';
+import { useNpcDialog } from '@/components/NpcDialog';
 
 const TO_TOKENS = ['BTC'];
 interface IProps {
@@ -56,6 +57,7 @@ export default (props: IProps) => {
     const { open } = useTokenSelector();
     const { open: openConfirmModal } = useContext(TransactionConfirmContext);
     const { open: checkoutMyDebts } = useMyDebts();
+    const { setWords: say } = useNpcDialog();
 
     const { requestConnectWallet } = useModel('app', (model) => ({
         requestConnectWallet: model.requestConnectWallet,
@@ -253,6 +255,9 @@ export default (props: IProps) => {
     // 计算burned 和unstaking amount
     const burnInitialHandler = async (v) => {
         setBurnType(v);
+
+        say(intl.formatMessage({ id: 'butnToInitialTip' }));
+
         if (currencyRatio < initialRatio) {
             setUnstakeAmount(0);
             const res = await collateralSystem.getUserCollateralInUsd(
@@ -327,6 +332,9 @@ export default (props: IProps) => {
     */
     const burnMaxHandler = async (v) => {
         setBurnType(v);
+
+        say(intl.formatMessage({ id: 'butnToMaxTip' }));
+
         const fromTokenPrice = await getTokenPrice(fromToken);
         if (fromTokenBalance * fromTokenPrice < toTokenDebtInUsd) {
             setBurnAmount(0);

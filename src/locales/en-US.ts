@@ -202,4 +202,13 @@ export default {
     type: 'Type',
     unstaking: 'Unstaking',
     staking: 'Stake',
+    mintCommentaryTitile: 'Begin to Mint',
+    mintCommentaryDesc:
+        "To lock single-currency or LP tokens consisted of BS as collateral to mint IronForge's synthetic asssts(fAssets)",
+    burnCommentaryTitile: 'How to burn',
+    burnCommentaryDesc:
+        'To burn your fAssets to clear debts, then you can unlock your collateral ',
+    butnToInitialTip:
+        'Burn a certain amount of fAssets to make F-ratio return to the initial to avoid getting liquidated',
+    butnToMaxTip: 'Burn all fAssets to clear debts and unlock your collateral',
 };

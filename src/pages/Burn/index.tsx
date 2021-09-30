@@ -173,8 +173,12 @@ export default () => {
             <div className="burn-box">
                 {!isMobile && (
                     <CommentaryCard
-                        title={intl.formatMessage({ id: 'burn.title' })}
-                        description={intl.formatMessage({ id: 'burn.desc' })}
+                        title={intl.formatMessage({
+                            id: 'burnCommentaryTitile',
+                        })}
+                        description={intl.formatMessage({
+                            id: 'burnCommentaryDesc',
+                        })}
                     />
                 )}
                 <BurnForm onSubmitSuccess={onSubmitSuccess} />

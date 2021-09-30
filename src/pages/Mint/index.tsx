@@ -553,10 +553,12 @@ export default () => {
             <div className="right-box">
                 {!isMobile && (
                     <CommentaryCard
-                        title={intl.formatMessage({ id: 'mint.title' })}
-                        description={
-                            '用户可以通过单币质押或是组合质押来铸造合成资产'
-                        }
+                        title={intl.formatMessage({
+                            id: 'mintCommentaryTitile',
+                        })}
+                        description={intl.formatMessage({
+                            id: 'mintCommentaryDesc',
+                        })}
                     />
                 )}
                 <div className="mint-form-box common-box">
