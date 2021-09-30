@@ -1,5 +1,6 @@
 const fs = require('fs');
 const path = require('path');
+const { exec } = require('child_process');
 const root = path.join(__dirname, '..');
 
 console.log('>> root path is %s', root);
@@ -68,10 +69,33 @@ function translate(filename, temp) {
  * @todo 支持命令行
  */
 (function main() {
-    /** @type {Object} 模版数据 */
-    const temp = require(path.join(
-        root,
-        './src/locales/dist/zh-CN.js',
-    )).default;
-    translate('en-US', temp);
+    const output = `--outDir ${path.join(root, 'src/locales/dist')}`;
+    exec(
+        `tsc ${path.join(
+            root,
+            'src/locales/zh-CN.ts',
+        )} ${output} && tsc ${path.join(
+            root,
+            'src/locales/en-US.ts',
+        )} ${output}`,
+        (error, stdout, stderr) => {
+            if (error) {
+                console.log(`error: ${error.message}`);
+                return;
+            }
+            if (stderr) {
+                console.log(`stderr: ${stderr}`);
+                return;
+            }
+            console.log(`stdout: ${stdout}`);
+            console.log('>> start translation job...');
+
+            /** @type {Object} 模版数据 */
+            const temp = require(path.join(
+                root,
+                './src/locales/dist/zh-CN.js',
+            )).default;
+            translate('en-US', temp);
+        },
+    );
 })();

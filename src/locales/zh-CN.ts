@@ -164,6 +164,17 @@ export default {
     noAssets: '暂无资产',
     noTrades: '暂无交易记录',
     noConnection: '点击“连接钱包”后查看',
+    /** @description 动词 */
+    'verb.from': '从', //就当动词省略
+    'verb.send': '发送',
+    'verb.provide.liquidity': '提供流动性',
+    'verb.withdraw.liquidity': '提现',
+    'verb.stake.lp': '质押货币对',
+    'verb.x': ' ',
+    /** @description 连词 */
+    'conj.to': '到',
+    'conj.and': '和',
+    'conj.x': ' ',
     /**@description 通用词 */
     perpetual: '永续合约',
     delivery: '交割合约',
@@ -181,18 +192,10 @@ export default {
     connectWallet: '连接钱包',
     apyDesc: 'APY是包含复投的收益',
     bsDesc: 'BS是Iron Forge的平台代币',
-    bsTotalDesc: '奖励50%可即刻提取,50%将于30天内线性释放',
-    /** @description 动词 */
-    'verb.from': '从', //就当动词省略
-    'verb.send': '发送',
-    'verb.provide.liquidity': '提供流动性',
-    'verb.withdraw.liquidity': '提现',
-    'verb.stake.lp': '质押货币对',
-    'verb.x': ' ',
-    /** @description 连词 */
-    'conj.to': '到',
-    'conj.and': '和',
-    'conj.x': ' ',
+    rewards: '奖励',
+    rewardsTip: '奖励50%可即刻提取,50%将于30天内线性释放',
+    earningRatio: '收益率',
+    earningRatioTip: '收益/锁仓',
     'app.unlockWallet': '解锁钱包',
     amount: 'Amount',
     stake: 'Stake',
@@ -200,7 +203,6 @@ export default {
     approve: 'Approve',
     dontHave: "Dont't have ",
     get: 'Get ',
-    totalStaked: 'Total staked',
     APY: 'APY',
     earn: 'EARN',
     bsTotalEarned: 'BS Total Earned',
@@ -216,4 +218,8 @@ export default {
     txSentSuccess: '交易已成功发送.',
     txReceived: '交易已上链',
     txReceivedSuccess: '交易已成功上链.',
+    totalStaked: '总质押',
+    collateral: '质押物',
+    detail: '详情',
+    claim: '提取',
 };

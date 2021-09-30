@@ -3,7 +3,7 @@ import './mobile.less';
 
 import { useState, useContext } from 'react';
 import { Button, Popover } from 'antd';
-import { useModel } from 'umi';
+import { useModel, useIntl } from 'umi';
 import Overlay from '@/components/Overlay';
 import { useWeb3React } from '@web3-react/core';
 import { useMinerReward } from '@/hooks/useContract';
@@ -17,6 +17,7 @@ export const useClaimRewards = () => {
 };
 
 const ClaimRewards = () => {
+    const intl = useIntl();
     const { visable, close } = useContext(ClaimRewardsContext);
     const [submitting, setSubmitting] = useState(false);
     const { account } = useWeb3React();
@@ -63,7 +64,9 @@ const ClaimRewards = () => {
                                     ? `${stakeDataList[0]?.totalPendingReward} BS`
                                     : '--'}
                             </span>
-                            <span className="label">Rewards</span>
+                            <span className="label">
+                                {intl.formatMessage({ id: 'rewards' })}
+                            </span>
                             <div className="bottom">
                                 <p className="price">
                                     {account
@@ -72,7 +75,9 @@ const ClaimRewards = () => {
                                     <Popover
                                         trigger="hover"
                                         placement="topLeft"
-                                        content="收益来自于铸造中锁仓的BS，50%可即刻提取，50%将于30天内线性释放。"
+                                        content={intl.formatMessage({
+                                            id: 'rewardsTip',
+                                        })}
                                     >
                                         <i className="icon-question size-20" />
                                     </Popover>
@@ -85,7 +90,7 @@ const ClaimRewards = () => {
                                     }
                                     loading={submitting}
                                 >
-                                    Claim
+                                    {intl.formatMessage({ id: 'claim' })}
                                 </Button>
                             </div>
                         </div>
@@ -104,11 +109,13 @@ const ClaimRewards = () => {
                                     : '--'}
                             </span>
                             <span className="label">
-                                Earning ratio{' '}
+                                {intl.formatMessage({ id: 'earningRatioTip' })}{' '}
                                 <Popover
                                     trigger="hover"
                                     placement="topRight"
-                                    content="APR"
+                                    content={intl.formatMessage({
+                                        id: 'earningRatioTip',
+                                    })}
                                 >
                                     <i className="icon-question size-20" />
                                 </Popover>

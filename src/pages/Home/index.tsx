@@ -27,16 +27,6 @@ import { getTokenPrice } from '@/utils';
 import { toFixedWithoutRound } from '@/utils/bigNumber';
 import useEnv from '@/hooks/useEnv';
 
-const tabItems = [
-    {
-        name: 'Total Staked',
-        key: 'total-staked',
-    },
-    {
-        name: 'Collateral',
-        key: 'collateral',
-    },
-];
 const POOL_ID = 0;
 
 const mockCollaterals = ['BTC'];
@@ -53,6 +43,18 @@ export default () => {
         return process.env.NODE_ENV === 'development';
     };
     const intl = useIntl();
+
+    const tabItems = [
+        {
+            name: intl.formatMessage({ id: 'totalStaked' }),
+            key: 'total-staked',
+        },
+        {
+            name: intl.formatMessage({ id: 'collateral' }),
+            key: 'collateral',
+        },
+    ];
+
     const { isMobile } = useEnv();
     const { open: openClaimRewards } = useClaimRewards();
     const [tabKey, setTabKey] = useState(tabItems[0].key);
@@ -217,11 +219,11 @@ export default () => {
                     </div>
                     <br />
                     <div className="staked-card">
-                        <h3>Total Staked</h3>
+                        <h3>{intl.formatMessage({ id: '' })}</h3>
                         <span>{account ? `${totalStaked} FUSD` : '--'}</span>
                     </div>
                     <div className="collateral-card">
-                        <h3>Collateria</h3>
+                        {intl.formatMessage({ id: 'collateral' })}
                         <div className="callterals">
                             {collaterals.map((item) => (
                                 <Popover
@@ -295,12 +297,14 @@ export default () => {
                                 ? stakeDataList[0]?.totalPendingReward + ' BS'
                                 : '--'}
                         </span>
-                        <span className="label">Rewards</span>
+                        <span className="label">
+                            {intl.formatMessage({ id: 'rewards' })}
+                        </span>
                         <Button
                             className="see-rewards-btn common-btn common-btn-red"
                             onClick={openClaimRewards}
                         >
-                            Detail
+                            {intl.formatMessage({ id: 'detail' })}
                         </Button>
                     </div>
                     <div className="amount-box">
