@@ -19,6 +19,7 @@ import { NpcDialogContext } from './provider';
 import { useLang } from '@/layouts/components/LangSwitcher';
 import useEnv from '@/hooks/useEnv';
 import { TokenSelectorContext } from '../TokenSelector/provider';
+import useMounted from '@/hooks/useMounted';
 
 interface NpcDialog {
     children?: ReactNode;
@@ -40,6 +41,7 @@ const NpcDialog = (props: NpcDialog) => {
     const { lang } = useLang();
     const delayKey = useRef(null);
     const { path } = useEnv();
+    const mounted = useMounted();
     const { visible: tokenSelectorVisible } =
         useContext(TokenSelectorContext) ?? {};
     // const totalTm = useRef(0);
@@ -102,17 +104,19 @@ const NpcDialog = (props: NpcDialog) => {
 
     /**@description 若关闭，清空文字；反之打开窗口 */
     useLayoutEffect(() => {
+        if (!mounted.current) return;
+
         words?.length > 0 ? open() : close();
     }, [words]);
 
     useLayoutEffect(() => {
         // 延迟加载
-        setTimeout(() => setLoaded(true), 200);
+        const key = setTimeout(() => setLoaded(true), 200);
 
         return () => {
-            // all clear
-            setLoaded(false);
-            close();
+            clearTms();
+            clearTimeout(delayKey.current);
+            clearTimeout(key);
         };
     }, [path]);
 
