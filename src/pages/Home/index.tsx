@@ -215,11 +215,11 @@ export default () => {
                                 ? stakeDataList[0]?.totalPendingReward + ' BS'
                                 : '--'}
                         </span>
-                        <h3>Reward</h3>
+                        <h3>{intl.formatMessage({ id: 'rewards' })}</h3>
                     </div>
                     <br />
                     <div className="staked-card">
-                        <h3>{intl.formatMessage({ id: '' })}</h3>
+                        <h3>{intl.formatMessage({ id: 'totalStaked' })}</h3>
                         <span>{account ? `${totalStaked} FUSD` : '--'}</span>
                     </div>
                     <div className="collateral-card">
@@ -241,7 +241,7 @@ export default () => {
                     </div>
                     <div className="debt-card">
                         <span>{account ? `$${totalDebtInUSD}` : '--'}</span>
-                        <h3>Active Debt</h3>
+                        <h3>{intl.formatMessage({ id: 'activeDebt' })}</h3>
                     </div>
                 </section>
             )}

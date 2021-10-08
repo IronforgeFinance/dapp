@@ -145,8 +145,6 @@ export default {
     change: 'Change',
     changeWallet: 'Change Wallet',
     connectWallet: 'Connect Wallet',
-    apyDesc: 'APY是包含复投的收益',
-    bsDesc: 'BS是Iron Forge的平台代币',
     rewards: 'Rewards',
     rewardsTip:
         'Rewards come from BS locked in the Mint, 50% can be withdrawn immediately, and 50% will be released linearly within 30 days',
@@ -172,6 +170,7 @@ export default {
     txReceived: 'Transaction received',
     txReceivedSuccess: 'Transaction received successfully.',
     totalStaked: 'Total staked',
+    activeDebt: 'Active Debts',
     collateral: 'Collateral',
     detail: 'Detail',
     claim: 'Claim',
