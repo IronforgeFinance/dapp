@@ -80,7 +80,7 @@ export default () => {
                         key={token.name}
                         className={classNames({
                             token: true,
-                            active: choosedToken === token.name,
+                            // active: choosedToken === token.name,
                         })}
                         onClick={makeChoice.bind(
                             this,

@@ -22,7 +22,7 @@ export default (props: TabGroupProps) => {
     const _changeTab = useCallback((key) => onChange(key), []);
 
     return (
-        <div className={'tab-group ' + props.className}>
+        <div className={'tab-group ' + (props.className ?? '')}>
             {items.map((item) => {
                 return (
                     <button

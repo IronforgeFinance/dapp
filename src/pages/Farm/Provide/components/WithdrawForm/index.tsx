@@ -193,7 +193,10 @@ export default () => {
 
     return (
         <div>
-            <div className="provide-form common-box">
+            <div
+                className="provide-form common-box"
+                style={{ filter: 'unset' }}
+            >
                 <div className="input-item">
                     <p className="label">
                         {intl.formatMessage({ id: 'liquidity.withdraw.lp' })}

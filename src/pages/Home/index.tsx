@@ -223,7 +223,7 @@ export default () => {
                         <span>{account ? `${totalStaked} FUSD` : '--'}</span>
                     </div>
                     <div className="collateral-card">
-                        {intl.formatMessage({ id: 'collateral' })}
+                        <h3>{intl.formatMessage({ id: 'collateral' })}</h3>
                         <div className="callterals">
                             {collaterals.map((item) => (
                                 <Popover

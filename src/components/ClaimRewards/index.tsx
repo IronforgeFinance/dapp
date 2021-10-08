@@ -55,61 +55,37 @@ const ClaimRewards = () => {
             <section className="claim-rewards">
                 <a className="back-btn" onClick={close} />
                 <ul className="cards-group">
-                    <li className="rewards card">
+                    <li className="total-locked card">
+                        <div className="before" />
+                        <div className="content">
+                            <i className="icon-staked" />
+                            <span className="value">
+                                {account ? `$00.0` : '--'}
+                            </span>
+                            <span className="label">
+                                {intl.formatMessage({ id: 'totalStaked' })}
+                                <Popover
+                                    trigger="hover"
+                                    placement="topRight"
+                                    content={intl.formatMessage({
+                                        id: 'rewardsTip',
+                                    })}
+                                >
+                                    <i className="icon-question size-20" />
+                                </Popover>
+                            </span>
+                        </div>
+                        <div className="after" />
+                    </li>
+                    <li className="total-rewards card">
                         <div className="before" />
                         <div className="content">
                             <i className="icon-rewards" />
                             <span className="value">
-                                {account
-                                    ? `${stakeDataList[0]?.totalPendingReward} BS`
-                                    : '--'}
+                                {account ? `$00.0` : '--'}
                             </span>
                             <span className="label">
-                                {intl.formatMessage({ id: 'rewards' })}
-                            </span>
-                            <div className="bottom">
-                                <p className="price">
-                                    {account
-                                        ? `${stakeDataList[0]?.redeemableReward} BS`
-                                        : '--'}
-                                    <Popover
-                                        trigger="hover"
-                                        placement="topLeft"
-                                        content={intl.formatMessage({
-                                            id: 'rewardsTip',
-                                        })}
-                                    >
-                                        <i className="icon-question size-20" />
-                                    </Popover>
-                                </p>
-                                <Button
-                                    className="claim-btn common-btn common-btn-red"
-                                    onClick={handleRedeem}
-                                    disabled={
-                                        stakeDataList[0]?.redeemableReward <= 0
-                                    }
-                                    loading={submitting}
-                                >
-                                    {intl.formatMessage({ id: 'claim' })}
-                                </Button>
-                            </div>
-                        </div>
-                        <div className="after" />
-                    </li>
-                    <li className="ratio card">
-                        <div className="before" />
-                        <div className="content">
-                            <span className="value">
-                                {account
-                                    ? `${
-                                          (stakeDataList[0]?.apy * 100).toFixed(
-                                              4,
-                                          ) + '%'
-                                      }`
-                                    : '--'}
-                            </span>
-                            <span className="label">
-                                {intl.formatMessage({ id: 'earningRatioTip' })}{' '}
+                                {intl.formatMessage({ id: 'totalRewards' })}{' '}
                                 <Popover
                                     trigger="hover"
                                     placement="topRight"
@@ -120,6 +96,72 @@ const ClaimRewards = () => {
                                     <i className="icon-question size-20" />
                                 </Popover>
                             </span>
+                        </div>
+                        <div className="after" />
+                    </li>
+                    <li className="claim card">
+                        <div className="before" />
+                        <div className="content-wrapper">
+                            <div className="content">
+                                <span className="value">
+                                    {account
+                                        ? `${stakeDataList[0]?.totalPendingReward} BS`
+                                        : '--'}
+                                </span>
+                                <span className="label">
+                                    {intl.formatMessage({
+                                        id: 'rewards',
+                                    })}{' '}
+                                    <Popover
+                                        trigger="hover"
+                                        placement="topRight"
+                                        content={intl.formatMessage({
+                                            id: 'rewardsTip',
+                                        })}
+                                    >
+                                        <i className="icon-question size-20" />
+                                    </Popover>
+                                </span>
+                            </div>
+                            <div className="content">
+                                <span className="value">
+                                    {account
+                                        ? `${
+                                              (
+                                                  stakeDataList[0]?.apy * 100
+                                              ).toFixed(4) + '%'
+                                          }`
+                                        : '--'}
+                                </span>
+                                <span className="label">
+                                    {intl.formatMessage({
+                                        id: 'earningRatioTip',
+                                    })}{' '}
+                                    <Popover
+                                        trigger="hover"
+                                        placement="topRight"
+                                        content={intl.formatMessage({
+                                            id: 'earningRatioTip',
+                                        })}
+                                    >
+                                        <i className="icon-question size-20" />
+                                    </Popover>
+                                </span>
+                            </div>
+                            <div className="content">
+                                <span className="value">
+                                    {account
+                                        ? `${
+                                              (
+                                                  stakeDataList[0]?.apy * 100
+                                              ).toFixed(4) + '%'
+                                          }`
+                                        : '--'}
+                                </span>
+                                <Button className="claim-btn common-btn common-btn-red">
+                                    {intl.formatMessage({ id: 'claim' })}
+                                </Button>
+                            </div>
                         </div>
                         <div className="after" />
                     </li>

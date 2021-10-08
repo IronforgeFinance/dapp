@@ -1,4 +1,4 @@
-@import url('~@/assets/styles/iron.less');
+@import '~@/assets/styles/iron.less';
 
 .pc( {
 
@@ -14,6 +14,9 @@
             position: absolute;
             display: flex;
             flex-direction: column;
+            height: 100vh;
+            #bgImage.background('~@/assets/images/home-bg.jpg');
+            background-size: 100% 100%;
 
             .select-tokens {
                 width: 100%;
@@ -205,7 +208,7 @@
                     flex-direction: column;
                     align-items: center;
                     width: 330px;
-                    height: 208px;
+                    height: 184px;
                     max-height: 208px;
 
                     .tab-group {
@@ -220,7 +223,7 @@
                     }
 
                     .pannel-content {
-                        padding: 36px 55px 48px 55px;
+                        padding: 36px 20px 0 20px;
                         font-family: Poppins;
                         font-style: normal;
                         font-weight: bold;
@@ -357,14 +360,12 @@
                         rgba(55, 25, 18, 0) 87.73%);
                     backdrop-filter: blur(20px);
                     border-radius: 8px;
-                    min-width: 282px;
-                    height: 184px;
                     display: flex;
                     flex-direction: column;
                     align-items: center;
-                    justify-content: space-between;
-                    box-sizing: border-box;
-                    padding: 37px 48px 53px 48px;
+                    justify-content: center;
+                    width: 282px;
+                    min-height: 184px;
 
                     .amount {
                         font-family: Poppins;
@@ -378,6 +379,7 @@
                     }
 
                     .desc {
+                        margin-top: 16px;
                         font-family: Poppins;
                         font-style: normal;
                         font-weight: normal;

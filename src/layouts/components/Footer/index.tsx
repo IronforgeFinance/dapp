@@ -48,7 +48,6 @@ export default () => {
         setShowWholeView(
             !filterList.some((item) => item === window.location!.pathname),
         );
-
         return history.listen((location, action) => {
             setShowWholeView(
                 !filterList.some((item) => item === location.pathname),

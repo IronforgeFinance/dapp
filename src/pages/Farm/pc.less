@@ -6,6 +6,36 @@
             flex-direction: column;
             align-items: center;
 
+            .iron-switch {
+                border: 1px solid #E1AB3B;
+                background: transparent;
+                border-radius: 12px;
+                height: 36px;
+
+                .switch-btn {
+                    height: 30px;
+                    border-radius: 12px;
+                    min-width: 60px;
+                    font-family: Poppins;
+                    font-style: normal;
+                    font-weight: 600;
+                    font-size: 16px;
+                    line-height: 24px;
+                    display: flex;
+                    align-items: center;
+                    text-align: center;
+                    color: #E1AB3B;
+
+                    &.active {
+                        &:before {
+                            height: 30px;
+                            border-radius: 12px;
+                            width: 92%;
+                        }
+                    }
+                }
+            }
+
             .btn-mint {
                 margin: 0 auto;
             }

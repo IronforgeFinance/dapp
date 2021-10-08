@@ -455,7 +455,10 @@ export default () => {
                     </div>
                 </div>
             </Folder>
-            <div className="provide-form common-box">
+            <div
+                className="provide-form common-box"
+                style={{ filter: 'unset' }}
+            >
                 <div className="input-item">
                     <p className="label">
                         {intl.formatMessage({ id: 'liquidity.provide.asset0' })}

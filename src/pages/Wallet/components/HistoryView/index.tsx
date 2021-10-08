@@ -498,6 +498,7 @@ const HistoryView = () => {
                 className="custom-tabs"
                 defaultActiveKey={tabKey}
                 onChange={changeTab}
+                style={{ filter: 'unset' }}
             >
                 {tabItems.map((tabKey) => (
                     <TabPane

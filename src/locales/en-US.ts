@@ -170,6 +170,7 @@ export default {
     txReceived: 'Transaction received',
     txReceivedSuccess: 'Transaction received successfully.',
     totalStaked: 'Total staked',
+    totalRewards: 'Total Rewards',
     activeDebt: 'Active Debts',
     collateral: 'Collateral',
     detail: 'Detail',
@@ -222,4 +223,6 @@ export default {
         'Countdown to delivery, the casting cannot be unlocked by burning before the delivery date',
     apyTip: 'APY includes compounding',
     bsTip: '50% of the rewards can be withdrawn immediately, and  the rest will be released linearly within 30 days',
+    totalRewardsTip: '',
+    totalSatkedTip: '',
 };

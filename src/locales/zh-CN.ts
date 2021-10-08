@@ -214,6 +214,7 @@ export default {
     txReceived: '交易已上链',
     txReceivedSuccess: '交易已成功上链.',
     totalStaked: '总质押',
+    totalRewards: '总奖励',
     activeDebt: '活动债务',
     collateral: '质押物',
     detail: '详情',
@@ -255,4 +256,6 @@ export default {
     _55daysTip: '交割倒计时，在交割之前该笔铸造物不可通过燃烧来解押',
     apyTip: 'APY是包含复投的收益',
     bsTip: '奖励50%可即刻提取,50%将于30天内线性释放',
+    totalRewardsTip: '',
+    totalSatkedTip: '',
 };

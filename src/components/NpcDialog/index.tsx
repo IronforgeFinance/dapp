@@ -111,12 +111,11 @@ const NpcDialog = (props: NpcDialog) => {
 
     useLayoutEffect(() => {
         // 延迟加载
-        const key = setTimeout(() => setLoaded(true), 200);
+        setTimeout(() => setLoaded(true), 200);
 
         return () => {
-            clearTms();
-            clearTimeout(delayKey.current);
-            clearTimeout(key);
+            setLoaded(false);
+            close();
         };
     }, [path]);
 
