@@ -248,7 +248,9 @@ export default () => {
 
             <section className="slogan-box">
                 <p>
-                    <b>Forging</b> the Future of Crypto Finance.
+                    <b>Forging</b> the Future of
+                    <br />
+                    Crypto Finance.
                 </p>
             </section>
 

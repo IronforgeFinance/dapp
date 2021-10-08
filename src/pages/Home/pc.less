@@ -17,6 +17,7 @@
             height: 100vh;
             #bgImage.background('~@/assets/images/home-bg.jpg');
             background-size: 100% 100%;
+            overflow: hidden;
 
             .select-tokens {
                 width: 100%;
@@ -27,19 +28,18 @@
                 left: -100px;
                 top: 0;
                 z-index: -1;
-                width: 840px;
-                height: 875px;
+                // width: 840px;
+                height: 100vh;
                 pointer-events: none;
             }
 
             .video-bg-right {
                 position: absolute;
                 right: 0;
-                top: 150px;
-                width: 572px;
-                height: 632px;
+                height: 100vh;
                 pointer-events: none;
                 z-index: 2;
+                transform: translateY(20%) translateX(10%);
             }
 
             .sheepskin-box {
@@ -165,14 +165,15 @@
                 font-family: Poppins;
                 font-style: normal;
                 font-weight: bold;
-                font-size: 90px;
-                line-height: 135px;
+                font-size: unit((90/1920) * 100, vw);
+                line-height: unit((135/1920) * 100, vw);
                 text-align: center;
+                white-space: nowrap;
 
                 p {
                     color: white;
-                    width: 1162px;
-                    max-width: 1162px;
+                    width: unit((1162/1920) * 100, vw);
+                    max-width: unit((1162/1920) * 100, vw);
 
                     b {
                         color: #e96013;

@@ -136,7 +136,7 @@ export default () => {
                 }}
             >
                 {LP_TOKENS.map((item, index) => (
-                    <StakeItem key={index} {...item} />
+                    <StakeItem key={index} {...item} noDiamond={!checked} />
                 ))}
             </div>
 
@@ -147,7 +147,7 @@ export default () => {
                 }}
             >
                 {POOL_TOKENS.map((item, index) => (
-                    <StakeItem key={index} {...item} />
+                    <StakeItem key={index} {...item} noDiamond={!checked} />
                 ))}
             </div>
         </Fragment>

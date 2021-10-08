@@ -1,7 +1,7 @@
 import './pc.less';
 import './mobile.less';
 
-import 'react';
+import { useLayoutEffect, useRef } from 'react';
 import { NavLink, useIntl, history } from 'umi';
 import WalletStatus from '../WalletStatus';
 import MobileNavigation from './components/MobileNavigation';
@@ -9,11 +9,37 @@ import Logo from '@/assets/images/header-logo.png';
 import useEagerConnect from '@/hooks/useEagerConnect';
 import LangSwitcher from '../LangSwitcher';
 import useEnv from '@/hooks/useEnv';
+import { throttle } from 'lodash';
+
+const MAX_SCROLL = 0.5;
 
 export default () => {
     const { isMobile } = useEnv();
     const intl = useIntl();
+    const header = useRef(null);
     useEagerConnect();
+
+    useLayoutEffect(() => {
+        const callback = throttle(() => {
+            if (!header.current) {
+                header.current = document.querySelector(
+                    '.header-nav',
+                ) as HTMLElement;
+            }
+
+            console.log('>> scrollTop ', window.scrollY);
+            header.current.style.background = `rgba(71, 57, 44, ${Math.min(
+                MAX_SCROLL,
+                window.scrollY / 100,
+            )})`;
+        }, 100);
+
+        document.addEventListener('wheel', callback);
+
+        return () => {
+            document.removeEventListener('wheel', callback);
+        };
+    }, []);
 
     return (
         <div className="header-nav">

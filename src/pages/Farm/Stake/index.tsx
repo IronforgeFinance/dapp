@@ -1,7 +1,7 @@
 import './pc.less';
 import './mobile.less';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Fragment } from 'react';
 import StakeForm from './components/StakeForm';
 import PoolItem from './components/PoolItem';
 import classnames from 'classnames';
@@ -12,8 +12,12 @@ import { DEFAULT_POOL } from '@/models/stakeData';
 import { useWeb3React } from '@web3-react/core';
 import useRefresh from '@/hooks/useRefresh';
 
-export default (props: { poolName: string; poolId: number }) => {
-    const { poolName, poolId } = props;
+export default (props: {
+    poolName: string;
+    poolId: number;
+    noDiamond?: boolean;
+}) => {
+    const { poolName, poolId, noDiamond } = props;
     const [showStakeForm, setShowStakeForm] = useState(false);
     const [stakeData, setStakeData] = useState<IStakePool>({
         ...DEFAULT_POOL,
@@ -47,12 +51,16 @@ export default (props: { poolName: string; poolId: number }) => {
         >
             <div className="flipper">
                 <div className="front">
-                    <div className={`lp-token lp-token-left`}>
-                        <TokenIcon name={token1}></TokenIcon>
-                    </div>
-                    <div className={`lp-token lp-token-right`}>
-                        <TokenIcon name={token2}></TokenIcon>
-                    </div>
+                    {!noDiamond && (
+                        <Fragment>
+                            <div className={`lp-token lp-token-left`}>
+                                <TokenIcon name={token1}></TokenIcon>
+                            </div>
+                            <div className={`lp-token lp-token-right`}>
+                                <TokenIcon name={token2}></TokenIcon>
+                            </div>
+                        </Fragment>
+                    )}
 
                     <PoolItem pool={stakeData} handleFlipper={handleFlipper} />
                 </div>

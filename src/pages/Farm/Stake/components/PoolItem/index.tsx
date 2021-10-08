@@ -10,6 +10,7 @@ import { useModel } from 'umi';
 import { useWeb3React } from '@web3-react/core';
 import * as message from '@/components/Notification';
 import { handleTxSent } from '@/utils';
+import { TokenIcon } from '@/components/Icon';
 
 export default (props: { pool: IStakePool; handleFlipper: () => void }) => {
     const {
@@ -58,7 +59,12 @@ export default (props: { pool: IStakePool; handleFlipper: () => void }) => {
         <div className="pool-item">
             <div className="pool-item-container">
                 <div className="pool-item-title">
-                    <p>{name}</p>
+                    <p>
+                        {name}
+                        {(name ?? '').split('-').length < 2 && (
+                            <TokenIcon name={name} />
+                        )}
+                    </p>
                 </div>
                 <div className="pool-total-staked">
                     <p>${totalStaked}</p>
