@@ -1,0 +1,29 @@
+@import url('~@/assets/styles/iron.less');
+
+.mobile( {
+        .header-nav {
+            height: @mobileNavHeight;
+            display: flex;
+            align-items: center;
+            width: 100%;
+            padding: 29px 22px 9px 22px;
+            position: fixed;
+            left: 0;
+            top: 0;
+            z-index: 10;
+
+            .logo {
+                flex-shrink: 0;
+                width: 145px;
+                object-fit: contain;
+                cursor: pointer;
+            }
+
+            .right-box {
+                .fill();
+                align-items: center;
+            }
+        }
+    }
+
+);

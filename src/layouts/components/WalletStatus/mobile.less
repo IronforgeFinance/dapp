@@ -1,0 +1,131 @@
+@import '~@/assets/styles/iron.less';
+
+@media (max-width: 750px) {
+    .btn-connect {
+        border: 2px solid @headerColor;
+        box-sizing: border-box;
+        border-radius: 4px;
+        display: flex;
+        align-items: center;
+        font-family: Poppins;
+        font-style: normal;
+        font-weight: normal;
+        font-size: 24px;
+        line-height: 36px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: @headerColor;
+        height: 58px;
+        width: 248px;
+    }
+
+    .mobile-wallet-btn {
+        width: 110px;
+        height: 58px;
+        box-sizing: border-box;
+        background: @headerColor;
+        border-radius: 6px 42px 42px 6px;
+        padding: 18px 21px 16px 20px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
+        > img {
+            width: 24px;
+            height: 24px;
+            flex-shrink: 0;
+        }
+
+        > .arrow-down {
+            #bgImage.background('~@/assets/images/down.svg');
+            transition: all 0.2s;
+            height: 10.64px;
+            width: 17.15px;
+        }
+    }
+
+    .custom-dropdown.ant-dropdown {
+        // width: 250px;
+        // height: 266px;
+        background: url(~@/assets/images/popup_bg.png) center center no-repeat;
+        background-size: cover;
+        box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+        padding-top: 10px;
+        text-align: center;
+        z-index: 10;
+
+        .dropdown {
+            padding: 32px 24px;
+
+            p.item {
+                margin-top: 24px;
+                margin-bottom: 12px;
+                text-align: center;
+                font-style: normal;
+                font-weight: normal;
+                font-size: 24px;
+                line-height: 36px;
+                text-transform: uppercase;
+                color: #ffffff;
+            }
+
+            .header {
+                img {
+                    width: 32px;
+                    height: 32px;
+                    margin-right: 6px;
+                }
+
+                > img:first-child {
+                    margin-right: 10px;
+                }
+            }
+
+            .options.item {
+                margin-top: 0;
+
+                img {
+                    cursor: pointer;
+
+                    &:hover {
+                        transform: translateY(2px);
+                        box-shadow: 0px 0px 40px white;
+                    }
+                }
+
+                > img:first-child {
+                    margin-right: 0;
+                }
+            }
+
+            .btn-disconnect {
+                width: 236px;
+                height: 70px;
+                font-style: normal;
+                font-weight: bold;
+                font-size: 22px;
+                line-height: 33px;
+                color: #ffffff;
+                margin: 0 auto;
+            }
+
+            .btn-change {
+                border-color: rgba(225, 171, 59, 0.8);
+                color: rgba(225, 171, 59, 0.8);
+                height: 40px;
+                width: 122px;
+                border-radius: 6px;
+                border: 2px solid #e1ab3b;
+                box-sizing: border-box;
+                font-family: Poppins;
+                font-style: normal;
+                font-weight: normal;
+                font-size: 22px;
+                line-height: 33px;
+                text-align: center;
+                color: rgba(225, 171, 59, 0.8);
+            }
+        }
+    }
+}

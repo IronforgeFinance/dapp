@@ -1,0 +1,55 @@
+@media (min-width: 751px) {
+    @import '~@/assets/styles/iron.less';
+
+    .none-view {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
+
+        margin-top: 100px;
+        // transform: translateY(-50%);
+
+        .icon-no-assets {
+            width: 103px;
+            height: 62.28px;
+            #bgImage.background('~@/assets/images/icon-money.png');
+            mix-blend-mode: luminosity;
+        }
+
+        .icon-no-connection {
+            height: 63.86999150274522px;
+            width: 57.40459546381925px;
+            #bgImage.background('~@/assets/images/none-view-icon-key.png');
+            mix-blend-mode: luminosity;
+        }
+
+        .icon-no-records {
+            #bgImage.icon(80px, '~@/assets/images/none-view-icon-history.png');
+            mix-blend-mode: luminosity;
+        }
+
+        p {
+            margin-top: 30px;
+            font-style: normal;
+            font-weight: bold;
+            font-size: 20px;
+            line-height: 123.01%;
+            display: flex;
+            align-items: center;
+            text-align: center;
+            letter-spacing: 0.01em;
+            color: #ffffff;
+        }
+
+        a.common-btn {
+            margin-top: 40px;
+            height: 69.86248016357422px;
+            width: 236px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+    }
+}

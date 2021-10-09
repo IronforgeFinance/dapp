@@ -1,0 +1,142 @@
+@import '~@/assets/styles/iron.less';
+
+.pc( {
+        .iron-loading {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 250px;
+
+            > * {
+                flex-shrink: 0
+            }
+
+            .animation {
+                #bgImage.icon(250px, '~./assets/bg.png');
+                position: relative;
+
+                > * {
+                    position: absolute;
+                }
+
+                .hammer {
+                    #bgImage.icon(150px, '~./assets/hammer.png');
+                    left: 60%;
+                    top: 50%;
+                    transform: translate(-50%, -50%);
+                    transform-origin: 100% 100%;
+
+                    @keyframes knock {
+                        0% {
+                            transform: translate(-50%, -50%) rotate(0deg);
+                        }
+
+                        50% {
+                            transform: translate(-50%, -50%) rotate(-10deg);
+                        }
+
+                        80% {
+                            transform: translate(-50%, -50%) rotate(0deg);
+                        }
+
+                        100% {
+                            transform: translate(-50%, -50%) rotate(0deg);
+                        }
+                    }
+
+                    animation: knock 1.7s ease-in infinite;
+                }
+
+                .stone {
+                    #bgImage.icon(50px, '~./assets/stone.png');
+                    left: 40%;
+                    top: 65%;
+                    transform: translate(-50%, -50%);
+                    transform-origin: 100% 100%;
+
+                    @keyframes knocked {
+                        0% {
+                            transform: translate(-50%, -50%) scaleY(1);
+                        }
+
+                        30% {
+                            transform: translate(-50%, -50%) scaleY(1);
+                        }
+
+                        50% {
+                            transform: translate(-50%, -50%) scaleY(0);
+                        }
+
+                        80% {
+                            transform: translate(-50%, -50%) scaleY(1);
+                        }
+
+                        100% {
+                            transform: translate(-50%, -50%) scaleY(1);
+                        }
+                    }
+
+                    animation: knocked 1.7s linear infinite;
+                }
+            }
+
+            span {
+                font-family: Poppins;
+                font-style: normal;
+                font-weight: 500;
+                font-size: 16px;
+                line-height: 27px;
+                color: #AC4C06;
+                position: relative;
+                display: flex;
+                align-items: center;
+                word-break: keep-all;
+
+                @keyframes outerFlush {
+                    0% {
+                        opacity: 1;
+                    }
+
+                    30% {
+                        opacity: 1;
+                    }
+
+                    50% {
+                        opacity: 0;
+                    }
+
+                    100% {
+                        opacity: 1;
+                    }
+                }
+
+                animation: outerFlush 1.7s linear infinite;
+
+
+                &:after {
+                    content: '...';
+                    width: 100%;
+                    display: inline-block;
+                    overflow: hidden;
+
+                    @keyframes flush {
+                        0% {
+                            width: 100%;
+                        }
+
+                        80% {
+                            width: 0;
+                        }
+
+                        100% {
+                            width: 100%;
+                        }
+                    }
+
+                    animation: flush 1.7s linear infinite;
+                }
+            }
+        }
+    }
+
+);

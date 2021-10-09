@@ -1,0 +1,69 @@
+@import '~@/assets/styles/iron.less';
+
+.mobile( {
+
+        .trade-container {
+            .mobile-container('~@/assets/images/mobile-trade-bg.jpg');
+            align-items: center;
+            height: 150vh;
+
+            .shop {
+                width: 639.25px;
+                // height: 737px + 80px;
+                // padding: 100.88px 81.89px 32.78px 92.65px;
+                // box-sizing: border-box;
+                margin-top: 163.26px;
+                position: relative;
+
+                > .roof {
+                    width: 706.89px;
+                    height: 164.41px;
+                    #bgImage.background('~@/assets/images/trade-swap-roof-ceiling.png');
+                    position: absolute;
+                    left: 50%;
+                    transform: translateX(-50%);
+                    top: -70px;
+                }
+
+                > .sign {
+                    width: 275.38px;
+                    height: 71.44px;
+                    #bgImage.background('~@/assets/images/trade-swap-roof-sign.png');
+                    position: absolute;
+                    left: 50%;
+                    transform: translateX(-50%);
+
+                    top: -95px;
+
+                    &.active {
+                        #bgImage.background('~@/assets/images/trade-swap-roof-sign-active.png');
+                    }
+                }
+
+                .form {
+                    width: 100%;
+                    height: 100%;
+                    padding: 120px 48px 50px 48px;
+
+                    .btn-trade {
+                        width: 340px;
+                        height: 90px;
+                        margin: 39.72px auto 0 auto;
+                    }
+
+                    .fee-cost {
+                        font-style: normal;
+                        font-weight: normal;
+                        font-size: 20px;
+                        line-height: 30px;
+                        display: flex;
+                        align-items: center;
+                        color: #e1ab3b;
+                        margin-top: 9px;
+                    }
+                }
+            }
+        }
+    }
+
+);

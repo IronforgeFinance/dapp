@@ -1,0 +1,162 @@
+@import '~@/assets/styles/iron.less';
+
+.mobile( {
+
+        .npc-dilaog {
+            left: 0;
+            top: @mobileNavHeight;
+            display: flex;
+            align-items: flex-end;
+            justify-content: flex-start;
+            transition: all 0.2s;
+            width: 750px;
+
+            &.fix-bottom {
+                position: fixed;
+                bottom: 0;
+                left: 0;
+                z-index: 3000;
+
+                &.show, &.hide {
+                    top: unset;
+                    height: 0;
+                }
+
+                &.hide {
+                    margin-bottom: -90px;
+
+                    &.is-right {
+                        margin-bottom: -70px;
+                    }
+                }
+            }
+
+            &.show {
+                transform: translateX(0);
+                height: 100%;
+            }
+
+            &.hide {
+                transform: translateX(-100%);
+                height: 0;
+                margin-bottom: 0;
+
+                &.is-right {
+                    transform: translateX(100%);
+                    margin-bottom: 0;
+                }
+            }
+
+            margin-bottom: -90px;
+
+            &.is-right {
+                margin-bottom: -70px;
+            }
+
+            .dialog-box {
+                // height: 628px;
+                // width: 1047px;
+                display: flex;
+                align-items: flex-end;
+                justify-content: flex-start;
+                position: relative;
+                padding-bottom: 0;
+                padding-left: 300px;
+                width: 100%;
+
+                &.is-right {
+                    padding-top: 0;
+                    padding-left: 50px;
+                }
+
+                .npc {
+                    width: 469.22px;
+                    object-fit: contain;
+                    flex-shrink: 0;
+                    position: absolute;
+                    bottom: 0;
+                    left: 0;
+
+                    &.is-right {
+                        right: 0;
+                        width: 322px;
+                        transform: rotateY(180deg);
+                    }
+                }
+
+                .words {
+                    #bgImage.dinamicBg('~@/assets/images/npc-dialog-words-bg.png', 50%, 'vertical');
+                    margin: 0;
+
+                    &:before {
+                        background-size: 100% 170%;
+                    }
+
+                    &:after {
+                        background-size: 100% 150%;
+                    }
+
+                    margin-bottom: 100px;
+
+                    &.is-right {
+                        margin-bottom: 60px;
+
+                        &:before {
+                            transform: translateX(-50%) rotateY(180deg);
+                        }
+
+                        &:after {
+                            transform: translateX(-50%) rotateY(180deg);
+                        }
+                    }
+
+                    width: 440.94px;
+                    max-width: 440.94px;
+                    min-height: 128.02px;
+                    padding: 70px 40px 140px 40px;
+                    box-sizing: border-box;
+
+                    font-family: Poppins;
+                    font-style: normal;
+                    font-weight: 300;
+                    font-size: 16px;
+                    line-height: 174%;
+                    /* or 28px */
+
+                    text-align: justify;
+                    position: relative;
+                    display: flex;
+
+                    /* 辅助色3-深红色 */
+
+                    color: #460d12;
+
+                    > a {
+                        font-style: normal;
+                        font-weight: bold;
+                        font-size: 18px;
+                        line-height: 22px;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        color: #ac4c06;
+                        min-width: 80px;
+                        position: absolute;
+                        right: 70px;
+                        bottom: 110px;
+                        z-index: 3;
+                    }
+
+                    > span {
+                        position: relative;
+                        z-index: 1;
+                        word-break: break-all;
+                        white-space: normal;
+                        display: inline-block;
+                    }
+                }
+            }
+        }
+    }
+
+);

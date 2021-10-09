@@ -1,0 +1,305 @@
+@import '~@/assets/styles/iron.less';
+
+.pc( {
+
+        div.ant-popover {
+            max-width: 300px;
+        }
+
+        .claim-rewards {
+            display: flex;
+            align-items: flex-start;
+            padding-top: 50px;
+            justify-content: center;
+            width: 100vw;
+            height: 100vh;
+            position: relative;
+            overflow-y: scroll;
+
+            .back-btn {
+                position: absolute;
+                display: inline-block;
+                width: 84px;
+                height: 64px;
+                #bgImage.background('~@/assets/images/icon-back.png');
+                left: 70px;
+                top: 180px;
+            }
+
+            .cards-group {
+                list-style: none;
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: space-between;
+                width: 766px;
+
+                .card {
+                    width: 420px;
+                    // height: 496px;
+                    display: flex;
+                    flex-direction: column;
+                    position: relative;
+                    background: linear-gradient(23.5deg,
+                        rgba(56, 25, 19, 0.8) 2.6%,
+                        rgba(55, 25, 18, 0) 87.73%);
+                    border: 2px solid #e1ab3b;
+                    box-sizing: border-box;
+                    backdrop-filter: blur(20px);
+                    border-radius: 8px;
+
+                    // &:nth-child(n + 2) {
+                    //     margin-left: 92px;
+                    // }
+
+                    .before {
+                        display: flex;
+                        align-items: center;
+                        justify-content: space-between;
+                        width: 100%;
+                        position: absolute;
+                        top: 0;
+                        padding: 13px;
+
+                        &:before {
+                            content: '';
+                            display: inline-block;
+                            border: 2px solid #d80899;
+                            border-top-left-radius: 10px;
+                            border-bottom: none;
+                            border-right: none;
+                            width: 30px;
+                            height: 30px;
+                        }
+
+                        &:after {
+                            content: '';
+                            display: inline-block;
+                            border: 2px solid #d80899;
+                            border-top-right-radius: 10px;
+                            border-bottom: none;
+                            border-left: none;
+                            width: 30px;
+                            height: 30px;
+                        }
+                    }
+
+                    .after {
+                        display: flex;
+                        align-items: center;
+                        justify-content: space-between;
+                        width: 100%;
+                        position: absolute;
+                        bottom: 0;
+                        padding: 13px;
+
+                        &:before {
+                            content: '';
+                            display: inline-block;
+                            border: 2px solid #d80899;
+                            border-bottom-left-radius: 10px;
+                            border-top: none;
+                            border-right: none;
+                            width: 30px;
+                            height: 30px;
+                        }
+
+                        &:after {
+                            content: '';
+                            display: inline-block;
+                            border: 2px solid #d80899;
+                            border-bottom-right-radius: 10px;
+                            border-top: none;
+                            border-left: none;
+                            width: 30px;
+                            height: 30px;
+                        }
+                    }
+                }
+
+                .total-locked {
+                    border: 1px solid #d80899;
+                    width: 356px;
+                    min-height: 385px;
+
+                    .icon-staked {
+                        #bgImage.background('~./assets/icon-totalStaked.png');
+                        width: 161.1px;
+                        height: 164px;
+                        transform: scale(1.8);
+                    }
+
+                    .label {
+                        font-size: 24px;
+                        line-height: 36px;
+                    }
+                }
+
+                .total-rewards {
+                    border: 1px solid #e1ab3b;
+                    width: 356px;
+                    min-height: 385px;
+
+                    .icon-rewards {
+                        #bgImage.background('~./assets/icon-totalRewards.png');
+                        width: 186.09px;
+                        height: 179px;
+                        transform: scale(1.8);
+                    }
+
+                    .before,
+                    .after {
+                        &:before {
+                            border-color: #e1ab3b;
+                        }
+
+                        &:after {
+                            border-color: #e1ab3b;
+                        }
+                    }
+                }
+
+                .claim {
+                    flex-basis: 100%;
+                    min-height: 334px;
+                    margin-top: 54px;
+                    background: linear-gradient(23.5deg, rgba(56, 25, 19, 0.8) 2.6%, rgba(55, 25, 18, 0) 87.73%);
+                    border: 2px solid #D1D0DA;
+                    box-sizing: border-box;
+                    backdrop-filter: blur(20px);
+                    border-radius: 8px;
+
+                    .content-wrapper {
+                        height: 100%;
+                        width: 100%;
+                        display: flex;
+                        align-items: center;
+                        justify-content: space-evenly;
+                        padding: 46px 0;
+
+                        .claim-btn {
+                            width: 96px;
+                            height: 38px;
+                            font-family: Poppins;
+                            font-style: normal;
+                            font-weight: bold;
+                            font-size: 15px;
+                            line-height: 22px;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            color: #ffffff;
+                        }
+
+                        .content {
+                            height: unset;
+                            padding: 0 36px;
+                            width: 100%;
+
+                            &:nth-child(n - 1) {
+                                position: relative;
+
+                                &:before {
+                                    content: '';
+                                    width: 1px;
+                                    height: 44px;
+                                    position: absolute;
+                                    top: 20px;
+                                    right: 0;
+                                    background: rgba(209, 208, 218, 0.44);
+                                }
+                            }
+                        }
+
+                        .value {
+                            flex: unset;
+                        }
+                    }
+
+                    .before,
+                    .after {
+                        &:before {
+                            border-color: #D1D0DA;
+                        }
+
+                        &:after {
+                            border-color: #D1D0DA;
+                        }
+                    }
+                }
+
+                .content {
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    height: 100%;
+                    padding: 46px 36px;
+                }
+
+                .icon-question {
+                    margin-left: 10px;
+                    cursor: pointer;
+                }
+
+                .value {
+                    font-family: Poppins;
+                    font-style: normal;
+                    font-weight: bold;
+                    font-size: 48px;
+                    line-height: 72px;
+                    color: #e1ab3b;
+
+                    flex: 1;
+                    display: flex;
+                    justify-content: center;
+                    align-items: flex-end;
+                }
+
+                .label {
+                    font-family: Poppins;
+                    font-style: normal;
+                    font-weight: normal;
+                    font-size: 24px;
+                    line-height: 36px;
+                    display: flex;
+                    align-items: center;
+                    text-align: center;
+                    color: #ffffff;
+                }
+
+                .bottom {
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
+                    width: 100%;
+                    margin-top: 50px;
+
+                    .price {
+                        font-family: Poppins;
+                        font-style: normal;
+                        font-weight: bold;
+                        font-size: 28px;
+                        line-height: 42px;
+                        display: flex;
+                        align-items: center;
+                        color: #e1ab3b;
+                    }
+
+                    .claim-btn {
+                        width: 96px;
+                        height: 38px;
+                        font-family: Poppins;
+                        font-style: normal;
+                        font-weight: bold;
+                        font-size: 15px;
+                        line-height: 22px;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        color: #ffffff;
+                    }
+                }
+            }
+        }
+    }
+
+);

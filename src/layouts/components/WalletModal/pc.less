@@ -1,0 +1,108 @@
+@media (min-width: 751px) {
+    @import '~@/assets/styles/iron.less';
+
+    .custom-board.board-box {
+        .content {
+            max-height: unset;
+        }
+    }
+
+    .wallet-modal {
+        padding: 24px 0 12px 0;
+    }
+
+    .connectors {
+        width: 312px;
+        max-height: 420px;
+        overflow-y: auto;
+
+        .connector {
+            cursor: pointer;
+            background: rgba(255, 225, 187, 0.04);
+            border: 1px solid rgba(84, 51, 20, 0.04);
+            box-sizing: border-box;
+            // box-shadow: 0px 3px 4px rgba(106, 77, 25, 0.3);
+            border-radius: 4px;
+
+            height: 60px;
+            width: 312px;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            padding: 16px 12px;
+            box-sizing: border-box;
+
+            transition: all 0.2s;
+
+            &:nth-child(n + 2) {
+                margin-top: 12px;
+            }
+
+            &.active,
+            &:hover {
+                background: #ffe1bb;
+                border: 1px solid #543314;
+                box-sizing: border-box;
+                box-shadow: 0px 3px 4px rgba(106, 77, 25, 0.3);
+                border-radius: 4px;
+            }
+
+            &.active {
+                .connect-success {
+                    display: inline-block;
+                }
+            }
+
+            .connect-success {
+                #bgImage.icon(20px, '~@/assets/images/connect-success.svg');
+                display: none;
+            }
+
+            .wallet-icon {
+                border-radius: 10px;
+                margin-right: 15px;
+            }
+
+            .title {
+                font-style: normal;
+                font-weight: 500;
+                font-size: 16px;
+                line-height: 14px;
+                color: #292725;
+                flex: 1;
+            }
+        }
+    }
+
+    .unconnected {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-top: 20px;
+
+        .tip {
+            font-style: normal;
+            font-weight: 300;
+            font-size: 16px;
+            line-height: 24px;
+            text-align: center;
+            color: #ac4c06;
+        }
+
+        .learn-connect-btn {
+            margin-top: 14px;
+
+            height: 70px;
+            width: 236px;
+
+            font-style: normal;
+            font-weight: bold;
+            font-size: 17px;
+            line-height: 25px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #ffffff;
+        }
+    }
+}

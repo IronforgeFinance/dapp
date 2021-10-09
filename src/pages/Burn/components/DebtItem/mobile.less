@@ -1,0 +1,52 @@
+@import '~@/assets/styles/iron.less';
+
+.mobile( {
+
+        .your-debts {
+            .summary {
+                #bgImage.background('~@/assets/images/my-debts-bg.svg');
+                height: 113px;
+                width: 559px;
+                margin: 27px auto 0 auto;
+                padding: 28px 0 0 49px;
+                box-sizing: border-box;
+                transform: scale(1.1);
+
+                .data {
+                    display: flex;
+                    align-items: center;
+
+                    .label {
+                        font-family: Poppins;
+                        font-style: normal;
+                        font-weight: 500;
+                        font-size: 20px;
+                        line-height: 30px;
+                        color: rgba(107, 47, 7, 0.8);
+                    }
+
+                    .value {
+                        font-family: Poppins;
+                        font-style: normal;
+                        font-weight: bold;
+                        font-size: 28px;
+                        line-height: 42px;
+                        color: #6b2f07;
+                        margin-left: 46px;
+                    }
+                }
+            }
+        }
+
+        .content-box {
+            .custom-table.ant-table-wrapper .ant-table-cell {
+                vertical-align: top;
+            }
+
+            .custom-table .ant-table-thead .ant-table-cell:last-child {
+                text-align: left;
+            }
+        }
+    }
+
+);

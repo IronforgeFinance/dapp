@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
-import useAuth, { connectorLocalStorageKey } from './useAuth';
+import useAuth from './useAuth';
+import { connectorLocalStorageKey } from '@/layouts/components/WalletModal/config';
 import { ConnectorNames, connectorsByName } from '@/utils/web3';
 
 const _binanceChainListener = async () =>

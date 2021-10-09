@@ -8,13 +8,21 @@
 /package-lock.json
 
 # production
-/dist
+dist
 
 # misc
 .DS_Store
+
+# local test
+contracts.*.json
+
 
 # umi
 /src/.umi
 /src/.umi-production
 /src/.umi-test
 /.env.local
+*.tar.gz
+
+# vscode
+.vscode

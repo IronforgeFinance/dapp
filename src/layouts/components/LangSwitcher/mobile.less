@@ -1,0 +1,123 @@
+@import '~@/assets/styles/iron.less';
+
+.mobile( {
+        .lang-switcher {
+            position: relative;
+            margin-left: 20px;
+
+            .display {
+                display: flex;
+                align-items: center;
+                cursor: pointer;
+
+                .icon-lang {
+                    width: 22px;
+                    height: 22px;
+                    border-radius: 50%;
+                    background-color: #fff;
+                    background-size: cover;
+                    &:extend(.bgImage);
+
+                    &.en {
+                        background-image: url('~@/assets/images/icon-lang-en.png');
+                    }
+
+                    &.zh {
+                        background-image: url('~@/assets/images/icon-lang-zh.png');
+                    }
+                }
+
+                .name {
+                    font-style: normal;
+                    font-weight: 500;
+                    font-size: 22px;
+                    line-height: 33px;
+                    display: flex;
+                    align-items: center;
+                    color: @headerColor;
+                    display: inline-block;
+                    margin-left: 6px;
+                }
+            }
+
+            .lang-wrapper {
+                right: 0;
+                bottom: 0;
+                position: absolute;
+                transition: transform 0.2s;
+                transform-origin: top;
+
+                &.show {
+                    transform: translateY(calc(100% + 16px)) scaleY(1);
+                }
+
+                &.hide {
+                    transform: translateY(calc(100% + 16px)) scaleY(0);
+                }
+
+                .lang-list {
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    list-style: none;
+                    position: relative;
+                    padding: 0 82px 59px 75px;
+
+                    &:before {
+                        flex: 1;
+                        content: '';
+                        position: absolute;
+                        width: 100%;
+                        height: calc(50% + 1vw);
+                        top: 0;
+                        left: 50%;
+                        transform: translateX(-50%);
+                        background-size: cover;
+                        background-repeat: no-repeat;
+                        background-position: top center;
+                        background-image: url('~@/assets/images/lang-bg.png');
+                    }
+
+                    &:after {
+                        flex: 1;
+                        content: '';
+                        position: absolute;
+                        width: 100%;
+                        height: calc(50% + 1vw);
+                        bottom: 0;
+                        left: 50%;
+                        transform: translateX(-50%);
+                        background-size: cover;
+                        background-repeat: no-repeat;
+                        background-position: bottom center;
+                        background-image: url('~@/assets/images/lang-bg.png');
+                    }
+
+                    .lang-item {
+                        padding-top: 20px;
+                        position: relative;
+                        z-index: 1;
+                        justify-content: center;
+                        font-style: normal;
+                        font-weight: normal;
+                        font-size: 22px;
+                        line-height: 33px;
+                        color: #e1ab3b;
+                        opacity: 0.7;
+                        cursor: pointer;
+
+                        &.active,
+                        &:hover {
+                            color: #ffcc63;
+                        }
+
+                        &:nth-child(n + 2) {
+                            margin-top: 8px;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+);

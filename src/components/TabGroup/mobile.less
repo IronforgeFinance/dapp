@@ -1,0 +1,40 @@
+@media (max-width: 750px) {
+    @import '~@/assets/styles/iron.less';
+
+    .tab-group {
+        height: 89px;
+        width: 592px;
+        display: flex;
+        align-items: flex-end;
+        justify-content: center;
+        margin: 0 auto;
+    }
+
+    .tab-btn {
+        height: 88px;
+        width: 296px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-style: normal;
+        font-weight: bold;
+        font-size: 28px;
+        line-height: 42px;
+        color: rgba(255, 255, 255, 1);
+        #bgImage.background('~@/assets/images/common-tab-btn.png');
+        background-size: 100% 100% !important;
+        opacity: 0.7;
+        transition: all 0.2s;
+
+        &.active {
+            opacity: 1;
+            width: 298px;
+            height: 88px;
+            #bgImage.background('~@/assets/images/common-tab-btn-active.png');
+        }
+
+        &:hover {
+            text-shadow: 0 0 5px #fff;
+        }
+    }
+}

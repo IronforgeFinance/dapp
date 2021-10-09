@@ -1,0 +1,39 @@
+@media (max-width: 750px) {
+    @import '~@/assets/styles/iron.less';
+
+    .board-box {
+        min-height: 892.00390625px;
+        width: 703.007080078125px;
+        // height: 668px;
+        filter: drop-shadow(12px 17px 70px rgba(237, 170, 39, 0.5));
+        padding: 108px 103px 70px 103px;
+        box-sizing: border-box;
+        #bgImage.dinamicBg('~@/assets/images/mint-select-token-dialog.png', 50%, 'vertical');
+
+        #position.parent();
+
+        .title-wrapper {
+            #position.absHorizCenter();
+        }
+
+        .titile.common-titile {
+            width: 389.45px;
+            height: 82px;
+        }
+
+        .btn-close {
+            #bgImage.icon(64px, '~@/assets/images/mint-select-token-dialog-close.png');
+            #position.absRtCorner(translate(5%, 0%));
+        }
+
+        .content {
+            margin: 0 auto;
+            width: 496.93px;
+            max-height: 540px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            overflow-y: auto;
+        }
+    }
+}
