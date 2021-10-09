@@ -144,7 +144,10 @@ export const LpTokenView = (props: RecordProps) => {
     return (
         <div className="lp-token-view">
             <TokenIcon name={`${token0.name}-${token1.name}`} />
-            <span className="name">{`${token0.name}+${token1.name}`} LP</span>
+            <span className="name">
+                {token0.name}
+                {token1.name && `+${token1.name} LP`}
+            </span>
         </div>
     );
 };

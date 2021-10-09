@@ -306,8 +306,9 @@ export default (props: IProps) => {
             );
             const toTokenPrice = await getTokenPrice(toToken);
             const unstakeAmount =
-                (toTokenDebtInUsd * initialRatio) / toTokenPrice -
-                debtInfo.collateral;
+                debtInfo.collateral -
+                (toTokenDebtInUsd * initialRatio) / toTokenPrice;
+
             if (unstakeAmount < 0) {
                 return;
             }
@@ -345,7 +346,7 @@ export default (props: IProps) => {
             return;
         } else {
             setUnstakeAmount(toTokenDebt);
-            const price = await getTokenPrice(toToken);
+            const price = await getTokenPrice(fromToken);
             const userCollateralInUsd = new BigNumber(toTokenDebt).multipliedBy(
                 price,
             );
