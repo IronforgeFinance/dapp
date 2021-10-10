@@ -17,6 +17,7 @@ import { useWeb3React } from '@web3-react/core';
 import useRefresh from '@/hooks/useRefresh';
 import { useIntl } from 'umi';
 import NoneView from '@/components/NoneView';
+import usePagination from '@/hooks/usePagination';
 
 const columns = [
     {
@@ -96,47 +97,41 @@ const mockData: PoolViewProps[] = new Array(3).fill('').map((item, index) => ({
 
 const PoolView = () => {
     const intl = useIntl();
-    const [dataSource, setDataSource] = useState([]);
     const { account } = useWeb3React();
     const { slowRefresh } = useRefresh();
     const { lpDataList, setLpDataList, fetchLpDataInfo, fetchLpDataList } =
         useModel('lpData', (model) => ({ ...model }));
 
-    const refresh = async () => {
+    const fetchPools = async () => {
         try {
             const list = await fetchLpDataList(PROVIDED_LP_TOKENS, account);
-            const data = list.map((item) => {
-                return {
-                    address: item.address,
-                    token0: {
-                        name: item.token1,
-                        amount: item.token1Balance,
-                    },
-                    token1: {
-                        name: item.token2,
-                        amount: item.token2Balance,
-                    },
-                };
-            });
-            setDataSource(data);
+            return {
+                data: {
+                    pools: list.map((item) => {
+                        return {
+                            address: item.address,
+                            token0: {
+                                name: item.token1,
+                                amount: item.token1Balance,
+                            },
+                            token1: {
+                                name: item.token2,
+                                amount: item.token2Balance,
+                            },
+                        };
+                    }),
+                },
+            };
         } catch (error) {
             console.error(error);
+            return { data: null };
         }
     };
-    useEffect(() => {
-        if (account) {
-            refresh();
-        }
-    }, [account, slowRefresh]);
 
-    const noneStatus = useMemo(() => {
-        if (!account) {
-            return 'noConnection';
-        }
-        if (!dataSource?.length) {
-            return 'noAssets';
-        }
-    }, [account, dataSource]);
+    const { list: dataSource, noneStatus } = usePagination({
+        key: 'pools',
+        customFetch: fetchPools,
+    });
 
     return (
         <div className="pool-view">

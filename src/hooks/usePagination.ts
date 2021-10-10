@@ -127,7 +127,7 @@ const usePagination = (props: PaginationProps) => {
         isClear.current = true;
     }, [pagination, list]);
 
-    useLayoutEffect(() => {
+    useEffect(() => {
         if (!mounted.current) return;
         setLoading(true);
     }, []);
@@ -161,7 +161,7 @@ const usePagination = (props: PaginationProps) => {
         if (list && !list?.length) {
             return none || 'noAssets';
         }
-    }, [account, list]);
+    }, [account, list, loading]);
 
     useEffect(() => {
         if (!mounted.current) return;
