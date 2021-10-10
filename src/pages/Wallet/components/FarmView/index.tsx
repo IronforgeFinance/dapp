@@ -11,7 +11,7 @@ import {
 import useRefresh from '@/hooks/useRefresh';
 import { useWeb3React } from '@web3-react/core';
 import { history, useModel } from 'umi';
-import { LP_TOKENS } from '@/config/';
+import { LP_TOKENS, POOL_TOKENS } from '@/config/';
 import { useIntl } from 'umi';
 import NoneView from '@/components/NoneView';
 import { useCallback } from 'react';
@@ -95,7 +95,10 @@ const FarmView = () => {
         ...model,
     }));
     const fetchPools = async (account) => {
-        const list = await fetchStakePoolList(LP_TOKENS, account);
+        const list = await fetchStakePoolList(
+            [...POOL_TOKENS, ...LP_TOKENS],
+            account,
+        );
         return {
             data: {
                 farms: list.map((item) => {
@@ -106,7 +109,7 @@ const FarmView = () => {
                             name: tokens[0],
                         },
                         token1: {
-                            name: tokens[1],
+                            name: tokens[1] || '',
                         },
                         value: {
                             amount: item.staked,
