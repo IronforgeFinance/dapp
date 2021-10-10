@@ -9,7 +9,12 @@ import { MyDebtsContext } from '@/components/MyDebts/provider';
 import { LoadingContext } from '@/contexts/LoadingContext';
 import Loading from '../Loading';
 
-export type NoneTypes = 'noAssets' | 'noConnection' | 'noRecords' | undefined;
+export type NoneTypes =
+    | 'noAssets'
+    | 'noConnection'
+    | 'noRecords'
+    | 'loading'
+    | undefined;
 export interface NoneViewProps {
     type: NoneTypes;
 }

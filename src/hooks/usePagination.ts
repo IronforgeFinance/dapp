@@ -151,6 +151,10 @@ const usePagination = (props: PaginationProps) => {
     );
 
     const noneStatus: NoneTypes = useMemo(() => {
+        if (loading) {
+            return 'loading';
+        }
+
         if (!account) {
             return 'noConnection';
         }
