@@ -29,10 +29,8 @@ import {
     GET_OPERATIONS,
     GET_BURNS_FROM_PANCAKE,
     GET_MINTS_FROM_PANCAKE,
-    GET_OPERATIONS_FUZZY,
     GET_MINTS_FROM_PANCAKE_TOTAL,
     GET_BURNS_FROM_PANCAKE_TOTAL,
-    GET_OPERATIONS_FUZZY_TOTAL,
     GET_OPERATIONS_TOTAL,
 } from '@/subgraph/graphql';
 import { pancakeswapClient, ourClient } from '@/subgraph/clientManager';
@@ -221,12 +219,8 @@ const HistoryView = () => {
     }, [tabKey]);
 
     const operationsTable = usePagination({
-        listGql: Array.isArray(requestType)
-            ? GET_OPERATIONS_FUZZY
-            : GET_OPERATIONS,
-        totalGql: Array.isArray(requestType)
-            ? GET_OPERATIONS_FUZZY_TOTAL
-            : GET_OPERATIONS_TOTAL,
+        listGql: GET_OPERATIONS(Array.isArray(requestType)),
+        totalGql: GET_OPERATIONS_TOTAL(Array.isArray(requestType)),
         key: 'operations',
         asyncParser: async (operations) => {
             for (let i = 0; i < operations.length; i++) {
