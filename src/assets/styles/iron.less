@@ -229,11 +229,6 @@
     .dinamicBg(@image, @ratio: 50%, @direct: 'horizontal') {
         position: relative;
 
-        > * {
-            position: relative;
-            z-index: 1;
-        }
-
         &:before {
             flex: 1;
             content: '';
@@ -241,6 +236,8 @@
             background-size: cover;
             background-repeat: no-repeat;
             background-image: url(@image);
+            pointer-events: none;
+            z-index: -1;
 
             & when (@direct ='horizontal') {
                 width: calc(@ratio + 1px);
@@ -268,6 +265,8 @@
             background-size: cover;
             background-repeat: no-repeat;
             background-image: url(@image);
+            pointer-events: none;
+            z-index: -1;
 
             & when (@direct ='horizontal') {
                 width: calc(@ratio + 1px);
