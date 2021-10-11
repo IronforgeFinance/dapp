@@ -108,11 +108,16 @@ const ProgressBar = (props: IProgressBarProps) => {
     const currentRatio = useMemo(() => {
         if (isStakeRatioInitial) {
             return isTrading
-                ? 50 + (increment / (stakeRatioInitial || 1)) * 50
+                ? Math.min(
+                      50 + (increment / (stakeRatioInitial || 1)) * 50,
+                      100,
+                  )
                 : 0;
         }
 
-        return isTrading ? 50 + (increment / (startValue || 1)) * 50 : 0;
+        return isTrading
+            ? Math.min(50 + (increment / (startValue || 1)) * 50, 100)
+            : 0;
     }, [increment, startValue, stakeRatioInitial]);
     const isRaised = useMemo(
         () => initialRatio < currentRatio,
