@@ -16,7 +16,13 @@ export const GET_MINTS_FROM_PANCAKE_TOTAL = gql`
 `;
 export const GET_MINTS_FROM_PANCAKE = gql`
     query PancakeMints($offset: Int, $limit: Int, $user: String) {
-        mints(skip: $offset, first: $limit, where: { sender_contains: $user }) {
+        mints(
+            skip: $offset
+            first: $limit
+            where: { sender_contains: $user }
+            orderBy: "timestamp"
+            orderDirection: "desc"
+        ) {
             id
             pair {
                 name
@@ -47,7 +53,13 @@ export const GET_BURNS_FROM_PANCAKE_TOTAL = gql`
 `;
 export const GET_BURNS_FROM_PANCAKE = gql`
     query PancakeBurns($offset: Int, $limit: Int, $user: String) {
-        burns(skip: $offset, first: $limit, where: { sender_contains: $user }) {
+        burns(
+            skip: $offset
+            first: $limit
+            where: { sender_contains: $user }
+            orderBy: "timestamp"
+            orderDirection: "desc"
+        ) {
             id
             pair {
                 name
@@ -79,7 +91,13 @@ export const GET_MINTS_TOTAL = gql`
 `;
 export const GET_MINTS = gql`
     query Mints($offset: Int, $limit: Int, $user: String) {
-        mints(skip: $offset, first: $limit, where: { user_contains: $user }) {
+        mints(
+            skip: $offset
+            first: $limit
+            where: { user_contains: $user }
+            orderBy: "timestamp"
+            orderDirection: "desc"
+        ) {
             id
             user
             collateralCurrency
@@ -103,7 +121,13 @@ export const GET_BURNS_TOTAL = gql`
 `;
 export const GET_BURNS = gql`
     query Burns($offset: Int, $limit: Int, $user: String) {
-        burns(skip: $offset, first: $limit, where: { user_contains: $user }) {
+        burns(
+            skip: $offset
+            first: $limit
+            where: { user_contains: $user }
+            orderBy: "timestamp"
+            orderDirection: "desc"
+        ) {
             id
             user
             unstakingAmount
@@ -135,6 +159,8 @@ export const GET_OPERATIONS = gql`
             skip: $offset
             first: $limit
             where: { user_contains: $user, type_contains: $type }
+            orderBy: "timestamp"
+            orderDirection: "desc"
         ) {
             id
             type
@@ -167,6 +193,8 @@ export const GET_OPERATIONS_FUZZY = gql`
             skip: $offset
             first: $limit
             where: { user_contains: $user, type_in: $type }
+            orderBy: "timestamp"
+            orderDirection: "desc"
         ) {
             id
             type
@@ -197,6 +225,8 @@ export const GET_MINTS_BY_COLLATERAL = gql`
             skip: $offset
             first: $limit
             where: { user: $user, collateralCurrency_contains: "-" }
+            orderBy: "timestamp"
+            orderDirection: "desc"
         ) {
             id
             user
