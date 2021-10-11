@@ -1,12 +1,13 @@
 @mobileNavHeight: 120px;
-
 @headerColor: #e1ab3b;
 
-@usdt: linear-gradient(90deg, #fcd144 85.54%, #ffad33 98.08%);
-@usdc: linear-gradient(90deg, #26a17b 85.54%, #0c8f67 98.08%);
-@usd: linear-gradient(116.98deg, #611bf6 31.39%, #8d33ff 83.13%);
-@btc: linear-gradient(116.98deg, #f6911b 31.39%, #ffcb44 83.13%);
-@eth: linear-gradient(116.98deg, #c4c3c7 31.39%, #72727a 83.13%);
+@tokenColorList: {
+    usdt: linear-gradient(90deg, #fcd144 85.54%, #ffad33 98.08%);
+    usdc: linear-gradient(90deg, #26a17b 85.54%, #0c8f67 98.08%);
+    usd: linear-gradient(116.98deg, #611bf6 31.39%, #8d33ff 83.13%);
+    btc: linear-gradient(116.98deg, #f6911b 31.39%, #ffcb44 83.13%);
+    eth: linear-gradient(116.98deg, #c4c3c7 31.39%, #72727a 83.13%);
+};
 
 .global {
     // clear all of gap, it could be outer or inner
@@ -99,6 +100,7 @@
     }
 }
 
+// flex布局下增加填充块
 .fill {
     display: flex;
     width: 100%;
@@ -125,67 +127,24 @@
 }
 
 .token-color(@geometric) {
-    &.@{geometric}-usdc {
-        & when(@geometric=bar) {
-            background: @usdc;
-        }
+    each(@tokenColorList, {
+            &.@{geometric}-@{key} {
+                & when(@geometric=bar) {
+                    background: @value;
+                }
 
-        & when(@geometric=dot) {
-            &:before {
-                background: @usdc;
+                & when(@geometric=dot) {
+                    &:before {
+                        background: @value;
+                    }
+                }
             }
         }
-    }
 
-    &.@{geometric}-usdt {
-        & when(@geometric=bar) {
-            background: @usdt;
-        }
-
-        & when(@geometric=dot) {
-            &:before {
-                background: @usdt;
-            }
-        }
-    }
-
-    &.@{geometric}-usd {
-        & when(@geometric=bar) {
-            background: @usd;
-        }
-
-        & when(@geometric=dot) {
-            &:before {
-                background: @usd;
-            }
-        }
-    }
-
-    &.@{geometric}-btc {
-        & when(@geometric=bar) {
-            background: @btc;
-        }
-
-        & when(@geometric=dot) {
-            &:before {
-                background: @btc;
-            }
-        }
-    }
-
-    &.@{geometric}-eth {
-        & when(@geometric=bar) {
-            background: @eth;
-        }
-
-        & when(@geometric=dot) {
-            &:before {
-                background: @eth;
-            }
-        }
-    }
+    );
 }
 
+// 圆点
 .dot(@size: 16px, @marginRight: 0px, @bgColor: transparent) {
     display: flex;
     align-items: center;
@@ -206,6 +165,7 @@
     }
 }
 
+// 背景图片基本配置，可用来继承
 .bgImage {
     background-position: center;
     background-repeat: no-repeat;
@@ -216,7 +176,9 @@
     flex-grow: 0;
 }
 
+// 背景图片工具集
 #bgImage {
+    // 基本类型
     .background(@bgImage, @bgColor: transparent) {
         background-position: center;
         background-repeat: no-repeat;
@@ -226,6 +188,7 @@
         flex-shrink: 0;
     }
 
+    // 动态背景图。用合成的方式来保持缩放比例不被破坏
     .dinamicBg(@image, @ratio: 50%, @direct: 'horizontal') {
         position: relative;
 
@@ -288,6 +251,7 @@
         }
     }
 
+    // 图标
     .icon(@size, @bgImage, @bgColor: transparent, @pure: true) {
         #bgImage.background(@bgImage, @bgColor);
 
@@ -303,6 +267,7 @@
         }
     }
 
+    // 按钮
     .button(@bgImage, @bgColor: transparent) {
         #bgImage.background(@bgImage, @bgColor);
 
@@ -347,6 +312,7 @@
     }
 }
 
+// 手机版的页面级别容器
 .mobile-container(@image: '') {
     #bgImage.background(@image);
     padding-top: @mobileNavHeight;
