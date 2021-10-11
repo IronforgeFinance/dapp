@@ -27,7 +27,7 @@ export default () => {
                 ) as HTMLElement;
             }
 
-            console.log('>> scrollTop ', window.scrollY);
+            // console.log('>> scrollTop ', window.scrollY);
             header.current.style.background = `rgba(71, 57, 44, ${Math.min(
                 MAX_SCROLL,
                 window.scrollY / 100,
