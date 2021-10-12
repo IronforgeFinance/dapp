@@ -30,8 +30,9 @@
 
             .f-asset {
                 display: flex;
+                flex-wrap: wrap;
 
-                span {
+                > span {
                     margin-left: 10px;
                     font-family: Poppins;
                     font-style: normal;
@@ -41,6 +42,31 @@
                     display: flex;
                     align-items: center;
                     color: #292725;
+                }
+
+                .rest-days {
+                    display: flex;
+                    align-items: center;
+                    flex-basis: 100%;
+                    margin-top: 3px;
+
+                    span {
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        height: 20px;
+                        width: 60px;
+                        border-radius: 1px;
+                        background: #AC4C06;
+                        border-radius: 1px;
+                        font-family: Poppins;
+                        font-style: normal;
+                        font-weight: 300;
+                        font-size: 14px;
+                        line-height: 21px;
+                        color: #FFFFFF;
+                        margin-right: 10px;
+                    }
                 }
             }
 

@@ -13,7 +13,7 @@ import { useIntl } from 'umi';
 import TabRecordBoard from '@/components/TabRecordBoard';
 import MintView from '@/layouts/components/Footer/components/MintView';
 import BurnView from '@/layouts/components/Footer/components/BurnView';
-import DeliveryView from '@/layouts/components/Footer/components/DeliveryView';
+// import DeliveryView from '@/layouts/components/Footer/components/DeliveryView';
 import { ReactComponent as TabBackIcon01 } from '@/assets/images/big-board-svg-01.svg';
 import { ReactComponent as TabBackIcon02 } from '@/assets/images/big-board-svg-02.svg';
 import { ReactComponent as TabBackIcon03 } from '@/assets/images/big-board-svg-03.svg';
