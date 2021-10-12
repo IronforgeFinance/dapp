@@ -2,7 +2,6 @@ import { useWeb3React } from '@web3-react/core';
 import React, { useState, useEffect } from 'react';
 import { IProgressBarProps } from '@/components/ProgressBar';
 import { ProgressBarType } from '@/config/constants/types';
-import { IDebtItemInfo } from '../pages/Burn/components/DebtItem/index';
 import {
     useDebtSystem,
     useCollateralSystem,
@@ -14,7 +13,6 @@ import { PLATFORM_TOKEN } from '@/config';
 import { toFixedWithoutRound } from '@/utils/bigNumber';
 import useWeb3Provider from '@/hooks/useWeb3Provider';
 import useRefresh from './useRefresh';
-import { COLLATERAL_TOKENS } from '@/config';
 import { useModel } from 'umi';
 import { useInitialRatio } from '@/hooks/useConfig';
 import { getTokenPrice } from '@/utils';
