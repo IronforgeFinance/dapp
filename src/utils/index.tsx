@@ -89,3 +89,9 @@ export const handleTxSent = async (tx: any, intl: any) => {
         scanHref: `${process.env.BSC_SCAN_URL}/tx/${tx.hash}`,
     });
 };
+
+let CollateralTokens = [];
+export const getCollateralTokens = async () => {
+    if (CollateralTokens.length > 0) return CollateralTokens;
+    
+};

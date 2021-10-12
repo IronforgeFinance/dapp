@@ -20,7 +20,7 @@ import PancakeRouter from '@/config/abi/PancakeRouterV2.json';
 import PancakeFactory from '@/config/abi/PancakeFactory.json';
 import MinerReward from '@/config/abi/MinerReward.json';
 import PlatformToken from '@/config/abi/IronForgeToken.json';
-
+import AssetSystemAbi from '@/config/abi/AssetSystem.json';
 export const getContract = (
     abi: any,
     address: string,
@@ -52,6 +52,14 @@ export const getCollateralSystemContract = (
     const chainId = process.env.APP_CHAIN_ID as string;
     const address = Addresses.CollateralSystem[chainId];
     return getContract(collateralSystemAbi, address, signer);
+};
+
+export const getAssetSystemContract = (
+    signer?: ethers.Signer | ethers.providers.Provider,
+) => {
+    const chainId = process.env.APP_CHAIN_ID as string;
+    const address = Addresses.AssetSystem[chainId];
+    return getContract(AssetSystemAbi, address, signer);
 };
 
 export const getExchangeSystemContract = (

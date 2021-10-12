@@ -92,11 +92,13 @@ export default () => {
     const _fTokenBalance = useRef(0);
 
     const collateralSystem = useCollateralSystem();
-    const exchangeSystem = useExchangeSystem();
-    const configContract = useConfig();
 
     const initialRatio = useInitialRatio(collateralToken);
 
+    const { mintTokens } = useModel('app', (model) => ({
+        ...model,
+    }));
+    console.log('mintTokens: ', mintTokens);
     const collateralTokenAddress = useMemo(() => {
         if (collateralToken) {
             return Tokens[collateralToken].address[process.env.APP_CHAIN_ID!];
@@ -146,20 +148,6 @@ export default () => {
 
     // const { stakedData, setStakedData } = useStakedData();
 
-    const openCollateralTokenList = useCallback(() => {
-        // setWords(
-        //     collateralToken ? intl.formatMessage({ id: 'ftokenTip' }) : '',
-        // );
-        open(COLLATERAL_TOKENS, { callback: collateralTokenHandler });
-    }, [intl]);
-    const openToTokenList = useCallback(() => {
-        setWords(toToken ? intl.formatMessage({ id: 'ftokenTip' }) : '');
-        open(
-            MINT_TOKENS.map((name) => ({ name })),
-            { callback: toTokenHandler },
-        );
-    }, [intl]);
-
     const {
         stakedData,
         setStakedData,
@@ -173,13 +161,28 @@ export default () => {
         ...model,
     }));
 
-    const { requestConnectWallet } = useModel('app', (model) => ({
-        requestConnectWallet: model.requestConnectWallet,
-    }));
+    const { requestConnectWallet, collateralTokens } = useModel(
+        'app',
+        (model) => ({
+            collateralTokens: model.collateralTokens,
+            requestConnectWallet: model.requestConnectWallet,
+        }),
+    );
+
+    const openCollateralTokenList = useCallback(() => {
+        // setWords(
+        //     collateralToken ? intl.formatMessage({ id: 'ftokenTip' }) : '',
+        // );
+        open(collateralTokens, { callback: collateralTokenHandler });
+    }, [intl, collateralTokens]);
+    const openToTokenList = useCallback(() => {
+        setWords(toToken ? intl.formatMessage({ id: 'ftokenTip' }) : '');
+        open(mintTokens, { callback: toTokenHandler });
+    }, [intl, mintTokens]);
 
     const { balance: fTokenBalance, refresh: refreshIFTBalance } =
         useBep20Balance(PLATFORM_TOKEN);
-    console.log('fTokenBalance: ', fTokenBalance);
+
     useBep20Balance('IFT');
     _fTokenBalance.current = fTokenBalance;
 

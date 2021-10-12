@@ -55,6 +55,10 @@ export default () => {
         },
     ];
 
+    const { collateralTokens } = useModel('app', (model) => ({
+        ...model,
+    }));
+
     const { isMobile } = useEnv();
     const { open: openClaimRewards } = useClaimRewards();
     const [tabKey, setTabKey] = useState(tabItems[0].key);
@@ -82,16 +86,6 @@ export default () => {
         fetchStakePoolList([{ poolName: 'BS', poolId: POOL_ID }], account);
     }, [account]);
 
-    const computedRatio = useMemo(
-        () => initialRatio * 100,
-        [collateralToken, initialRatio],
-    );
-
-    const { balance: fusdBalance } = useBep20Balance('FUSD');
-
-    const { debtData } = useModel('dataView', (model) => ({
-        debtData: model.stakedData,
-    }));
     const getCollateralDataByToken = async (
         token: string,
         account?: string,
@@ -125,7 +119,7 @@ export default () => {
         };
     };
     const fetchCollateralInfo = async () => {
-        const tokens = COLLATERAL_TOKENS.map((token) => token.name);
+        const tokens = collateralTokens.map((token) => token.name);
         const infos = await Promise.all(
             tokens.map((token) => getCollateralDataByToken(token, account)),
         );
@@ -141,7 +135,7 @@ export default () => {
             return 0;
         }
         const res = await Promise.all(
-            COLLATERAL_TOKENS.map((token) =>
+            collateralTokens.map((token) =>
                 debtSystem.GetUserDebtBalanceInUsd(
                     account,
                     ethers.utils.formatBytes32String(token.name),
@@ -161,7 +155,7 @@ export default () => {
     useEffect(() => {
         fetchCollateralInfo();
         getDebtInUSD();
-    }, [account]);
+    }, [account, collateralTokens]);
 
     return (
         <PreloadAssetsSuspense>

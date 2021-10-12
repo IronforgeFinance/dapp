@@ -46,9 +46,9 @@ export default () => {
     const { open } = useTokenSelector();
     const { open: openConfirmModal } = useContext(TransitionConfirmContext);
     const { account } = useWeb3React();
-    const [fromToken, setFromToken] = useState(TOKEN_OPTIONS[0].name);
+    const [fromToken, setFromToken] = useState(MINT_TOKENS[0]);
     const [fromAmount, setFromAmount] = useState<number | undefined>();
-    const [toToken, setToToken] = useState(TOKEN_OPTIONS[1].name);
+    const [toToken, setToToken] = useState(MINT_TOKENS[1]);
     const [toAmount, setToAmount] = useState<number | undefined>();
     const [fromBalance, setFromBalance] = useState(0.0);
     const [submitting, setSubmitting] = useState(false);
@@ -86,8 +86,9 @@ export default () => {
         setToApprovedLastUpdated,
     );
 
-    const { requestConnectWallet } = useModel('app', (model) => ({
+    const { requestConnectWallet, mintTokens } = useModel('app', (model) => ({
         requestConnectWallet: model.requestConnectWallet,
+        mintTokens: model.mintTokens,
     }));
 
     const { balance: fromTokenBalance } = useBep20Balance(fromToken);
@@ -223,13 +224,13 @@ export default () => {
     };
 
     const openFromTokenList = useCallback(
-        () => open(TOKEN_OPTIONS, { callback: fromTokenHandler }),
-        [],
+        () => open(mintTokens, { callback: fromTokenHandler }),
+        [mintTokens],
     );
 
     const openToTokenList = useCallback(
-        () => open(TOKEN_OPTIONS, { callback: toTokenHandler }),
-        [],
+        () => open(mintTokens, { callback: toTokenHandler }),
+        [mintTokens],
     );
 
     return (
