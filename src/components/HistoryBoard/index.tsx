@@ -30,11 +30,11 @@ export const tabItems = [
         key: 'burn',
         icon: <TabBackIcon02 fill="#89512D" />,
     },
-    {
-        name: 'history.delivery',
-        key: 'delivery',
-        icon: <TabBackIcon03 fill="#89512D" />,
-    },
+    // {
+    //     name: 'history.delivery',
+    //     key: 'delivery',
+    //     icon: <TabBackIcon03 fill="#89512D" />,
+    // },
 ];
 
 export const useHistoryBoard = () => {
@@ -59,9 +59,9 @@ export default (props: HistoryBoardProps) => {
             case tabItems[1].key: {
                 return <BurnView />;
             }
-            case tabItems[2].key: {
-                return <DeliveryView />;
-            }
+            // case tabItems[2].key: {
+            //     return <DeliveryView />;
+            // }
             default:
                 return null;
         }

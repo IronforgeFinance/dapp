@@ -32,6 +32,7 @@ interface PaginationProps {
     none?: NoneTypes;
     /**@param {function} parser 转换器  */
     parser?(any): any;
+    asyncParser?(any): any;
     key: string;
     /**@param {any} extVars 扩展query参数  */
     extVars?: any;
@@ -50,12 +51,13 @@ const usePagination = (props: PaginationProps) => {
         extVars = {},
         customFetch,
         none,
+        asyncParser,
     } = props;
     const { setWords: say } = useNpcDialog();
     const { account } = useWeb3React();
     const [list, setList] = useState(null);
     const { loading, setLoading } = useContext(LoadingContext);
-    const { fastRefresh } = useRefresh();
+    const { slowRefresh } = useRefresh();
     const mounted = useMounted();
     const isClear = useRef(false);
     const refreshCount = useRef(0);
@@ -74,7 +76,7 @@ const usePagination = (props: PaginationProps) => {
                     const { data } = await customFetch(account);
                     setList(data ? data[key] : []);
                 } else {
-                    const { data } = await client.query({
+                    let { data } = await client.query({
                         query: listGql,
                         variables: {
                             offset: pagination.current - 1,
@@ -83,32 +85,40 @@ const usePagination = (props: PaginationProps) => {
                             ...extVars,
                         },
                     });
-                    if (parser) {
-                        setList(data ? data[key].map(parser) : []);
-                    } else {
-                        setList(data ? data[key] : []);
+                    if (data && data[key]) {
+                        if (asyncParser) {
+                            data[key] = await asyncParser(data[key]);
+                        }
+                        if (parser) {
+                            data[key] = data[key].map(parser);
+                        }
                     }
+                    setList(data ? data[key] : []);
                 }
             } finally {
                 refreshCount.current += 1;
                 loading && setLoading(false);
             }
         }
-    }, [account, pagination]);
+    }, [account, pagination, extVars]);
 
     /**@description Fetch total count */
     const fetchListTotal = useCallback(async () => {
         if (account) {
             const { data } = await client.query({
                 query: totalGql,
-                variables: { user: account },
+                variables: { user: account, ...extVars },
             });
+
+            const total = data ? data[key]?.length : 0;
             setPagination({
                 ...pagination,
-                total: data ? data[key]?.length : 0,
+                total,
             });
+
+            return total;
         }
-    }, [account]);
+    }, [account, extVars]);
 
     /**@description Reset data */
     const reset = useCallback(() => {
@@ -119,7 +129,8 @@ const usePagination = (props: PaginationProps) => {
             total: 0,
         });
         isClear.current = false;
-    }, [pagination, list]);
+        fetchListTotal();
+    }, [list, extVars]);
 
     /**@description Clear data */
     const clear = useCallback(() => {
@@ -127,7 +138,7 @@ const usePagination = (props: PaginationProps) => {
         isClear.current = true;
     }, [pagination, list]);
 
-    useLayoutEffect(() => {
+    useEffect(() => {
         if (!mounted.current) return;
         setLoading(true);
     }, []);
@@ -136,14 +147,14 @@ const usePagination = (props: PaginationProps) => {
         if (!mounted.current) return;
         if (isClear.current) return;
         fetchList();
-    }, [fastRefresh, pagination]);
+    }, [slowRefresh, pagination]);
 
     useEffect(() => {
         if (!mounted.current) return;
         if (isClear.current) return;
         if (customFetch) return; //自定义fetch不需要拿total
         fetchListTotal();
-    }, []);
+    }, [slowRefresh]);
 
     const position = useMemo(
         () => (pagination.total > pagination.pageSize ? 'bottomRight' : 'none'),
@@ -151,13 +162,17 @@ const usePagination = (props: PaginationProps) => {
     );
 
     const noneStatus: NoneTypes = useMemo(() => {
+        if (loading) {
+            return 'loading';
+        }
+
         if (!account) {
             return 'noConnection';
         }
         if (list && !list?.length) {
             return none || 'noAssets';
         }
-    }, [account, list]);
+    }, [account, list, loading]);
 
     useEffect(() => {
         if (!mounted.current) return;
@@ -177,6 +192,7 @@ const usePagination = (props: PaginationProps) => {
             (a, b) => Number(b.timestamp) - Number(a.timestamp),
         ),
         pagination,
+        setList,
         setPagination,
         position,
         noneStatus,

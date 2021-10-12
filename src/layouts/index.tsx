@@ -20,9 +20,11 @@ import MobileNavigationContextProvider from './components/Header/components/Mobi
 import HistoryBoardContextProvider from '@/components/HistoryBoard/provider';
 import NpcDialogContextProvider from '@/components/NpcDialog/provider';
 import MyDebtsContextProvider from '@/components/MyDebts/provider';
+import DeliveryHistoryContextProvider from '@/components/DeliveryHistory/provider';
 import ClaimRewardsContextProvider from '@/components/ClaimRewards/provider';
 import LangContextProvider from './components/LangSwitcher/provider';
 import TokenSelectorProvider from '@/components/TokenSelector/provider';
+import DeliveryHistory from '@/components/DeliveryHistory';
 
 export default function Layout({
     children,
@@ -98,47 +100,52 @@ export default function Layout({
                             <HistoryBoardContextProvider>
                                 <NpcDialogContextProvider>
                                     <MyDebtsContextProvider>
-                                        <ClaimRewardsContextProvider>
-                                            {/* 多为弹窗组件，优势：复用、防止包含块、单例（避免多实例造成内存浪费）、支持跨层（调用灵活）。相关操作方法由provider提供 */}
-                                            <Fragment>
-                                                <HistoryBoard />
-                                                <MyDebts />
-                                                <ClaimRewards />
-                                                {!isMobile && (
-                                                    <Fragment>
-                                                        <TokenSelector />
-                                                        <NpcDialog />
-                                                    </Fragment>
-                                                )}
-                                            </Fragment>
+                                        <DeliveryHistoryContextProvider>
+                                            <ClaimRewardsContextProvider>
+                                                {/* 多为弹窗组件，优势：复用、防止包含块、单例（避免多实例造成内存浪费）、支持跨层（调用灵活）。相关操作方法由provider提供 */}
+                                                <Fragment>
+                                                    <HistoryBoard />
+                                                    <MyDebts />
+                                                    <DeliveryHistory />
+                                                    <ClaimRewards />
+                                                    {!isMobile && (
+                                                        <Fragment>
+                                                            <TokenSelector />
+                                                            <NpcDialog />
+                                                        </Fragment>
+                                                    )}
+                                                </Fragment>
 
-                                            {/* 页面内容 */}
-                                            <Fragment>
-                                                <CommonHeader />
+                                                {/* 页面内容 */}
+                                                <Fragment>
+                                                    <CommonHeader />
 
-                                                <TransactionConfirm>
-                                                    <section
-                                                        className={`${
-                                                            path
-                                                                .slice(1)
-                                                                .replace(
-                                                                    '/',
-                                                                    '-',
-                                                                ) || 'home'
-                                                        }-container`}
-                                                    >
-                                                        {isMobile && (
-                                                            <Fragment>
-                                                                <TokenSelector />
-                                                                <NpcDialog />
-                                                            </Fragment>
-                                                        )}
-                                                        {children}
-                                                    </section>
-                                                </TransactionConfirm>
-                                                {!isMobile && <CommonFooter />}
-                                            </Fragment>
-                                        </ClaimRewardsContextProvider>
+                                                    <TransactionConfirm>
+                                                        <section
+                                                            className={`${
+                                                                path
+                                                                    .slice(1)
+                                                                    .replace(
+                                                                        '/',
+                                                                        '-',
+                                                                    ) || 'home'
+                                                            }-container`}
+                                                        >
+                                                            {isMobile && (
+                                                                <Fragment>
+                                                                    <TokenSelector />
+                                                                    <NpcDialog />
+                                                                </Fragment>
+                                                            )}
+                                                            {children}
+                                                        </section>
+                                                    </TransactionConfirm>
+                                                    {!isMobile && (
+                                                        <CommonFooter />
+                                                    )}
+                                                </Fragment>
+                                            </ClaimRewardsContextProvider>
+                                        </DeliveryHistoryContextProvider>
                                     </MyDebtsContextProvider>
                                 </NpcDialogContextProvider>
                             </HistoryBoardContextProvider>

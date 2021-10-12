@@ -1,0 +1,76 @@
+@import url('~@/assets/styles/iron.less');
+
+.pc( {
+        .delivery-view {
+            .switch-wrapper {
+                display: flex;
+                justify-content: flex-end;
+                margin-right: 50px;
+
+                .iron-switch {
+                    position: relative;
+                    overflow: hidden;
+
+                    .switch-btn {
+                        min-width: 80px;
+                    }
+
+                    &:before {
+                        content: '';
+                        background: rgba(225, 171, 59, 0.4);
+                        position: absolute;
+                        left: 0;
+                        top: 0;
+                        width: 100%;
+                        height: 100%;
+                        mix-blend-mode: multiply;
+                    }
+                }
+            }
+
+            .f-asset {
+                display: flex;
+
+                span {
+                    margin-left: 10px;
+                    font-family: Poppins;
+                    font-style: normal;
+                    font-weight: normal;
+                    font-size: 16px;
+                    line-height: 24px;
+                    display: flex;
+                    align-items: center;
+                    color: #292725;
+                }
+            }
+
+            .delivery-value {
+                display: flex;
+                flex-direction: column;
+
+                span {
+                    &:first-child {
+                        font-family: Poppins;
+                        font-style: normal;
+                        font-weight: bold;
+                        font-size: 16px;
+                        line-height: 24px;
+                        display: flex;
+                        align-items: center;
+                        color: rgba(172, 76, 6, 0.8);
+                    }
+
+                    &:last-child {
+                        font-family: Poppins;
+                        font-style: normal;
+                        font-weight: 300;
+                        font-size: 15px;
+                        line-height: 22px;
+                        color: rgba(41, 39, 37, 0.8);
+                    }
+                }
+            }
+        }
+    }
+
+);
