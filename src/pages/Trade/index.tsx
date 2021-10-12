@@ -7,6 +7,7 @@ import React, {
     useMemo,
     useCallback,
     useContext,
+    Fragment,
 } from 'react';
 import { useConfig, useExchangeSystem, usePrices } from '@/hooks/useContract';
 import Tokens from '@/config/constants/tokens';
@@ -35,8 +36,6 @@ import {
     useCheckERC20ApprovalStatus,
     useERC20Approve,
 } from '@/hooks/useApprove';
-import PreloadAssetsSuspense from '@/components/PreloadAssetsSuspense';
-import PreloadImages from '@/components/PreloadImages';
 //TODO: for test.从配置中读取
 const TOKEN_OPTIONS = MINT_TOKENS.map((token) => ({ name: token }));
 
@@ -234,14 +233,7 @@ export default () => {
     );
 
     return (
-        <PreloadAssetsSuspense>
-            {/* <PreloadImages
-                imageList={[
-                    'http://172.28.10.91:8000/static/trade-swap-roof-sign.8ee0f0a8.png',
-                    'http://172.28.10.91:8000/static/trade-swap-roof-sign-active.e536e325.png',
-                    'http://172.28.10.91:8000/static/trade-swap-roof-ceiling.ea6c8001.png'
-                ]}
-            /> */}
+        <Fragment>
             <div className="shop common-box">
                 <div className="roof" />
                 <div
@@ -386,6 +378,6 @@ export default () => {
                 </div>
             </div>
             <MarketDetail token0={fromToken} token1={toToken} />
-        </PreloadAssetsSuspense>
+        </Fragment>
     );
 };
