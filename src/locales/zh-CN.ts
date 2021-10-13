@@ -258,4 +258,5 @@ export default {
     bsTip: '奖励50%可即刻提取,50%将于30天内线性释放',
     totalRewardsTip: '',
     totalSatkedTip: '',
+    staked: '已质押',
 };

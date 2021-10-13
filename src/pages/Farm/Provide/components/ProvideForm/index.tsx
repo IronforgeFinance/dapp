@@ -431,7 +431,7 @@ export default () => {
         <div className="provide-outer-container">
             <Folder
                 placement={isMobile ? 'right' : 'left'}
-                foldingOffest={95}
+                foldingOffest={88}
                 value={!isCurrentTab || !hasLpList}
             >
                 <div className="lp-list">
