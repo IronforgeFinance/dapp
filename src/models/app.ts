@@ -19,7 +19,12 @@ const useAppModel = () => {
     const requestConnectWallet = () => {
         setConnectWalletSignal(new Date().getTime());
     };
-    return { isMobile, connectWalletSignal, requestConnectWallet };
+    return {
+        isMobile,
+        connectWalletSignal,
+        requestConnectWallet,
+        setConnectWalletSignal,
+    };
 };
 
 export default useAppModel;

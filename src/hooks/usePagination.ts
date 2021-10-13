@@ -140,7 +140,7 @@ const usePagination = (props: PaginationProps) => {
 
     useEffect(() => {
         if (!mounted.current) return;
-        setLoading(true);
+        setLoading(!!account);
     }, []);
 
     useEffect(() => {

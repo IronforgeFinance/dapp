@@ -25,15 +25,25 @@ export default () => {
     const [showDropdown, setShowDropdown] = useState(false);
     const [visable, setVisable] = useState(false);
 
-    const { connectWalletSignal } = useModel('app', (model) => ({
-        connectWalletSignal: model.connectWalletSignal,
-    }));
+    const { connectWalletSignal, setConnectWalletSignal } = useModel(
+        'app',
+        (model) => ({
+            connectWalletSignal: model.connectWalletSignal,
+            setConnectWalletSignal: model.setConnectWalletSignal,
+        }),
+    );
 
     useEffect(() => {
         if (connectWalletSignal) {
             setVisable(true);
         }
     }, [connectWalletSignal]);
+
+    useEffect(() => {
+        if (!visable) {
+            setConnectWalletSignal(0);
+        }
+    }, [visable]);
 
     const handleLogout = () => {
         logout();

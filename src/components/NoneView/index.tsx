@@ -1,10 +1,16 @@
 import './pc.less';
 import './mobile.less';
 
-import { Fragment, useContext } from 'react';
+import {
+    Fragment,
+    useContext,
+    useEffect,
+    useCallback,
+    useLayoutEffect,
+    useRef,
+} from 'react';
 import { useModel, useIntl, history } from 'umi';
 import { TabRecordBoardContext } from '@/components/TabRecordBoard';
-import { useCallback } from 'react';
 import { MyDebtsContext } from '@/components/MyDebts/provider';
 import { LoadingContext } from '@/contexts/LoadingContext';
 import Loading from '../Loading';
@@ -25,15 +31,44 @@ const NoneView = (props: NoneViewProps) => {
     const { close } =
         useContext(TabRecordBoardContext) ?? useContext(MyDebtsContext) ?? {};
     const { loading } = useContext(LoadingContext);
+    // const orginalZIndex = useRef<string | null>(null);
 
-    const { requestConnectWallet } = useModel('app', (model) => ({
-        requestConnectWallet: model.requestConnectWallet,
-    }));
+    const { requestConnectWallet, connectWalletSignal } = useModel(
+        'app',
+        (model) => ({
+            connectWalletSignal: model.connectWalletSignal,
+            requestConnectWallet: () => {
+                const header: HTMLElement =
+                    document.querySelector('.header-nav');
+                // if (!orginalZIndex.current) {
+                //     orginalZIndex.current =
+                //         window.getComputedStyle(header).zIndex;
+                // }
+                header.style.zIndex = '2000';
+
+                model.requestConnectWallet();
+            },
+        }),
+    );
 
     const gotoMint = useCallback(() => {
         history.push('/mint');
         close && close();
     }, [close]);
+
+    useLayoutEffect(() => {
+        if (connectWalletSignal === 0) {
+            const header: HTMLElement = document.querySelector('.header-nav');
+            // if (orginalZIndex.current) {
+            //     setTimeout(() => {
+            //         header.style.zIndex = orginalZIndex.current;
+            //     }, 200);
+            // }
+            setTimeout(() => {
+                header.removeAttribute('style');
+            }, 200);
+        }
+    }, [connectWalletSignal]);
 
     return (
         <div className="none-view">
