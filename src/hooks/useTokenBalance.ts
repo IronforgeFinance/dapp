@@ -30,7 +30,7 @@ const useTokenBalance = (tokenAddress: string) => {
     const { account } = useWeb3React();
     const { fastRefresh } = useRefresh();
 
-    const contract = useERC20(tokenAddress);
+    const contract = getBep20Contract(tokenAddress);
 
     useEffect(() => {
         const fetchBalance = async () => {
@@ -80,10 +80,7 @@ export const useBep20Balance = (token: string, fixed: number = 2) => {
                     throw new Error('Wrong token ' + token);
                 }
                 const address = tokenObj.address[process.env.APP_CHAIN_ID];
-                const contract = getBep20Contract(
-                    address,
-                    provider.getSigner(),
-                );
+                const contract = getBep20Contract(address);
                 const res = await contract.balanceOf(account);
                 const amount = toFixedWithoutRound(
                     ethers.utils.formatUnits(res, tokenObj.decimals),

@@ -92,11 +92,12 @@ export default () => {
     const _fTokenBalance = useRef(0);
 
     const collateralSystem = useCollateralSystem();
-    const exchangeSystem = useExchangeSystem();
-    const configContract = useConfig();
 
     const initialRatio = useInitialRatio(collateralToken);
 
+    const { mintTokens } = useModel('app', (model) => ({
+        ...model,
+    }));
     const collateralTokenAddress = useMemo(() => {
         if (collateralToken) {
             return Tokens[collateralToken].address[process.env.APP_CHAIN_ID!];
@@ -146,20 +147,6 @@ export default () => {
 
     // const { stakedData, setStakedData } = useStakedData();
 
-    const openCollateralTokenList = useCallback(() => {
-        // setWords(
-        //     collateralToken ? intl.formatMessage({ id: 'ftokenTip' }) : '',
-        // );
-        open(COLLATERAL_TOKENS, { callback: collateralTokenHandler });
-    }, [intl]);
-    const openToTokenList = useCallback(() => {
-        setWords(toToken ? intl.formatMessage({ id: 'ftokenTip' }) : '');
-        open(
-            MINT_TOKENS.map((name) => ({ name })),
-            { callback: toTokenHandler },
-        );
-    }, [intl]);
-
     const {
         stakedData,
         setStakedData,
@@ -173,13 +160,31 @@ export default () => {
         ...model,
     }));
 
-    const { requestConnectWallet } = useModel('app', (model) => ({
-        requestConnectWallet: model.requestConnectWallet,
-    }));
+    const { requestConnectWallet, collateralTokens } = useModel(
+        'app',
+        (model) => ({
+            collateralTokens: model.collateralTokens,
+            requestConnectWallet: model.requestConnectWallet,
+        }),
+    );
+
+    const openCollateralTokenList = useCallback(() => {
+        // setWords(
+        //     collateralToken ? intl.formatMessage({ id: 'ftokenTip' }) : '',
+        // );
+        open(COLLATERAL_TOKENS, { callback: collateralTokenHandler });
+    }, [intl]);
+    const openToTokenList = useCallback(() => {
+        setWords(toToken ? intl.formatMessage({ id: 'ftokenTip' }) : '');
+        open(
+            MINT_TOKENS.map((item) => ({ name: item })),
+            { callback: toTokenHandler },
+        );
+    }, [intl]);
 
     const { balance: fTokenBalance, refresh: refreshIFTBalance } =
         useBep20Balance(PLATFORM_TOKEN);
-    console.log('fTokenBalance: ', fTokenBalance);
+
     useBep20Balance('IFT');
     _fTokenBalance.current = fTokenBalance;
 
@@ -243,6 +248,7 @@ export default () => {
             if (account && toToken && collateralAmount) {
                 //TODO 该接口需要有用户地址，否则报错
                 const res = await collateralSystem.getMaxBuildAmount(
+                    account,
                     ethers.utils.formatBytes32String(collateralToken),
                     expandTo18Decimals(collateralAmount),
                     ethers.utils.formatBytes32String(toToken),
@@ -411,6 +417,7 @@ export default () => {
             return;
         }
         const maxCanBuild = await collateralSystem.getMaxBuildAmount(
+            account,
             ethers.utils.formatBytes32String(collateralToken),
             expandTo18Decimals(collateralAmount),
             ethers.utils.formatBytes32String(toToken),

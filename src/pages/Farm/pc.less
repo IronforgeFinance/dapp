@@ -10,7 +10,8 @@
                 border: 1px solid #E1AB3B;
                 background: transparent;
                 border-radius: 12px;
-                height: 36px;
+                height: unset;
+                padding: 5px;
 
                 .switch-btn {
                     height: 30px;
@@ -28,9 +29,9 @@
 
                     &.active {
                         &:before {
-                            height: 30px;
                             border-radius: 12px;
-                            width: 92%;
+                            width: 100%;
+                            height: 100%;
                         }
                     }
                 }
@@ -97,7 +98,7 @@
             .farm-pool {
                 display: flex;
                 flex-wrap: wrap;
-                justify-content: space-between;
+                justify-content: space-evenly;
                 width: 1300px;
                 // margin: 50px auto;
                 margin-top: 0px;

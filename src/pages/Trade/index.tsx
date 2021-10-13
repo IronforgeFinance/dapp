@@ -7,6 +7,7 @@ import React, {
     useMemo,
     useCallback,
     useContext,
+    Fragment,
 } from 'react';
 import { useConfig, useExchangeSystem, usePrices } from '@/hooks/useContract';
 import Tokens from '@/config/constants/tokens';
@@ -35,8 +36,6 @@ import {
     useCheckERC20ApprovalStatus,
     useERC20Approve,
 } from '@/hooks/useApprove';
-import PreloadAssetsSuspense from '@/components/PreloadAssetsSuspense';
-import PreloadImages from '@/components/PreloadImages';
 //TODO: for test.从配置中读取
 const TOKEN_OPTIONS = MINT_TOKENS.map((token) => ({ name: token }));
 
@@ -47,9 +46,9 @@ export default () => {
     const { open } = useTokenSelector();
     const { open: openConfirmModal } = useContext(TransitionConfirmContext);
     const { account } = useWeb3React();
-    const [fromToken, setFromToken] = useState(TOKEN_OPTIONS[0].name);
+    const [fromToken, setFromToken] = useState(MINT_TOKENS[0]);
     const [fromAmount, setFromAmount] = useState<number | undefined>();
-    const [toToken, setToToken] = useState(TOKEN_OPTIONS[1].name);
+    const [toToken, setToToken] = useState(MINT_TOKENS[1]);
     const [toAmount, setToAmount] = useState<number | undefined>();
     const [fromBalance, setFromBalance] = useState(0.0);
     const [submitting, setSubmitting] = useState(false);
@@ -87,8 +86,9 @@ export default () => {
         setToApprovedLastUpdated,
     );
 
-    const { requestConnectWallet } = useModel('app', (model) => ({
+    const { requestConnectWallet, mintTokens } = useModel('app', (model) => ({
         requestConnectWallet: model.requestConnectWallet,
+        mintTokens: model.mintTokens,
     }));
 
     const { balance: fromTokenBalance } = useBep20Balance(fromToken);
@@ -224,24 +224,25 @@ export default () => {
     };
 
     const openFromTokenList = useCallback(
-        () => open(TOKEN_OPTIONS, { callback: fromTokenHandler }),
+        () =>
+            open(
+                MINT_TOKENS.map((item) => ({ name: item })),
+                { callback: fromTokenHandler },
+            ),
         [],
     );
 
     const openToTokenList = useCallback(
-        () => open(TOKEN_OPTIONS, { callback: toTokenHandler }),
+        () =>
+            open(
+                MINT_TOKENS.map((item) => ({ name: item })),
+                { callback: toTokenHandler },
+            ),
         [],
     );
 
     return (
-        <PreloadAssetsSuspense>
-            {/* <PreloadImages
-                imageList={[
-                    'http://172.28.10.91:8000/static/trade-swap-roof-sign.8ee0f0a8.png',
-                    'http://172.28.10.91:8000/static/trade-swap-roof-sign-active.e536e325.png',
-                    'http://172.28.10.91:8000/static/trade-swap-roof-ceiling.ea6c8001.png'
-                ]}
-            /> */}
+        <Fragment>
             <div className="shop common-box">
                 <div className="roof" />
                 <div
@@ -386,6 +387,6 @@ export default () => {
                 </div>
             </div>
             <MarketDetail token0={fromToken} token1={toToken} />
-        </PreloadAssetsSuspense>
+        </Fragment>
     );
 };

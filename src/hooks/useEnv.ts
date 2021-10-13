@@ -11,11 +11,11 @@ export const useEnv = () => {
 
     useEffect(() => {
         const handleResize = debounce(() => {
-            console.log(
-                '>> is mobile: %s',
-                /mobile/gi.test(navigator.userAgent) ||
-                    window.innerWidth <= 750,
-            );
+            // console.log(
+            //     '>> is mobile: %s',
+            //     /mobile/gi.test(navigator.userAgent) ||
+            //         window.innerWidth <= 750,
+            // );
 
             setIsMobile(
                 /mobile/gi.test(navigator.userAgent) ||

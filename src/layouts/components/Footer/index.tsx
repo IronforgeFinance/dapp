@@ -23,6 +23,7 @@ import { MobileNavigationContext } from '@/layouts/components/Header/components/
 import useRefresh from '@/hooks/useRefresh';
 import { getTokenPrice } from '@/utils';
 import { PLATFORM_TOKEN } from '@/config';
+import { useDeliveryHistory } from '@/components/DeliveryHistory';
 
 export default () => {
     const intl = useIntl();
@@ -33,6 +34,7 @@ export default () => {
         MobileNavigationContext,
     );
     const { isMobile } = useEnv();
+    const { open: openDeliveryHistory } = useDeliveryHistory();
     const [rate] = useState('0.00%');
     const [showWholeView, setShowWholeView] = useState(false);
 
@@ -63,12 +65,12 @@ export default () => {
     }, [slowRefresh]);
 
     const openHistory = useCallback(() => {
-        openWithTabKey(2);
-        setMobileNavigationVisible(false);
+        openDeliveryHistory();
+        isMobile && setMobileNavigationVisible(false);
     }, []);
     const openMint = useCallback(() => {
         openWithTabKey();
-        setMobileNavigationVisible(false);
+        isMobile && setMobileNavigationVisible(false);
     }, []);
 
     return (

@@ -16,7 +16,13 @@ export const GET_MINTS_FROM_PANCAKE_TOTAL = gql`
 `;
 export const GET_MINTS_FROM_PANCAKE = gql`
     query PancakeMints($offset: Int, $limit: Int, $user: String) {
-        mints(skip: $offset, first: $limit, where: { sender_contains: $user }) {
+        mints(
+            skip: $offset
+            first: $limit
+            where: { sender_contains: $user }
+            orderBy: timestamp
+            orderDirection: desc
+        ) {
             id
             pair {
                 name
@@ -47,7 +53,13 @@ export const GET_BURNS_FROM_PANCAKE_TOTAL = gql`
 `;
 export const GET_BURNS_FROM_PANCAKE = gql`
     query PancakeBurns($offset: Int, $limit: Int, $user: String) {
-        burns(skip: $offset, first: $limit, where: { sender_contains: $user }) {
+        burns(
+            skip: $offset
+            first: $limit
+            where: { sender_contains: $user }
+            orderBy: timestamp
+            orderDirection: desc
+        ) {
             id
             pair {
                 name
@@ -79,7 +91,13 @@ export const GET_MINTS_TOTAL = gql`
 `;
 export const GET_MINTS = gql`
     query Mints($offset: Int, $limit: Int, $user: String) {
-        mints(skip: $offset, first: $limit, where: { user_contains: $user }) {
+        mints(
+            skip: $offset
+            first: $limit
+            where: { user_contains: $user }
+            orderBy: timestamp
+            orderDirection: desc
+        ) {
             id
             user
             collateralCurrency
@@ -103,7 +121,13 @@ export const GET_BURNS_TOTAL = gql`
 `;
 export const GET_BURNS = gql`
     query Burns($offset: Int, $limit: Int, $user: String) {
-        burns(skip: $offset, first: $limit, where: { user_contains: $user }) {
+        burns(
+            skip: $offset
+            first: $limit
+            where: { user_contains: $user }
+            orderBy: timestamp
+            orderDirection: desc
+        ) {
             id
             user
             unstakingAmount
@@ -122,65 +146,78 @@ export const GET_BURNS = gql`
  * @property {Deposit | Withdraw | Harvest | Mint | Trade | Burn} type 操作记录类型
  * @property {HexString} txhash 交易哈希
  */
-export const GET_OPERATIONS_TOTAL = gql`
-    query Operations($user: String, $type: String) {
-        operations(where: { user_contains: $user, type_contains: $type }) {
-            id
-        }
-    }
-`;
-export const GET_OPERATIONS = gql`
-    query Operations($offset: Int, $limit: Int, $user: String, $type: String) {
-        operations(
-            skip: $offset
-            first: $limit
-            where: { user_contains: $user, type_contains: $type }
-        ) {
-            id
-            type
-            fromCurrency
-            fromAmount
-            toCurrency
-            toAmount
-            txhash
-            timestamp
-            status
-        }
-    }
-`;
-
-export const GET_OPERATIONS_FUZZY_TOTAL = gql`
-    query Operations($user: String, $type: [String]) {
-        operations(where: { user_contains: $user, type_in: $type }) {
-            id
-        }
-    }
-`;
-export const GET_OPERATIONS_FUZZY = gql`
-    query OperationsByFilter(
-        $offset: Int
-        $limit: Int
-        $user: String
-        $type: [String]
-    ) {
-        operations(
-            skip: $offset
-            first: $limit
-            where: { user_contains: $user, type_in: $type }
-        ) {
-            id
-            type
-            fromCurrency
-            fromAmount
-            toCurrency
-            toAmount
-            txhash
-            timestamp
-            status
-        }
-    }
-`;
-
+export const GET_OPERATIONS_TOTAL = (isArray = false) =>
+    isArray
+        ? gql`
+              query Operations($user: String, $type: [String]) {
+                  operations(where: { user_contains: $user, type_in: $type }) {
+                      id
+                  }
+              }
+          `
+        : gql`
+              query Operations($user: String, $type: String) {
+                  operations(
+                      where: { user_contains: $user, type_contains: $type }
+                  ) {
+                      id
+                  }
+              }
+          `;
+export const GET_OPERATIONS = (isArray = false) =>
+    isArray
+        ? gql`
+              query Operations(
+                  $offset: Int
+                  $limit: Int
+                  $user: String
+                  $type: [String]
+              ) {
+                  operations(
+                      skip: $offset
+                      first: $limit
+                      where: { user_contains: $user, type_in: $type }
+                      orderBy: timestamp
+                      orderDirection: desc
+                  ) {
+                      id
+                      type
+                      fromCurrency
+                      fromAmount
+                      toCurrency
+                      toAmount
+                      txhash
+                      timestamp
+                      status
+                  }
+              }
+          `
+        : gql`
+              query Operations(
+                  $offset: Int
+                  $limit: Int
+                  $user: String
+                  $type: String
+              ) {
+                  operations(
+                      skip: $offset
+                      first: $limit
+                      where: { user_contains: $user, type_contains: $type }
+                      orderBy: timestamp
+                      orderDirection: desc
+                  ) {
+                      id
+                      type
+                      fromCurrency
+                      fromAmount
+                      toCurrency
+                      toAmount
+                      txhash
+                      timestamp
+                      status
+                  }
+              }
+          `;
 /**
  * @description
  */
@@ -197,6 +234,8 @@ export const GET_MINTS_BY_COLLATERAL = gql`
             skip: $offset
             first: $limit
             where: { user: $user, collateralCurrency_contains: "-" }
+            orderBy: timestamp
+            orderDirection: desc
         ) {
             id
             user

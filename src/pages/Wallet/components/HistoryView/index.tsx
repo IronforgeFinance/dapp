@@ -1,7 +1,7 @@
 import './pc.less';
 import './mobile.less';
 
-import { Tabs, Table, Button, Popover } from 'antd';
+import { Tabs, Table, Button, Popover, TablePaginationConfig } from 'antd';
 import {
     useState,
     useCallback,
@@ -29,9 +29,9 @@ import {
     GET_OPERATIONS,
     GET_BURNS_FROM_PANCAKE,
     GET_MINTS_FROM_PANCAKE,
-    GET_OPERATIONS_FUZZY,
     GET_MINTS_FROM_PANCAKE_TOTAL,
     GET_BURNS_FROM_PANCAKE_TOTAL,
+    GET_OPERATIONS_TOTAL,
 } from '@/subgraph/graphql';
 import { pancakeswapClient, ourClient } from '@/subgraph/clientManager';
 import { TransitionConfirmContext } from '@/components/TransactionConfirm';
@@ -44,6 +44,7 @@ import NoneView from '@/components/NoneView';
 import ISwitch from '@/components/Switch';
 import useMounted from '@/hooks/useMounted';
 import usePagination from '@/hooks/usePagination';
+import { LoadingContext } from '@/contexts/LoadingContext';
 
 const { TabPane } = Tabs;
 
@@ -179,12 +180,8 @@ const HistoryView = () => {
     const [tabKey, setTabKey] = useState('All' as TabType);
     const [operations, setOperations] = useState([]);
     const [checked, setChecked] = useState(true);
+    const { setLoading } = useContext(LoadingContext);
     const mounted = useMounted();
-    const [pagination, setPagination] = useState({
-        current: 1,
-        pageSize: DEFAULT_PAGE_SIZE,
-        total: 0,
-    });
     const exchangeSystem = useExchangeSystem();
 
     const mintsTable = usePagination({
@@ -202,6 +199,42 @@ const HistoryView = () => {
         parser: useParseDataOfPancake('burn'),
         key: 'burns',
         // extVars: { user: '' },
+    });
+
+    /**
+     * @description Calculate request type for filtering.
+     */
+    /** @type {string} */
+    const requestType = useMemo(() => {
+        if (tabKey === 'All') {
+            return '';
+        }
+        if (tabKey === 'Trade') {
+            return 'Exchange';
+        }
+        if (tabKey === 'Farm') {
+            return ['Deposit', 'Withdraw', 'Harvest'];
+        }
+        return tabKey;
+    }, [tabKey]);
+
+    const operationsTable = usePagination({
+        listGql: GET_OPERATIONS(Array.isArray(requestType)),
+        totalGql: GET_OPERATIONS_TOTAL(Array.isArray(requestType)),
+        key: 'operations',
+        asyncParser: async (operations) => {
+            for (let i = 0; i < operations.length; i++) {
+                const item = operations[i];
+                if (item.type === 'Exchange' && item.status === 'pending') {
+                    const res = await fetchIfCanRevert(item.id);
+                    console.log('canRevertRes: ', res);
+                    item.canRevert = res;
+                }
+            }
+            return operations;
+        },
+        parser: parseDataOfOur,
+        extVars: { type: requestType },
     });
 
     const columns = [
@@ -375,94 +408,45 @@ const HistoryView = () => {
         }
     };
 
-    /**
-     * @description Calculate request type for filtering.
-     */
-    /** @type {string} */
-    const requestType = useMemo(() => {
-        if (tabKey === 'All') {
-            return '';
-        }
-        if (tabKey === 'Trade') {
-            return 'Exchange';
-        }
-        if (tabKey === 'Farm') {
-            return ['Deposit', 'Withdraw', 'Harvest'];
-        }
-        return tabKey;
-    }, [tabKey]);
-
-    /**
-     * @description
-     * @returns {void}
-     */
-    const fetchOperations = useCallback(async () => {
-        try {
-            const { data } = await ourClient.query({
-                query: Array.isArray(requestType)
-                    ? GET_OPERATIONS_FUZZY
-                    : GET_OPERATIONS,
-                variables: {
-                    offset: pagination.current - 1,
-                    limit: pagination.pageSize * 0.5,
-                    user: account,
-                    type: requestType,
-                },
-            });
-            for (let i = 0; i < data.operations.length; i++) {
-                const item = data.operations[i];
-                if (item.type === 'Exchange' && item.status === 'pending') {
-                    const res = await fetchIfCanRevert(item.id);
-                    console.log('canRevertRes: ', res);
-                    item.canRevert = res;
-                }
-            }
-            setOperations(data.operations);
-        } catch (error) {
-            console.error(error);
-        }
-    }, [account, requestType]);
-
     useEffect(() => {
         if (!mounted.current) return;
-
-        setPagination({ ...pagination, current: 1 });
+        setLoading(true);
 
         switch (tabKey) {
             case 'All': {
                 mintsTable.reset();
                 burnsTable.reset();
-                fetchOperations();
+                operationsTable.reset();
                 break;
             }
             case 'Mint': {
                 mintsTable.clear();
                 burnsTable.clear();
-                fetchOperations();
+                operationsTable.reset();
                 break;
             }
             case 'Burn': {
                 mintsTable.clear();
                 burnsTable.clear();
-                fetchOperations();
+                operationsTable.reset();
                 break;
             }
             case 'Trade': {
                 mintsTable.clear();
                 burnsTable.clear();
-                fetchOperations();
+                operationsTable.reset();
                 break;
             }
             case 'Farm': {
                 mintsTable.clear();
                 burnsTable.clear();
-                fetchOperations();
+                operationsTable.reset();
                 break;
             }
             case 'Pool': {
                 mintsTable.reset();
                 burnsTable.reset();
-                setOperations([]);
+                operationsTable.clear();
                 break;
             }
         }
@@ -474,23 +458,88 @@ const HistoryView = () => {
      * @description Combine all kinds of datas for unified data format
      */
     const records = useMemo(() => {
-        const handledData = operations.map(parseDataOfOur);
-        return [...handledData, ...mintsTable.list, ...burnsTable.list].sort(
+        return [
+            ...operationsTable.list,
+            ...mintsTable.list,
+            ...burnsTable.list,
+        ].sort(
             ((a, b) => Number(b.dealtime) - Number(a.dealtime)) as (
                 a: HistoryViewProps,
                 b: HistoryViewProps,
             ) => number,
         );
-    }, [mintsTable, burnsTable, operations]);
+    }, [mintsTable, burnsTable, operationsTable]);
 
     const noneStatus = useMemo(() => {
-        if (!account) {
-            return 'noConnection';
+        if (records?.length) return;
+
+        if (tabKey === 'All') {
+            return (
+                mintsTable.noneStatus ??
+                burnsTable.noneStatus ??
+                operationsTable.noneStatus ??
+                undefined
+            );
+        } else if (tabKey === 'Pool') {
+            return mintsTable.noneStatus ?? burnsTable.noneStatus ?? undefined;
+        } else {
+            return operationsTable.noneStatus ?? undefined;
         }
-        if (!records?.length) {
-            return 'noRecords';
+    }, [tabKey, mintsTable, burnsTable, operationsTable]);
+
+    const pagination: TablePaginationConfig = useMemo(() => {
+        if (tabKey === 'All') {
+            return {
+                ...operationsTable.pagination,
+                total:
+                    mintsTable.pagination.total +
+                    burnsTable.pagination.total +
+                    operationsTable.pagination.total,
+            };
+        } else if (tabKey === 'Pool') {
+            return {
+                ...mintsTable.pagination,
+                total:
+                    mintsTable.pagination.total + burnsTable.pagination.total,
+            };
+        } else {
+            return operationsTable.pagination;
         }
-    }, [account, records]);
+    }, [tabKey, mintsTable, burnsTable, operationsTable]);
+
+    const setPagination = useCallback(
+        (pagination) => {
+            if (tabKey === 'All') {
+                mintsTable.setPagination({
+                    ...mintsTable.pagination,
+                    current: pagination.current,
+                });
+                burnsTable.setPagination({
+                    ...burnsTable.pagination,
+                    current: pagination.current,
+                });
+                operationsTable.setPagination({
+                    ...operationsTable.pagination,
+                    current: pagination.current,
+                });
+            } else if (tabKey === 'Pool') {
+                mintsTable.setPagination({
+                    ...mintsTable.pagination,
+                    current: pagination.current,
+                });
+                burnsTable.setPagination({
+                    ...burnsTable.pagination,
+                    current: pagination.current,
+                });
+            } else {
+                operationsTable.setPagination({
+                    ...operationsTable.pagination,
+                    current: pagination.current,
+                });
+            }
+        },
+        [tabKey, mintsTable, burnsTable, operationsTable],
+    );
 
     return (
         <div className="history-view">
@@ -521,7 +570,10 @@ const HistoryView = () => {
                                 columns={columns}
                                 rowKey={(record) => record.id}
                                 dataSource={records}
-                                pagination={false}
+                                pagination={pagination}
+                                onChange={(pagination) =>
+                                    setPagination(pagination)
+                                }
                             />
                         )}
                     </TabPane>

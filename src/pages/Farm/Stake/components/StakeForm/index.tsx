@@ -158,7 +158,7 @@ export default (props: {
                 <div className="input-item-content">
                     <div className="content-label">
                         <p className="right">
-                            {intl.formatMessage({ id: 'balance:' })}
+                            {intl.formatMessage({ id: 'staked' })}:{' '}
                             <span className="balance">
                                 {tabKey === STAKE_TABS.stake
                                     ? lpBalance

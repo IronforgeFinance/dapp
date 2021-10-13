@@ -195,49 +195,8 @@
         }
 
         .common-box {
-            background-image: url('~@/assets/images/common-box-bg.png');
-            background-repeat: no-repeat;
-            background-position: center;
-            background-size: 100% 100%;
-            position: relative;
             filter: drop-shadow(12px 12px 70px #e78231);
-
-            > * {
-                position: relative;
-            }
-
-            // > .input-item {
-            //     position: relative;
-            //     z-index: 2;
-            // }
-
-            &:before {
-                content: '';
-                position: absolute;
-                width: 100%;
-                height: 10%;
-                left: 50%;
-                top: 2px;
-                transform: translateX(-50%);
-                background: url('~@/assets/images/common-box-corner.png') no-repeat;
-                background-size: cover;
-                background-position: center top;
-                pointer-events: none;
-            }
-
-            &:after {
-                content: '';
-                position: absolute;
-                width: 100%;
-                height: 10%;
-                left: 50%;
-                bottom: 0;
-                transform: translateX(-50%);
-                background: url('~@/assets/images/common-box-corner.png') no-repeat;
-                background-size: cover;
-                background-position: center bottom;
-                pointer-events: none;
-            }
+            #bgImage.dinamicBg('~@/assets/images/common-box-bg.png', 50%, 'vertical');
         }
 
         .common-btn-back {
@@ -714,4 +673,7 @@
         }
     }
 
-);; ; ; ;
+);; ;
+;
+;
+;

@@ -108,11 +108,16 @@ const ProgressBar = (props: IProgressBarProps) => {
     const currentRatio = useMemo(() => {
         if (isStakeRatioInitial) {
             return isTrading
-                ? 50 + (increment / (stakeRatioInitial || 1)) * 50
+                ? Math.min(
+                      50 + (increment / (stakeRatioInitial || 1)) * 50,
+                      100,
+                  )
                 : 0;
         }
 
-        return isTrading ? 50 + (increment / (startValue || 1)) * 50 : 0;
+        return isTrading
+            ? Math.min(50 + (increment / (startValue || 1)) * 50, 100)
+            : 0;
     }, [increment, startValue, stakeRatioInitial]);
     const isRaised = useMemo(
         () => initialRatio < currentRatio,
@@ -155,7 +160,7 @@ const ProgressBar = (props: IProgressBarProps) => {
                         }
                         trigger="hover"
                     >
-                        <div className="progress-bar" style={barStyle}>
+                        <div className="progress-bar">
                             <div className="progress-bar-bg">
                                 <div
                                     className={`initial-progress ${
@@ -166,22 +171,36 @@ const ProgressBar = (props: IProgressBarProps) => {
                                         ...barStyle,
                                     }}
                                 >
-                                    <div className="move-bar" />
+                                    <div
+                                        className="move-bar"
+                                        style={barStyle}
+                                    />
                                 </div>
                                 <div
                                     className={`current-progress ${
                                         isRaised && 'is-raised'
                                     }`}
-                                    style={{ width: currentRatio + '%' }}
+                                    style={{
+                                        width:
+                                            (isRaised
+                                                ? currentRatio - initialRatio
+                                                : currentRatio) + '%',
+                                        left: isRaised
+                                            ? `${initialRatio}%`
+                                            : '0',
+                                    }}
                                 >
-                                    <div className="move-bar" />
+                                    <div
+                                        className="move-bar"
+                                        style={barStyle}
+                                    />
                                 </div>
                             </div>
                         </div>
                     </Popover>
                 )}
                 {type !== 'f_ratio' && (
-                    <div className="progress-bar" style={barStyle}>
+                    <div className="progress-bar">
                         <div className="progress-bar-bg">
                             <div
                                 className={`initial-progress ${
@@ -192,15 +211,21 @@ const ProgressBar = (props: IProgressBarProps) => {
                                     ...barStyle,
                                 }}
                             >
-                                <div className="move-bar" />
+                                <div className="move-bar" style={barStyle} />
                             </div>
                             <div
                                 className={`current-progress ${
                                     isRaised && 'is-raised'
                                 }`}
-                                style={{ width: currentRatio + '%' }}
+                                style={{
+                                    width:
+                                        (isRaised
+                                            ? currentRatio - initialRatio
+                                            : 0) + '%',
+                                    left: isRaised ? `${initialRatio}%` : '0',
+                                }}
                             >
-                                <div className="move-bar" />
+                                <div className="move-bar" style={barStyle} />
                             </div>
                         </div>
                     </div>

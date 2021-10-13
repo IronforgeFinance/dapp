@@ -59,9 +59,14 @@ export default (props: IProps) => {
     const { open: checkoutMyDebts } = useMyDebts();
     const { setWords: say } = useNpcDialog();
 
-    const { requestConnectWallet } = useModel('app', (model) => ({
-        requestConnectWallet: model.requestConnectWallet,
-    }));
+    const { requestConnectWallet, collateralTokens, mintTokens } = useModel(
+        'app',
+        (model) => ({
+            collateralTokens: model.collateralTokens,
+            requestConnectWallet: model.requestConnectWallet,
+            mintTokens: model.mintTokens,
+        }),
+    );
 
     const { currencyRatio } = useDataView(toToken);
 

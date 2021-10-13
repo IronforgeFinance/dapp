@@ -55,6 +55,10 @@ export default () => {
         },
     ];
 
+    const { collateralTokens } = useModel('app', (model) => ({
+        ...model,
+    }));
+
     const { isMobile } = useEnv();
     const { open: openClaimRewards } = useClaimRewards();
     const [tabKey, setTabKey] = useState(tabItems[0].key);
@@ -82,16 +86,6 @@ export default () => {
         fetchStakePoolList([{ poolName: 'BS', poolId: POOL_ID }], account);
     }, [account]);
 
-    const computedRatio = useMemo(
-        () => initialRatio * 100,
-        [collateralToken, initialRatio],
-    );
-
-    const { balance: fusdBalance } = useBep20Balance('FUSD');
-
-    const { debtData } = useModel('dataView', (model) => ({
-        debtData: model.stakedData,
-    }));
     const getCollateralDataByToken = async (
         token: string,
         account?: string,

@@ -8,6 +8,7 @@ import useLastUpdated from '@/hooks/useLastUpdated';
 import * as message from '@/components/Notification';
 import Token from '@/config/constants/tokens';
 import useProvider from '@/hooks/useWeb3Provider';
+import { getBep20Contract } from '@/utils/contractHelper';
 
 // Approve erc20
 export const useERC20Approve = (
@@ -53,7 +54,7 @@ export const useCheckERC20ApprovalStatus = (
         const token = Token[address];
         address = token.address[process.env.APP_CHAIN_ID];
     }
-    const erc20 = useERC20(address);
+    const erc20 = getBep20Contract(address);
     useEffect(() => {
         const checkApprovalStatus = async () => {
             try {

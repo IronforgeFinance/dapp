@@ -162,6 +162,7 @@ export default {
     bsTotalEarned: 'BS Total Earned',
     harvest: 'Harvest',
     STAKED: 'STAKED',
+    staked: 'staked',
     txRejected: 'Transaction rejected',
     rejectedByUser: 'Rejected by user',
     txConfirm: 'Confirm Transaction',
