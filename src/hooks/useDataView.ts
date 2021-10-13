@@ -17,6 +17,10 @@ import { useModel } from 'umi';
 import { useInitialRatio } from '@/hooks/useConfig';
 import { getTokenPrice } from '@/utils';
 import useLastUpdated from './useLastUpdated';
+import {
+    getCollateralSystemContract,
+    getDebtSystemContract,
+} from '@/utils/contractHelper';
 const testData = [
     {
         type: ProgressBarType.staked,
@@ -65,8 +69,8 @@ const useDataView = (currency: string) => {
     const [currencyRatio, setCurrencyRatio] = useState(0); //TODO 初始质押率;
     const { account } = useWeb3React();
     const { fastRefresh } = useRefresh();
-    const collateralSystem = useCollateralSystem();
-    const debtSystem = useDebtSystem();
+    const collateralSystem = getCollateralSystemContract();
+    const debtSystem = getDebtSystemContract();
     const provider = useWeb3Provider();
 
     const initialRatio = useInitialRatio(currency);
@@ -76,8 +80,6 @@ const useDataView = (currency: string) => {
     const fetchStakedData = async () => {
         if (account) {
             try {
-                console.log('getUserCollateralInUsd', currency);
-
                 const res = await collateralSystem.getUserCollateralInUsd(
                     account,
                     ethers.utils.formatBytes32String(currency),
@@ -104,8 +106,6 @@ const useDataView = (currency: string) => {
     };
     const fetchLockedData = async () => {
         try {
-            console.log('fetchLockedData: ', currency);
-
             const res = await collateralSystem.userLockedData(
                 account,
                 ethers.utils.formatBytes32String(currency),
@@ -131,8 +131,6 @@ const useDataView = (currency: string) => {
     };
     const fetchDebtData = async () => {
         try {
-            console.log('fetchDebtData: ', currency);
-
             const res = await debtSystem.GetUserDebtBalanceInUsd(
                 account,
                 ethers.utils.formatBytes32String(currency),
@@ -158,8 +156,6 @@ const useDataView = (currency: string) => {
     const fetchCurrencyRatio = async () => {
         if (currency) {
             try {
-                console.log('fetchCurrencyRatio: ', currency);
-
                 const res = await collateralSystem.getRatio(
                     account,
                     ethers.utils.formatBytes32String(currency),
@@ -210,13 +206,13 @@ const useDataView = (currency: string) => {
             fetchDebtData();
             fetchLockedData();
         }
-    }, [account, currency, provider]);
+    }, [account, currency]);
 
     useEffect(() => {
         if (currency && account) {
             fetchCurrencyRatio();
         }
-    }, [currency, account, provider, initialRatio]);
+    }, [currency, account, initialRatio]);
     return { stakedData, fetchStakedData, currencyRatio };
 };
 

@@ -64,6 +64,11 @@ export default {
         56: '',
         1337: localOutput.CollateralSystem,
     },
+    AssetSystem: {
+        97: testnetOutput.AssetSystem,
+        56: '',
+        1337: localOutput.AssetSystem,
+    },
     ExchangeSystem: {
         97: testnetOutput.ExchangeSystem,
         56: '',

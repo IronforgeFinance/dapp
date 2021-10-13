@@ -59,9 +59,14 @@ export default (props: IProps) => {
     const { open: checkoutMyDebts } = useMyDebts();
     const { setWords: say } = useNpcDialog();
 
-    const { requestConnectWallet } = useModel('app', (model) => ({
-        requestConnectWallet: model.requestConnectWallet,
-    }));
+    const { requestConnectWallet, collateralTokens, mintTokens } = useModel(
+        'app',
+        (model) => ({
+            collateralTokens: model.collateralTokens,
+            requestConnectWallet: model.requestConnectWallet,
+            mintTokens: model.mintTokens,
+        }),
+    );
 
     const { currencyRatio } = useDataView(toToken);
 
@@ -103,16 +108,16 @@ export default (props: IProps) => {
     const openFromTokenList = useCallback(
         () =>
             open(
-                MINT_TOKENS.map((item) => ({
+                mintTokens.map((item) => ({
                     name: item,
                 })),
                 { callback: fromTokenHandler },
             ),
-        [],
+        [mintTokens],
     );
     const openToTokenList = useCallback(
-        () => open(COLLATERAL_TOKENS, { callback: toTokenHandler }),
-        [],
+        () => open(collateralTokens, { callback: toTokenHandler }),
+        [collateralTokens],
     );
 
     const collateralSystem = useCollateralSystem();

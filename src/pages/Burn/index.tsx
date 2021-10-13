@@ -28,21 +28,29 @@ import { toFixedWithoutRound } from '@/utils/bigNumber';
 import { IDebtItemInfo } from '@/models/burnData';
 import useWeb3Provider from '@/hooks/useWeb3Provider';
 import useEnv from '@/hooks/useEnv';
+import {
+    getCollateralSystemContract,
+    getDebtSystemContract,
+} from '@/utils/contractHelper';
 
 export default () => {
     const intl = useIntl();
     const { account } = useWeb3React();
-    const collateralSystem = useCollateralSystem();
-    const debtSystem = useDebtSystem();
+    const collateralSystem = getCollateralSystemContract();
+    const debtSystem = getDebtSystemContract();
     const [showForm, setShowForm] = useState(false);
     const [currentDebt, setCurrentDebt] = useState(0);
     const { balance: fusdBalance } = useBep20Balance('FUSD');
     const provider = useWeb3Provider();
     const { isMobile } = useEnv();
 
-    const { requestConnectWallet } = useModel('app', (model) => ({
-        requestConnectWallet: model.requestConnectWallet,
-    }));
+    const { requestConnectWallet, collateralTokens } = useModel(
+        'app',
+        (model) => ({
+            collateralTokens: model.collateralTokens,
+            requestConnectWallet: model.requestConnectWallet,
+        }),
+    );
 
     const { setDebtItemInfos, setTotalDebtInUSD } = useModel(
         'burnData',
@@ -55,9 +63,9 @@ export default () => {
     只能查询某个抵押物currency 对应的debt in usd。
     前端先写死支持的币，然后分别查询debt in usd，并求和; 
     */
-    const getDebtInUSD = async () => {
+    const getDebtInUSD = useCallback(async () => {
         const res = await Promise.all(
-            COLLATERAL_TOKENS.map((token) =>
+            collateralTokens.map((token) =>
                 debtSystem.GetUserDebtBalanceInUsd(
                     account,
                     ethers.utils.formatBytes32String(token.name),
@@ -72,7 +80,7 @@ export default () => {
         }, 0);
         const val = toFixedWithoutRound(totalDebtInUsd, 2);
         setTotalDebtInUSD(val);
-    };
+    }, [collateralTokens]);
 
     const getCollateralDataByToken = async (account, token) => {
         const res = await collateralSystem.getUserCollateral(
@@ -96,7 +104,7 @@ export default () => {
     };
 
     const getDebtInfo = async () => {
-        const tokens = COLLATERAL_TOKENS.map((token) => token.name);
+        const tokens = collateralTokens.map((token) => token.name);
         const res = await Promise.all(
             tokens.map((token) => getCollateralDataByToken(account, token)),
         );
@@ -139,7 +147,7 @@ export default () => {
         if (account) {
             refreshData();
         }
-    }, [account, provider]); //fixme: provider 不是metask时合约接口会报错。
+    }, [account, collateralTokens]); //fixme: provider 不是metask时合约接口会报错。
 
     const onSubmitSuccess = () => {
         setShowForm(false);
