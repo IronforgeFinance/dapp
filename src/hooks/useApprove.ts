@@ -21,7 +21,7 @@ export const useERC20Approve = (
         const token = Token[address];
         address = token.address[process.env.APP_CHAIN_ID];
     }
-    const erc20 = getBep20Contract(address);
+    const erc20 = useERC20(address);
 
     const handleApprove = async () => {
         const tx = await erc20.approve(spender, ethers.constants.MaxUint256);

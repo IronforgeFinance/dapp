@@ -28,12 +28,12 @@ export const MINT_TOKENS = [
 export const DELIVERY_TOKENS = ['lBTCUSD_210924', 'lBTCUSD_211231'];
 
 // TODO 从后台接口或合约中获取.
-export const POOL_TOKENS = [{ poolName: 'BS', poolId: 1 }];
+export const POOL_TOKENS = [{ poolName: 'BS', poolId: 2 }];
 
 // TODO 从后台接口或合约中获取.
 export const LP_TOKENS = [
-    { poolName: 'USDC-IFT', poolId: 2 }, // 前两个池子是BS的池子，lp的name只能写死配置
-    { poolName: 'USDC-ETH', poolId: 3 },
+    { poolName: 'USDC-IFT', poolId: 4 }, // 前两个池子是BS的池子，lp的name只能写死配置
+    { poolName: 'USDC-ETH', poolId: 5 },
 ];
 
 //TODO 配置中读取官方预先添加的流动性lp
