@@ -133,7 +133,7 @@ const DeliveryView = () => {
                     <Table
                         className="custom-table"
                         columns={columns}
-                        rowKey={(record) => record.id}
+                        rowKey={(record) => record.timestamp}
                         dataSource={dataSource}
                         pagination={{ ...pagination, position: [position] }}
                         onChange={(pagination) => setPagination(pagination)}

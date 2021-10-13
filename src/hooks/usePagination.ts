@@ -71,33 +71,28 @@ const usePagination = (props: PaginationProps) => {
     /**@description Fetch data list */
     const fetchList = useCallback(async () => {
         if (account) {
-            try {
-                if (customFetch) {
-                    const { data } = await customFetch(account);
-                    setList(data ? data[key] : []);
-                } else {
-                    let { data } = await client.query({
-                        query: listGql,
-                        variables: {
-                            offset: pagination.current - 1,
-                            limit: pagination.pageSize,
-                            user: account,
-                            ...extVars,
-                        },
-                    });
-                    if (data && data[key]) {
-                        if (asyncParser) {
-                            data[key] = await asyncParser(data[key]);
-                        }
-                        if (parser) {
-                            data[key] = data[key].map(parser);
-                        }
+            if (customFetch) {
+                const { data } = await customFetch(account);
+                setList(data ? data[key] : []);
+            } else {
+                let { data } = await client.query({
+                    query: listGql,
+                    variables: {
+                        offset: pagination.current - 1,
+                        limit: pagination.pageSize,
+                        user: account,
+                        ...extVars,
+                    },
+                });
+                if (data && data[key]) {
+                    if (asyncParser) {
+                        data[key] = await asyncParser(data[key]);
                     }
-                    setList(data ? data[key] : []);
+                    if (parser) {
+                        data[key] = data[key].map(parser);
+                    }
                 }
-            } finally {
-                refreshCount.current += 1;
-                loading && setLoading(false);
+                setList(data ? data[key] : []);
             }
         }
     }, [account, pagination, extVars]);
@@ -142,6 +137,14 @@ const usePagination = (props: PaginationProps) => {
         if (!mounted.current) return;
         setLoading(!!account);
     }, []);
+
+    useEffect(() => {
+        if (!mounted.current) return;
+        if (Array.isArray(list)) {
+            refreshCount.current += 1;
+            loading && setLoading(false);
+        }
+    }, [list]);
 
     useEffect(() => {
         if (!mounted.current) return;
