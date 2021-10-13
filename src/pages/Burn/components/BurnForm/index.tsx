@@ -108,16 +108,16 @@ export default (props: IProps) => {
     const openFromTokenList = useCallback(
         () =>
             open(
-                mintTokens.map((item) => ({
+                MINT_TOKENS.map((item) => ({
                     name: item,
                 })),
                 { callback: fromTokenHandler },
             ),
-        [mintTokens],
+        [],
     );
     const openToTokenList = useCallback(
-        () => open(collateralTokens, { callback: toTokenHandler }),
-        [collateralTokens],
+        () => open(COLLATERAL_TOKENS, { callback: toTokenHandler }),
+        [],
     );
 
     const collateralSystem = useCollateralSystem();

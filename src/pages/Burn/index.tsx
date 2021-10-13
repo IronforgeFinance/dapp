@@ -63,9 +63,9 @@ export default () => {
     只能查询某个抵押物currency 对应的debt in usd。
     前端先写死支持的币，然后分别查询debt in usd，并求和; 
     */
-    const getDebtInUSD = useCallback(async () => {
+    const getDebtInUSD = async () => {
         const res = await Promise.all(
-            collateralTokens.map((token) =>
+            COLLATERAL_TOKENS.map((token) =>
                 debtSystem.GetUserDebtBalanceInUsd(
                     account,
                     ethers.utils.formatBytes32String(token.name),
@@ -80,7 +80,7 @@ export default () => {
         }, 0);
         const val = toFixedWithoutRound(totalDebtInUsd, 2);
         setTotalDebtInUSD(val);
-    }, [collateralTokens]);
+    }
 
     const getCollateralDataByToken = async (account, token) => {
         const res = await collateralSystem.getUserCollateral(
@@ -104,7 +104,7 @@ export default () => {
     };
 
     const getDebtInfo = async () => {
-        const tokens = collateralTokens.map((token) => token.name);
+        const tokens = COLLATERAL_TOKENS.map((token) => token.name);
         const res = await Promise.all(
             tokens.map((token) => getCollateralDataByToken(account, token)),
         );
@@ -147,7 +147,7 @@ export default () => {
         if (account) {
             refreshData();
         }
-    }, [account, collateralTokens]); //fixme: provider 不是metask时合约接口会报错。
+    }, [account]); //fixme: provider 不是metask时合约接口会报错。
 
     const onSubmitSuccess = () => {
         setShowForm(false);

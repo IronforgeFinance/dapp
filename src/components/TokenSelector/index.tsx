@@ -88,7 +88,10 @@ export default () => {
                             token.remainDays,
                         )}
                     >
-                        <TokenIcon name={token.name.toLowerCase()} size={24} />
+                        <TokenIcon
+                            name={token?.name?.toLowerCase()}
+                            size={24}
+                        />
                         <span className="name">
                             {token.name.toUpperCase()}
                             {token.isDeliveryAsset && (

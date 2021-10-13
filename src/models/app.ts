@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import { throttle } from 'lodash';
 import { useCollateralSystem } from '@/hooks/useContract';
 import {
@@ -62,8 +62,9 @@ const useAppModel = () => {
         getWindowScreen();
         window.addEventListener('resize', getWindowScreen, false);
 
-        fetchCollateralTokens();
-        fetchMintTokens();
+        //Deprecated. Too slow.
+        // fetchCollateralTokens();
+        // fetchMintTokens();
         return () => {
             window.removeEventListener('resize', getWindowScreen, false);
         };
