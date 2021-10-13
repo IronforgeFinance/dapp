@@ -248,6 +248,7 @@ export default () => {
             if (account && toToken && collateralAmount) {
                 //TODO 该接口需要有用户地址，否则报错
                 const res = await collateralSystem.getMaxBuildAmount(
+                    account,
                     ethers.utils.formatBytes32String(collateralToken),
                     expandTo18Decimals(collateralAmount),
                     ethers.utils.formatBytes32String(toToken),
@@ -416,6 +417,7 @@ export default () => {
             return;
         }
         const maxCanBuild = await collateralSystem.getMaxBuildAmount(
+            account,
             ethers.utils.formatBytes32String(collateralToken),
             expandTo18Decimals(collateralAmount),
             ethers.utils.formatBytes32String(toToken),
