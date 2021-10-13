@@ -183,9 +183,11 @@ const ProgressBar = (props: IProgressBarProps) => {
                                     style={{
                                         width:
                                             (isRaised
-                                                ? currentRatio - 50
+                                                ? currentRatio - initialRatio
                                                 : currentRatio) + '%',
-                                        left: isRaised ? '50%' : '0',
+                                        left: isRaised
+                                            ? `${initialRatio}%`
+                                            : '0',
                                     }}
                                 >
                                     <div
@@ -217,9 +219,10 @@ const ProgressBar = (props: IProgressBarProps) => {
                                 }`}
                                 style={{
                                     width:
-                                        (isRaised ? currentRatio - 50 : 0) +
-                                        '%',
-                                    left: isRaised ? '50%' : '0',
+                                        (isRaised
+                                            ? currentRatio - initialRatio
+                                            : 0) + '%',
+                                    left: isRaised ? `${initialRatio}%` : '0',
                                 }}
                             >
                                 <div className="move-bar" style={barStyle} />
