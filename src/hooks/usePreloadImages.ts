@@ -32,6 +32,11 @@ const usePreloadImages = () => {
                     'gem-red.e400d6ac.png',
                     'trade-bg.cc7288da.png',
                 ];
+            case '/farm/provide':
+                return [
+                    'farm-header-bg.dd80a50e.png',
+                    'lp-list-bg.9283f4cb.png',
+                ];
             case '/wallet':
                 return [
                     'trade-bg.cc7288da.png',
