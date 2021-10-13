@@ -98,7 +98,6 @@ export default () => {
     const { mintTokens } = useModel('app', (model) => ({
         ...model,
     }));
-    console.log('mintTokens: ', mintTokens);
     const collateralTokenAddress = useMemo(() => {
         if (collateralToken) {
             return Tokens[collateralToken].address[process.env.APP_CHAIN_ID!];
@@ -173,12 +172,15 @@ export default () => {
         // setWords(
         //     collateralToken ? intl.formatMessage({ id: 'ftokenTip' }) : '',
         // );
-        open(collateralTokens, { callback: collateralTokenHandler });
-    }, [intl, collateralTokens]);
+        open(COLLATERAL_TOKENS, { callback: collateralTokenHandler });
+    }, [intl]);
     const openToTokenList = useCallback(() => {
         setWords(toToken ? intl.formatMessage({ id: 'ftokenTip' }) : '');
-        open(mintTokens, { callback: toTokenHandler });
-    }, [intl, mintTokens]);
+        open(
+            MINT_TOKENS.map((item) => ({ name: item })),
+            { callback: toTokenHandler },
+        );
+    }, [intl]);
 
     const { balance: fTokenBalance, refresh: refreshIFTBalance } =
         useBep20Balance(PLATFORM_TOKEN);

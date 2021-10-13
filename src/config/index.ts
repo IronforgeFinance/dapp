@@ -16,7 +16,13 @@ export const COLLATERAL_TOKENS = [
 ];
 
 //TODO 从配置或者合约中获取
-export const MINT_TOKENS = ['FUSD', 'lBTC', 'lBTCUSD_210924', 'lBTCUSD_211231'];
+export const MINT_TOKENS = [
+    'FUSD',
+    'lBTC',
+    'lETH',
+    'lBTCUSD_210924',
+    'lBTCUSD_211231',
+];
 
 //TODO 从配置或者合约中获取
 export const DELIVERY_TOKENS = ['lBTCUSD_210924', 'lBTCUSD_211231'];

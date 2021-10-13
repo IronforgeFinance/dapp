@@ -119,7 +119,7 @@ export default () => {
         };
     };
     const fetchCollateralInfo = async () => {
-        const tokens = collateralTokens.map((token) => token.name);
+        const tokens = COLLATERAL_TOKENS.map((token) => token.name);
         const infos = await Promise.all(
             tokens.map((token) => getCollateralDataByToken(token, account)),
         );
@@ -135,7 +135,7 @@ export default () => {
             return 0;
         }
         const res = await Promise.all(
-            collateralTokens.map((token) =>
+            COLLATERAL_TOKENS.map((token) =>
                 debtSystem.GetUserDebtBalanceInUsd(
                     account,
                     ethers.utils.formatBytes32String(token.name),
@@ -155,7 +155,7 @@ export default () => {
     useEffect(() => {
         fetchCollateralInfo();
         getDebtInUSD();
-    }, [account, collateralTokens]);
+    }, [account]);
 
     return (
         <PreloadAssetsSuspense>

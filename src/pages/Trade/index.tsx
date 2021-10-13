@@ -224,13 +224,21 @@ export default () => {
     };
 
     const openFromTokenList = useCallback(
-        () => open(mintTokens, { callback: fromTokenHandler }),
-        [mintTokens],
+        () =>
+            open(
+                MINT_TOKENS.map((item) => ({ name: item })),
+                { callback: fromTokenHandler },
+            ),
+        [],
     );
 
     const openToTokenList = useCallback(
-        () => open(mintTokens, { callback: toTokenHandler }),
-        [mintTokens],
+        () =>
+            open(
+                MINT_TOKENS.map((item) => ({ name: item })),
+                { callback: toTokenHandler },
+            ),
+        [],
     );
 
     return (
