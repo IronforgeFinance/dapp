@@ -1,69 +1,59 @@
-@media (max-width: 750px) {
-    .btn-scale {
-        min-height: 39.999996185302734px;
-        min-width: 88.00000762939453px;
-        border: 1px solid rgba(225, 171, 59, 0.7);
-        background: #e1ab3b;
-        border: 0.4px solid #e1ab3b;
-        box-sizing: border-box;
-        box-shadow: 3px 4px 4px rgba(252, 209, 68, 0.2);
-        border-radius: 4px;
-        background: #e1ab3b;
-        border: 0.4px solid #e1ab3b;
-        box-sizing: border-box;
-        box-shadow: 3px 4px 4px rgba(252, 209, 68, 0.2);
-        border-radius: 4px;
-        font-family: Poppins;
-        font-style: normal;
-        font-weight: bold;
-        font-size: 26px;
-        line-height: 39px;
-        display: flex;
-        justify-content: center;
-        text-align: center;
+@import url('~@/assets/styles/iron.less');
 
-        position: relative;
+.mobile( {
+        .btn-scale {
+            height: 39.999996185302734px;
+            min-width: 88.00000762939453px;
 
-        > span {
-            padding: 8px 12px;
-            box-sizing: border-box;
-        }
+            font-family: Poppins;
+            font-style: normal;
+            font-weight: 300;
+            font-size: 26px;
+            line-height: 39px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid #E1AB3B;
+            border-radius: 4px;
 
-        &:nth-child(n + 2) {
-            margin-left: 20px;
-        }
+            /* 主色调-黄色 */
 
-        &.active {
-            background: #fcd144;
-            border: 1px solid #fcd144;
-            box-shadow: 3px 4px 4px rgba(252, 209, 68, 0.2);
-            color: #ffffff;
+            color: #E1AB3B;
 
-            &:before {
-                content: '';
-                position: absolute;
-                width: 20%;
-                height: 150%;
-                left: -12px;
-                top: 50%;
-                transform: translateY(-50%);
-                background: url('~@/assets/images/scale-focus.svg') no-repeat;
-                background-size: cover;
-                background-position: left center;
+            position: relative;
+
+            >span {
+                padding: 8px 12px;
+                box-sizing: border-box;
             }
 
-            &:after {
-                content: '';
-                position: absolute;
-                width: 20%;
-                height: 150%;
-                right: -12px;
-                top: 50%;
-                transform: translateY(-50%);
-                background: url('~@/assets/images/scale-focus.svg') no-repeat;
-                background-size: cover;
-                background-position: right center;
+            &:nth-child(n + 2) {
+                margin-left: 20px;
+            }
+
+            &.active {
+                border: 1px solid rgba(225, 171, 59, 0.7);
+                border: 0.4px solid #e1ab3b;
+                background: #e1ab3b;
+                box-sizing: border-box;
+                color: #1C1C1D;
+                font-weight: bold;
+
+                #bgImage.dinamicBg('~@/assets/images/scale-focus.svg', 20%);
+
+                &:before {
+                    height: 175%;
+                    left: -10px;
+                    z-index: 1;
+                }
+
+                &:after {
+                    height: 175%;
+                    right: -10px;
+                    z-index: 1;
+                }
             }
         }
     }
-}
+
+);

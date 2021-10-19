@@ -10,6 +10,7 @@
             justify-content: flex-start;
             transition: all 0.2s;
             width: 750px;
+            z-index: -1;
 
             &.fix-bottom {
                 position: fixed;
@@ -87,14 +88,8 @@
                 .words {
                     #bgImage.dinamicBg('~@/assets/images/npc-dialog-words-bg.png', 50%, 'vertical');
                     margin: 0;
-
-                    &:before {
-                        background-size: 100% 170%;
-                    }
-
-                    &:after {
-                        background-size: 100% 150%;
-                    }
+                    z-index: 1;
+                    min-height: 500px;
 
                     margin-bottom: 100px;
 
