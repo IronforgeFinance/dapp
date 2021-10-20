@@ -1,18 +1,21 @@
+import { unmountComponentAtNode } from 'react-dom';
 import { useImage } from 'react-image';
 
 interface PreloadImagesProps {
     image: string;
-    onLoad(any?): void;
 }
 
 const PreloadImage = (props: PreloadImagesProps) => {
-    const { image, onLoad } = props;
+    const { image } = props;
     const { src } = useImage({ srcList: image });
 
     return (
         <img
             src={src}
-            onLoad={onLoad}
+            onLoad={(event) => {
+                const node: HTMLElement = event.currentTarget;
+                unmountComponentAtNode(node);
+            }}
             style={{
                 width: 0,
                 height: 0,

@@ -13,30 +13,13 @@ export const generateImageList = (files: string[]) => {
 
 const PreloadAssets = () => {
     const { preloadImages } = usePreloadImages();
-    const { path } = useEnv();
-    const [doneAssetsLen, setDoneAssetsLen] = useState(0);
     const assets = generateImageList(preloadImages);
-
-    useEffect(() => {
-        setDoneAssetsLen(0);
-    }, [path]);
-
-    const canCancelNodes = useMemo(() => {
-        return doneAssetsLen === preloadImages.length;
-    }, [doneAssetsLen]);
 
     return (
         <Fragment>
-            {!canCancelNodes &&
-                assets.map((url) =>
-                    url ? (
-                        <PreloadImage
-                            key={url}
-                            image={url}
-                            onLoad={() => setDoneAssetsLen(doneAssetsLen + 1)}
-                        />
-                    ) : null,
-                )}
+            {assets.map((url) =>
+                url ? <PreloadImage key={url} image={url} /> : null,
+            )}
         </Fragment>
     );
 };
