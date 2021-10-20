@@ -1,5 +1,5 @@
-import { useMemo, useState } from 'react';
-import useEnv from './useEnv';
+import useEnv from '@/hooks/useEnv';
+import { useMemo } from 'react';
 
 const usePreloadImages = () => {
     const { path, isMobile } = useEnv();

@@ -1,20 +1,13 @@
 import './pc.less';
 import './mobile.less';
 
-import React, {
-    useState,
-    useEffect,
-    useMemo,
-    useContext,
-    Fragment,
-} from 'react';
+import { useState, useEffect, Fragment } from 'react';
 import useEagerConnect from '@/hooks/useEagerConnect';
 import Blacksmith from '@/assets/images/blacksmith.png';
 import Merchant from '@/assets/images/merchant.png';
 import { useInitialRatio } from '@/hooks/useConfig';
 import { COLLATERAL_TOKENS, PLATFORM_TOKEN } from '@/config';
 import { useBep20Balance } from '@/hooks/useTokenBalance';
-import PreloadAssetsSuspense from '@/components/PreloadAssetsSuspense';
 import TabGroup from '@/components/TabGroup';
 import { useClaimRewards } from '@/components/ClaimRewards';
 import { useIntl, useModel } from 'umi';
@@ -158,12 +151,7 @@ export default () => {
     }, [account]);
 
     return (
-        <PreloadAssetsSuspense>
-            {/* <PreloadImages
-                imageList={[
-                    'http://zoneccc.nat300.top/static/blacksmith.0d9279a9.png',
-                ]}
-            /> */}
+        <Fragment>
             {!isMobile && (
                 <Fragment>
                     <video
@@ -313,6 +301,6 @@ export default () => {
                     </div>
                 </div>
             )}
-        </PreloadAssetsSuspense>
+        </Fragment>
     );
 };

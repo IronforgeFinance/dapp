@@ -1,21 +1,18 @@
-import React, { useState, useMemo, useRef, useEffect, Fragment } from 'react';
 import { useImage } from 'react-image';
 
 interface PreloadImagesProps {
     image: string;
+    onLoad(any?): void;
 }
 
-export const generateImageList = (files: string[]) => {
-    return files.map((file) => `${location.origin}/static/${file}`);
-};
-
-const PreloadImages = (props: PreloadImagesProps) => {
-    const { image } = props;
+const PreloadImage = (props: PreloadImagesProps) => {
+    const { image, onLoad } = props;
     const { src } = useImage({ srcList: image });
 
     return (
         <img
             src={src}
+            onLoad={onLoad}
             style={{
                 width: 0,
                 height: 0,
@@ -26,9 +23,8 @@ const PreloadImages = (props: PreloadImagesProps) => {
         />
     );
 };
-
-PreloadImages.defaultProps = {
+PreloadImage.defaultProps = {
     imageList: [],
 };
 
-export default PreloadImages;
+export default PreloadImage;
