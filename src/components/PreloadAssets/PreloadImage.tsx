@@ -1,10 +1,10 @@
 import { useImage } from 'react-image';
 
-interface PreloadImagesProps {
+interface PreloadImageProps {
     image: string;
 }
 
-const PreloadImage = (props: PreloadImagesProps) => {
+const PreloadImage = (props: PreloadImageProps) => {
     const { image } = props;
     useImage({ srcList: image });
 

@@ -1,11 +1,11 @@
 import { unmountComponentAtNode } from 'react-dom';
 import { useImage } from 'react-image';
 
-interface PreloadImagesProps {
+interface PreloadImageProps {
     image: string;
 }
 
-const PreloadImage = (props: PreloadImagesProps) => {
+const PreloadImage = (props: PreloadImageProps) => {
     const { image } = props;
     const { src } = useImage({ srcList: image });
 
