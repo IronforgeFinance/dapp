@@ -2,16 +2,14 @@
     .flip-container {
         perspective: 1000px;
         width: 100vw;
-        // height: 520px;
+        height: 948.16px;
+
+        &:nth-child(n + 2) {
+            margin-top: 88px;
+        }
 
         &.flipper-over .flipper {
             transform: rotateY(180deg);
-        }
-
-        .front,
-        .back {
-            // width: 400px;
-            // height: 520px;
         }
 
         /* flip speed goes here */
