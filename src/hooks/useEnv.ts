@@ -17,10 +17,10 @@ export const useEnv = () => {
             //         window.innerWidth <= 750,
             // );
 
-            setIsMobile(
+            const yes =
                 /mobile/gi.test(navigator.userAgent) ||
-                    window.innerWidth <= 750,
-            );
+                window.innerWidth <= 750;
+            setIsMobile(yes);
         }, 200);
 
         // Add event listener
