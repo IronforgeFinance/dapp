@@ -18,6 +18,12 @@ export default defineConfig({
             mediaQuery: true,
             exclude: /node_modules|antd|(.*)pc.less/i,
         }),
+        // pxToViewPort({
+        //     viewportWidth: 1920,
+        //     viewportUnit: 'vw',
+        //     mediaQuery: true,
+        //     exclude: /node_modules|antd|(.*)mobile.less/i,
+        // }),
     ],
     chainWebpack(config, { webpack }) {
         // Set alias
