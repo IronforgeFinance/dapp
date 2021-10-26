@@ -3,7 +3,6 @@ import './mobile.less';
 
 import { ReactNode, Suspense } from 'react';
 import { useState, useMemo, useEffect, Fragment } from 'react';
-import usePreloadImages from './usePreloadImages';
 import useEnv from '@/hooks/useEnv';
 import PreloadImage from './PreloadImage';
 
@@ -12,7 +11,18 @@ export const generateImageList = (files: string[]) => {
 };
 
 const PreloadAssets = () => {
-    const { preloadImages } = usePreloadImages();
+    const { path, isMobile } = useEnv();
+
+    const preloadImages = useMemo(() => {
+        const images = isMobile
+            ? require('./mobile.json')
+            : require('./pc.json');
+        const commonFiles = images.common;
+        const pageFiles = images.pages[path];
+
+        return commonFiles.concat(pageFiles);
+    }, [path]);
+
     const assets = generateImageList(preloadImages);
 
     return (
