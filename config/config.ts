@@ -1,7 +1,8 @@
 import { defineConfig } from 'umi';
-import routes from './routes';
 import path from 'path';
+import routes from './routes';
 import pxToViewPort from 'postcss-px-to-viewport';
+import PreloadPlugin from '../webpack/preloadPlugin';
 
 export default defineConfig({
     favicon: 'favicon.ico',
@@ -31,6 +32,18 @@ export default defineConfig({
             '@iron',
             path.join(__dirname, '../src/components'),
         );
+
+        // Output preload json
+        config
+            .plugin(PreloadPlugin.name)
+            .use(PreloadPlugin)
+            .end()
+            .plugin(webpack.WatchIgnorePlugin.name)
+            .use(
+                new webpack.WatchIgnorePlugin([
+                    path.resolve(__dirname, '..', 'src/preload*.json'),
+                ]),
+            );
     },
     locale: {
         default: 'en-US',

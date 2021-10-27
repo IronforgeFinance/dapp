@@ -19,7 +19,7 @@ const PreloadAssets = () => {
      */
     const preloadImages = useMemo(() => {
         try {
-            const images = require('@/preload.json');
+            const images = require('@/preload.hash.json');
             const device = isMobile ? 'mobile' : 'pc';
             const commonFiles = images[device].common;
             const pageFiles = images[device].pages[path];
