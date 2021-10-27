@@ -13,14 +13,21 @@ export const generateImageList = (files: string[]) => {
 const PreloadAssets = () => {
     const { path, isMobile } = useEnv();
 
+    /**
+     * @todo 配置化
+     * @todo 脚本生成
+     */
     const preloadImages = useMemo(() => {
-        const images = isMobile
-            ? require('./mobile.json')
-            : require('./pc.json');
-        const commonFiles = images.common;
-        const pageFiles = images.pages[path];
-
-        return commonFiles.concat(pageFiles);
+        try {
+            const images = require('@/preload.json');
+            const device = isMobile ? 'mobile' : 'pc';
+            const commonFiles = images[device].common;
+            const pageFiles = images[device].pages[path];
+            return commonFiles.concat(pageFiles);
+        } catch (error) {
+            console.warn(error);
+            return [];
+        }
     }, [path]);
 
     const assets = generateImageList(preloadImages);
