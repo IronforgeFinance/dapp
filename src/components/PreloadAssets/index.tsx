@@ -13,10 +13,6 @@ export const generateImageList = (files: string[]) => {
 const PreloadAssets = () => {
     const { path, isMobile } = useEnv();
 
-    /**
-     * @todo 配置化
-     * @todo 脚本生成
-     */
     const preloadImages = useMemo(() => {
         try {
             const images = require('@/preload.hash.json');
