@@ -34,16 +34,9 @@ export default defineConfig({
         );
 
         // Output preload json
-        config
-            .plugin(PreloadPlugin.name)
-            .use(PreloadPlugin)
-            .end()
-            .plugin(webpack.WatchIgnorePlugin.name)
-            .use(
-                new webpack.WatchIgnorePlugin([
-                    path.resolve(__dirname, '..', 'src/preload*.json'),
-                ]),
-            );
+        config.when(process.env.MODE === 'compile', (config) => {
+            config.plugin(PreloadPlugin.name).use(PreloadPlugin);
+        });
     },
     locale: {
         default: 'en-US',
