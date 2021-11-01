@@ -23,22 +23,22 @@
             }
 
             .dialog-box {
-                // height: 628px;
-                width: 1047px;
+                // height: adaptToPc(628);
+                width: adaptToPc(1047);
                 display: flex;
                 align-items: flex-end;
                 justify-content: flex-start;
                 position: relative;
-                padding-bottom: 200px;
-                padding-left: 388px;
+                padding-bottom: adaptToPc(200);
+                padding-left: adaptToPc(388);
 
                 &.is-right {
-                    padding-bottom: 230px;
-                    padding-left: 380px;
+                    padding-bottom: adaptToPc(230);
+                    padding-left: adaptToPc(380);
                 }
 
                 .npc {
-                    width: 626px;
+                    width: adaptToPc(626);
                     object-fit: contain;
                     flex-shrink: 0;
                     position: absolute;
@@ -46,34 +46,27 @@
                     left: 0;
 
                     &.is-right {
-                        height: 510px;
-                        width: 516px;
+                        height: adaptToPc(510);
+                        width: adaptToPc(516);
                     }
                 }
 
                 .words {
                     #bgImage.dinamicBg('~@/assets/images/npc-dialog-words-bg.png', 50%, 'vertical');
 
-                    &:before {
-                        background-size: 100% 170%;
-                    }
-
-                    &:after {
-                        background-size: 100% 150%;
-                    }
-
-                    width: 517px;
-                    max-width: 517px;
-                    min-height: 220px;
-                    padding: 50px 66px 100px 56px;
+                    width: adaptToPc(517);
+                    max-width: adaptToPc(517);
+                    min-height: adaptToPc(220);
+                    padding: adaptToPc(50) adaptToPc(66) adaptToPc(100) adaptToPc(56);
                     box-sizing: border-box;
 
                     font-family: Poppins;
                     font-style: normal;
                     font-weight: 300;
-                    font-size: 16px;
+                    font-size: adaptToPc(16);
                     line-height: 174%;
-                    /* or 28px */
+                    z-index: 1;
+                    /* or adaptToPc(28) */
 
                     text-align: justify;
                     position: relative;
@@ -86,16 +79,16 @@
                     > a {
                         font-style: normal;
                         font-weight: bold;
-                        font-size: 15px;
-                        line-height: 22px;
+                        font-size: adaptToPc(15);
+                        line-height: adaptToPc(22);
                         display: flex;
                         align-items: center;
                         justify-content: center;
                         color: #ac4c06;
-                        min-width: 80px;
+                        min-width: adaptToPc(80);
                         position: absolute;
-                        right: 66px;
-                        bottom: 86px;
+                        right: adaptToPc(66);
+                        bottom: adaptToPc(86);
                         z-index: 3;
                     }
 

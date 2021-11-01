@@ -9,6 +9,7 @@
 
 # production
 dist
+preload.hash.json
 
 # misc
 .DS_Store

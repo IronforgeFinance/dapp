@@ -1,0 +1,82 @@
+{
+    "pc": {
+        "common": [
+            "common-box-bg.png",
+            "common-btn-red.png",
+            "mint-select-token-dialog.png",
+            "header-logo.png",
+            "npc-dialog-mint-person.png",
+            "icon-axe.png",
+            "icon-lock.png",
+            "icon-coin.png",
+            "icon-magic-bottle.png"
+        ],
+        "pages": {
+            "/": ["blacksmith.png", "merchant.png", "home-bg.jpg"],
+            "/mint": ["mint_bg.jpg"],
+            "/burn": ["burn_bg.jpg"],
+            "/trade": [
+                "trade-swap-roof-sign.png",
+                "trade-swap-roof-sign-active.png",
+                "trade-swap-roof-ceiling.png",
+                "trade-market-detail-bg.png",
+                "trade-bg.png"
+            ],
+            "/farm": [
+                "farm-header-bg.png",
+                "pool-item-bg.png",
+                "gem-yellow.png",
+                "gem-red.png",
+                "trade-bg.png"
+            ],
+            "/farm/provide": ["farm-header-bg.png", "lp-list-bg.png"],
+            "/wallet": [
+                "trade-bg.png",
+                "big-board-bg.png",
+                "big-board-tab-bg.png",
+                "big-board-tab-bg-active.png"
+            ]
+        }
+    },
+    "mobile": {
+        "common": [
+            "header-logo.png",
+            "footer-icon-history.png",
+            "footer-icon-52days.png",
+            "mobile-form-box-bg.png",
+            "icon-axe.png",
+            "icon-lock.png",
+            "icon-coin.png",
+            "icon-magic-bottle.png",
+            "mint-select-token-dialog.png",
+            "common-btn-red.png",
+            "common-btn-yellow.png"
+        ],
+        "pages": {
+            "/": ["blacksmith.png", "common-box-bg.png"],
+            "/mint": ["mobile-mint-bg.png"],
+            "/burn": ["mobile-burn-bg.jpg"],
+            "/trade": [
+                "trade-swap-roof-sign.png",
+                "trade-swap-roof-sign-active.png",
+                "trade-swap-roof-ceiling.png",
+                "trade-market-detail-bg.png",
+                "mobile-trade-bg.jpg"
+            ],
+            "/farm": [
+                "farm-header-bg.png",
+                "pool-item-bg.png",
+                "gem-yellow.png",
+                "gem-red.png",
+                "trade-bg.png"
+            ],
+            "/farm/provide": ["farm-header-bg.png", "lp-list-bg.png"],
+            "/wallet": [
+                "trade-bg.png",
+                "big-board-bg.png",
+                "big-board-tab-bg.png",
+                "big-board-tab-bg-active.png"
+            ]
+        }
+    }
+}

@@ -1,7 +1,7 @@
 import './pc.less';
 import './mobile.less';
 
-import { Fragment, useEffect, useRef } from 'react';
+import { Fragment, useEffect, useRef, useMemo } from 'react';
 import { IRouteComponentProps } from 'umi';
 import CommonHeader from './components/Header';
 import CommonFooter from './components/Footer';
@@ -25,28 +25,24 @@ import ClaimRewardsContextProvider from '@/components/ClaimRewards/provider';
 import LangContextProvider from './components/LangSwitcher/provider';
 import TokenSelectorProvider from '@/components/TokenSelector/provider';
 import DeliveryHistory from '@/components/DeliveryHistory';
-import PreloadImage, { generateImageList } from '@/components/PreloadImage';
-import PreloadAssetsSuspense from '@/components/PreloadAssetsSuspense';
-import usePreloadImages from '@/hooks/usePreloadImages';
+import PreloadAssets from '@/components/PreloadAssets';
+import Loading from '@/components/Loading';
 
-export default function Layout({
-    children,
-    location,
-    route,
-    history,
-    match,
-}: IRouteComponentProps) {
+export default function Layout({ children, location }: IRouteComponentProps) {
     const { isMobile, path } = useEnv();
     const { account } = useWeb3React();
     const { clearDataView } = useModel('dataView', (model) => ({
         clearDataView: model.clearDataView,
     }));
     const player = useRef<HTMLVideoElement>(null);
-    const { preloadImages } = usePreloadImages();
 
     const isDev = () => {
         return process.env.NODE_ENV === 'development';
     };
+
+    const conatinerClass = useMemo(() => {
+        return `${path.slice(1).replace('/', '-') || 'home'}-container`;
+    }, [path]);
 
     useEffect(() => {
         if (!isMobile) {
@@ -70,10 +66,8 @@ export default function Layout({
     }, [location, account]);
     return (
         <div className="container">
-            <PreloadAssetsSuspense>
-                {generateImageList(preloadImages).map((url) => (
-                    <PreloadImage key={url} image={url} />
-                ))}
+            <PreloadAssets.Suspense loading={<Loading />}>
+                <PreloadAssets />
                 {!isMobile && (
                     <video
                         loop
@@ -130,22 +124,13 @@ export default function Layout({
 
                                                         <TransactionConfirm>
                                                             <section
-                                                                className={`${
-                                                                    path
-                                                                        .slice(
-                                                                            1,
-                                                                        )
-                                                                        .replace(
-                                                                            '/',
-                                                                            '-',
-                                                                        ) ||
-                                                                    'home'
-                                                                }-container`}
+                                                                className={
+                                                                    conatinerClass
+                                                                }
                                                             >
                                                                 {isMobile && (
                                                                     <Fragment>
                                                                         <TokenSelector />
-                                                                        <NpcDialog />
                                                                     </Fragment>
                                                                 )}
                                                                 {children}
@@ -164,7 +149,7 @@ export default function Layout({
                         </LoadingContextProvider>
                     </TokenSelectorProvider>
                 </LangContextProvider>
-            </PreloadAssetsSuspense>
+            </PreloadAssets.Suspense>
         </div>
     );
 }

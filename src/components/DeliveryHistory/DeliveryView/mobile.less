@@ -1,11 +1,114 @@
 @import url('~@/assets/styles/iron.less');
 
 .mobile( {
-        .mint-view {
-            .ant-table-tbody {
-                .ant-table-cell {
-                    &:nth-child(n + 4) {
-                        vertical-align: baseline;
+        .delivery-view {
+            .switch-wrapper {
+                display: flex;
+                justify-content: flex-end;
+                margin-right: 50px;
+
+                .iron-switch {
+                    position: relative;
+                    overflow: hidden;
+                    border-radius: 22px;
+
+                    .switch-btn {
+                        min-width: 80px;
+                        font-size: 22px;
+                        line-height: 33px;
+                        color: #460d12;
+
+                        &:before {
+                            border-radius: 22px;
+                        }
+                    }
+
+                    &:before {
+                        content: '';
+                        background: rgba(225, 171, 59, 0.4);
+                        position: absolute;
+                        left: 0;
+                        top: 0;
+                        width: 100%;
+                        height: 100%;
+                        mix-blend-mode: multiply;
+                    }
+                }
+            }
+
+            .f-asset {
+                display: flex;
+                flex-wrap: wrap;
+                min-width: 180px;
+
+                .token-icon {
+                    width: 20px !important;
+                    height: 20px !important;
+                }
+
+                > span {
+                    margin-left: 10px;
+                    font-family: Poppins;
+                    font-style: normal;
+                    font-weight: normal;
+                    font-size: 18px;
+                    line-height: 27px;
+                    display: flex;
+                    align-items: center;
+                    color: #292725;
+                }
+
+                .rest-days {
+                    display: flex;
+                    align-items: center;
+                    flex-basis: 100%;
+                    margin-top: 3px;
+
+                    span {
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        height: 20px;
+                        min-width: 60px;
+                        word-break: keep-all;
+                        border-radius: 1px;
+                        background: #AC4C06;
+                        border-radius: 1px;
+                        font-family: Poppins;
+                        font-style: normal;
+                        font-weight: 300;
+                        font-size: 18px;
+                        line-height: 27px;
+                        color: #FFFFFF;
+                        margin-right: 10px;
+                    }
+                }
+            }
+
+            .delivery-value {
+                display: flex;
+                flex-direction: column;
+                min-width: 150px;
+
+                span {
+                    &:first-child {
+                        font-family: Poppins;
+                        font-style: normal;
+                        font-weight: bold;
+                        font-size: 18px;
+                        line-height: 27px;
+                        display: flex;
+                        align-items: center;
+                        color: rgba(172, 76, 6, 0.8);
+                    }
+
+                    &:last-child {
+                        font-family: Poppins;
+                        font-style: normal;
+                        font-weight: 300;
+                        font-size: 18px;
+                        line-height: 27px;
+                        color: rgba(41, 39, 37, 0.8);
                     }
                 }
             }

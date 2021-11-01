@@ -17,7 +17,7 @@ const Overlay = (props: IOverlayProps) => {
         const body = document.querySelector('body');
         visable
             ? (body.style.position = 'fixed')
-            : (body.style.position = 'unset');
+            : body.removeAttribute('style');
     }, [visable]);
 
     return (

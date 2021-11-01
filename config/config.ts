@@ -1,7 +1,8 @@
 import { defineConfig } from 'umi';
-import routes from './routes';
 import path from 'path';
+import routes from './routes';
 import pxToViewPort from 'postcss-px-to-viewport';
+import PreloadPlugin from '../webpack/preloadPlugin';
 
 export default defineConfig({
     favicon: 'favicon.ico',
@@ -18,6 +19,12 @@ export default defineConfig({
             mediaQuery: true,
             exclude: /node_modules|antd|(.*)pc.less/i,
         }),
+        // pxToViewPort({
+        //     viewportWidth: 1920,
+        //     viewportUnit: 'vw',
+        //     mediaQuery: true,
+        //     exclude: /node_modules|antd|(.*)mobile.less/i,
+        // }),
     ],
     chainWebpack(config, { webpack }) {
         // Set alias
@@ -25,6 +32,11 @@ export default defineConfig({
             '@iron',
             path.join(__dirname, '../src/components'),
         );
+
+        // Output preload json
+        config.when(process.env.MODE === 'compile', (config) => {
+            config.plugin(PreloadPlugin.name).use(PreloadPlugin);
+        });
     },
     locale: {
         default: 'en-US',

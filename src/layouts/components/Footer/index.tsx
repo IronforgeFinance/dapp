@@ -24,19 +24,18 @@ import useRefresh from '@/hooks/useRefresh';
 import { getTokenPrice } from '@/utils';
 import { PLATFORM_TOKEN } from '@/config';
 import { useDeliveryHistory } from '@/components/DeliveryHistory';
+import { useMobileNavigation } from '../Header/components/MobileNavigation';
 
 export default () => {
     const intl = useIntl();
     const { slowRefresh } = useRefresh();
     const [price, setPrice] = useState(0);
     const { openWithTabKey } = useHistoryBoard();
-    const { setVisible: setMobileNavigationVisible } = useContext(
-        MobileNavigationContext,
-    );
     const { isMobile } = useEnv();
     const { open: openDeliveryHistory } = useDeliveryHistory();
     const [rate] = useState('0.00%');
     const [showWholeView, setShowWholeView] = useState(false);
+    const { setVisible: setMobileNavigationVisible } = useMobileNavigation();
 
     const filterList = useMemo(
         () =>
@@ -67,11 +66,11 @@ export default () => {
     const openHistory = useCallback(() => {
         openDeliveryHistory();
         isMobile && setMobileNavigationVisible(false);
-    }, []);
+    }, [isMobile]);
     const openMint = useCallback(() => {
         openWithTabKey();
         isMobile && setMobileNavigationVisible(false);
-    }, []);
+    }, [isMobile]);
 
     return (
         <Fragment>

@@ -117,19 +117,22 @@ const usePagination = (props: PaginationProps) => {
 
     /**@description Reset data */
     const reset = useCallback(() => {
-        setList([]);
+        setList(null);
+        setLoading(true);
         setPagination({
             current: 1,
             pageSize: size || DEFAULT_PAGE_SIZE,
             total: 0,
         });
+        refreshCount.current = 0;
         isClear.current = false;
         fetchListTotal();
     }, [list, extVars]);
 
     /**@description Clear data */
     const clear = useCallback(() => {
-        setList([]);
+        setList(null);
+        setLoading(true);
         isClear.current = true;
     }, [pagination, list]);
 

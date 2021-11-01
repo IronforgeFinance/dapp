@@ -9,6 +9,7 @@ import { TokenIcon } from '@/components/Icon';
 import { useIntl } from 'umi';
 import { getTokenPrice } from '@/utils/index';
 import { TokenSelectorContext } from './provider';
+import useEnv from '@/hooks/useEnv';
 
 export const useTokenSelector = () => {
     return useContext(TokenSelectorContext);
@@ -17,6 +18,7 @@ export const useTokenSelector = () => {
 export default () => {
     const intl = useIntl();
     const [choosedToken, setChoosedToken] = useState('');
+    const { isMobile } = useEnv();
     const { setTokenList, openOption, tokenList, visible, close } =
         useContext(TokenSelectorContext);
 
@@ -94,6 +96,7 @@ export default () => {
                         />
                         <span className="name">
                             {token.name.toUpperCase()}
+                            {isMobile && <br />}
                             {token.isDeliveryAsset && (
                                 <span className="remain-days">
                                     {token.remainDays}
