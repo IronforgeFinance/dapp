@@ -130,6 +130,6 @@ export const getPlatformTokenContract = (
     signer?: ethers.Signer | ethers.providers.Provider,
 ) => {
     const chainId = process.env.APP_CHAIN_ID as string;
-    const address = Tokens.BS.address[chainId];
+    const address = Tokens.BST.address[chainId];
     return getContract(PlatformToken, address, signer);
 };

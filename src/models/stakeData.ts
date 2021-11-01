@@ -16,7 +16,7 @@ import { LP_TOKENS, PLATFORM_TOKEN } from '@/config';
 
 // apy = ap/totalAp * rewardPerBlock
 export interface IStakePool {
-    name: string; // USDC-IFT
+    name: string; // USDC-BST
     lpAddress: string;
     lpPrice: number;
     apy: number;
@@ -117,7 +117,7 @@ const useStakeDataModel = () => {
         console.log('lpPrice of: ', poolName, lpPrice);
         const totalStakedLpVal = lpPrice * totalStakedVal;
         const totalStaked = Number((totalStakedVal * lpPrice).toFixed(2));
-        const rewardPrice = await getTokenPrice('IFT');
+        const rewardPrice = await getTokenPrice('BST');
         const BSC_BLOCK_TIME = 5; // 5 seconds per block
         // rate per day
         const apr =

@@ -491,7 +491,7 @@ export default (props: IProps) => {
                 amount: unstakeAmount,
             },
             bsToken: {
-                name: 'BS',
+                name: 'BST',
                 price: Number((lockedPrice * unlockedAmount).toFixed(2)),
                 amount: unlockedAmount,
             },

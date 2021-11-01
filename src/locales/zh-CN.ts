@@ -44,7 +44,7 @@ export default {
     'mint.selectCasting': '选择铸造',
     'mint.locked': '锁定',
     'mint.collateral': '质押物',
-    'mint.ftoken': 'BS',
+    'mint.ftoken': 'BST',
     'mint.approve': '授权铸币',
     'mint.cast': '铸造',
     'mint.fassets': 'F资产',
@@ -110,9 +110,9 @@ export default {
     'liquidity.withdraw.willreceive': '将会获得',
     'liquidity.withdraw.approve': '授权提现',
 
-    'liquidity.bs.tvl': 'BS TVL',
-    'liquidity.bs.circulatingVal': 'BS Circulating Value',
-    'liquidity.bs.totalEarned': 'BS Total Earned',
+    'liquidity.bs.tvl': 'BST TVL',
+    'liquidity.bs.circulatingVal': 'BST Circulating Value',
+    'liquidity.bs.totalEarned': 'BST Total Earned',
 
     'liquidity.yourLiquidity': 'Your Liquidity',
     'liquidity.yourLiquidityDesc':
@@ -203,7 +203,7 @@ export default {
     get: 'Get ',
     APY: 'APY',
     earn: 'EARN',
-    bsTotalEarned: 'BS Total Earned',
+    bsTotalEarned: 'BST Total Earned',
     harvest: 'Harvest',
     STAKED: 'STAKED',
     txRejected: '交易已取消',

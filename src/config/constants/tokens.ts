@@ -41,8 +41,8 @@ export default {
         decimals: 18,
         projectLink: 'https://ethereum.org/en/',
     },
-    IFT: {
-        symbol: 'IFT',
+    BST: {
+        symbol: 'BST',
         address: {
             56: '0x55d398326f99059fF775485246999027B3197955', //TODO usdt for test
             97: testnetOutput.buildTokens.platformToken, //TODO usdt for test
@@ -51,7 +51,7 @@ export default {
         decimals: 18,
     },
     BS: {
-        symbol: 'BS',
+        symbol: 'BST',
         address: {
             56: '0x55d398326f99059fF775485246999027B3197955', //TODO usdt for test
             97: testnetOutput.buildTokens.platformToken, //TODO usdt for test
@@ -86,12 +86,12 @@ export default {
         },
         decimals: 18,
     },
-    'USDC-IFT': {
-        symbol: 'USDC-IFT',
+    'USDC-BST': {
+        symbol: 'USDC-BST',
         address: {
             56: '',
-            97: testnetOutput['USDC-IFT'],
-            1337: localOutput['USDC-IFT'],
+            97: testnetOutput['USDC-BST'],
+            1337: localOutput['USDC-BST'],
         },
         decimals: 18,
     },

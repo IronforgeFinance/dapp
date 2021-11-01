@@ -83,7 +83,7 @@ export default () => {
     );
 
     useEffect(() => {
-        fetchStakePoolList([{ poolName: 'BS', poolId: POOL_ID }], account);
+        fetchStakePoolList([{ poolName: 'BST', poolId: POOL_ID }], account);
     }, [account]);
 
     const getCollateralDataByToken = async (
@@ -206,7 +206,7 @@ export default () => {
                     <div className="rewards-card">
                         <span>
                             {account
-                                ? stakeDataList[0]?.totalPendingReward + ' BS'
+                                ? stakeDataList[0]?.totalPendingReward + ' BST'
                                 : '--'}
                         </span>
                         <h3>{intl.formatMessage({ id: 'rewards' })}</h3>
@@ -290,7 +290,7 @@ export default () => {
                     <div className="rewards-box">
                         <span className="amount">
                             {account
-                                ? stakeDataList[0]?.totalPendingReward + ' BS'
+                                ? stakeDataList[0]?.totalPendingReward + ' BST'
                                 : '--'}
                         </span>
                         <span className="label">

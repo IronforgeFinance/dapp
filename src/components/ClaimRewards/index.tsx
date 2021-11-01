@@ -32,7 +32,7 @@ const ClaimRewards = () => {
     const MinerReward = useMinerReward();
 
     const fetchRewardInfo = async () => {
-        fetchStakePoolList([{ poolName: 'BS', poolId: POOL_ID }], account);
+        fetchStakePoolList([{ poolName: 'BST', poolId: POOL_ID }], account);
     };
 
     const handleRedeem = async () => {
@@ -105,7 +105,7 @@ const ClaimRewards = () => {
                             <div className="content">
                                 <span className="value">
                                     {account
-                                        ? `${stakeDataList[0]?.totalPendingReward} BS`
+                                        ? `${stakeDataList[0]?.totalPendingReward} BST`
                                         : '--'}
                                 </span>
                                 <span className="label">

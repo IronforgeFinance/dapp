@@ -17,7 +17,7 @@ export const useERC20Approve = (
     setLastUpdated: () => void,
 ) => {
     const [requestedApproval, setRequestedApproval] = useState(false);
-    if (!address.startsWith('0x') && Token[address]) {
+    if (address && !address.startsWith('0x') && Token[address]) {
         const token = Token[address];
         address = token.address[process.env.APP_CHAIN_ID];
     }
@@ -50,7 +50,7 @@ export const useCheckERC20ApprovalStatus = (
     const { account } = useWeb3React();
     const provider = useProvider();
     const { lastUpdated, setLastUpdated } = useLastUpdated();
-    if (!address.startsWith('0x') && Token[address]) {
+    if (address && !address.startsWith('0x') && Token[address]) {
         const token = Token[address];
         address = token.address[process.env.APP_CHAIN_ID];
     }

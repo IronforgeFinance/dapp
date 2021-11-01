@@ -46,8 +46,8 @@ export default () => {
         const price = await getTokenPrice(PLATFORM_TOKEN);
 
         const pools = [
-            { poolName: 'BS', poolId: 0 },
-            { poolName: 'BS', poolId: 1 },
+            { poolName: 'BST', poolId: 0 },
+            { poolName: 'BST', poolId: 1 },
         ];
         const poolInfos = await Promise.all(
             pools.map((item) => {

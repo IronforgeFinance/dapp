@@ -111,9 +111,9 @@ export default () => {
         collateralSytemContract,
     );
 
-    const { isApproved: isIFTApproved, setLastUpdated: setLastIFTApproved } =
+    const { isApproved: isBSTApproved, setLastUpdated: setLastBSTApproved } =
         useCheckERC20ApprovalStatus(
-            Tokens.IFT.address[process.env.APP_CHAIN_ID],
+            Tokens.BST.address[process.env.APP_CHAIN_ID],
             collateralSytemContract,
         );
 
@@ -126,12 +126,12 @@ export default () => {
     );
 
     const {
-        handleApprove: handleIFTApprove,
-        requestedApproval: requestIFTApproval,
+        handleApprove: handleBSTApprove,
+        requestedApproval: requestBSTApproval,
     } = useERC20Approve(
-        Tokens.IFT.address[process.env.APP_CHAIN_ID],
+        Tokens.BST.address[process.env.APP_CHAIN_ID],
         collateralSytemContract,
-        setLastIFTApproved,
+        setLastBSTApproved,
     );
 
     const handleAllApprove = () => {
@@ -139,8 +139,8 @@ export default () => {
             handleApprove();
             return; // 一次按钮点击处理一次approve
         }
-        if (!isIFTApproved) {
-            handleIFTApprove();
+        if (!isBSTApproved) {
+            handleBSTApprove();
             return;
         }
     };
@@ -182,10 +182,10 @@ export default () => {
         );
     }, [intl]);
 
-    const { balance: fTokenBalance, refresh: refreshIFTBalance } =
+    const { balance: fTokenBalance, refresh: refreshBSTBalance } =
         useBep20Balance(PLATFORM_TOKEN);
 
-    useBep20Balance('IFT');
+    useBep20Balance('BST');
     _fTokenBalance.current = fTokenBalance;
 
     const { balance: collateralBalance, refresh: refreshCollateralBalance } =
@@ -195,7 +195,7 @@ export default () => {
         useBep20Balance(toToken, 6);
 
     const refreshBalance = () => {
-        refreshIFTBalance();
+        refreshBSTBalance();
         refreshCollateralBalance();
         refreshMintBalance();
     };
@@ -433,7 +433,7 @@ export default () => {
             );
             return;
         }
-        if (isApproved && isIFTApproved) {
+        if (isApproved && isBSTApproved) {
             try {
                 setSubmitting(true);
                 let tx;
@@ -536,7 +536,7 @@ export default () => {
                 amount: toAmount,
             },
             bsToken: {
-                name: 'BS',
+                name: 'BST',
                 price: Number((lockedPrice * _lockedAmount).toFixed(2)),
                 amount: _lockedAmount,
             },
@@ -739,7 +739,7 @@ export default () => {
                             {intl.formatMessage({ id: 'app.unlockWallet' })}
                         </Button>
                     )}
-                    {account && isApproved && isIFTApproved && (
+                    {account && isApproved && isBSTApproved && (
                         <Button
                             className="btn-mint common-btn common-btn-red"
                             onClick={openMintConfirm}
@@ -750,12 +750,12 @@ export default () => {
                     )}
                     {account &&
                         ((!isApproved && collateralToken) ||
-                            !isIFTApproved) && (
+                            !isBSTApproved) && (
                             <Button
                                 className="btn-mint common-btn common-btn-red"
                                 onClick={handleAllApprove}
                                 loading={
-                                    requestedApproval || requestIFTApproval
+                                    requestedApproval || requestBSTApproval
                                 }
                             >
                                 {intl.formatMessage({ id: 'mint.approve' })}

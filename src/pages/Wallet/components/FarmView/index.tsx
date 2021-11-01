@@ -116,7 +116,7 @@ const FarmView = () => {
                             price: (item.staked * item.lpPrice).toFixed(2),
                         },
                         earnedToken0: {
-                            name: 'BS',
+                            name: 'BST',
                             amount: item.totalPendingReward,
                         },
                         apy: item.apy,

@@ -91,7 +91,7 @@ export default (props: { pool: IStakePool; handleFlipper: () => void }) => {
                             {intl.formatMessage({ id: 'earn' })}:
                         </p>
                         <p className="value">
-                            BS{' '}
+                            BST{' '}
                             <Popover
                                 content={intl.formatMessage({ id: 'bsTip' })}
                                 trigger="hover"

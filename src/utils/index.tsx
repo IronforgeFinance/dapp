@@ -58,7 +58,7 @@ export const getTokenPrice = async (token: string) => {
     if (!token) return 0;
     try {
         if (token === 'FUSD') return 1; // TODO for test
-        if (token === 'BS') token = PLATFORM_TOKEN;
+        if (token === 'BST') token = PLATFORM_TOKEN;
         const prices = getPricesContract(simpleRpcProvider);
         const res = await prices.getPrice(
             ethers.utils.formatBytes32String(token),
